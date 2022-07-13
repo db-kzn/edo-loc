@@ -121,8 +121,8 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
                 Phone = f.Phone,
                 Fax = f.Fax,
                 HotLine = f.HotLine,
-                Email = f.EMail,
-                SiteUrl = f.Www,
+                Email = f.EMail?.ToLower() ?? "",
+                SiteUrl = f.Www?.ToLower() ?? "",
 
                 HeadLastName = f.FamDir,
                 HeadName = f.ImDir,
@@ -149,8 +149,8 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
             c.Phone = f.Phone;
             c.Fax = f.Fax;
             c.HotLine = f.HotLine;
-            c.Email = f.EMail;
-            c.SiteUrl = f.Www;
+            c.Email = f.EMail?.ToLower() ?? "";
+            c.SiteUrl = f.Www?.ToLower() ?? "";
 
             c.HeadLastName = f.FamDir;
             c.HeadName = f.ImDir;
@@ -161,11 +161,28 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
         }
         public static bool HasChanges(Company c, TFOMS f)
         {
-            return c.Type != OrgTypes.Fund || c.State != OrgStates.Active || c.TfOkato != f.TfOkato ||
-                c.Code != f.TfKod || c.Inn != f.Mtr.Inn || c.Kpp != f.Mtr.Kpp || c.Ogrn != f.TfOgrn ||
-                c.Name != f.NameTfp || c.ShortName != f.NameTfk || c.Address != f.Address ||
-                c.Phone != f.Phone || c.Fax != f.Fax || c.HotLine != f.HotLine || c.Email != f.EMail || c.SiteUrl != f.Www ||
-                c.HeadLastName != f.FamDir || c.HeadName != f.ImDir || c.HeadMidName != f.OtDir;
+            return c.Type != OrgTypes.Fund ||
+                c.State != OrgStates.Active ||
+                c.TfOkato != f.TfOkato ||
+
+                c.Code != f.TfKod ||
+                c.Inn != f.Mtr.Inn ||
+                c.Kpp != f.Mtr.Kpp ||
+                c.Ogrn != f.TfOgrn ||
+
+                c.Name != f.NameTfp ||
+                c.ShortName != f.NameTfk ||
+                c.Address != f.Address ||
+
+                c.Phone != f.Phone ||
+                c.Fax != f.Fax ||
+                c.HotLine != f.HotLine ||
+                c.Email != (f.EMail?.ToLower() ?? "") ||
+                c.SiteUrl != (f.Www?.ToLower() ?? "") ||
+
+                c.HeadLastName != f.FamDir ||
+                c.HeadName != f.ImDir ||
+                c.HeadMidName != f.OtDir;
         }
     }
 }

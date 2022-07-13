@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EDO_FOMS.Domain.Entities.Dir;
 
-[Index("Code", "Inn")]
+[Index("Code"), Index("Inn"), Index("TfOkato")]
 public class Company : AuditableEntity<int>
 {
     public OrgTypes Type { get; set; } = OrgTypes.Undefined;

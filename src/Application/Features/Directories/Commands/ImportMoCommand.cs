@@ -69,7 +69,7 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
 
                 mos.ForEach(async mo =>
                 {
-                    Company company = companies.Entities.FirstOrDefault(c => c.Code == mo.MCod); //  && c.TfOkato == mo.TfOkato
+                    Company company = companies.Entities.FirstOrDefault(c => c.Code == mo.MCod);
 
                     if (company is null)
                     {
@@ -121,8 +121,8 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
                 Phone = m.Phone,
                 Fax = m.Fax,
                 HotLine = "",
-                Email = m.EMail,
-                SiteUrl = m.Www,
+                Email = m.EMail?.ToLower() ?? "",
+                SiteUrl = m.Www?.ToLower() ?? "",
 
                 HeadLastName = m.FamRuk,
                 HeadName = m.ImRuk,
@@ -149,8 +149,8 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
             c.Phone = m.Phone;
             c.Fax = m.Fax;
             c.HotLine = "";
-            c.Email = m.EMail;
-            c.SiteUrl = m.Www;
+            c.Email = m.EMail?.ToLower() ?? "";
+            c.SiteUrl = m.Www?.ToLower() ?? "";
 
             c.HeadLastName = m.FamRuk;
             c.HeadName = m.ImRuk;
@@ -164,7 +164,8 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
             return c.Type != OrgTypes.MO || c.State != OrgStates.Active || c.TfOkato != m.TfOkato ||
                 c.Code != m.MCod || c.Inn != m.Inn || c.Kpp != m.Kpp || c.Ogrn != m.Ogrn ||
                 c.Name != m.NamMop || c.ShortName != m.NamMok || c.Address != m.JurAddress.AddrJ ||
-                c.Phone != m.Phone || c.Fax != m.Fax || c.Email != m.EMail || c.SiteUrl != m.Www ||
+                c.Phone != m.Phone || c.Fax != m.Fax ||
+                c.Email != (m.EMail?.ToLower() ?? "") || c.SiteUrl != (m.Www?.ToLower() ?? "") ||
                 c.HeadLastName != m.FamRuk || c.HeadName != m.ImRuk || c.HeadMidName != m.OtRuk;
         }
     }

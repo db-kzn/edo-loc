@@ -12,14 +12,14 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EDO_FOMS.Infrastructure.Migrations
 {
     [DbContext(typeof(EdoFomsContext))]
-    [Migration("20220711185448_Dirs")]
+    [Migration("20220713161304_Dirs")]
     partial class Dirs
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.6")
+                .HasAnnotation("ProductVersion", "6.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -151,7 +151,11 @@ namespace EDO_FOMS.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Code", "Inn");
+                    b.HasIndex("Code");
+
+                    b.HasIndex("Inn");
+
+                    b.HasIndex("TfOkato");
 
                     b.ToTable("Companies", "dic");
                 });

@@ -69,7 +69,7 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
 
                 smos.ForEach(async smo =>
                 {
-                    Company company = companies.Entities.FirstOrDefault(c => c.Code == smo.SmoCod); // && c.TfOkato == smo.TfOkato
+                    Company company = companies.Entities.FirstOrDefault(c => c.Code == smo.SmoCod);
 
                     if (company is null)
                     {
@@ -106,27 +106,27 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
             {
                 Type = OrgTypes.SMO,
                 State = OrgStates.Active,
-                TfOkato = s.TfOkato ?? "",
+                TfOkato = s.TfOkato,
 
-                Code = s.SmoCod ?? "",
-                Inn = s.Inn ?? "",
-                Kpp = s.Kpp ?? "",
-                Ogrn = s.Ogrn ?? "",
+                Code = s.SmoCod,
+                Inn = s.Inn,
+                Kpp = s.Kpp,
+                Ogrn = s.Ogrn,
 
-                Name = s.NamSmop ?? "",
-                ShortName = s.NamSmok ?? "",
-                Address = s.PstAddress.AddrF ?? "",
+                Name = s.NamSmop,
+                ShortName = s.NamSmok,
+                Address = s.PstAddress.AddrF,
                 AO = Guid.Empty,
 
-                Phone = s.Phone ?? "",
-                Fax = s.Fax ?? "",
-                HotLine = s.HotLine ?? "",
-                Email = s.EMail ?? "",
-                SiteUrl = s.Www ?? "",
+                Phone = s.Phone,
+                Fax = s.Fax,
+                HotLine = s.HotLine,
+                Email = s.EMail?.ToLower() ?? "",
+                SiteUrl = s.Www?.ToLower() ?? "",
 
-                HeadLastName = s.FamRuk ?? "",
-                HeadName = s.ImRuk ?? "",
-                HeadMidName = s.OtRuk ?? "",
+                HeadLastName = s.FamRuk,
+                HeadName = s.ImRuk,
+                HeadMidName = s.OtRuk,
                 Changed = s._DEdit
             };
         }
@@ -134,27 +134,27 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
         {
             c.Type = OrgTypes.SMO;
             c.State = OrgStates.Active;
-            c.TfOkato = s.TfOkato ?? "";
+            c.TfOkato = s.TfOkato;
 
-            c.Code = s.SmoCod ?? "";
-            c.Inn = s.Inn ?? "";
-            c.Kpp = s.Kpp ?? "";
-            c.Ogrn = s.Ogrn ?? "";
+            c.Code = s.SmoCod;
+            c.Inn = s.Inn;
+            c.Kpp = s.Kpp;
+            c.Ogrn = s.Ogrn;
 
-            c.Name = s.NamSmop ?? "";
-            c.ShortName = s.NamSmok ?? "";
-            c.Address = s.PstAddress.AddrF ?? "";
+            c.Name = s.NamSmop;
+            c.ShortName = s.NamSmok;
+            c.Address = s.PstAddress.AddrF;
             c.AO = Guid.Empty;
 
-            c.Phone = s.Phone ?? "";
-            c.Fax = s.Fax ?? "";
-            c.HotLine = s.HotLine ?? "";
-            c.Email = s.EMail ?? "";
-            c.SiteUrl = s.Www ?? "";
+            c.Phone = s.Phone;
+            c.Fax = s.Fax;
+            c.HotLine = s.HotLine;
+            c.Email = s.EMail?.ToLower() ?? "";
+            c.SiteUrl = s.Www?.ToLower() ?? "";
 
-            c.HeadLastName = s.FamRuk ?? "";
-            c.HeadName = s.ImRuk ?? "";
-            c.HeadMidName = s.OtRuk ?? "";
+            c.HeadLastName = s.FamRuk;
+            c.HeadName = s.ImRuk;
+            c.HeadMidName = s.OtRuk;
             c.Changed = s._DEdit;
 
             return c;
@@ -164,7 +164,8 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
             return c.Type != OrgTypes.SMO || c.State != OrgStates.Active || c.TfOkato != s.TfOkato ||
                 c.Code != s.SmoCod || c.Inn != s.Inn || c.Kpp != s.Kpp || c.Ogrn != s.Ogrn ||
                 c.Name != s.NamSmop || c.ShortName != s.NamSmok || c.Address != s.PstAddress.AddrF ||
-                c.Phone != s.Phone || c.Fax != s.Fax || c.HotLine != s.HotLine || c.Email != s.EMail || c.SiteUrl != s.Www ||
+                c.Phone != s.Phone || c.Fax != s.Fax || c.HotLine != s.HotLine ||
+                c.Email != (s.EMail?.ToLower() ?? "") || c.SiteUrl != (s.Www?.ToLower() ?? "") ||
                 c.HeadLastName != s.FamRuk || c.HeadName != s.ImRuk || c.HeadMidName != s.OtRuk;
         }
     }

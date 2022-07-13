@@ -124,10 +124,22 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 column: "EmplOrgId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Companies_Code_Inn",
+                name: "IX_Companies_Code",
                 schema: "dic",
                 table: "Companies",
-                columns: new[] { "Code", "Inn" });
+                column: "Code");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Companies_Inn",
+                schema: "dic",
+                table: "Companies",
+                column: "Inn");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Companies_TfOkato",
+                schema: "dic",
+                table: "Companies",
+                column: "TfOkato");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Documents_Organizations_EmplOrgId",

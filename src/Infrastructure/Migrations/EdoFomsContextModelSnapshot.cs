@@ -17,7 +17,7 @@ namespace EDO_FOMS.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.6")
+                .HasAnnotation("ProductVersion", "6.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -149,7 +149,11 @@ namespace EDO_FOMS.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Code", "Inn");
+                    b.HasIndex("Code");
+
+                    b.HasIndex("Inn");
+
+                    b.HasIndex("TfOkato");
 
                     b.ToTable("Companies", "dic");
                 });
