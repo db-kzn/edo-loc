@@ -1,0 +1,42 @@
+﻿@namespace EDO_FOMS.Client.Pages.Agreements
+@using EDO_FOMS.Application.Responses.Docums
+
+@inject Microsoft.Extensions.Localization.IStringLocalizer<MembersDialog> _localizer
+
+<MudDialog Style="background-color: var(--mud-palette-background-grey); min-width: 540px;">
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Outlined.GroupAdd" Class="mr-3 mb-n1" />
+            @_localizer["Add members"]
+        </MudText>
+    </TitleContent>
+
+    <DialogContent>
+        <MudGrid>
+            <MudItem xs="12">
+                <div class="d-flex">
+                    <MudAutocomplete T="ContactResponse" Label="@_localizer["Employee of your organization"]" @bind-Value="contact" SearchFunc="@SearchMembersAsync"
+                                 ResetValueOnEmptyText="@resetValueOnEmptyText" CoerceText="@coerceText" CoerceValue="@coerceValue"  Clearable="false"
+                                 Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Outlined.HealthAndSafety" AdornmentColor="Color.Default"
+                                 ToStringFunc="@(e => (e == null) ? null : ContactName(e))"/>
+
+                    <MudIconButton Icon="@Icons.Material.Filled.Add" Style="height:48px;" Color="Color.Primary" OnClick="AddMember" Disabled="@(contact == null)"></MudIconButton>
+                </div>
+
+                <MudChipSet AllClosable="true" OnClose="DelMember">
+                   @foreach (var c in contacts)
+                   {
+                       <MudChip Text="@c.Key" Variant="Variant.Outlined" Color="Color.Default"></MudChip>
+                   }
+                </MudChipSet>
+            </MudItem>
+        </MudGrid>
+    </DialogContent>
+
+    <DialogActions>
+         <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit"  FullWidth="true" Color="Color.Primary"
+                Disabled="@(contacts.Count == 0 && contact == null)" OnClick="SendMembersAsync">
+             @_localizer["Send"]
+         </MudButton>
+     </DialogActions>
+</MudDialog>

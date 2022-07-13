@@ -1,0 +1,131 @@
+﻿@namespace EDO_FOMS.Client.Pages.Dirs
+
+@page "/dirs/med_orgs"
+
+@using EDO_FOMS.Application.Features.Directories.Queries
+
+@inject Microsoft.Extensions.Localization.IStringLocalizer<Med_orgs> _localizer
+
+<MudPaper Square="true" Elevation="3" Style="z-index: 1;">
+    <MudToolBar>
+        <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Directory of medical organizations"]" Color="Color.Tertiary" Placement="Placement.Right">
+            <MudText Typo="Typo.button">@_localizer["Med.Orgs"]</MudText>
+        </MudTooltip>
+
+        <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Renew"]" Color="Color.Tertiary" Placement="Placement.Right">
+            <MudIconButton Icon="@Icons.Material.Outlined.Sync" OnClick="RenewAsync"></MudIconButton>
+        </MudTooltip>
+
+        @if (importAvailable)
+        {
+            if (_companiesForImports.Fund)
+            {
+                <MudButton Variant="Variant.Text" StartIcon="@Icons.Material.TwoTone.Unarchive" Color="Color.Success"
+                    OnClick="ImportFOMS" Disabled="@(!_loaded)">
+                    @_localizer["FOMS"]
+                </MudButton>
+            }
+
+            if (_companiesForImports.SMO)
+            {
+                <MudButton Variant="Variant.Text" StartIcon="@Icons.Material.TwoTone.Unarchive" Color="Color.Success"
+                    OnClick="ImportSMO" Disabled="@(!_loaded)">
+                    @_localizer["SMO"]
+                </MudButton>
+            }
+
+            if (_companiesForImports.MO)
+            {
+                <MudButton Variant="Variant.Text" StartIcon="@Icons.Material.TwoTone.Unarchive" Color="Color.Success"
+                    OnClick="ImportMO" Disabled="@(!_loaded)">
+                    @_localizer["MO"]
+                </MudButton>
+            }
+        }
+
+        <MudSpacer />
+
+        <MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" Class="search-field" Immediate="false" FullWidth=false 
+            Placeholder="@_localizer["Search For Orgs"]" T="string" Clearable="true" ValueChanged="@(s => OnSearch(s))"
+            Adornment="Adornment.Start" AdornmentColor="Color.Primary" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" >
+        </MudTextField>
+
+        <MudTooltip Delay="@delay" Duration="@duration" Placement="Placement.Left" Color="Color.Tertiary" Arrow="true"
+            Text="@(matchCase ? _localizer["Match Case On"] : _localizer["Match Case Off"])">
+            <MudToggleIconButton Toggled="@matchCase" ToggledChanged="OnToggledMatchCase"
+                 Icon="@Icons.Material.Filled.FormatStrikethrough" Color="@Color.Default"
+                 ToggledIcon="@Icons.Material.Filled.TextFields" ToggledColor="@Color.Default"/>
+        </MudTooltip>
+
+        <MudTooltip Delay="@delay" Duration="@duration" Placement="Placement.Left" Color="Color.Tertiary" Arrow="true"
+            Text="@_localizer["Rows density"]">
+            <MudToggleIconButton Toggled="@dense" ToggledChanged="OnToggledDense"
+                 Icon="@Icons.Material.Filled.DensityMedium" Color="@Color.Default"
+                 ToggledIcon="@Icons.Material.Filled.DensitySmall" ToggledColor="@Color.Default"/>
+        </MudTooltip>
+
+        <MudTooltip Delay="@delay" Duration="@duration" Placement="Placement.Left" Color="Color.Tertiary" Arrow="true" Text="@_localizer["Filter"]">
+            <MudIconButton Icon="@Icons.Material.TwoTone.FilterAlt" Color="@(Filter.IsActive ? Color.Error : Color.Default)" OnClick="@ToggleFilter" /> @*Edge="Edge.End"*@
+        </MudTooltip>
+    </MudToolBar>
+</MudPaper>
+
+<MudContainer MaxWidth="MaxWidth.False" Class="pa-6">
+    <MudTable Hover="true" Dense="@dense" Bordered="false" Striped="true" Breakpoint="Breakpoint.Xs"
+        @ref="_mudTable" T="CompaniesResponse" @bind-SelectedItem="_company" OnRowClick="OnRowClickAsync"
+        ServerData="@(new Func<TableState, Task<TableData<CompaniesResponse>>>(ServerReloadAsync))"
+        Loading="@(!_loaded)" LoadingProgressColor="Color.Info" RowsPerPage="@_rowsPerPage">
+
+        <ColGroup>
+            <col />
+            <col /><col /><col />
+            <col /><col />
+        </ColGroup>
+
+        <HeaderContent>
+            <MudTh><MudTableSortLabel T="CompaniesResponse" SortLabel="Code">@_localizer["Code"]-@_localizer["INN"]</MudTableSortLabel></MudTh>
+
+            <MudTh><MudTableSortLabel T="CompaniesResponse" SortLabel="Code">@_localizer["Name"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="CompaniesResponse" SortLabel="Code">@_localizer["Short Name"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="CompaniesResponse" SortLabel="Code">@_localizer["Address"]</MudTableSortLabel></MudTh>
+
+            <MudTh><MudTableSortLabel T="CompaniesResponse" SortLabel="Code">@_localizer["Contacts"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="CompaniesResponse" SortLabel="Code">@_localizer["Head"]</MudTableSortLabel></MudTh>
+
+        </HeaderContent>
+
+        <RowTemplate>
+            <MudTd DataLabel="@($"{_localizer["Code"]}-{_localizer["INN"]}")">
+                <MudHighlighter Text="@context.Code" HighlightedText="@_searchString" /> - 
+                <MudHighlighter Text="@context.Inn" HighlightedText="@_searchString" />
+            </MudTd>
+
+            <MudTd DataLabel="@_localizer["Name"]">
+                <MudHighlighter Text="@context.Name" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="@_localizer["Short Name"]">
+                <MudHighlighter Text="@context.ShortName" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="@_localizer["Address"]">
+                <MudHighlighter Text="@context.Address" HighlightedText="@_searchString" />
+            </MudTd>
+
+            <MudTd DataLabel="@_localizer["Contacts"]">
+                <p><MudHighlighter Text="@context.Phone" HighlightedText="@_searchString" /></p>
+                <p><MudHighlighter Text="@context.HotLine" HighlightedText="@_searchString" /></p>
+                <p><MudHighlighter Text="@context.Email.ToLower()" HighlightedText="@_searchString" /></p>
+                <p><MudHighlighter Text="@context.SiteUrl" HighlightedText="@_searchString" /></p>
+            </MudTd>
+            <MudTd DataLabel="@_localizer["Head"]">
+                <p><MudHighlighter Text="@context.HeadLastName" HighlightedText="@_searchString" /></p>
+                <p><MudHighlighter Text="@context.HeadName" HighlightedText="@_searchString" /></p>
+                <p><MudHighlighter Text="@context.HeadMidName" HighlightedText="@_searchString" /></p>
+            </MudTd>
+            
+        </RowTemplate>
+
+        <PagerContent>
+            <TablePager />
+        </PagerContent>
+    </MudTable>
+</MudContainer>

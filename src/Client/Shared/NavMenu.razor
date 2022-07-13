@@ -1,0 +1,157 @@
+﻿@inject Microsoft.Extensions.Localization.IStringLocalizer<NavMenu> _localizer
+@using System.Security.Claims
+
+@if (IsOpen) { <UserCard Style="padding: 12px 16px; height: 64px;" /> }
+else         { <UserAvatar Style="padding: 12px 8px; height: 64px;" /> }
+
+<MudDivider />
+@* Class="mb-4" Style="margin-bottom: 0px !important;"*@
+
+<MudNavMenu>
+    @*<MudNavLink Href="/dashboard" Class="d-none" Match="NavLinkMatch.All" Icon="@Icons.Material.Outlined.Dashboard" Disabled>@_localizer["Dashboard"]</MudNavLink>     
+    <MudDivider  Class="d-none"/>*@
+
+    @*<MudNavLink Href="/personal/account" Icon="@Icons.Material.Outlined.AccountBox">@_localizer["Account"]</MudNavLink>
+    <MudNavLink Href="/personal/certs" Icon="@Icons.Material.Outlined.Verified" Disabled>@_localizer["Certifications"]</MudNavLink>*@
+
+    <MudNavLink Href="/progress" Icon="@Icons.Material.TwoTone.AllInbox" IconColor="Color.Primary">
+        <div class="d-flex flex-row" style="height: 24px;">
+            <MudItem Class="my-auto">@_localizer["Progress"]</MudItem>
+            <MudItem Class="ml-auto pr-4 my-auto">@((NavCounts.Progress > 0) ? NavCounts.Progress : "")</MudItem>
+        </div>
+    </MudNavLink>
+    <MudDivider />
+
+    <MudNavLink Href="/docs" Icon="@Icons.Material.TwoTone.Assignment" IconColor="Color.Primary">
+        <div class="d-flex flex-row" style="height: 24px;">
+            <MudItem Class="my-auto">@_localizer["Documents"]</MudItem>
+            <MudItem Class="ml-auto pr-4 my-auto">@((NavCounts.Docs > 0) ? NavCounts.Docs : "")</MudItem>
+        </div>
+    </MudNavLink>
+    <MudDivider />
+
+    <MudNavLink Href="/archive" Icon="@Icons.Material.TwoTone.Inventory2" IconColor="Color.Primary">
+        <div class="d-flex flex-row" style="height: 24px;">
+            <MudItem Class="my-auto">@_localizer["Archive"]</MudItem>
+            <MudItem Class="ml-auto pr-4 my-auto">@((NavCounts.Archive > 0) ? NavCounts.Archive : "")</MudItem>
+        </div>
+    </MudNavLink>
+    <MudDivider />
+
+    <MudNavGroup Title=@_localizer["Organization"] Icon="@Icons.Material.TwoTone.HomeWork" IconColor="Color.Primary" Expanded="true">
+        <MudNavLink Href="/personal/my_org" Icon="@Icons.Material.Outlined.BusinessCenter">@_localizer["Requisites"]</MudNavLink>
+        <MudNavLink Href="/personal/employees" Icon="@Icons.Material.Outlined.Groups">@_localizer["Employees"]</MudNavLink>
+        @*<MudNavLink Href="/personal/keys" Icon="@Icons.Material.Outlined.FactCheck" Disabled Class="d-none">@_localizer["Keys"]</MudNavLink>*@
+    </MudNavGroup>
+    <MudDivider />
+
+    <MudNavGroup Title=@_localizer["Directories"] Icon="@Icons.Material.TwoTone.MenuBook" IconColor="Color.Primary" Expanded="true">
+        <MudNavLink Href="/dirs/doc-types" Icon="@Icons.Material.Outlined.DocumentScanner">@_localizer["Doc Types"]</MudNavLink>
+        <MudNavLink Href="/dirs/med_orgs" Icon="@Icons.Material.Outlined.MedicalServices">@_localizer["Organizations"]</MudNavLink>
+        <MudNavLink Href="/dirs/routes" Icon="@Icons.Material.Outlined.Map">@_localizer["Routes"]</MudNavLink>
+    </MudNavGroup>
+    <MudDivider />
+
+    @if (_canSystemEdit || _canSystemView)
+    {
+        @*<MudListSubheader Class="mt-2 mb-n2">@_localizer["Administration"]</MudListSubheader>*@
+
+        <MudNavGroup Title=@_localizer["Administration"] Icon="@Icons.Material.TwoTone.AdminPanelSettings" IconColor="Color.Primary" Expanded="true">
+            @*@if (_canOrgsView) {}*@
+            <MudNavLink Href="/admin/orgs" Icon="@Icons.Material.Outlined.MapsHomeWork">@_localizer["Organizations"]</MudNavLink>
+
+            @*@if (_canUsersView) {}*@
+            <MudNavLink Href="/admin/users" Icon="@Icons.Material.Outlined.ManageAccounts">@_localizer["Users"]</MudNavLink>
+
+            @*@if (_canCertsView) {}*@
+            <MudNavLink Href="/admin/certs" Icon="@Icons.Material.Outlined.Badge">@_localizer["Certs"]</MudNavLink>
+ 
+            <MudNavLink Href="/admin/send-mail" Icon="@Icons.Material.Outlined.MarkAsUnread">@_localizer["Send Mail"]</MudNavLink>
+ 
+            @*@if (_canViewRoles) {}
+            <MudNavLink Href="/admin/roles" Icon="@Icons.Material.Outlined.GppGood" Disabled>@_localizer["Roles"]</MudNavLink>
+            *@
+        </MudNavGroup>
+        <MudDivider />
+    }
+
+    @*@if (_canSystemEdit)
+    {
+        <MudNavGroup Title=@_localizer["System"] Icon="@Icons.Material.TwoTone.HomeRepairService" IconColor="Color.Primary" Expanded="true">
+            <MudNavLink Href="/jobs" Target="_blank" Icon="@Icons.Material.Outlined.Work">
+                @_localizer["Hangfire"]
+            </MudNavLink>
+
+            <!--<MudNavLink Href="/swagger/index.html" Target="_blank" Icon="@Icons.Material.Outlined.LiveHelp">
+                @_localizer["Swagger"]
+            </MudNavLink>-->
+    
+            <!--<MudNavLink Href="/audit-trails" Icon="@Icons.Material.Outlined.Security">
+                @_localizer["Audit Trails"]
+            </MudNavLink>-->
+
+            <!--<MudNavLink Href="/document-types" Icon="@Icons.Material.Outlined.FileCopy">
+                    @_localizer["Document Types"]
+            </MudNavLink>-->
+
+            <!--<MudNavLink Href="/chat" Icon="@Icons.Material.Outlined.Chat">
+                @_localizer["Chat"]
+            </MudNavLink>-->
+
+            <!--<MudNavLink Href="/dashboard" Icon="@Icons.Material.Outlined.Dashboard" Disabled>
+                @_localizer["Dashboard"]
+            </MudNavLink>-->
+        </MudNavGroup>
+    }*@
+
+    @*@if (_canActsView || _canActsEdit)
+    {
+        <MudNavGroup Title=@_localizer["Docs"] Icon="@Icons.Material.TwoTone.AllInbox" IconColor="Color.Primary" Expanded="true">
+            <MudNavLink Href="/agreements/inbox" Icon="@Icons.Material.Outlined.Inbox">@_localizer["Inbox"]</MudNavLink>
+            <!--IconColor="Color.Success"-->
+            <MudNavLink Href="/agreements/approved" Icon="@Icons.Material.Outlined.MoveToInbox">@_localizer["Approved"]</MudNavLink>
+             <!--IconColor="Color.Error"-->
+            <MudNavLink Href="/agreements/reject" Icon="@Icons.Material.Outlined.Outbox">@_localizer["Reject"]</MudNavLink>
+            <MudNavLink Href="/agreements/signed" Icon="@Icons.Material.Outlined.AllInbox">@_localizer["Signed"]</MudNavLink>
+        </MudNavGroup>
+        <MudDivider />
+    }*@
+
+    @*@if (_canActsView || _canActsEdit)
+    {
+        <MudNavGroup Title=@_localizer["Processes"] Icon="@Icons.Material.TwoTone.Traffic" IconColor="Color.Primary" Expanded="true">
+            <MudNavLink Href="/acts/drafts" Icon="@Icons.Material.Outlined.IntegrationInstructions">@_localizer["Drafts"]</MudNavLink>
+            <!--<MudNavLink Href="/acts/routes" Icon="@Icons.Material.Filled.EditRoad" Disabled>@_localizer["Routes"]</MudNavLink>-->
+
+            <!--<MudBadge Dot="true" Color="Color.Warning"></MudBadge>-->
+            <MudNavLink Href="/acts/in-progress" Icon="@Icons.Material.Outlined.NoteAlt">
+                <div class="d-flex flex-row" style="height: 24px;">
+                    <MudItem Class="my-auto">@_localizer["Under"]</MudItem>
+                    <!--<MudItem Class="ml-auto pr-4 my-auto">25</MudItem>-->
+                </div>
+            </MudNavLink>
+
+            <MudNavLink Href="/acts/completed" Icon="@Icons.Material.Outlined.AssignmentTurnedIn">@_localizer["Completed"]</MudNavLink>
+            <MudNavLink Href="/acts/canceled" Icon="@Icons.Material.Outlined.AssignmentReturn" >@_localizer["Canceled"]</MudNavLink>
+            <!--<MudNavLink Href="/acts/find" Icon="@Icons.Material.Outlined.ManageSearch">@_localizer["Find"]</MudNavLink>-->
+            <MudNavLink Href="/acts/archive" Icon="@Icons.Material.Outlined.Inventory2" Class="d-flex">@_localizer["Archive"]</MudNavLink>
+            <!--<MudNavLink Href="/acts/deleted" Icon="@Icons.Material.Outlined.DeleteForever">@_localizer["Deleted"]</MudNavLink>-->
+        </MudNavGroup>
+        <MudDivider />
+    }*@
+
+    @*ExpandIcon="@Icons.Material.Filled.ExpandMore" HideExpandIcon="false" *@
+
+    @*<MudNavGroup Title=@_localizer["Samples"] Icon="@Icons.Material.TwoTone.ViewQuilt" IconColor="Color.Primary">
+        <MudNavLink Href="application/email" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Outlined.Email">Email</MudNavLink>
+        <MudNavLink Href="application/chat" Icon="@Icons.Material.Outlined.Forum">Chat</MudNavLink>
+
+        <MudNavLink Href="pages/error/404" Icon="@Icons.Material.Outlined.InsertDriveFile">404</MudNavLink>
+        <MudNavLink Href="pages/utility/faq" Icon="@Icons.Material.Outlined.InsertDriveFile">Faq</MudNavLink>
+
+        <MudNavLink Href="application/todo" Icon="@Icons.Custom.Uncategorized.AlertSuccess" Disabled="true">Todo</MudNavLink>
+        <MudNavLink Href="application/users" Icon="@Icons.Material.Outlined.PeopleAlt" Disabled="true">Users</MudNavLink>
+    </MudNavGroup>
+
+    <MudDivider />*@
+</MudNavMenu>

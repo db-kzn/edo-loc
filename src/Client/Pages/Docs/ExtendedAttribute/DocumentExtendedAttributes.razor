@@ -1,0 +1,22 @@
+﻿@namespace EDO_FOMS.Client.Pages.Doc.ExtendedAttribute
+@page "/extended-attributes/{EntityName}/{EntityIdString}"
+
+@using EDO_FOMS.Domain.Entities.Doc
+@using EDO_FOMS.Domain.Entities.ExtendedAttributes
+
+@attribute [Authorize(Policy = Permissions.Documents.View)]
+@inherits ExtendedAttributes<int, int, Document, DocumentExtendedAttribute>
+
+@Inherited()
+
+@code
+{
+    protected override Func<string, int> FromStringToEntityIdTypeConverter => s => int.Parse(s);
+
+    protected override string ExtendedAttributesViewPolicyName =>   Permissions.Documents.View;
+    protected override string ExtendedAttributesEditPolicyName =>   Permissions.Documents.Edit;
+    protected override string ExtendedAttributesCreatePolicyName => Permissions.Documents.Create;
+    protected override string ExtendedAttributesDeletePolicyName => Permissions.Documents.Delete;
+    protected override string ExtendedAttributesExportPolicyName => Permissions.Documents.Export;
+    protected override string ExtendedAttributesSearchPolicyName => Permissions.Documents.Search;
+}

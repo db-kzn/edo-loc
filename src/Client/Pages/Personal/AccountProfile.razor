@@ -1,0 +1,138 @@
+﻿@namespace EDO_FOMS.Client.Pages.Personal
+@inject Microsoft.Extensions.Localization.IStringLocalizer<AccountProfile> _localizer
+
+<EditForm Model="@_profileModel" OnValidSubmit="UpdateProfileAsync">
+    <FluentValidationValidator @ref="_fluentValidationValidator" />
+
+<MudCard>
+    <MudCardContent>
+        <MudGrid>
+
+            <MudItem xs="12" sm="6" md="6" lg="4" xl="3">
+                <MudCard>
+                    @*<MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText>Public Profile</MudText>
+                        </CardHeaderContent>
+                    </MudCardHeader>*@
+
+                    @if (!string.IsNullOrEmpty(@ImageDataUrl))
+                    {
+                        <MudCardMedia Image="@ImageDataUrl" />
+
+                        @*<MudDivider />
+                        <MudCardContent>
+                            <MudAvatar Image="@ImageDataUrl" Style="height:100px; width:100px;"> </MudAvatar>
+                        </MudCardContent>*@
+                    }
+                    else
+                    {
+                        <div class="d-flex justify-center mb-4">
+                            <MudCardContent>
+                                <MudAvatar Rounded="true" Color="Color.Primary" Style="height:100px; width:100px;" Variant="Variant.Outlined">
+                                    <MudIcon Icon="@Icons.Material.Filled.Portrait" Size="Size.Large"/>
+                                </MudAvatar>
+
+                               @* <MudAvatar Color="Color.Secondary" Style="height:100px; width:100px;">@_firstLetterOfName</MudAvatar>
+                                <MudText Align="Align.Center">@_profileModel.GivenName @_profileModel.Surname</MudText>
+                                <MudText Align="Align.Center">@_profileModel.Email</MudText>*@
+                            </MudCardContent>
+                        </div>
+                    }
+
+
+                    <MudDivider />
+
+                    <MudCardActions Class="d-flex justify-center">
+                        <InputFile id="fileInput" OnChange="UploadFiles" hidden />
+
+                        <MudButton HtmlTag="label" Variant="Variant.Text" Color="Color.Primary" Size="Size.Medium" StartIcon="@Icons.TwoTone.PhotoCamera" for="fileInput" Disabled>
+                            @_localizer["Upload Image"]
+                        </MudButton>
+
+                        <MudSpacer />
+
+                        <MudButton Variant="Variant.Text" Color="Color.Error" EndIcon="@Icons.TwoTone.Delete" Size="Size.Medium" 
+                                   OnClick="DeleteAsync" Disabled> @*="@string.IsNullOrEmpty(@ImageDataUrl)"*@
+                            @_localizer["Delete Image"]
+                        </MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
+
+            <MudItem xs="12" sm="6" md="6" lg="8" xl="9">
+                
+                    
+
+                    @*<MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText>@_localizer["Profile Details"]</MudText>
+                        </CardHeaderContent>
+                    </MudCardHeader>*@
+
+
+                    <MudGrid>
+                        <MudItem xs="12" md="12" lg="6">
+                            <MudTextField @bind-Value="@_profileModel.UserName" For="@(() => _profileModel.UserName)" Label="@_localizer["User Name"]" Variant="Variant.Filled" ReadOnly="true" />
+                        </MudItem>
+                        <MudItem xs="12" md="12" lg="6">
+                            <MudTextField @bind-Value="@_profileModel.Title" For="@(() => _profileModel.Title)" Label="@_localizer["Title"]" Variant="Variant.Text" />
+                        </MudItem>
+
+                        <MudItem xs="12" md="12" lg="6">
+                            <MudTextField @bind-Value="@_profileModel.Surname" For="@(() => _profileModel.Surname)" Label="@_localizer["Surname"]" Variant="Variant.Filled"  ReadOnly="true"/>
+                        </MudItem>
+                        <MudItem xs="12" md="12" lg="6">
+                            <MudTextField @bind-Value="@_profileModel.GivenName" For="@(() => _profileModel.GivenName)" Label="@_localizer["Given Name"]" Variant="Variant.Filled" ReadOnly="true"/>
+                        </MudItem>
+                        
+                        @*<MudItem xs="12" md="12" lg="6">
+                            <MudTextField @bind-Value="@_profileModel.Inn" Label="@_localizer["Inn"]" For="@(() => _profileModel.Inn)" Variant="Variant.Filled" ReadOnly="true" />
+                        </MudItem>
+                        <MudItem xs="12" md="12" lg="6">
+                            <MudTextField @bind-Value="@_profileModel.Snils" Label="@_localizer["Snils"]" For="@(() => _profileModel.Snils)" Variant="Variant.Filled" ReadOnly="true" />
+                        </MudItem>*@
+
+                        <MudItem xs="12" md="12" lg="6">
+                            <MudTextField @bind-Value="@_profileModel.PhoneNumber" For="@(() => _profileModel.PhoneNumber)" Label="@_localizer["Phone Number"]" Variant="Variant.Text" />
+                        </MudItem>
+                        <MudItem xs="12" md="12" lg="6">
+                            <MudTextField @bind-Value="@_profileModel.Email" Label="@_localizer["Email"]" For="@(() => _profileModel.Email)" Variant="Variant.Text" InputType="InputType.Email" />
+                        </MudItem>
+
+                        @*<MudItem xs="12" md="12" lg="6">
+                            <MudTextField @bind-Value="@_profileModel.BaseRoleIx" For="@(() => _profileModel.BaseRoleIx)" Label="@_localizer["Base Role"]" Variant="Variant.Filled" ReadOnly="true" />
+                        </MudItem>
+                        <MudItem xs="12" md="12" lg="6">
+                            <MudTextField @bind-Value="@_profileModel.OrgTypeIx" For="@(() => _profileModel.OrgTypeIx)" Label="@_localizer["Org Type"]" Variant="Variant.Filled" ReadOnly="true"  />
+                        </MudItem>*@
+
+                        @*<MudItem xs="12">
+                            <MudText>
+                                <b>Visible Only To Friends</b>
+                            </MudText>
+                            <MudText Typo="Typo.body2">
+                                Means that only your friends will be able to see your contact details.
+                            </MudText>
+                            <MudSwitch @bind-Checked="true" Color="Color.Secondary" />
+                        </MudItem>*@
+                    </MudGrid>
+
+
+                    @*<MudCardActions Class="pb-4 pl-4">
+                        <MudButton Variant="Variant.Filled" Disabled="@(!Validated)" Color="Color.Primary" Class="ml-auto" ButtonType="ButtonType.Submit">@_localizer["Save Changes"]</MudButton>
+                    </MudCardActions>*@
+
+                
+            </MudItem>
+
+        </MudGrid>
+    </MudCardContent>
+
+    <MudDivider />
+
+    <MudCardActions>
+        <MudButton Variant="Variant.Filled" Disabled="@(!Validated)" Color="Color.Primary" Class="ml-auto" ButtonType="ButtonType.Submit">@_localizer["Save Changes"]</MudButton>
+    </MudCardActions>
+</MudCard>
+</EditForm>

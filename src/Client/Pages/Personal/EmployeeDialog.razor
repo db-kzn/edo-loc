@@ -1,0 +1,106 @@
+﻿@namespace EDO_FOMS.Client.Pages.Personal
+@using EDO_FOMS.Domain.Enums
+
+@inject Microsoft.Extensions.Localization.IStringLocalizer<EmployeeDialog> _localizer
+
+<EditForm Model="EmployeeModel">
+    <FluentValidationValidator @ref="_fluentValidationValidator" />
+    
+    <MudDialog>
+        <TitleContent>
+            <MudText Typo="Typo.h6">
+                <MudIcon Icon="@Icons.Material.Outlined.Person" Class="mr-3 mb-n1"/>
+                @(string.IsNullOrWhiteSpace(EmployeeModel.Id) ? _localizer["New Employee"] : _localizer["Edit Employee"])
+            </MudText>
+        </TitleContent>
+
+        <DialogContent>
+            <MudGrid>
+                @*<MudItem xs="12" Class="d-flex justify-center pb-4">
+                    <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Outlined.Memory" Size="Size.Large"
+                        Style="height: 56px;" FullWidth="true"  Color="Color.Default" OnClick="CertSelect">
+                        @_localizer["Fill out from certificate"]
+                     </MudButton>
+                </MudItem>*@
+
+                <MudItem xs="6" Class="input-field">
+                    <MudTextField For="@(() => EmployeeModel.Snils)" @bind-Value="EmployeeModel.Snils" Label="@_localizer["SNILS"]" Variant="Variant.Filled" ReadOnly="true" />
+                </MudItem>
+                <MudItem xs="6" Class="input-field">
+                    <MudTextField For="@(() => EmployeeModel.Inn)" @bind-Value="EmployeeModel.Inn" Label="@_localizer["INN"]" Variant="Variant.Filled" ReadOnly="true" />
+                </MudItem>
+
+                <MudItem xs="6" Class="input-field">
+                    <MudTextField For="@(() => EmployeeModel.Id)" @bind-Value="EmployeeModel.Id" Label="@_localizer["User ID"]" Variant="Variant.Filled" ReadOnly="true"/>
+                </MudItem>
+                <MudItem xs="6" Class="input-field">
+                    <MudTextField For="@(() => EmployeeModel.Title)" @bind-Value="EmployeeModel.Title" Label="@_localizer["Title"]" ReadOnly="@(!_canSelfOrgEdit)" />
+                </MudItem>
+
+                <MudItem xs="6" Class="input-field">
+                    <MudTextField For="@(() => EmployeeModel.Surname)" @bind-Value="EmployeeModel.Surname" Label="@_localizer["Surname"]" ReadOnly="@(!_canSelfOrgEdit)" />
+                </MudItem>
+                <MudItem xs="6" Class="input-field">
+                    <MudTextField For="@(() => EmployeeModel.GivenName)" @bind-Value="EmployeeModel.GivenName" Label="@_localizer["Given Name"]" ReadOnly="@(!_canSelfOrgEdit)" />
+                </MudItem>
+
+                <MudItem xs="6" Class="input-field">
+                    <MudTextField For="@(() => EmployeeModel.Email)" @bind-Value="EmployeeModel.Email" Label="@_localizer["EMail"]" InputType="InputType.Email" ReadOnly="@(!_canSelfOrgEdit)"/>
+                </MudItem>
+                <MudItem xs="6" Class="input-field">
+                    <MudTextField For="@(() => EmployeeModel.PhoneNumber)" @bind-Value="EmployeeModel.PhoneNumber" Label="@_localizer["Phone"]" InputType="InputType.Telephone" ReadOnly="@(!_canSelfOrgEdit)"/>
+                </MudItem>
+
+                <MudItem xs="6" Class="input-field">
+                    <MudSelect T="UserBaseRoles" Label="@_localizer["Base Role"]" @bind-Value="EmployeeModel.BaseRole" ReadOnly="@(!_canSelfOrgEdit)">
+                        @*AdornmentIcon="@(EmployeeModel.Role == _admin ? Icons.Material.Outlined.Stars : Icons.Material.Outlined.AccountCircle)" AdornmentColor="@(EmployeeModel.Role == _admin ? Color.Error : Color.Primary)"*@
+                       
+                        <MudSelectItem T="UserBaseRoles" Value="UserBaseRoles.User" Disabled="@(!_canManageUsers)">
+                            <div class="d-flex flex-row" style="height: 24px;">
+                                <MudIcon Icon="@Icons.Material.Outlined.Person" Color="Color.Default" Size="Size.Small" Class="mr-2"/>Пользователь
+                            </div>
+                        </MudSelectItem>
+                       
+                        <MudSelectItem T="UserBaseRoles" Value="UserBaseRoles.Employee" Disabled="@(!_canManageEmployees)">
+                            <div class="d-flex flex-row" style="height: 24px;">
+                                <MudIcon Icon="@Icons.Material.Outlined.HistoryEdu" Color="Color.Success" Size="Size.Small" Class="mr-2"/>Сотрудник
+                            </div>
+                        </MudSelectItem>
+                       
+                        <MudSelectItem T="UserBaseRoles" Value="UserBaseRoles.Manager" Disabled="@(!_canManageManagers)">
+                            <div class="d-flex flex-row" style="height: 24px;">
+                                <MudIcon Icon="@Icons.Material.Outlined.Engineering" Color="Color.Primary" Size="Size.Small" Class="mr-2"/>Администратор
+                            </div>                            
+                        </MudSelectItem>
+                        
+                        <MudSelectItem T="UserBaseRoles" Value="UserBaseRoles.Chief" Disabled="@(!_canManageChiefs)">
+                            <div class="d-flex flex-row" style="height: 24px;">
+                                <MudIcon Icon="@Icons.Material.Outlined.WorkspacePremium" Color="Color.Warning" Size="Size.Small" Class="mr-2"/>Руководитель
+                            </div>
+                        </MudSelectItem>
+                        
+                        <MudSelectItem T="UserBaseRoles" Value="UserBaseRoles.Admin" Disabled="@(!_canManageAdmins)">
+                            <div class="d-flex flex-row" style="height: 24px;">
+                                <MudIcon Icon="@Icons.Material.Outlined.Stars" Color="Color.Error" Size="Size.Small" Class="mr-2"/>Админ ЭДО
+                            </div>
+                        </MudSelectItem>
+                        
+                    </MudSelect>
+                </MudItem>
+
+                <MudItem xs="6" Class="input-field">
+                    <MudCheckBox @bind-Checked="@EmployeeModel.IsActive" Size="Size.Large" Label="@_localizer["Activate User"]" Color="Color.Tertiary" ReadOnly="@(!_canSelfOrgEdit)"></MudCheckBox>
+                </MudItem>
+                
+            </MudGrid>
+        </DialogContent>
+    
+        <DialogActions>
+            <MudItem xs="12" Class="d-flex justify-center">
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="OnSubmit" Size="Size.Large" FullWidth="true" Disabled="@(!Validated || !_canSelfOrgEdit)">
+                    @(string.IsNullOrWhiteSpace(EmployeeModel.Id) ? _localizer["Save"] : _localizer["Update"])
+                </MudButton>
+            </MudItem>
+        </DialogActions>
+    </MudDialog>
+</EditForm>

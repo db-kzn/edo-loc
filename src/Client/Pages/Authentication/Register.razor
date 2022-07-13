@@ -1,0 +1,84 @@
+﻿@page "/register"
+@layout MainLayout
+@attribute [AllowAnonymous]
+@inject Microsoft.Extensions.Localization.IStringLocalizer<Register> _localizer
+
+<EditForm Model="@_certModel" OnValidSubmit="SubmitAsync">
+    
+    <FluentValidationValidator @ref="_fluentValidationValidator" />
+
+    <MudGrid>
+        @*<MudItem xs="12">
+            <div class="d-flex justify-center">
+                <MudIcon Icon="@Icons.Material.Outlined.HealthAndSafety" Color="Color.Primary" Size="Size.Large" Style="width: 100px; height: 100px;" />
+            </div>
+        </MudItem>*@
+        <MudItem xs="12">
+            <div class="d-flex justify-center">
+                <MudText Typo="Typo.h4">@_localizer["Registration"]</MudText>
+            </div>
+        </MudItem>
+        <MudItem xs="12">
+            <div class="d-flex justify-center">
+                <MudText>@_localizer["Already have an account?"] <MudLink Href="/login">@_localizer["Sign In"]</MudLink></MudText>
+            </div>
+        </MudItem>
+
+        <MudItem xs="12" Class="d-flex justify-center">
+            <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Outlined.Memory" IconColor="Color.Warning"
+                Color="Color.Default" Size="Size.Large" FullWidth="true" OnClick="CertSelect" Style="height: 56px;">
+                    @_localizer["Electronic key"]
+                </MudButton>
+        </MudItem>
+        
+        <MudItem xs="6">
+            <MudTextField For="@(() => _certModel.Title)" @bind-Value="_certModel.Title" Label="@_localizer["Title"]"
+                 Variant="@(cert.IsOrgCert ? Variant.Filled : Variant.Text)" ReadOnly="@cert.IsOrgCert"/>
+        </MudItem>
+        <MudItem xs="6">
+            <MudTextField For="@(() => _certModel.Org)" @bind-Value="_certModel.Org" Label="@_localizer["Organization Name"]"
+                 Variant="@(cert.IsOrgCert ? Variant.Filled : Variant.Text)" ReadOnly="@cert.IsOrgCert"/>
+        </MudItem>
+        
+         <MudItem xs="6">
+            <MudTextField For="@(() => _certModel.InnLe)" @bind-Value="_certModel.InnLe" Label="@_localizer["Organization INN"]"
+                 Variant="@(cert.IsOrgCert ? Variant.Filled : Variant.Text)" ReadOnly="@cert.IsOrgCert"/>
+        </MudItem>
+        <MudItem xs="6">
+            <MudTextField For="@(() => _certModel.Snils)" @bind-Value="_certModel.Snils" Label="@_localizer["User SNILS"]"
+                 Variant="Variant.Filled" ReadOnly="true"/>
+        </MudItem>
+
+        <MudItem xs="6">
+            <MudTextField For="@(() => _certModel.Surname)" @bind-Value="_certModel.Surname" Label="@_localizer["User Surname"]"
+                 Variant="Variant.Filled" ReadOnly="true"/>
+        </MudItem>
+        <MudItem xs="6">
+            <MudTextField For="@(() => _certModel.GivenName)" @bind-Value="_certModel.GivenName" Label="@_localizer["User Given Name"]"
+                 Variant="Variant.Filled" ReadOnly="true"/>
+        </MudItem>
+        
+        <MudItem xs="12">
+            <MudTextField For="@(() => _certModel.Thumbprint)" @bind-Value="_certModel.Thumbprint" Label="@_localizer["Thumbprint"]"
+                 Variant="Variant.Filled" ReadOnly="true" InputType="@_passwordInput" Adornment="Adornment.End"
+                 AdornmentColor="@(_passwordVisibility ? Color.Error : Color.Default)"
+                 AdornmentIcon="@_passwordInputIcon" OnAdornmentClick="TogglePasswordVisibility"/>
+        </MudItem>
+        
+        <MudItem xs="6">
+            <MudTextField For="@(() => _certModel.FromDate)" @bind-Value="_certModel.FromDate" Label="@_localizer["From Date"]"
+                 Variant="Variant.Filled" ReadOnly="true"/>
+        </MudItem>
+        <MudItem xs="6">
+            <MudTextField For="@(() => _certModel.TillDate)" @bind-Value="_certModel.TillDate" Label="@_localizer["Till Date"]"
+                 Variant="Variant.Filled" ReadOnly="true"/>
+        </MudItem>
+        
+        <MudItem xs="12" Class="d-flex justify-center">
+            <MudButton FullWidth="true" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large"
+                ButtonType="ButtonType.Submit" Disabled="@(!Validated)">
+                    @_localizer["Register"]
+            </MudButton>
+        </MudItem>
+    </MudGrid>
+</EditForm>

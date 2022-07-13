@@ -1,0 +1,97 @@
+﻿@namespace EDO_FOMS.Client.Pages.Agreements
+
+@page "/agreements/inbox"
+
+@using EDO_FOMS.Application.Features.Agreements.Queries
+@using EDO_FOMS.Domain.Enums
+
+@inject Microsoft.Extensions.Localization.IStringLocalizer<Inbox> _localizer
+
+<MudPaper Square="true" Elevation="3" Style="z-index: 1;">
+    <MudToolBar  Elevation="2">
+        <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Documents for signature"]" Color="Color.Tertiary" Placement="Placement.Right">
+            <MudText Typo="Typo.button">@_localizer["Inbox"]</MudText>
+        </MudTooltip>
+
+        <MudSpacer />
+
+       <MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" Class="search-field" Immediate="true" FullWidth=false 
+            Placeholder="@_localizer["Search For Agreements"]" T="string" @bind-Value="_searchString" 
+            Adornment="Adornment.End" AdornmentColor="Color.Primary" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" >
+        </MudTextField>
+    </MudToolBar>
+</MudPaper>
+
+<MudContainer MaxWidth="MaxWidth.False" Class="pa-6">
+    @*ServerData="@(new Func<TableState, Task<TableData<GetAllDocumentsResponse>>>(ServerReloadAsync))"*@
+        @*Filter="new Func<EmployeeAgreementResponse, bool>(Search)"*@
+    <MudTable Hover="true" Dense="false" Bordered="false" Striped="true" Breakpoint="Breakpoint.Xs" 
+        Loading="@(!_loaded)" LoadingProgressColor="Color.Info"  OnRowClick="OnRowClickAsync"
+        @ref="_mudTable" T="EmployeeAgreementsResponse" Items="@_employeeAgreements" @bind-SelectedItem="_employeeAgreement">
+
+        <HeaderContent>
+            <!-- Type -->
+            @*<MudTh><MudTableSortLabel SortBy="new Func<EmployeeAgreementResponse, object>(x => x.DocType)">@_localizer["Type"]</MudTableSortLabel></MudTh>*@
+            <MudTh><MudTableSortLabel SortBy="new Func<EmployeeAgreementsResponse, object>(x => x.DocNumber)">@_localizer["Number"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<EmployeeAgreementsResponse, object>(x => x.DocDate)">@_localizer["Date"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<EmployeeAgreementsResponse, object>(x => x.DocTitle)">@_localizer["Title"]</MudTableSortLabel></MudTh>
+
+            <MudTh><MudTableSortLabel SortBy="new Func<EmployeeAgreementsResponse, object>(x => x.DocFileName)">@_localizer["File Name"]</MudTableSortLabel></MudTh>
+            <!-- CreateOn -->
+            <MudTh>@_localizer["Actions"]</MudTh>
+        </HeaderContent>
+
+        <RowTemplate>
+            <MudTd DataLabel="@_localizer["Number"]">
+                <MudHighlighter Text="@context.DocNumber" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="@_localizer["Date"]">
+                <MudHighlighter Text="@context.DocDate.ToString("dd MMM yyyy")" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="@_localizer["Title"]">
+                <MudHighlighter Text="@context.DocTitle" HighlightedText="@_searchString" />
+            </MudTd>
+
+            <MudTd DataLabel="@_localizer["File Name"]">
+                <MudLink Href="@context.DocURL" Underline="Underline.None" Target="_blank">
+                    <MudHighlighter Text="@context.DocFileName" HighlightedText="@_searchString" />
+                </MudLink>
+            </MudTd>
+
+            <MudTd DataLabel="@_localizer["Actions"]">
+                <MudMenu Label="@_localizer["Actions"]" Variant="Variant.Outlined" Color="Color.Primary" DisableElevation="true"
+                    EndIcon="@Icons.Outlined.KeyboardArrowDown" IconColor="Color.Primary" Direction="Direction.Left" OffsetX="true">
+                    <ChildContent>
+                        @*OnClick="(() => RunProcessAsync(context.Id))"*@
+                        <MudListItem Icon="@Icons.Material.TwoTone.GroupAdd" IconColor="Color.Warning"
+                            OnClick="(() => AddMembersAsync(context))">
+                                @_localizer["Members"]
+                        </MudListItem>
+
+                        @if (context.Action == AgreementActions.ToSign || context.Action == AgreementActions.ToApprove)
+                        {
+                            <MudListItem Icon="@Icons.Material.TwoTone.Draw" IconColor="Color.Success"
+                                OnClick="(() => SignAnAgreementAsync(context))">
+                                @_localizer["To Signed"]
+                            </MudListItem>
+                        }
+                        else if (context.Action == AgreementActions.ToVerify)
+                        {
+                            <MudListItem Icon="@Icons.Material.TwoTone.Done" IconColor="Color.Success"
+                                OnClick="(() => ApproveAnAgreementAsync(context))">
+                                @_localizer["Verify"]
+                            </MudListItem>
+                        }
+                         
+                        <MudListItem Icon="@Icons.Material.TwoTone.Clear" IconColor="Color.Error"
+                            OnClick="(() => RejectAnAgreementAsync(context))">
+                            @_localizer["Reject"]
+                        </MudListItem>
+                    </ChildContent>
+                </MudMenu>
+            </MudTd>
+
+        </RowTemplate>
+
+    </MudTable>
+</MudContainer>

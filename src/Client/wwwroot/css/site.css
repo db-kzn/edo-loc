@@ -1,0 +1,123 @@
+﻿.fab-btn-add {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+}
+
+.support-info {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+}
+
+.build-info {
+    position: fixed;
+    right: 24px;
+    top: 88px;
+}
+
+.input-field {
+    min-width: 300px;
+}
+
+.search-field {
+    max-width: 300px;
+}
+
+.pager-field {
+    max-width: 80px;
+}
+
+.mud-main-content {
+    height: 100vh;
+    overflow: hidden;
+}
+
+.mud-container {
+    overflow-y: auto;
+    height: 100%;
+    /*padding-bottom: 64px;*/
+}
+
+.mud-table {
+    margin-bottom: 64px;
+}
+
+.unread > td {
+    /*color: var(--mud-palette-primary) !important;*/
+    font-weight: bold;
+}
+
+/* SITE LOADER */
+
+@keyframes donut-spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.parent {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: auto;
+    background-color: #0288d1;
+}
+
+.block {
+    width: 250px;
+    height: 250px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+}
+
+.donut {
+    display: inline-block;
+    border: 8px solid rgba(0, 100, 100, 0.1);
+    border-left-color: #eceff1;
+    border-radius: 50%;
+    width: 20vh;
+    height: 20vh;
+    margin: 0 auto;
+    animation: donut-spin 1.2s linear infinite;
+}
+
+.actions .actions-panel {
+    display: none;
+}
+
+.actions:hover .actions-panel {
+    display: inherit;
+    float: right;
+}
+
+.actions > .action-cell {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+.actions:hover .actions-content {
+    display: none;
+}
+
+.mud-list-item-icon {
+    min-width: 38px;
+}
+
+.col-date-time {
+    width: 170px;
+}
+
+.col-date {
+    width: 140px;
+}

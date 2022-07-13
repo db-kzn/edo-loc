@@ -1,0 +1,70 @@
+﻿@namespace EDO_FOMS.Client.Pages.Admin
+
+@page "/admin/send-mail"
+
+@attribute [Authorize(Policy = Permissions.System.View)]
+@inject Microsoft.Extensions.Localization.IStringLocalizer<SendMail> _localizer
+
+
+<MudPaper Square="true" Elevation="3" Style="z-index: 1;">
+    <MudToolBar  Elevation="2">
+        <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Send Mail"]" Color="Color.Tertiary" Placement="Placement.Right">
+            <MudText Typo="Typo.button">@_localizer["Mail"]</MudText>
+        </MudTooltip>
+
+        @*<MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Renew"]" Color="Color.Tertiary" Placement="Placement.Right">
+            <MudIconButton Icon="@Icons.Material.Outlined.Sync" aria-label="Renew" OnClick="RenewAsync"></MudIconButton>
+        </MudTooltip>*@
+
+        <MudSpacer />
+
+        @*<MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" Class="search-field" Immediate="true" FullWidth=false 
+            Placeholder="@_localizer["Search For Users"]" T="string" @bind-Value="_searchString" 
+            Adornment="Adornment.End" AdornmentColor="Color.Primary" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" >
+        </MudTextField>*@
+
+        @*Class="mt-0 mb-3"*@
+        @*<MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Link to the organization"]" Color="Color.Tertiary" Placement="Placement.Left">
+            <MudIconButton Icon="@Icons.Material.Outlined.AddLink" Color="Color.Inherit" Edge="Edge.End"/>
+        </MudTooltip>*@
+    </MudToolBar>
+</MudPaper>
+
+<MudContainer MaxWidth="MaxWidth.False" Class="pa-6">
+    <EditForm Model="@_mailModel" OnValidSubmit="ToSend">
+        <MudCard>
+            <MudCardContent>
+                <MudGrid>
+                    <MudItem md="6">
+                        <MudTextField @bind-Value="@_mailModel.Email" For="@(() => _mailModel.Email)" Label="@_localizer["Address"]" Variant="Variant.Text" />
+                    </MudItem>
+
+                    <MudItem md="6">
+                        <MudTextField @bind-Value="@_mailModel.Theme" For="@(() => _mailModel.Theme)" Label="@_localizer["Theme"]" Variant="Variant.Text" />
+                    </MudItem>
+
+                    <MudItem md="12">
+                        <MudTextField @bind-Value="@_mailModel.Text" For="@(() => _mailModel.Text)" Label="@_localizer["Mail Text"]" Variant="Variant.Outlined" />
+                    </MudItem>
+                </MudGrid>
+            </MudCardContent>
+
+            <MudDivider />
+
+            <MudCardActions>
+                <MudButton FullWidth="true" Variant="Variant.Outlined" Color="Color.Primary" Class="ml-auto" ButtonType="ButtonType.Submit">@_localizer["Send"]</MudButton>
+            </MudCardActions>
+        </MudCard>
+    </EditForm>
+</MudContainer>
+
+<MudDrawer Anchor="Anchor.Right" Elevation="1" Variant="@DrawerVariant.Persistent" ClipMode="DrawerClipMode.Always">
+    <MudDrawerHeader Style="padding: 8px 4px 8px 16px;">
+        <MudText Style="align-self:center;" Typo="Typo.h6" Inline="true">@_localizer[""]</MudText>
+    </MudDrawerHeader>
+    
+    <MudDivider />
+
+    <MudList Clickable="true" Class="py-0">
+    </MudList>
+</MudDrawer>

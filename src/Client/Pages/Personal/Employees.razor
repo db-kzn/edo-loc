@@ -1,0 +1,196 @@
+﻿@namespace EDO_FOMS.Client.Pages.Personal
+
+@page "/personal/employees"
+
+@using EDO_FOMS.Application.Responses.Identity
+@using EDO_FOMS.Domain.Enums
+
+@inject Microsoft.Extensions.Localization.IStringLocalizer<Employees> _localizer
+
+@*<style>
+    .mud-table-container {
+        overflow: auto;
+    }
+</style>*@
+
+<MudPaper Square="true" Elevation="3" Style="z-index: 1;">
+    <MudToolBar  Elevation="2">
+        <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Employee management"]" Color="Color.Tertiary" Placement="Placement.Right">
+            <MudText Typo="Typo.button">@_localizer["Employees"]</MudText>
+        </MudTooltip>
+
+        <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Renew"]" Color="Color.Tertiary" Placement="Placement.Right">
+            <MudIconButton Icon="@Icons.Material.Outlined.Sync" aria-label="RenewAsync" OnClick="RenewAsync"></MudIconButton>
+        </MudTooltip>
+
+        <MudSpacer />
+       
+        <MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" Class="search-field" Immediate="false" FullWidth=false 
+            Placeholder="@_localizer["Search For Employees"]" @bind-Value="_searchString" Clearable="true"
+            Adornment="Adornment.Start" AdornmentColor="Color.Primary" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" >
+        </MudTextField>
+
+        <MudTooltip Delay="@delay" Duration="@duration" Placement="Placement.Left" Color="Color.Tertiary" Arrow="true"
+            Text="@(matchCase ? _localizer["Match Case On"] : _localizer["Match Case Off"])">
+            <MudToggleIconButton Toggled="@matchCase" ToggledChanged="OnToggledMatchCase"
+                 Icon="@Icons.Material.Filled.FormatStrikethrough" Color="@Color.Default"
+                 ToggledIcon="@Icons.Material.Filled.TextFields" ToggledColor="@Color.Default"/>
+        </MudTooltip>
+
+        <MudTooltip Delay="@delay" Duration="@duration" Placement="Placement.Left" Color="Color.Tertiary" Arrow="true"
+            Text="@_localizer["Rows density"]">
+            <MudToggleIconButton Toggled="@dense" ToggledChanged="OnToggledDense"
+                 Icon="@Icons.Material.Filled.DensityMedium" Color="@Color.Default"
+                 ToggledIcon="@Icons.Material.Filled.DensitySmall" ToggledColor="@Color.Default"/>
+        </MudTooltip>
+    </MudToolBar>
+</MudPaper>
+
+<MudContainer MaxWidth="MaxWidth.False" Class="pa-6">
+  
+    <MudTable Hover="true" Dense="@dense" Bordered="false" Striped="true" Breakpoint="Breakpoint.Xs" 
+        Loading="@(!_loaded)" LoadingProgressColor="Color.Info"
+        Filter="new Func<UserResponse, bool>(Search)" OnRowClick="EditEmployee"
+        @ref="mudTable" T="UserResponse" Items="@_employeeList" @bind-SelectedItem="_employee">
+
+        <ColGroup>
+            <col /><col /><col />
+            <col /><col /><col /><col />
+            <col class="col-date-time" />
+        </ColGroup>
+
+        @*RowClassFunc="@SelectedRowClassFunc" OnRowClick="RowClickEvent"*@
+        <HeaderContent>
+            @*<MudTh><MudTableSortLabel SortBy="new Func<UserResponse, object>(x => x.UserName)">@_localizer["UserName"]</MudTableSortLabel></MudTh>*@
+            <MudTh><MudTableSortLabel SortBy="new Func<UserResponse, object>(x => x.Inn)">@_localizer["Inn"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<UserResponse, object>(x => x.Snils)">@_localizer["Snils"]</MudTableSortLabel></MudTh>
+
+            <MudTh><MudTableSortLabel SortBy="new Func<UserResponse, object>(x => x.Title)">@_localizer["Title"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<UserResponse, object>(x => x.Surname)">@_localizer["Surname"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<UserResponse, object>(x => x.GivenName)">@_localizer["Given Name"]</MudTableSortLabel></MudTh>
+
+            <MudTh><MudTableSortLabel SortBy="new Func<UserResponse, object>(x => x.Email)">@_localizer["Email"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<UserResponse, object>(x => x.IsActive)">@_localizer["State"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<UserResponse, object>(x => x.CreatedOn)">@_localizer["Created"]</MudTableSortLabel></MudTh>
+        </HeaderContent>
+
+        <RowTemplate>
+
+            <MudTd DataLabel="@_localizer["Inn"]">
+                <MudHighlighter Text="@context.Inn" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="@_localizer["Snils"]">
+                <MudHighlighter Text="@context.Snils" HighlightedText="@_searchString" />
+            </MudTd>
+
+            <MudTd DataLabel="@_localizer["Title"]">
+                <MudHighlighter Text="@context.Title" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="@_localizer["Surname"]">
+                <MudHighlighter Text="@context.Surname" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="@_localizer["Given Name"]">
+                <MudHighlighter Text="@context.GivenName" HighlightedText="@_searchString" />
+            </MudTd>
+
+            <MudTd DataLabel="@_localizer["Email"]">
+                <MudHighlighter Text="@context.Email" HighlightedText="@_searchString" />
+            </MudTd>
+
+            <MudTd DataLabel="@_localizer["State"]">
+                @*Style="text-align: center;"*@
+                @*<MudCheckBox @bind-Checked="@context.IsActive" ReadOnly Color="Color.Secondary"></MudCheckBox>*@
+
+                @if(@context.EmailConfirmed)
+                {
+                    <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["e-mail confirmed"]" Placement="Placement.Left" Color="Color.Tertiary">
+                        <MudIcon Icon="@Icons.Material.Outlined.MarkEmailRead" Color="Color.Success" Class="mx-2"/>
+                    </MudTooltip>
+                }
+                else
+                {
+                    <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["e-mail not confirmed"]" Placement="Placement.Left" Color="Color.Tertiary">
+                        <MudIcon Icon="@Icons.Material.Outlined.MarkEmailUnread" Color="Color.Error" Class="mx-2"/>
+                    </MudTooltip>
+                }
+
+                @if(@context.IsActive)
+                {
+                    <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Active"]" Placement="Placement.Left" Color="Color.Tertiary">
+                        <MudIcon Icon="@Icons.Material.Outlined.Verified" Color="Color.Success" Class="mx-2"/>
+                    </MudTooltip>
+                }
+                else
+                {
+                    <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Lock"]" Placement="Placement.Left" Color="Color.Tertiary">
+                        <MudIcon Icon="@Icons.Material.Outlined.Lock" Color="Color.Warning" Class="mx-2"/>
+                    </MudTooltip>
+                }
+
+                @if(@context.BaseRole == UserBaseRoles.Manager)
+                {
+                    <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Manager"]" Placement="Placement.Left" Color="Color.Tertiary">
+                        <MudIcon Icon="@Icons.Material.Outlined.Engineering" Color="Color.Primary" Class="mx-2"/>
+                    </MudTooltip>
+                }
+                else if(@context.BaseRole == UserBaseRoles.Chief)
+                {
+                     <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Chief"]" Placement="Placement.Left" Color="Color.Tertiary">
+                        <MudIcon Icon="@Icons.Material.Outlined.WorkspacePremium" Color="Color.Warning" Class="mx-2"/>
+                     </MudTooltip>
+                }
+                else if(@context.BaseRole == UserBaseRoles.Employee)
+                {
+                     <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Employee"]" Placement="Placement.Left" Color="Color.Tertiary">
+                        <MudIcon Icon="@Icons.Material.Outlined.HistoryEdu" Color="Color.Success" Class="mx-2"/>
+                     </MudTooltip>
+                }
+                else if(@context.BaseRole == UserBaseRoles.User)
+                {
+                     <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["User"]" Placement="Placement.Left" Color="Color.Tertiary">
+                        <MudIcon Icon="@Icons.Material.Outlined.Person" Color="Color.Default" Class="mx-2"/>
+                     </MudTooltip>
+                }
+                else if(@context.BaseRole == UserBaseRoles.Admin)
+                {
+                     <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Admin"]" Placement="Placement.Left" Color="Color.Tertiary">
+                        <MudIcon Icon="@Icons.Material.Outlined.Stars" Color="Color.Error" Class="mx-2"/>
+                     </MudTooltip>
+                }
+
+            </MudTd>
+
+            <MudTd DataLabel="@_localizer["Created"]">
+                <MudHighlighter Text="@context.CreatedOn.ToString()" HighlightedText="@_searchString" />
+            </MudTd>
+
+            @*<MudTd DataLabel="Actions" Style="text-align:right">
+                <MudMenu Label="@_localizer["Actions"]" Variant="Variant.Filled" DisableElevation="true" EndIcon="@Icons.Filled.KeyboardArrowDown" IconColor="Color.Secondary" Direction="Direction.Left" OffsetX="true">
+                    <MudMenuItem OnClick="(()=>ViewProfile(context.Id))">@_localizer["View Profile"]</MudMenuItem>
+                    @if (_canViewRoles)
+                        {
+                        <MudMenuItem OnClick="(()=>ManageRoles(context.Id, context.Email))">@_localizer["Manage Roles"]</MudMenuItem>
+                        }
+                </MudMenu>
+            </MudTd>*@
+        </RowTemplate>
+    </MudTable>
+    
+   @*<MudItem Class="fab-btn-add">
+        <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Add new employee"]" Color="Color.Tertiary" Placement="Placement.Left">
+            <MudFab Color="Color.Secondary" Icon="@Icons.Material.Filled.Add" aria-label="add" OnClick="AddNewEmployee"/>
+        </MudTooltip>
+    </MudItem>*@
+
+</MudContainer>
+
+<MudDrawer Anchor="Anchor.Right" Elevation="1" Variant="@DrawerVariant.Persistent" ClipMode="DrawerClipMode.Always">
+    <MudDrawerHeader Style="padding: 8px 4px 8px 16px;">
+        <MudText Style="align-self:center;" Typo="Typo.h6" Inline="true">@_localizer[""]</MudText>
+    </MudDrawerHeader>
+    
+    <MudDivider />
+
+    <MudList Clickable="true" Class="py-0">
+    </MudList>
+</MudDrawer>

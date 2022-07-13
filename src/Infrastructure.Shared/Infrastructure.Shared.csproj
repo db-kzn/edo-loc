@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace>EDO_FOMS.Infrastructure.Shared</RootNamespace>
+    <AssemblyName>EDO_FOMS.Infrastructure.Shared</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Application\Application.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MailKit" Version="3.3.0" />
+    <PackageReference Include="MimeKit" Version="3.3.0" />
+  </ItemGroup>
+</Project>

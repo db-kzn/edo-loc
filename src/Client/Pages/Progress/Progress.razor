@@ -1,0 +1,324 @@
+﻿@namespace EDO_FOMS.Client.Pages.Progress
+
+@page "/progress"
+
+@using EDO_FOMS.Application.Responses.Docums
+@using EDO_FOMS.Application.Features.Orgs.Queries
+@using EDO_FOMS.Client.Models
+@using EDO_FOMS.Domain.Enums
+
+@inject Microsoft.Extensions.Localization.IStringLocalizer<Progress> _localizer
+
+<MudPaper Square="true" Elevation="3" Style="z-index: 1;">
+    <MudToolBar  Elevation="2">
+        <MudTooltip Delay="@delay" Duration="@duration" Style="display:none;" Text="@_localizer["Negotiation progress"]" Color="Color.Tertiary" Placement="Placement.Right">
+            <MudText Typo="Typo.button">@_localizer["Progress"]</MudText>
+        </MudTooltip>
+
+        <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Renew"]" Color="Color.Tertiary" Placement="Placement.Right">
+            <MudIconButton Icon="@Icons.Material.Outlined.Sync" aria-label="Renew" OnClick="Renew"></MudIconButton>
+        </MudTooltip>
+
+        @if (_selectedItems?.Where(i => i.Action == AgreementActions.ToSign && !i.ActionBlocked).Any() == true)//ToArray().Length > 0
+        {
+            <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.TwoTone.Draw" Color="Color.Success"
+                OnClick="SignSelectedItemsAsync" Disabled="@(!_loaded)">
+                @_localizer["To Signed"]: @_selectedItems.Where(i => i.Action == AgreementActions.ToSign && !i.ActionBlocked).Count()
+            </MudButton>
+        }
+
+        <MudSpacer />
+
+        <MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" Class="search-field" Immediate="false" FullWidth=false 
+            Placeholder="@_localizer["Document search"]" T="string" Clearable="true" ValueChanged="@(s => OnSearch(s))"
+            Adornment="Adornment.Start" AdornmentColor="Color.Default" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" >
+        </MudTextField>
+
+        <MudTooltip Delay="@delay" Duration="@duration" Placement="Placement.Left" Color="Color.Tertiary" Arrow="true"
+            Text="@(matchCase ? _localizer["Match Case On"] : _localizer["Match Case Off"])">
+            <MudToggleIconButton Toggled="@matchCase" ToggledChanged="OnToggledMatchCase"
+                 Icon="@Icons.Material.Filled.FormatStrikethrough" Color="@Color.Default"
+                 ToggledIcon="@Icons.Material.Filled.TextFields" ToggledColor="@Color.Default"/>
+        </MudTooltip>
+
+        <MudTooltip Delay="@delay" Duration="@duration" Placement="Placement.Left" Color="Color.Tertiary" Arrow="true"
+            Text="@_localizer["Rows density"]">
+
+            <MudToggleIconButton Toggled="@dense" ToggledChanged="OnToggledDense"
+                 Icon="@Icons.Material.Filled.DensityMedium" Color="@Color.Default"
+                 ToggledIcon="@Icons.Material.Filled.DensitySmall" ToggledColor="@Color.Default"/>
+        </MudTooltip>
+
+        <MudTooltip Delay="@delay" Duration="@duration" Placement="Placement.Left" Color="Color.Tertiary" Arrow="true" Text="@_localizer["Filter"]">
+            <MudIconButton Icon="@Icons.Material.TwoTone.FilterAlt" Color="@(Filter.IsActive ? Color.Error : Color.Default)" OnClick="@ToggleFilter" /> @*Edge="Edge.End"*@
+        </MudTooltip>
+    </MudToolBar>
+</MudPaper>
+
+<MudContainer MaxWidth="MaxWidth.False" Class="pa-6">
+    <MudTable Hover="true" Dense="@dense" Bordered="false" Striped="true" Breakpoint="Breakpoint.Xs"
+        @ref="_mudTable" T="AgreementModel" @bind-SelectedItem="_agreement" OnRowClick="OnRowClickAsync"
+        ServerData="@(new Func<TableState, Task<TableData<AgreementModel>>>(ServerReloadAsync))"
+        Loading="@(!_loaded)" LoadingProgressColor="Color.Info" RowsPerPage="@_rowsPerPage"
+        RowClassFunc="@UnreadRowClassFunc" RowClass="actions" 
+        MultiSelection="true" @bind-SelectedItems="_selectedItems">
+
+        <ColGroup>
+            <col style="width: 58px;"/><col /><col /><col />
+            <col /><col class="col-date" /><col />
+            <col class="col-date-time" />
+        </ColGroup>
+
+        <HeaderContent>
+            <MudTh><MudTableSortLabel T="AgreementModel" SortLabel="Action">@_localizer["Action"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="AgreementModel" SortLabel="DocCurrentStep">@_localizer["Step"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="AgreementModel" SortLabel="DocTypeId">@_localizer["Type"]</MudTableSortLabel></MudTh>
+
+            <MudTh><MudTableSortLabel T="AgreementModel" SortLabel="DocNumber">@_localizer["Number"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="AgreementModel" SortLabel="DocDate">@_localizer["Date"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="AgreementModel" SortLabel="DocTitle">@_localizer["Title"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="AgreementModel" SortLabel="DocCreatedOn">@_localizer["Create on"]</MudTableSortLabel></MudTh>
+        </HeaderContent>
+
+        <RowTemplate>
+            <MudTd DataLabel="@_localizer["Action"]">
+                <div class="d-flex flex-row" style="height: 24px;">
+                    @*@if (context.DocStage == DocStages.Draft)
+                    { <MudIcon Icon="@Icons.Material.TwoTone.IntegrationInstructions" Color="Color.Default" Class="mr-2"/> }
+                    else if (context.DocStage == DocStages.InProgress)
+                    { <MudIcon Icon="@Icons.Material.TwoTone.NoteAlt" Color="Color.Warning" Class="mr-2"/> }
+                    else if (context.DocStage == DocStages.Rejected)
+                    { <MudIcon Icon="@Icons.Material.TwoTone.AssignmentReturn" Color="Color.Error" Class="mr-2"/> }
+                    else if (context.DocStage == DocStages.Agreed)
+                    { <MudIcon Icon="@Icons.Material.TwoTone.AssignmentTurnedIn" Color="Color.Success" Class="mr-2"/> }
+                    else if (context.DocStage == DocStages.Deleted)
+                    { <MudIcon Icon="@Icons.Material.TwoTone.Delete" Color="Color.Default" Class="mr-2"/> }
+                    else if (context.DocStage == DocStages.Canceled)
+                    { <MudIcon Icon="@Icons.Material.TwoTone.CancelScheduleSend" Color="Color.Default" Class="mr-2"/> }
+                    else if (context.DocStage == DocStages.Archive)
+                    { <MudIcon Icon="@Icons.Material.TwoTone.Archive" Color="Color.Default" Class="mr-2"/> }
+                    @context.DocStageName*@
+
+                    @if(context.Action == AgreementActions.ToSign)
+                    { <MudIcon Icon="@Icons.Material.Outlined.Draw" Color="@(context.ActionBlocked ? Color.Default : Color.Success)" Class="mr-2"/> }
+                    else if(context.Action == AgreementActions.ToApprove)
+                    { <MudIcon Icon="@Icons.Material.Outlined.Rule" Color="@(context.ActionBlocked ? Color.Default : Color.Error)" Class="mr-2"/> }
+                    else if(context.Action == AgreementActions.ToVerify)
+                    { <MudIcon Icon="@Icons.Material.Outlined.AddTask" Color="@(context.ActionBlocked ? Color.Default : Color.Warning)" Class="mr-2"/> }
+                    else if(context.Action == AgreementActions.ToRun)
+                    { <MudIcon Icon="@Icons.Material.Outlined.PlayCircle" Color="@(context.ActionBlocked ? Color.Default : Color.Tertiary)" Class="mr-2"/> }
+                    @context.ActionName
+                </div>
+            </MudTd>
+
+            <MudTd DataLabel="@_localizer["Steps"]">
+                @context.DocCurrentStep из @context.DocTotalSteps
+            </MudTd>
+
+            <MudTd DataLabel="@_localizer["Type"]">
+                @*<MudHighlighter Text="@context.DocTypeName" HighlightedText="@_searchString" />*@
+                @context.DocTypeName
+             </MudTd>
+
+            <MudTd DataLabel="@_localizer["Number"]">
+                <MudHighlighter Text="@context.DocNumber" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="@_localizer["Date"]">
+                @*<MudHighlighter Text="@context.DocDateStr" HighlightedText="@_searchString" />*@
+                @context.DocDateStr
+            </MudTd>
+            <MudTd DataLabel="@_localizer["Title"]">
+                <MudHighlighter Text="@context.DocTitle" HighlightedText="@_searchString" />
+            </MudTd>
+
+            @*<MudTd DataLabel="@_localizer["File Name"]">
+                <MudLink Href="@context.DocURL" Underline="Underline.None" Target="_blank">
+                    <MudHighlighter Text="@context.DocFileName" HighlightedText="@_searchString" />
+                </MudLink>
+            </MudTd>*@
+
+            <MudTd DataLabel="@_localizer["Create on"]" Class="action-cell">
+                <div class="actions-content">
+                    @*<MudHighlighter Text="@context.DocCreatedOnStr" HighlightedText="@_searchString" />*@
+                    @context.DocCreatedOnStr
+                </div>
+
+                <span class="actions-panel">
+                    @{
+                        if (context.Action == AgreementActions.ToSign)
+                        {
+                            <MudTooltip Delay="@delay" Duration="@duration" Placement="Placement.Left" Color="Color.Tertiary" Arrow="true" Text="@_localizer["To Signed"]">
+                                <MudIconButton Class="mx-1" Variant="Variant.Outlined" Size="Size.Small" aria-label="Run"
+                                    Color="Color.Success" Icon="@Icons.Material.Outlined.Draw" Disabled="@(!_loaded || context.ActionBlocked)"
+                                    OnClick="(() => SignAnAgreementAsync(context))">
+                                </MudIconButton>
+                            </MudTooltip>
+                        }
+                        else if (context.Action == AgreementActions.ToApprove)
+                        {
+                            <MudTooltip Delay="@delay" Duration="@duration" Placement="Placement.Left" Color="Color.Tertiary" Arrow="true" Text="@_localizer["Approve"]">
+                                <MudIconButton Class="mx-1" Variant="Variant.Outlined" Size="Size.Small" aria-label="Run"
+                                    Color="Color.Success" Icon="@Icons.Material.Outlined.Done" Disabled="@(!_loaded || context.ActionBlocked)"
+                                    OnClick="(() => ApproveAnAgreementAsync(context))">
+                                </MudIconButton>
+                            </MudTooltip>
+                        }
+                        else if (context.Action == AgreementActions.ToVerify)
+                        {
+                            <MudTooltip Delay="@delay" Duration="@duration" Placement="Placement.Left" Color="Color.Tertiary" Arrow="true" Text="@_localizer["Verify"]">
+                                <MudIconButton Class="mx-1" Variant="Variant.Outlined" Size="Size.Small" aria-label="Run"
+                                    Color="Color.Success" Icon="@Icons.Material.Outlined.Done" Disabled="@(!_loaded || context.ActionBlocked)"
+                                    OnClick="(() => VerifyAnAgreementAsync(context))">
+                                </MudIconButton>
+                            </MudTooltip>
+                        }
+
+                        if (!(context.Action == AgreementActions.ToVerify))
+                        {
+                            <MudTooltip Delay="@delay" Duration="@duration" Placement="Placement.Left" Color="Color.Tertiary" Arrow="true" Text="@_localizer["Members"]">
+                                <MudIconButton Class="mx-1" Variant="Variant.Outlined" Size="Size.Small" aria-label="Run"
+                                    Color="Color.Warning" Icon="@Icons.Material.Outlined.GroupAdd" Disabled="@(!_loaded || context.ActionBlocked)"
+                                    OnClick="(() => AddMembersAsync(context))">
+                                </MudIconButton>
+                            </MudTooltip>
+
+                            <MudTooltip Delay="@delay" Duration="@duration" Placement="Placement.Left" Color="Color.Tertiary" Arrow="true" Text="@_localizer["Reject"]">
+                                <MudIconButton Class="mx-1" Variant="Variant.Outlined" Size="Size.Small" aria-label="Run"
+                                    Color="Color.Error" Icon="@Icons.Material.Outlined.Clear" Disabled="@(!_loaded || context.ActionBlocked)"
+                                    OnClick="(() => RejectAnAgreementAsync(context))">
+                                </MudIconButton>
+                            </MudTooltip>
+                        }
+                        else
+                        {
+                            <MudTooltip Delay="@delay" Duration="@duration" Placement="Placement.Left" Color="Color.Tertiary" Arrow="true" Text="@_localizer["Refuse"]">
+                                <MudIconButton Class="mx-1" Variant="Variant.Outlined" Size="Size.Small" aria-label="Run"
+                                    Color="Color.Error" Icon="@Icons.Material.Outlined.Clear" Disabled="@(!_loaded || context.ActionBlocked)"
+                                    OnClick="(() => RefuseAnAgreementAsync(context))">
+                                </MudIconButton>
+                            </MudTooltip>
+                        }
+                    }
+                </span>
+            </MudTd>
+        </RowTemplate>
+
+        <PagerContent>
+            <TablePager />
+        </PagerContent>
+    </MudTable>
+</MudContainer>
+
+<MudDrawer @bind-Open="@openFilter" Anchor="Anchor.Right" Elevation="1" Variant="@DrawerVariant.Persistent" ClipMode="DrawerClipMode.Always">
+
+    <MudDrawerHeader Style="padding: 8px 4px 8px 16px;">
+        <MudText Style="align-self:center;" Typo="Typo.button" Inline="true">@_localizer["Advanced filter"]</MudText>
+        <MudSpacer />
+        <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Reset"]" Color="Color.Tertiary" Placement="Placement.Left" Arrow="true">
+            <MudIconButton Icon="@Icons.Material.Outlined.SettingsBackupRestore" Color="Color.Primary" OnClick="FilterReset" Disabled="@(!Filter.IsActive)"/>
+        </MudTooltip>
+    </MudDrawerHeader>
+
+    <MudDivider />
+
+    <MudList Clickable="true" Class="py-0">
+        <MudListItem Icon="@Icons.Material.Outlined.AssignmentInd" Text="@_localizer["Attendee"]" InitiallyExpanded="false"
+            AdornmentColor="Color.Primary" IconColor="@(Filter.ChangedAttendee ? Color.Error : Color.Primary)">
+            <NestedList>
+                <MudAutocomplete Class="mx-2" Label="@_localizer["Organization"]" ToStringFunc="@(e => OrgName(e))" Disabled="@(!_loaded)"
+                    T="OrgsResponse" Value="orgContact" SearchFunc="@SearchOrgAsync" ValueChanged="@(o => OrgChanged(o))"
+                    ResetValueOnEmptyText="@resetValueOnEmptyText" CoerceText="@coerceText" CoerceValue="@coerceValue" Dense="true"/>
+
+                <MudAutocomplete Class="mx-2" Label="@_localizer["Employee"]" ToStringFunc="@(e => EmployeeName(e))" Disabled="@(!_loaded)"
+                    T="ContactResponse" Value="employeeContact" SearchFunc="@SearchEmployeeAsync" ValueChanged="@(e => EmployeeChanged(e))"
+                    ResetValueOnEmptyText="@resetValueOnEmptyText" CoerceText="@coerceText" CoerceValue="@coerceValue" Dense="true"/>
+            </NestedList>
+        </MudListItem>
+        <MudDivider />
+
+        <MudListItem Icon="@Icons.Material.Outlined.DocumentScanner" Text="@_localizer["Type"]" InitiallyExpanded="false"
+            AdornmentColor="Color.Primary" IconColor="@(Filter.ChangedType ? Color.Error : Color.Primary)">
+            <NestedList>
+                <MudListItem Icon="@(Filter.TypeContract ? Icons.Material.TwoTone.Description : Icons.Material.Outlined.CheckBoxOutlineBlank)"
+                    IconColor="@(Filter.TypeContract ? Color.Tertiary : Color.Default)" OnClick="@(() => OnType("Contract"))">
+                    @_localizer["Contract"]
+                </MudListItem>
+
+                <MudListItem Icon="@(Filter.TypeAgreement ? Icons.Material.TwoTone.NoteAdd : Icons.Material.Outlined.CheckBoxOutlineBlank)"
+                    IconColor="@(Filter.TypeAgreement ? Color.Warning : Color.Default)" OnClick="@(() => OnType("Agreement"))">
+                    @_localizer["Agreement"]
+                </MudListItem>
+            </NestedList>
+        </MudListItem>
+        <MudDivider />
+
+        <MudListItem Icon="@Icons.Material.Outlined.FontDownload" Text="@_localizer["Text"]" InitiallyExpanded="false"
+            AdornmentColor="Color.Primary" IconColor="@(Filter.ChangedText ? Color.Error : Color.Primary)">
+            <NestedList>
+                <MudTextField Class="mx-2" Label="@_localizer["Number"]" Variant="Variant.Text" Margin="Margin.Dense"
+                    @bind-Value="Filter.TextNumber" TextChanged="@(() => OnText())">
+                </MudTextField>
+                <MudTextField Class="mx-2" Label="@_localizer["Title"]" Variant="Variant.Text" Margin="Margin.Dense"
+                    @bind-Value="Filter.TextTitle" TextChanged="@(() => OnText())">
+                </MudTextField>
+            </NestedList>
+        </MudListItem>
+        <MudDivider />
+
+        <MudListItem Icon="@Icons.Material.Outlined.DateRange" Text="@_localizer["Date"]" InitiallyExpanded="false"
+            AdornmentColor="Color.Primary" IconColor="@(Filter.ChangedDate ? Color.Error : Color.Primary)">
+            <NestedList>
+                <MudDatePicker Class="mx-2" Label="@_localizer["From"]" Editable="false" DisableToolbar="true" AdornmentIcon="@Icons.Material.TwoTone.Today"
+                    @ref="_dateFrom" Date="Filter.DateFrom" DateChanged="@((d) => OnDate("From", d))" AutoClose="true">
+                    <PickerActions>
+                        <MudButton StartIcon="@Icons.Material.TwoTone.EventBusy" OnClick="@(() => _dateFrom.Clear())">@_localizer["Clear"]</MudButton>
+                        @*<MudButton OnClick="@(() => _dateFrom.Close(false))">@_localizer["Cancel"]</MudButton>*@
+                        @*<MudButton Color="Color.Primary" OnClick="@(() => _dateFrom.Close())">@_localizer["Ok"]</MudButton>*@
+                    </PickerActions>
+                </MudDatePicker>
+
+                <MudDatePicker Class="mx-2" Label="@_localizer["To"]" Editable="false" DisableToolbar="true" AdornmentIcon="@Icons.Material.TwoTone.Event"
+                    @ref="_dateTo" Date="Filter.DateTo" DateChanged="@((d) => OnDate("To", d))" AutoClose="true">
+                    <PickerActions>
+                        <MudButton StartIcon="@Icons.Material.TwoTone.EventBusy" OnClick="@(() => _dateTo.Clear())">@_localizer["Clear"]</MudButton>
+                        @*<MudButton OnClick="@(() => _dateTo.Close(false))">@_localizer["Cancel"]</MudButton>*@
+                        @*<MudButton Color="Color.Primary" OnClick="@(() => _dateTo.Close())">@_localizer["Ok"]</MudButton>*@
+                    </PickerActions>
+                </MudDatePicker>
+            </NestedList>
+        </MudListItem>
+        <MudDivider />
+
+        <MudListItem Icon="@Icons.Material.Outlined.DateRange" Text="@_localizer["Create on"]" InitiallyExpanded="false"
+            AdornmentColor="Color.Primary" IconColor="@(Filter.ChangedCreateOn ? Color.Error : Color.Primary)">
+            <NestedList>
+                <MudDatePicker Class="mx-2" Label="@_localizer["From"]" Editable="false" DisableToolbar="true" AdornmentIcon="@Icons.Material.TwoTone.Today"
+                    @ref="_createOnFrom" Date="Filter.CreateOnFrom" DateChanged="@((d) => OnCreateOn("From", d))" AutoClose="true">
+                    <PickerActions>
+                        <MudButton StartIcon="@Icons.Material.TwoTone.EventBusy" OnClick="@(() => _createOnFrom.Clear())">@_localizer["Clear"]</MudButton>
+                        @*<MudButton StartIcon="@Icons.Material.Outlined.Clear" OnClick="@(() => _createOnFrom.Close(false))">@_localizer["Cancel"]</MudButton>*@
+                        @*<MudButton Color="Color.Primary" OnClick="@(() => _createOnFrom.Close())">@_localizer["Ok"]</MudButton>*@
+                    </PickerActions>
+                </MudDatePicker>
+
+                <MudDatePicker Class="mx-2" Label="@_localizer["To"]" Editable="false" DisableToolbar="true" AdornmentIcon="@Icons.Material.TwoTone.Event"
+                    @ref="_createOnTo" Date="Filter.CreateOnTo" DateChanged="@((d) => OnCreateOn("To", d))" AutoClose="true">
+                    <PickerActions>
+                        <MudButton StartIcon="@Icons.Material.TwoTone.EventBusy" OnClick="@(() => _createOnTo.Clear())">@_localizer["Clear"]</MudButton>
+                        @*<MudButton OnClick="@(() => _createOnTo.Close(false))">@_localizer["Cancel"]</MudButton>*@
+                        @*<MudButton Color="Color.Primary" OnClick="@(() => _createOnTo.Close())">@_localizer["Ok"]</MudButton>*@
+                    </PickerActions>
+                </MudDatePicker>
+            </NestedList>
+        </MudListItem>
+        <MudDivider />
+
+        @*Disabled="@(!Filter.IsActive)"*@
+        @*Disabled="@(Filter.IsEmpty)" *@
+        <MudListItem>
+            <MudButton FullWidth="true" Variant="Variant.Outlined" StartIcon="@Icons.Outlined.Done" Color="Color.Primary"
+                 OnClick="ApplyFilter">@_localizer["Apply"]</MudButton>
+        </MudListItem>
+        <MudDivider />
+    </MudList>
+</MudDrawer>

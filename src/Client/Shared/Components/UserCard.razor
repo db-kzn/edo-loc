@@ -1,0 +1,25 @@
+﻿@namespace EDO_FOMS.Client.Shared.Components
+
+<MudCard Elevation="0" Square="true" Class="@Class">
+    <MudLink Href="/" Underline="Underline.None">
+        <MudCardHeader Style="@Style">
+
+            <CardHeaderAvatar>
+                @if (string.IsNullOrEmpty(ImageDataUrl))
+                {
+                    <MudAvatar Color="Color.Secondary">@FirstLetterOfName</MudAvatar>
+                }
+                else
+                {
+                    <MudAvatar Style="display: flex;" Image="@ImageDataUrl" />
+                }
+            </CardHeaderAvatar>
+
+            <CardHeaderContent>
+                <MudText Typo="Typo.body2" Style="color: var(--mud-palette-text-primary);">@GivenName</MudText>
+                <MudText Typo="Typo.body2" Style="color: var(--mud-palette-text-primary);">@Surname</MudText>
+            </CardHeaderContent>
+
+        </MudCardHeader>
+    </MudLink>
+</MudCard>

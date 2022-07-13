@@ -1,0 +1,52 @@
+{
+  "profiles": {
+    "Dev": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "workingDirectory": "D:\\Repositories\\edo\\src\\Server",
+      "launchBrowser": true,
+      "applicationUrl": "http://localhost:5000",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "http://0.0.0.0:5000"
+      },
+      "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
+      "nativeDebugging": true
+    },
+    "Prod": {
+      "commandName": "Project",
+      "launchBrowser": false,
+      "dotnetRunMessages": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Production"
+      },
+      "applicationUrl": "http://0.0.0.0:80"
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "launchBrowser": true,
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+      "publishAllPorts": true,
+      "useSSL": true
+    },
+    "WSL : Ubuntu 20.04": {
+      "commandName": "WSL2",
+      "launchBrowser": true,
+      "launchUrl": "http://localhost:8080",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "http://localhost:8080"
+      },
+      "distributionName": "Ubuntu-20.04"
+    },
+    "FOMS RT": {
+      "commandName": "Project",
+      "launchBrowser": false,
+      "dotnetRunMessages": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "FOMS_RT"
+      },
+      "applicationUrl": "http://0.0.0.0:80"
+    }
+  }
+}

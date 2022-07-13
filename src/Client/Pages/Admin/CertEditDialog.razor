@@ -1,0 +1,73 @@
+﻿@namespace EDO_FOMS.Client.Pages.Admin
+
+@inject Microsoft.Extensions.Localization.IStringLocalizer<CertEditDialog> _localizer
+
+<EditForm Model="@AddEditCertModel" OnValidSubmit="SaveAsync">
+    <FluentValidationValidator @ref="_fluentValidationValidator" />
+
+    <MudDialog>
+        <TitleContent>
+            @if (AddEditCertModel.Id == 0)
+            {
+                <MudText Typo="Typo.h6">
+                    <MudIcon Icon="@Icons.Material.Outlined.Add" Class="mr-3 mb-n1"/>
+                    @_localizer["Add Cert"]
+                </MudText>
+            }
+            else
+            {
+                <MudText Typo="Typo.h6">
+                    <MudIcon Icon="@Icons.Material.Outlined.Verified" Class="mr-3 mb-n1"/>
+                    @_localizer["Edit Cert"]
+                </MudText>
+            }
+        </TitleContent>
+
+        <DialogContent>
+            <MudGrid>
+                <MudItem xs="6" Class="input-field">
+                    <MudTextField For="@(() => AddEditCertModel.Id)" @bind-Value="AddEditCertModel.Id" Label="@_localizer["Cert ID"]" ReadOnly Variant="Variant.Filled"/>
+                </MudItem>
+                                <MudItem xs="6" Class="input-field">
+                    <MudTextField For="@(() => AddEditCertModel.Snils)" @bind-Value="AddEditCertModel.Snils" Label="@_localizer["Snils"]" ReadOnly Variant="Variant.Filled"/>
+                </MudItem>
+
+                <MudItem xs="6" Class="input-field">
+                    <MudTextField For="@(() => AddEditCertModel.Thumbprint)" @bind-Value="AddEditCertModel.Thumbprint" Label="@_localizer["Thumbprint"]" ReadOnly Variant="Variant.Filled"/>
+                </MudItem>
+                <MudItem xs="6" Class="input-field">
+                    <MudTextField For="@(() => AddEditCertModel.SerialNumber)" @bind-Value="AddEditCertModel.SerialNumber" Label="@_localizer["Serial Number"]" ReadOnly Variant="Variant.Filled"/>
+                </MudItem>
+
+                <MudItem xs="6" Class="input-field">
+                    <MudTextField For="@(() => AddEditCertModel.FromDate)" @bind-Value="AddEditCertModel.FromDate" Label="@_localizer["From Date"]" ReadOnly Variant="Variant.Filled"/>
+                </MudItem>
+                <MudItem xs="6" Class="input-field">
+                    <MudTextField For="@(() => AddEditCertModel.TillDate)" @bind-Value="AddEditCertModel.TillDate" Label="@_localizer["Till Date"]" ReadOnly Variant="Variant.Filled"/>
+                </MudItem>
+
+                <MudItem xs="12" Class="input-field">
+                    <MudSwitch @bind-Checked="@AddEditCertModel.IsActive" Label="@_localizer["Cert is Active"]" Color="Color.Tertiary"></MudSwitch>
+                    <MudSwitch @bind-Checked="@AddEditCertModel.SignAllowed" Label="@_localizer["Sign Allowed"]" Color="Color.Tertiary"></MudSwitch>
+                </MudItem>
+            </MudGrid>
+        </DialogContent>
+
+        <DialogActions>
+           
+            @if (AddEditCertModel.Id > 0)
+            {
+                <MudButton FullWidth="true" Variant="Variant.Outlined" Color="Color.Error" Size="Size.Large"
+                    StartIcon="@Icons.Material.TwoTone.Delete" IconColor="Color.Inherit" OnClick="Delete">
+                    @_localizer["Delete"] 
+                </MudButton>
+            }
+
+            <MudButton FullWidth="true" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large"
+                    ButtonType="ButtonType.Submit" Disabled="@(!Validated)">
+                    @(AddEditCertModel.Id != 0 ? _localizer["Update"] : _localizer["Save"]) 
+            </MudButton>
+            
+        </DialogActions>
+    </MudDialog>
+</EditForm>

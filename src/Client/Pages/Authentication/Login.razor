@@ -1,0 +1,206 @@
+﻿@page "/login"
+@using EDO_FOMS.Application.Models
+@layout MainLayout
+@attribute [AllowAnonymous]
+@inject Microsoft.Extensions.Localization.IStringLocalizer<Login> _localizer
+
+<EditForm Model="@_certRegModel" OnValidSubmit="SubmitAsync">
+    @*<FluentValidationValidator @ref="_fluentValidationValidator" />*@
+
+    <MudGrid>
+        <MudItem xs="3">
+            <div class="d-flex justify-center">
+                <MudIcon Icon="@Icons.Material.TwoTone.HealthAndSafety" Color="Color.Default" Size="Size.Large" Style="width: 128px; height: 128px;" />
+            </div>
+        </MudItem>
+        <MudItem xs="9">
+            <div class="d-flex justify-center align-center" style="height: 100%;">
+                <MudText Typo="Typo.h3">@_localizer["Title"]</MudText>
+            </div>
+        </MudItem>
+       @* <MudItem xs="12">
+            <div class="d-flex justify-center">
+                <MudText>@_localizer["Description"]</MudText>
+            </div>
+        </MudItem>
+        <MudItem xs="12">
+            <div class="d-flex justify-center">
+                <MudText>@_localizer["Don't have an account?"] <MudLink Href="/register">@_localizer["Register here"]</MudLink></MudText>
+            </div>
+        </MudItem>*@
+
+        @*<DataAnnotationsValidator />*@
+
+        @if (CurrentState == LoginStates.ChooseCert)
+        {
+            <MudItem xs="12" Class="d-flex justify-center">
+                <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Outlined.Memory" IconColor="Color.Warning"
+                       Color="Color.Default" Size="Size.Large" FullWidth="true" OnClick="CertSelectAsync" Style="height: 56px;">
+                    @_localizer["Electronic key"]
+                </MudButton>
+            </MudItem>
+        } 
+        else if (CurrentState == LoginStates.ChooseOrgInn)
+        {
+            <MudItem xs="12" Class="d-flex justify-center">
+                <MudText Typo="Typo.h5" Align="Align.Center">@_localizer["Attachment selection"]:</MudText>
+            </MudItem>
+
+            <MudList Clickable="true" Style="width: 100%;" Class="mr-8" @bind-SelectedValue="orgCard">
+                @foreach (OrgCardModel card in orgCards)
+                {
+                    <MudPaper Class="ma-4" Elevation="2" Width="100%">
+
+                        <MudListItem Icon="@Icons.Material.TwoTone.Domain" IconColor="Color.Default" IconSize="Size.Large" Value="card" OnClick="OnClickCardAsync">
+                            <MudText Typo="Typo.body1">@card.Inn - @(string.IsNullOrWhiteSpace(card.ShortName) ? "Нет краткого наименования" : card.ShortName)</MudText>
+                            <MudText Typo="Typo.body2">@card.Name</MudText>
+                        </MudListItem>
+
+                    </MudPaper>
+                }
+            </MudList>
+
+            <MudItem xs="12" Class="d-flex justify-center">
+                <MudButton Color="Color.Default" Variant="Variant.Outlined" FullWidth="true" StartIcon="@Icons.Material.Outlined.DriveFileRenameOutline"
+                    OnClick="InputOrgInn" Style="height: 56px;">
+                        @_localizer["By INN"]</MudButton>
+            </MudItem>
+        }
+        else if (CurrentState == LoginStates.InputOrgInn)
+        {
+            <MudItem xs="12" Class="d-flex justify-center">
+                <MudText Typo="Typo.h5" Align="Align.Center">@_localizer["INN required"]:</MudText>
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudTextField For="@(() => _certRegModel.InnLe)" @bind-Value="_certRegModel.InnLe" Label="@_localizer["INN"]" Variant="Variant.Text"/>
+            </MudItem>
+
+            <MudItem xs="12" Class="d-flex justify-center">
+                <MudButton Color="Color.Default" Variant="Variant.Outlined" FullWidth="true" StartIcon="@Icons.Material.Outlined.Clear"
+                    OnClick="Ok" Class="mr-4" Style="height: 56px;">@_localizer["Cancel"]</MudButton>
+                <MudButton Color="Color.Default" Variant="Variant.Outlined" FullWidth="true" EndIcon="@Icons.Material.Outlined.NavigateNext"
+                    OnClick="CheckOrgInnAsync" Class="ml-4" Style="height: 56px;">@_localizer["Next"]</MudButton>
+            </MudItem>
+        }
+        else if (CurrentState == LoginStates.AreYouChief)
+        {
+            <MudItem xs="12">
+                <MudText Typo="Typo.h5" Align="Align.Center">@_localizer["Are you org cheif?"]</MudText>
+            </MudItem>
+            <MudItem xs="12" Class="d-flex justify-center">
+                <MudButton Class="mr-2" Color="Color.Success" Variant="Variant.Filled" FullWidth="true" StartIcon="@Icons.Material.Outlined.Clear"
+                    OnClick="NoIamNotChief" Style="height: 56px;">@_localizer["No"]</MudButton>
+                <MudButton Class="ml-2" Color="Color.Error" Variant="Variant.Filled" FullWidth="true" StartIcon="@Icons.Material.Outlined.Done"
+                    OnClick="YesIamChiefAsync" Style="height: 56px;">@_localizer["Yes"]</MudButton>
+            </MudItem>
+        }
+        else if (CurrentState == LoginStates.ChiefRequired)
+        {
+            <MudItem xs="12">
+                <MudText Typo="Typo.h6" Align="Align.Center">@_localizer["The organization is not registered"]</MudText>
+                <MudText Typo="Typo.h6" Align="Align.Center">@_localizer["Only the head has the right to register it"]</MudText>
+            </MudItem>
+
+            <MudItem xs="12" Class="d-flex justify-center">
+                <MudButton Color="Color.Default" Variant="Variant.Outlined" FullWidth="true" StartIcon="@Icons.Material.Outlined.Done"
+                    OnClick="Ok" Style="height: 56px;">
+                        @_localizer["Ok"]
+                </MudButton>
+            </MudItem>
+        }
+        else if (CurrentState == LoginStates.OrgTitle)
+        {
+            <MudItem xs="12">
+                <MudText Typo="Typo.h6" Align="Align.Center">@_localizer["Organization details verification"]:</MudText>
+            </MudItem>
+            <MudItem xs="12">
+                <MudTextField For="@(() => _certRegModel.Org)" @bind-Value="_certRegModel.Org" Label="@_localizer["Organization Name"]" Variant="Variant.Text" ReadOnly="true"/>
+            </MudItem>
+            <MudItem xs="12">
+                <MudTextField For="@(() => _certRegModel.Title)" @bind-Value="_certRegModel.Title" Label="@_localizer["Title Of Chief"]" Variant="Variant.Text" ReadOnly="true"/>
+            </MudItem>
+            <MudItem xs="12" Class="d-flex justify-center">
+                <MudButton Color="Color.Primary" Variant="Variant.Outlined" FullWidth="true" StartIcon="@Icons.Material.Outlined.Done" OnClick="SignUpAsync" Style="height: 56px;">@_localizer["Register"]</MudButton>
+            </MudItem>
+        }
+        else if (CurrentState == LoginStates.SignInReady)
+        {
+            <MudItem xs="12" Class="d-flex justify-center">
+                <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Outlined.Memory" IconColor="Color.Warning" Disabled="@onSubmiting"
+                       Color="Color.Default" Size="Size.Large" FullWidth="true" OnClick="CertSelectAsync" Style="height: 56px;">
+                    @_localizer["Electronic key"]
+                </MudButton>
+            </MudItem>
+
+            <MudItem xs="12" Class="d-flex justify-center">
+                <MudPaper Width="100%">
+                    <MudText Typo="Typo.h6" Align="Align.Center"  Class="my-4">@_localizer["Certificate"]</MudText>
+                    <MudDivider />
+                    <MudText Typo="Typo.body1" Align="Align.Left" Class="ml-4 my-4"><b>@_localizer["Owner"]:</b> @cert?.Subject?.Name</MudText>
+                    <MudText Typo="Typo.body1" Align="Align.Left" Class="ml-4 my-4"><b>@_localizer["Algorithm"]:</b> @cert?.Algorithm</MudText>
+                    <MudText Typo="Typo.body1" Align="Align.Left" Class="ml-4 my-4"><b>@_localizer["Issuer"]:</b> @cert?.Issuer?.Name</MudText>
+                    <MudText Typo="Typo.body1" Align="Align.Left" Class="ml-4 my-4"><b>@_localizer["Valid"]:</b> @cert?.FromDate - @cert?.TillDate</MudText>
+                    <MudText Typo="Typo.body1" Align="Align.Left" Class="ml-4 my-4"><b>@_localizer["Thumbprint"]:</b> @cert?.Thumbprint</MudText>
+                </MudPaper>
+            </MudItem>
+
+            <MudItem xs="12" Class="d-flex justify-center">
+                <MudButton Color="Color.Primary" Variant="Variant.Outlined" FullWidth="true" Style="height: 56px;"
+                    Disabled="@onSubmiting" OnClick="SubmitAsync">
+                    
+                    @if(onSubmiting) 
+                    {
+                        <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
+                        <MudText Class="ms-4" Typo="Typo.button">@_localizer["Signing"]</MudText>
+                    }
+                    else
+                    {
+                        <MudIcon Icon="@Icons.Material.Outlined.Login"  Color="Color.Primary" />
+                        <MudText Class="ms-4" Typo="Typo.button">@_localizer["Sign In"]</MudText>
+                    }
+                    
+                </MudButton>
+            </MudItem>
+        }
+        
+        @*<MudItem xs="12" Class="d-flex justify-center">
+            <MudSelect T="FakeCert" @bind-Value="@_fakeCert" Label="Выбор тестового сертификата" Variant="Variant.Outlined" ToStringFunc="@converter" SelectedValuesChanged="@(() => FakeChanged())">
+                @foreach (FakeCert fc in FakeCerts)
+                {
+                    <MudSelectItem Value="@fc" />
+                }
+        </MudSelect>
+        </MudItem>*@
+
+        @*<MudItem xs="6">
+            <MudTextField T="string" Label="@_localizer["OrgInn"]" Variant="Variant.Filled" ReadOnly="true"
+                          @bind-Value="_certModel.OrgInn" For="@(() => _certModel.OrgInn)" />
+        </MudItem>
+
+        <MudItem xs="6">
+            <MudTextField T="string" Label="@_localizer["Snils"]" Variant="Variant.Filled" ReadOnly="true"
+                          @bind-Value="_certModel.Snils" For="@(() => _certModel.Snils)" />
+        </MudItem>
+
+        <MudItem xs="12">
+            <MudTextField Label="@_localizer["Thumbprint"]" Variant="Variant.Filled" ReadOnly="true"
+                          @bind-Value="_certModel.Thumbprint" For="@(() => _certModel.Thumbprint)"
+                          InputType="@_passwordInput" Adornment="Adornment.End"
+                          AdornmentColor="@(_passwordVisibility ? Color.Error : Color.Default)"
+                          AdornmentIcon="@_passwordInputIcon" OnAdornmentClick="TogglePasswordVisibility" />
+        </MudItem>*@
+
+        @*<MudItem xs="12" Class="d-flex justify-space-between align-center">
+            <MudCheckBox T="bool" Label="@_localizer["Remember me?"]" Color="Color.Primary" Class="ml-n1"></MudCheckBox>
+            <MudLink Href="/forgot-password">@_localizer["Forgot password?"]</MudLink>
+        </MudItem>*@
+
+        @*<MudItem xs="12" Class="d-flex justify-center">
+            <MudButton FullWidth="true" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large"
+                ButtonType="ButtonType.Submit" Disabled="@(!Validated)">
+                    @_localizer["Sign In"]
+            </MudButton>
+        </MudItem>*@
+    </MudGrid>
+</EditForm>

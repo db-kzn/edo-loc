@@ -1,0 +1,116 @@
+﻿@namespace EDO_FOMS.Client.Shared.Dialogs
+
+@using EDO_FOMS.Domain.Enums
+
+@inject Microsoft.Extensions.Localization.IStringLocalizer<NewUserDialog> _localizer
+
+<EditForm Model="_newUser">
+    <FluentValidationValidator @ref="_fluentValidationValidator" />
+    
+    <MudDialog>
+        <TitleContent>
+            <MudText Typo="Typo.h6">
+                <MudIcon Icon="@Icons.Material.Outlined.PersonAdd" Class="mr-3 mb-n1"/>
+                @_localizer["New User"]
+            </MudText>
+        </TitleContent>
+
+        <DialogContent>
+            <MudGrid>
+                <MudItem xs="12" Class="d-flex justify-center pb-4">
+                    <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Outlined.Memory" Size="Size.Large"
+                        Style="height: 56px;" FullWidth="true"  Color="Color.Default" OnClick="CertSelect">
+                        @_localizer["Fill out from certificate"]
+                    </MudButton>
+                </MudItem>
+
+                <MudItem xs="6" Class="input-field">
+                    <MudTextField For="@(() => _newUser.Title)" @bind-Value="_newUser.Title" Label="@_localizer["Title"]" />
+                </MudItem>
+                <MudItem xs="6" Class="input-field">
+                    <MudTextField For="@(() => _newUser.OrgName)" @bind-Value="_newUser.OrgName" Label="@_localizer["Org Name"]" />
+                </MudItem>
+
+                <MudItem xs="6" Class="input-field">
+                    <MudTextField For="@(() => _newUser.Surname)" @bind-Value="_newUser.Surname" Label="@_localizer["Surname"]" />
+                </MudItem>
+                <MudItem xs="6" Class="input-field">
+                    <MudTextField For="@(() => _newUser.GivenName)" @bind-Value="_newUser.GivenName" Label="@_localizer["Given Name"]" />
+                </MudItem>
+    
+                <MudItem xs="6" Class="input-field">
+                    <MudTextField For="@(() => _newUser.InnLe)" @bind-Value="_newUser.InnLe" Label="@_localizer["Org INN"]" />
+                </MudItem>
+                <MudItem xs="6" Class="input-field">
+                    <MudTextField For="@(() => _newUser.Snils)" @bind-Value="_newUser.Snils" Label="@_localizer["SNILS"]" />
+                </MudItem>            
+
+                <MudItem xs="12" Class="input-field">
+                    <MudTextField For="@(() => _newUser.Thumbprint)" @bind-Value="_newUser.Thumbprint" Label="@_localizer["Thumbprint"]" />
+                </MudItem>
+
+                <MudItem xs="6">
+                    <MudDatePicker Label="@_localizer["From Date"]" DisableToolbar="true" Elevation="2"
+                        For="@(() => _newUser.FromDate)" @bind-Date="_newUser.FromDate"/>
+                </MudItem>
+                <MudItem xs="6">
+                    <MudDatePicker Label="@_localizer["Till Date"]" DisableToolbar="true" Elevation="2"
+                        For="@(() => _newUser.TillDate)" @bind-Date="_newUser.TillDate"/>
+                </MudItem>
+
+                <MudItem xs="6" Class="input-field">
+                    <MudTextField For="@(() => _newUser.Email)" @bind-Value="_newUser.Email" Label="@_localizer["E-Mail"]" InputType="InputType.Email"/>
+                </MudItem>
+                <MudItem xs="6" Class="input-field">
+                    <MudSelect T="UserBaseRoles" Label="@_localizer["Base Role"]" @bind-Value="_newUser.BaseRole">
+                        @*AdornmentIcon="@(_newUser.Role == _admin ? Icons.Material.Outlined.Stars : Icons.Material.Outlined.AccountCircle)" AdornmentColor="@(_newUser.Role == _admin ? Color.Error : Color.Primary)"*@
+                        
+                        <MudSelectItem T="UserBaseRoles" Value="UserBaseRoles.User">
+                            <div class="d-flex flex-row" style="height: 24px;">
+                                <MudIcon Icon="@Icons.Material.Outlined.Person" Color="Color.Default" Size="Size.Small" Class="mr-2"/>Пользователь
+                            </div>
+                         </MudSelectItem>
+
+                        <MudSelectItem T="UserBaseRoles" Value="UserBaseRoles.Employee">
+                            <div class="d-flex flex-row" style="height: 24px;">
+                                <MudIcon Icon="@Icons.Material.Outlined.HistoryEdu" Color="Color.Success" Size="Size.Small" Class="mr-2"/>Сотрудник
+                            </div>
+                         </MudSelectItem>
+
+                        <MudSelectItem T="UserBaseRoles" Value="UserBaseRoles.Manager">
+                            <div class="d-flex flex-row" style="height: 24px;">
+                                <MudIcon Icon="@Icons.Material.Outlined.Engineering" Color="Color.Primary" Size="Size.Small" Class="mr-2"/>Администратор
+                            </div>                            
+                        </MudSelectItem>
+                        
+                        <MudSelectItem T="UserBaseRoles" Value="UserBaseRoles.Chief">
+                            <div class="d-flex flex-row" style="height: 24px;">
+                                <MudIcon Icon="@Icons.Material.Outlined.WorkspacePremium" Color="Color.Warning" Size="Size.Small" Class="mr-2"/>Руководитель
+                            </div>
+                        </MudSelectItem>
+                        
+                        <MudSelectItem T="UserBaseRoles" Value="UserBaseRoles.Admin">
+                            <div class="d-flex flex-row" style="height: 24px;">
+                                <MudIcon Icon="@Icons.Material.Outlined.Stars" Color="Color.Error" Size="Size.Small" Class="mr-2"/>Админ ЭДО
+                            </div>
+                        </MudSelectItem>
+
+                    </MudSelect>
+                </MudItem>
+
+                <MudItem xs="12" Class="input-field">
+                    <MudSwitch @bind-Checked="@_newUser.IsActive" Label="@_localizer["Activate User"]" Color="Color.Tertiary"></MudSwitch>
+                    <MudSwitch @bind-Checked="@_newUser.EmailConfirmed" Label="@_localizer["Confirm Email"]" Color="Color.Tertiary"></MudSwitch>
+                    @*<MudSwitch @bind-Checked="@_newUser.PhoneNumberConfimed" Label="@_localizer["Confirm Phone"]" Color="Color.Tertiary"></MudSwitch>*@
+                </MudItem>
+
+            </MudGrid>
+        </DialogContent>
+    
+        <DialogActions>
+            <MudItem xs="12" Class="d-flex justify-center">
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="OnSubmit" Size="Size.Large" FullWidth="true" Disabled="@(!Validated)">@_localizer["Register"]</MudButton>
+            </MudItem>
+        </DialogActions>
+    </MudDialog>
+</EditForm>

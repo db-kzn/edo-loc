@@ -1,0 +1,89 @@
+﻿@namespace EDO_FOMS.Client.Shared.Dialogs
+@using EDO_FOMS.Application.Requests.Orgs
+
+@inject Microsoft.Extensions.Localization.IStringLocalizer<OrganizationDialog> _localizer
+
+<MudDialog>
+    <DialogContent>
+        <MudItem xs="12" Class="d-flex justify-center pb-4">
+            <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.GeneratingTokens" Color="Color.Primary" Size="Size.Large" Style="width: 100%;">@_localizer["Fill out from certificate"]</MudButton>
+        </MudItem>
+
+        <MudTabs Elevation="0" Outlined="false" Rounded="true" Centered="true">
+            <MudTabPanel Text="@_localizer["Profile"]">
+                <MudItem xs="12" Class="input-field">
+                    <MudTextField For="@(() => _org.OrgName)" @bind-Value="_org.OrgName" Label="@_localizer["Name"]" />
+                </MudItem>
+                <MudItem xs="12" Class="input-field">
+                    <MudTextField For="@(() => _org.OrgOwner)" @bind-Value="_org.OrgOwner" Label="@_localizer["Owner"]" />
+                </MudItem>
+                <MudItem xs="12" Class="input-field">
+                    <MudTextField For="@(() => _org.Inn)" @bind-Value="_org.Inn" Label="@_localizer["INN"]" />
+                </MudItem>
+                <MudItem xs="12" Class="input-field">
+                    <MudTextField For="@(() => _org.Ogrn)" @bind-Value="_org.Ogrn" Label="@_localizer["OGRN"]" />
+                </MudItem>
+                <MudItem xs="12" Class="input-field">
+                    <MudTextField For="@(() => _org.Email)" @bind-Value="_org.Email" Label="@_localizer["E-Mail"]" />
+                </MudItem>
+            </MudTabPanel>
+
+            <MudTabPanel Text="@_localizer["Address"]">
+                <MudItem xs="12" Class="input-field">
+                    <MudTextField For="@(() => _org.CommonName)" @bind-Value="_org.CommonName" Label="@_localizer["Common Name"]" />
+                </MudItem>
+                <MudItem xs="12" Class="input-field">
+                    <MudTextField For="@(() => _org.StreetAdress)" @bind-Value="_org.StreetAdress" Label="@_localizer["Street Address"]" />
+                </MudItem>
+                <MudItem xs="12" Class="input-field">
+                    <MudTextField For="@(() => _org.Locality)" @bind-Value="_org.Locality" Label="@_localizer["Locality"]" />
+                </MudItem>
+                <MudItem xs="12" Class="input-field">
+                    <MudTextField For="@(() => _org.State)" @bind-Value="_org.State" Label="@_localizer["State"]" />
+                </MudItem>
+                <MudItem xs="12" Class="input-field">
+                    <MudTextField For="@(() => _org.Country)" @bind-Value="_org.Country" Label="@_localizer["Country"]" />
+                </MudItem>
+            </MudTabPanel>
+        </MudTabs>
+        @*<div class="d-flex flex-column py-1"></div>*@
+        @*@_localizer["Surname"]*@
+    </DialogContent>
+
+    <DialogActions>
+        <MudItem xs="12" Class="d-flex justify-center">
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Close" Size="Size.Large" Style="width: 100%;">@_localizer["Save"]</MudButton>
+        </MudItem>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    private AddNewOrgRequest _org = new();
+
+    void Close() => MudDialog.Close(DialogResult.Ok(true));
+
+    //void ChangeTitle()
+    //{
+    //    MudDialog.SetTitle("Current time is: " + DateTime.Now);
+    //}
+
+    //void ToggleCloseButton()
+    //{
+    //    MudDialog.Options.CloseButton = !(MudDialog.Options.CloseButton ?? false);
+    //    MudDialog.SetOptions(MudDialog.Options);
+    //}
+
+    //void ToggleFullWidth()
+    //{
+    //    MudDialog.Options.FullWidth = !(MudDialog.Options.FullWidth ?? true);
+    //    MudDialog.SetOptions(MudDialog.Options);
+    //}
+
+    //void ToggleHeader()
+    //{
+    //    MudDialog.Options.NoHeader = !(MudDialog.Options.NoHeader ?? false);
+    //    MudDialog.SetOptions(MudDialog.Options);
+    //}
+}

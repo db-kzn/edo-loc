@@ -1,0 +1,295 @@
+﻿@namespace EDO_FOMS.Client.Pages
+
+@using EDO_FOMS.Application.Features.Agreements.Queries
+@using EDO_FOMS.Domain.Enums
+
+@inject Microsoft.Extensions.Localization.IStringLocalizer<InProgressDialog> _localizer
+
+    <MudDialog Style="background-color: var(--mud-palette-background-grey)" >
+        <TitleContent>
+            <MudText Typo="Typo.h6" Class="d-flex align-center">
+                @*<MudIcon Icon="@Icons.Material.TwoTone.Pending" Class="mr-3 mb-n1" />*@
+                 @if (Doc.Stage == DocStages.Draft)
+                {
+                    <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Draft"]" Placement="Placement.Right" Color="Color.Tertiary">
+                        <MudIcon Icon="@Icons.Material.TwoTone.IntegrationInstructions" Color="Color.Default" Class="mr-4 mt-2"/>
+                    </MudTooltip>
+                }
+                else if (Doc.Stage == DocStages.InProgress)
+                {
+                     @*Class="align-self-center"*@
+                    <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["In progress"]" Placement="Placement.Right" Color="Color.Tertiary">
+                        <MudIcon Icon="@Icons.Material.TwoTone.NoteAlt" Color="Color.Warning" Class="mr-4 mt-2"/>
+                    </MudTooltip>
+                }
+                else if (Doc.Stage == DocStages.Rejected)
+                {
+                    <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Rejected"]" Placement="Placement.Right" Color="Color.Tertiary">
+                        <MudIcon Icon="@Icons.Material.TwoTone.AssignmentReturn" Color="Color.Error" Class="mr-4 mt-2"/>
+                    </MudTooltip>
+                }
+                else if (Doc.Stage == DocStages.Agreed)
+                {
+                    <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Agreed By All"]" Placement="Placement.Right" Color="Color.Tertiary">
+                        <MudIcon Icon="@Icons.Material.TwoTone.AssignmentTurnedIn" Color="Color.Success" Class="mr-4 mt-2"/>
+                    </MudTooltip>
+                }
+
+                @*@_localizer["Document approval progress"]*@
+                @*:{Doc.AgreementId}*@
+            
+                @($"{_localizer["Approval sheet"]}: {Doc.TypeName} №{Doc.Number} от {Doc.DateStr}г.")
+            </MudText>
+        </TitleContent>
+
+        @*Filter="new Func<GetAllDocumentsResponse, bool>(Search)" OnRowClick="EditDraftAsync"*@
+        <DialogContent>
+            <MudGrid Style="max-height: 70vh; overflow-y: scroll;">
+                <MudItem xs="12">
+                    @*<InputFile id="fileInput" hidden OnChange="UploadFiles" accept=".pdf"/>*@
+                     @*for="fileInput" HtmlTag="label"*@
+
+                    <MudButtonGroup  Color="Color.Default" Variant="Variant.Outlined" Style="width: 100%; background-color: var(--mud-palette-surface);">
+                        <MudButton Variant="Variant.Outlined" FullWidth="true" Color="Color.Default" Size="Size.Large"
+                                   StartIcon="@((Doc.Stage == DocStages.Archive) ? Icons.Material.Outlined.Download : Icons.Material.Outlined.MenuBook)"
+                                   IconColor="Color.Default" Style="height: 56px;" Link="@Doc.URL" Target="_blank"  Disabled="@(string.IsNullOrWhiteSpace(Doc.URL))">
+                            @Doc.FileName
+                        </MudButton>
+
+                        <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Download all files"]" Color="Color.Tertiary" Placement="Placement.Left" Arrow="true">
+                            <MudIconButton Icon="@Icons.Material.TwoTone.Download" Style="height: 56px;" Disabled></MudIconButton>    
+                            @*@if(string.IsNullOrEmpty(_doc.URL)){}
+                                else
+                                {
+                                    <MudIconButton Icon="@Icons.Material.TwoTone.Download" Style="height: 56px;" Link="@_doc.URL" Target="_blank"></MudIconButton>
+                                }*@
+                            </MudTooltip>
+                        </MudButtonGroup>
+                </MudItem>
+
+                <MudItem xs="12">
+                    <MudTable Hover="true" Dense="false" Bordered="false" Striped="true" Breakpoint="Breakpoint.Xs"
+                            Loading="@(!_loaded)" LoadingProgressColor="Color.Info" Style="margin-bottom: 0;"
+                            @ref="_mudTable" T="AgreementsProgressResponse" Items="@_agreements" @bind-SelectedItem="_agreement">
+
+                        <HeaderContent>
+                            <MudTh>@_localizer["Step"]</MudTh>
+
+                            <MudTh>@_localizer["Type"]</MudTh>
+                            <MudTh>@_localizer["Organization"]</MudTh>
+                            <MudTh>@_localizer["Employee"]</MudTh>
+                            
+                            <MudTh>@_localizer["Action"]</MudTh>
+                            <MudTh>@_localizer["State"]</MudTh>
+
+                            <MudTh>@_localizer["Create On"] @_localizer["Received"]</MudTh>
+                            <MudTh>@_localizer["Opened"]</MudTh>
+                            <MudTh>@_localizer["Answered"]</MudTh>
+
+                            <MudTh>@_localizer["Remark"]</MudTh>
+                            @*<MudTh>@_localizer["Sign"]</MudTh>*@
+                        </HeaderContent>
+
+                        <RowTemplate>
+                            <MudTd DataLabel="@_localizer["Step"]">
+                                @context.Step
+                            </MudTd>
+
+                            <MudTd DataLabel="@_localizer["Type"]">
+                                @if(context.UserOrgType == OrgTypes.Fund)
+                                {
+                                    <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Fund OMS"]" Placement="Placement.Left" Color="Color.Tertiary">
+                                        <MudIcon Icon="@Icons.Material.Outlined.HealthAndSafety" Color="Color.Error" Class="mx-2"/>
+                                    </MudTooltip>
+                                }
+                                else if(context.UserOrgType == OrgTypes.MO)
+                                {
+                                    <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["MO"]" Placement="Placement.Left" Color="Color.Tertiary">
+                                        <MudIcon Icon="@Icons.Material.Outlined.MedicalServices" Color="Color.Primary" Class="mx-2"/>
+                                    </MudTooltip>
+                                }
+                                else if(context.UserOrgType == OrgTypes.SMO)
+                                {
+                                    <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["SMO"]" Placement="Placement.Left" Color="Color.Tertiary">
+                                        <MudIcon Icon="@Icons.Material.Outlined.Museum" Color="Color.Success" Class="mx-2"/>
+                                    </MudTooltip>
+                                }
+                            </MudTd>
+                            <MudTd DataLabel="@_localizer["Organization"]">
+                                @(string.IsNullOrWhiteSpace(context.UserOrgShortName) ? context.UserOrgInn : context.UserOrgShortName)
+                            </MudTd>
+                            <MudTd DataLabel="@_localizer["Employee"]" Style="@((Doc.AgreementId == context.AgreementId) ? "font-weight: bold;" : "font-weight: normal;")">
+                                 @($"{context.Surname} {context.GivenName}")
+                            </MudTd>
+                            
+                            <MudTd DataLabel="@_localizer["Action"]">
+                                @if(context.Action == AgreementActions.ToSign)
+                                {
+                                    <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["To Sign"]" Placement="Placement.Left" Color="Color.Tertiary">
+                                        <MudIcon Icon="@Icons.Material.Outlined.Draw" Color="Color.Default" Class="mx-2"/>
+                                    </MudTooltip>
+                                }
+                                else if(context.Action == AgreementActions.ToApprove)
+                                {
+                                    <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["To Approve"]" Placement="Placement.Left" Color="Color.Tertiary">
+                                        <MudIcon Icon="@Icons.Material.Outlined.Rule" Color="Color.Default" Class="mx-2"/>
+                                    </MudTooltip>
+                                }
+                                else if(context.Action == AgreementActions.ToVerify)
+                                {
+                                    <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["To Check"]" Placement="Placement.Left" Color="Color.Tertiary">
+                                            <MudIcon Icon="@Icons.Material.Outlined.AddTask" Color="Color.Default" Class="mx-2"/>
+                                    </MudTooltip>
+                                }
+                                else if(context.Action == AgreementActions.ToRun)
+                                {
+                                    <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["To Run"]" Placement="Placement.Left" Color="Color.Tertiary">
+                                            <MudIcon Icon="@Icons.Material.Outlined.PlayCircle" Color="Color.Default" Class="mx-2"/>
+                                    </MudTooltip>
+                                }
+                            </MudTd>
+
+                            <MudTd DataLabel="@_localizer["State"]">
+                                <div class="d-flex flex-row" style="height: 24px;">
+
+                                @if (context.State == AgreementStates.Expecting)    // -. Ожидание. Согласование назначено, очередь не дошла
+                                {
+                                    <MudIcon Icon="@Icons.Material.TwoTone.NotificationsPaused" Color="Color.Default" Class="mx-2"/>
+                                    @_localizer["Expecting"]
+                                    @*<MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Expecting"]" Placement="Placement.Left" Color="Color.Tertiary"></MudTooltip>*@
+                                }
+                                else if(context.State == AgreementStates.Incoming)  // 1. Входящий - Новый поступивший
+                                {
+                                    <MudIcon Icon="@Icons.Material.TwoTone.MarkunreadMailbox" Color="Color.Default" Class="mx-2"/>
+                                    @_localizer["Incoming"]
+                                    @*<MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Incoming"]" Placement="Placement.Left" Color="Color.Tertiary"></MudTooltip>*@
+                                }
+                                else if(context.State == AgreementStates.Received)  // 2. В работе - Открытый, прочитанный
+                                {
+                                    <MudIcon Icon="@Icons.Material.TwoTone.Drafts" Color="Color.Primary" Class="mx-2"/>
+                                    @_localizer["In work"]
+                                    @*<MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["In work"]" Placement="Placement.Left" Color="Color.Tertiary"></MudTooltip>*@
+                                }
+                                else if (context.State == AgreementStates.Verifed) // 3. Согласованный
+                                {
+                                    <MudIcon Icon="@Icons.Material.TwoTone.DoneOutline" Color="Color.Success" Class="mx-2"/>
+                                    @_localizer["Verified"]
+                                    @*<MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Verified"]" Placement="Placement.Left" Color="Color.Tertiary"></MudTooltip>*@
+                                }
+                                else if (context.State == AgreementStates.Approved) // 3. Согласованный
+                                {
+                                        <MudIcon Icon="@Icons.Material.TwoTone.Verified" Color="Color.Success" Class="mx-2"/>
+                                    @_localizer["Approved"]
+                                    @*<MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Approved"]" Placement="Placement.Left" Color="Color.Tertiary"></MudTooltip>*@
+                                }
+                                else if (context.State == AgreementStates.Signed)   // 3. Подписанный
+                                {
+                                        <MudIcon Icon="@Icons.Material.TwoTone.QrCode" Color="Color.Success" Class="mx-2"/>
+                                    @_localizer["Signed"]
+                                    @*<MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Signed"]" Placement="Placement.Left" Color="Color.Tertiary"></MudTooltip>*@
+                                }
+                                else if (context.State == AgreementStates.Refused) // 4. Отклоненный
+                                {
+                                        <MudIcon Icon="@Icons.Material.TwoTone.Report" Color="Color.Warning" Class="mx-2"/>
+                                    @_localizer["Refused"]
+                                    @*<MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Refused"]" Placement="Placement.Left" Color="Color.Tertiary"></MudTooltip>*@
+                                }
+                                else if (context.State == AgreementStates.Rejected) // 4. Отклоненный
+                                {
+                                        <MudIcon Icon="@Icons.Material.TwoTone.DisabledByDefault" Color="Color.Error" Class="mx-2"/>
+                                    @_localizer["Rejected"]
+                                    @*<MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Rejected"]" Placement="Placement.Left" Color="Color.Tertiary"></MudTooltip>*@
+                                }
+                                else if (context.State == AgreementStates.Deleted ) // 4+ Удален
+                                {
+                                        <MudIcon Icon="@Icons.Material.TwoTone.DeleteForever" Color="Color.Default" Class="mx-2"/>
+                                    @_localizer["Deleted"]
+                                    @*<MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Deleted"]" Placement="Placement.Left" Color="Color.Tertiary"></MudTooltip>*@
+                                }
+                                else if (context.State == AgreementStates.Control ) // 
+                                {
+                                        <MudIcon Icon="@Icons.Material.TwoTone.Inventory" Color="Color.Info" Class="mx-2"/>
+                                    @_localizer["Control"]
+                                    @*<MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Control"]" Placement="Placement.Left" Color="Color.Tertiary"></MudTooltip>*@
+                                }
+                                </div>
+                            </MudTd>
+
+                            <MudTd DataLabel="@($"{_localizer["Create On"]}/{_localizer["Received"]}")">
+                                @(context.Step > 0 ? @context.Received?.ToString("dd.MM.yy HH:mm") : context.CreatedOn?.ToString("dd.MM.yy HH:mm"))
+                                @*@(context.Received != null ? @context.Received?.ToString("dd.MM.yy HH:mm") : context.CreatedOn?.ToString("dd.MM.yy HH:mm"))*@
+                            </MudTd>
+                            <MudTd DataLabel="@_localizer["Opened"]">
+                                @context.Opened?.ToString("dd.MM.yy HH:mm")
+                            </MudTd>
+                            <MudTd DataLabel="@_localizer["Answered"]">
+                                @context.Answered?.ToString("dd.MM.yy HH:mm")
+                            </MudTd>
+
+                            <MudTd DataLabel="@_localizer["Remark"]">
+                                @if(string.IsNullOrWhiteSpace(context.Remark))
+                                {
+                                    <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["No comment"]" Placement="Placement.Left" Color="Color.Tertiary">
+                                        <MudIcon Icon="@Icons.Material.TwoTone.ChatBubbleOutline" Color="Color.Default" />
+                                    </MudTooltip>
+                                }
+                                else
+                                {
+                                    <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["No comment"]" Placement="Placement.Left" Color="Color.Info">
+                                        <ChildContent>
+                                            <MudIcon Icon="@Icons.Material.TwoTone.Comment" Color="Color.Warning" />
+                                        </ChildContent>
+                                        <TooltipContent>
+                                            <MudText Typo="Typo.body2">@context.Remark</MudText>
+                                        </TooltipContent>
+                                    </MudTooltip>
+                                }
+
+                            </MudTd>
+                            @*<MudTd DataLabel="@_localizer["URL"]">@context.URL</MudTd>*@
+
+                        </RowTemplate>
+                    </MudTable>
+                </MudItem>
+
+                @if (!string.IsNullOrWhiteSpace(Doc.Description))
+                {
+                    <MudItem xs="12">
+                        <MudTextField @bind-Value="Doc.Description" Placeholder="@_localizer["Description"]" ReadOnly="true"
+                            Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Notes" AdornmentColor="Color.Warning" />
+                    </MudItem>
+                }
+            </MudGrid>
+        </DialogContent>
+            
+        <DialogActions>
+        @if(Doc.AgreementId == null || _isAnswered)
+        {
+            <MudButton Variant="Variant.Outlined" FullWidth="true" Color="Color.Default" Size="Size.Large"
+                StartIcon="@Icons.Material.Filled.Done" IconColor="Color.Info" OnClick="ClickOk">
+                    <MudText Typo="Typo.button" Class="ms-4">@_localizer["Ok"]</MudText>
+            </MudButton>
+        }
+        else
+        {
+            <MudButton Variant="Variant.Outlined" FullWidth="true" Color="Color.Success" Size="Size.Large"
+                StartIcon="@Icons.Material.Filled.Done" IconColor="Color.Success" OnClick="ClickAgree">
+                    <MudText Typo="Typo.button" Class="ms-4">@_localizer[_action]</MudText>
+            </MudButton>
+            if(_isMain)
+            {
+                <MudButton Variant="Variant.Outlined" FullWidth="true" Color="Color.Default" Size="Size.Large"
+                    StartIcon="@Icons.Material.Filled.AddTask" IconColor="Color.Inherit" OnClick="ClickAddMembers">
+                        <MudText Typo="Typo.button" Class="ms-4">@_localizer["Add Members"]</MudText>
+                </MudButton>
+            }
+            <MudButton Variant="Variant.Outlined" FullWidth="true" Color="Color.Error" Size="Size.Large"
+                StartIcon="@Icons.Material.Filled.Close" IconColor="Color.Error" OnClick="ClickReject">
+                    <MudText Typo="Typo.button" Class="ms-4">
+                        @((_action == nameof(AgreementActions.ToVerify)) ? _localizer["Refuse"] : _localizer["Reject"])
+                    </MudText>
+            </MudButton>
+        }
+
+        </DialogActions>
+    </MudDialog>

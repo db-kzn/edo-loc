@@ -1,0 +1,288 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Algorithm" xml:space="preserve">
+    <value>Алгоритм</value>
+  </data>
+  <data name="Are you org cheif?" xml:space="preserve">
+    <value>Вы руководитель организации?</value>
+  </data>
+  <data name="Attachment selection" xml:space="preserve">
+    <value>Прикрепить к организации</value>
+  </data>
+  <data name="By INN" xml:space="preserve">
+    <value>Указать ИНН</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="Certificate" xml:space="preserve">
+    <value>Сертификат</value>
+  </data>
+  <data name="Certificate not active. Administrator verification required" xml:space="preserve">
+    <value>Сертификат, не активен. Требуется проверка администратором</value>
+  </data>
+  <data name="Certificate user organization not found" xml:space="preserve">
+    <value>Организация пользователя сертификата не найдена</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Авторизуйтесь с помощью вашего сертификата.</value>
+  </data>
+  <data name="Don't have an account?" xml:space="preserve">
+    <value>У вас ещё нет аккаунта?</value>
+  </data>
+  <data name="E-mail" xml:space="preserve">
+    <value>Электронная почта</value>
+  </data>
+  <data name="Electronic key" xml:space="preserve">
+    <value>Выбрать сертификат</value>
+  </data>
+  <data name="Email is required!" xml:space="preserve">
+    <value>Электронная почта обязательна!</value>
+  </data>
+  <data name="Fill Administrator Credentials" xml:space="preserve">
+    <value>Данные администратора</value>
+  </data>
+  <data name="Fill Basic User Credentials" xml:space="preserve">
+    <value>Данные пользователя</value>
+  </data>
+  <data name="Forgot password?" xml:space="preserve">
+    <value>Забыли пароль?</value>
+  </data>
+  <data name="INN" xml:space="preserve">
+    <value>ИНН</value>
+  </data>
+  <data name="INN required" xml:space="preserve">
+    <value>Требуется ИНН организации</value>
+  </data>
+  <data name="Issuer" xml:space="preserve">
+    <value>Издатель</value>
+  </data>
+  <data name="Multiple user organizations found" xml:space="preserve">
+    <value>Найдено несколько организаций пользователя</value>
+  </data>
+  <data name="New employee registration required" xml:space="preserve">
+    <value>Требуется регистрация нового сотрудника</value>
+  </data>
+  <data name="New user registration required" xml:space="preserve">
+    <value>Требуется регистрация нового пользователя</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Далее</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Нет</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>Ок</value>
+  </data>
+  <data name="Only the head has the right to register it" xml:space="preserve">
+    <value>Только руководитель имеет право на ее регистрацию</value>
+  </data>
+  <data name="Organization details verification" xml:space="preserve">
+    <value>Проверка (ввод) данных:</value>
+  </data>
+  <data name="Organization Name" xml:space="preserve">
+    <value>Наименование огранизации</value>
+  </data>
+  <data name="Organization registration required" xml:space="preserve">
+    <value>Требуется регистрация организации</value>
+  </data>
+  <data name="OrgInn" xml:space="preserve">
+    <value>ИНН организации</value>
+  </data>
+  <data name="Owner" xml:space="preserve">
+    <value>Владелец</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Пароль</value>
+  </data>
+  <data name="Password is required!" xml:space="preserve">
+    <value>Пароль обязателен!</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Записать</value>
+  </data>
+  <data name="Register here" xml:space="preserve">
+    <value>Зарегистрируйтесь здесь</value>
+  </data>
+  <data name="Remember me?" xml:space="preserve">
+    <value>Запомнить меня?</value>
+  </data>
+  <data name="Server did not respond" xml:space="preserve">
+    <value>Сервер не ответил</value>
+  </data>
+  <data name="Sign In" xml:space="preserve">
+    <value>Авторизоваться</value>
+  </data>
+  <data name="Signing" xml:space="preserve">
+    <value>Проверка токена</value>
+  </data>
+  <data name="Snils" xml:space="preserve">
+    <value>СНИЛС</value>
+  </data>
+  <data name="System Check" xml:space="preserve">
+    <value>Проверка системы</value>
+  </data>
+  <data name="The certificate has been verified. Login started" xml:space="preserve">
+    <value>Сертификат верен. Возможен вход в систему</value>
+  </data>
+  <data name="The new certificate has been added to the user" xml:space="preserve">
+    <value>Пользователю добавлен новый сертификат</value>
+  </data>
+  <data name="The organization is not active. Admin Verification Required" xml:space="preserve">
+    <value>Организация не активна. Требуется проверка администратором</value>
+  </data>
+  <data name="The organization is not registered" xml:space="preserve">
+    <value>Организация не зарегистрирована</value>
+  </data>
+  <data name="The token is not connected" xml:space="preserve">
+    <value>Токен не подключен</value>
+  </data>
+  <data name="The user is not active. Administrator verification required" xml:space="preserve">
+    <value>Пользователь не активен. Требуется проверка администратором</value>
+  </data>
+  <data name="The user specified in the certificate was not found" xml:space="preserve">
+    <value>Пользователь указанный в сертификате не найден</value>
+  </data>
+  <data name="Thumbprint" xml:space="preserve">
+    <value>Отпечаток</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>ЭДО ОМС РТ</value>
+  </data>
+  <data name="Title Of Chief" xml:space="preserve">
+    <value>Должность руководителя</value>
+  </data>
+  <data name="Unknown error" xml:space="preserve">
+    <value>Не известная ошибка</value>
+  </data>
+  <data name="User organization found" xml:space="preserve">
+    <value>Найдена организация пользователя</value>
+  </data>
+  <data name="Valid" xml:space="preserve">
+    <value>Действителен</value>
+  </data>
+  <data name="Welcome {0}" xml:space="preserve">
+    <value>Добро пожаловать {0}</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Да</value>
+  </data>
+</root>

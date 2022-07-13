@@ -1,0 +1,42 @@
+﻿@namespace EDO_FOMS.Client.Pages.Personal
+@page "/personal/certs"
+@*@using Azino.Core.Application.Requests.Orgs*@
+@inject Microsoft.Extensions.Localization.IStringLocalizer<Certs> _localizer
+
+
+<MudPaper Square="true" Elevation="3" Style="z-index: 1;">
+    <MudToolBar  Elevation="2">
+        <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Manage your certs"]" Color="Color.Tertiary" Placement="Placement.Right">
+            <MudText Typo="Typo.button">@_localizer["Certificates"]</MudText>
+        </MudTooltip>
+
+        <MudSpacer />
+
+        <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Link to the certificate"]" Color="Color.Tertiary" Placement="Placement.Left">
+            <MudIconButton Icon="@Icons.Material.TwoTone.AddLink" Color="Color.Inherit" Edge="Edge.End"/>
+        </MudTooltip>
+    </MudToolBar>
+</MudPaper>
+
+<MudContainer MaxWidth="MaxWidth.False" Class="pa-6">
+   
+
+</MudContainer>
+
+@code {
+    //List<OrganizationRequest> orgs = new();
+
+    private int delay;
+    private int duration;
+
+    protected override void OnInitialized()
+    {
+        delay = _stateService.TooltipDelay;
+        duration = _stateService.TooltipDuration;
+    }
+
+    private void AddNewOrg()
+    {
+        _dialogService.Show<CertDialog>(@_localizer["New certificate"]);
+    }
+}

@@ -1,0 +1,59 @@
+﻿@using System.Net.Http
+@using System.Net.Http.Json
+@using EDO_FOMS.Client.Infrastructure.Managers.System
+@using EDO_FOMS.Client.Infrastructure.Services
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.Components.Web.Virtualization
+@using Microsoft.AspNetCore.Components.WebAssembly.Http
+@using Microsoft.JSInterop
+@using Microsoft.AspNetCore.Identity;
+@using MudBlazor
+@using Blazored.LocalStorage;
+@using Blazored.FluentValidation
+
+@using EDO_FOMS.Application.Requests.Identity
+@using EDO_FOMS.Shared.Constants.Permission
+
+@using EDO_FOMS.Client.Infrastructure.Authentication
+@using EDO_FOMS.Client.Infrastructure.Managers.Audit
+@using EDO_FOMS.Client.Infrastructure.Managers.Communication
+@using EDO_FOMS.Client.Infrastructure.Managers.Dashboard
+@using EDO_FOMS.Client.Infrastructure.Managers.Dir
+@using EDO_FOMS.Client.Infrastructure.Managers.Doc.Document
+@using EDO_FOMS.Client.Infrastructure.Managers.Doc.DocumentType
+@using EDO_FOMS.Client.Infrastructure.Managers.Identity.Account
+@using EDO_FOMS.Client.Infrastructure.Managers.Identity.Authentication
+@using EDO_FOMS.Client.Infrastructure.Managers.Identity.Roles
+@using EDO_FOMS.Client.Infrastructure.Managers.Identity.RoleClaims
+@using EDO_FOMS.Client.Infrastructure.Managers.Identity.Users
+@using EDO_FOMS.Client.Infrastructure.Managers.Interceptors
+@using EDO_FOMS.Client.Infrastructure.Managers.Preferences
+@using EDO_FOMS.Client.Infrastructure.Settings
+
+@using EDO_FOMS.Client
+@using EDO_FOMS.Client.Extensions
+@using EDO_FOMS.Client.Pages.Authentication
+@using EDO_FOMS.Client.Shared
+@using EDO_FOMS.Client.Shared.Components
+@using EDO_FOMS.Client.Shared.Dialogs
+
+@attribute [Authorize]
+@inject ClientPreferenceManager _clientPreferenceManager
+@inject AuthStateProvider       _authStateProvider
+@inject HttpClient              _httpClient
+@inject NavigationManager       _navigationManager
+@inject IAccountManager         _accountManager
+@inject IAuthenticationManager  _authManager
+@inject IAuthorizationService   _authService
+@inject IDialogService          _dialogService
+@inject IJSRuntime              _jsRuntime
+@inject IHttpInterceptorManager _interceptor
+@inject ILocalStorageService    _localStorage
+@inject IUserManager            _userManager
+@inject ISnackbar               _snackBar
+@inject IStateManager           _stateManager
+@inject IClientState            _stateService

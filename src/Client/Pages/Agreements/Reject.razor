@@ -1,0 +1,64 @@
+﻿@namespace EDO_FOMS.Client.Pages.Agreements
+
+@page "/agreements/reject"
+
+@using EDO_FOMS.Application.Features.Agreements.Queries
+
+@inject Microsoft.Extensions.Localization.IStringLocalizer<Reject> _localizer
+
+
+<MudPaper Square="true" Elevation="3" Style="z-index: 1;">
+    <MudToolBar  Elevation="2">
+        <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Viewing rejected documents"]" Color="Color.Tertiary" Placement="Placement.Right">
+            <MudText Typo="Typo.button">@_localizer["Reject"]</MudText>
+        </MudTooltip>
+
+        <MudSpacer />
+
+        <MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" Class="search-field" Immediate="true" FullWidth=false 
+            Placeholder="@_localizer["Search For Agreements"]" T="string" @bind-Value="_searchString" 
+            Adornment="Adornment.End" AdornmentColor="Color.Primary" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" >
+        </MudTextField>
+    </MudToolBar>
+</MudPaper>
+
+<MudContainer MaxWidth="MaxWidth.False" Class="pa-6">   
+    @*ServerData="@(new Func<TableState, Task<TableData<GetAllDocumentsResponse>>>(ServerReloadAsync))"*@
+        @*Filter="new Func<EmployeeAgreementResponse, bool>(Search)" OnRowClick="EditDraftAsync"*@
+    <MudTable Hover="true" Dense="false" Bordered="false" Striped="true" Breakpoint="Breakpoint.Xs"
+        Loading="@(!_loaded)" LoadingProgressColor="Color.Info"        
+        @ref="_mudTable" T="EmployeeAgreementsResponse" Items="@_employeeAgreements" @bind-SelectedItem="_employeeAgreement">
+
+        <HeaderContent>
+            <!-- Type -->
+            <MudTh><MudTableSortLabel SortBy="new Func<EmployeeAgreementsResponse, object>(x => x.DocNumber)">@_localizer["Number"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<EmployeeAgreementsResponse, object>(x => x.DocDate)">@_localizer["Date"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<EmployeeAgreementsResponse, object>(x => x.DocTitle)">@_localizer["Title"]</MudTableSortLabel></MudTh>
+
+            <MudTh><MudTableSortLabel SortBy="new Func<EmployeeAgreementsResponse, object>(x => x.DocFileName)">@_localizer["File Name"]</MudTableSortLabel></MudTh>
+            <!-- CreateOn -->
+
+            @*<MudTh><MudTableSortLabel SortBy="new Func<EmployeeAgreementResponse, object>(x => x.Type)">@_localizer["Type"]</MudTableSortLabel></MudTh>            
+            <MudTh>@_localizer["Actions"]</MudTh>*@
+        </HeaderContent>
+
+        <RowTemplate>
+            <MudTd DataLabel="@_localizer["Number"]">
+                <MudHighlighter Text="@context.DocNumber" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="@_localizer["Date"]">
+                <MudHighlighter Text="@context.DocDate.ToString("dd MMM yyyy")" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="@_localizer["Title"]">
+                <MudHighlighter Text="@context.DocTitle" HighlightedText="@_searchString" />
+            </MudTd>
+
+            <MudTd DataLabel="@_localizer["File Name"]">
+                <MudLink Href="@context.DocURL" Underline="Underline.None" Target="_blank">
+                    <MudHighlighter Text="@context.DocFileName" HighlightedText="@_searchString" />
+                </MudLink>
+            </MudTd>
+        </RowTemplate>
+
+    </MudTable>
+</MudContainer>

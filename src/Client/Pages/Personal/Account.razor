@@ -1,0 +1,46 @@
+﻿@namespace EDO_FOMS.Client.Pages.Personal
+@page "/personal/account"
+
+@inject Microsoft.Extensions.Localization.IStringLocalizer<Account> _localizer
+
+<MudPaper Square="true" Elevation="3" Style="z-index: 1;">
+    <MudToolBar  Elevation="2">
+        <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Manage your account"]" Color="Color.Tertiary" Placement="Placement.Right">
+            <MudText Typo="Typo.button">@_localizer["Account"]</MudText>
+        </MudTooltip>
+
+        <MudSpacer />
+
+        @*<MudIconButton Icon="@Icons.Material.Outlined.AddLink" Color="Color.Inherit" Edge="Edge.End"/>*@
+    </MudToolBar>
+</MudPaper>
+
+<MudContainer MaxWidth="MaxWidth.False" Class="pa-6">
+    @*<MudText Typo="Typo.h5" Color="Color.Primary" Class="mb-4">Account</MudText>*@
+    @*<AzinoTitle Title="@localizer["Account"]" Description="@localizer["Manage your account"]" />*@
+
+    <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true">
+        <MudTabPanel Text="@_localizer["Profile"]">
+            <AccountProfile />
+        </MudTabPanel>
+        
+        <MudTabPanel Text="@_localizer["Notifications"]" Disabled="false">
+            <AccountNotice />
+        </MudTabPanel>
+        
+        <MudTabPanel Text="@_localizer["Security"]" Disabled="true">
+            <AccountSecurity />
+        </MudTabPanel>
+    </MudTabs>
+</MudContainer>
+
+<MudDrawer Anchor="Anchor.Right" Elevation="1" Variant="@DrawerVariant.Persistent" ClipMode="DrawerClipMode.Always">
+    <MudDrawerHeader Style="padding: 8px 4px 8px 16px;">
+        <MudText Style="align-self:center;" Typo="Typo.h6" Inline="true">@_localizer[""]</MudText>
+    </MudDrawerHeader>
+    
+    <MudDivider />
+
+    <MudList Clickable="true" Class="py-0">
+    </MudList>
+</MudDrawer>

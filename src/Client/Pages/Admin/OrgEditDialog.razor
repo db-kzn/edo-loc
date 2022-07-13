@@ -1,0 +1,120 @@
+﻿@namespace EDO_FOMS.Client.Pages.Admin
+
+@using EDO_FOMS.Domain.Enums
+
+@inject Microsoft.Extensions.Localization.IStringLocalizer<OrgEditDialog> _localizer
+
+<EditForm Model="@AddEditOrgModel" OnValidSubmit="SaveAsync">
+    <FluentValidationValidator @ref="_fluentValidationValidator" />
+    
+    <MudDialog>
+        <TitleContent>
+            @if (AddEditOrgModel.Id == 0)
+            {
+                <MudText Typo="Typo.h6">
+                    <MudIcon Icon="@Icons.Material.Outlined.AddBox" Class="mr-3 mb-n1"/>
+                    @_localizer["Add Org"]
+                </MudText>
+            }
+            else
+            {
+                <MudText Typo="Typo.h6">
+                    <MudIcon Icon="@Icons.Material.Outlined.Domain" Class="mr-3 mb-n1"/>
+                    @_localizer["Edit Org"]
+                </MudText>
+            }
+        </TitleContent>
+
+        <DialogContent>
+            <MudGrid>
+                <MudItem xs="6" Class="input-field">
+                    <MudTextField For="@(() => AddEditOrgModel.Id)" @bind-Value="AddEditOrgModel.Id" Label="@_localizer["Org ID"]" Variant="Variant.Filled" ReadOnly="true" /> @*Disabled="@(AddEditOrgModel.Id == 0)"*@
+                </MudItem>
+                <MudItem xs="6" Class="input-field">
+                    <MudTextField For="@(() => AddEditOrgModel.ShortName)" @bind-Value="AddEditOrgModel.ShortName" Label="@_localizer["Short Name"]" ReadOnly="@(!_canSystemEdit)"/>
+                </MudItem>
+
+                <MudItem xs="12" Class="input-field">
+                    <MudTextField For="@(() => AddEditOrgModel.Name)" @bind-Value="AddEditOrgModel.Name" Label="@_localizer["Name"]" ReadOnly="@(!_canSystemEdit)"/>
+                </MudItem>
+
+                <MudItem xs="6" Class="input-field">
+                    <MudTextField For="@(() => AddEditOrgModel.Inn)" @bind-Value="AddEditOrgModel.Inn" Label="@_localizer["Org INN"]" ReadOnly="@(!_canSystemEdit)"/>
+                </MudItem>
+                <MudItem xs="6" Class="input-field">
+                    <MudTextField For="@(() => AddEditOrgModel.Ogrn)" @bind-Value="AddEditOrgModel.Ogrn" Label="@_localizer["Org OGRN"]" ReadOnly="@(!_canSystemEdit)" />
+                </MudItem>
+    
+               @* <MudItem xs="6" Class="input-field">
+                    <MudTextField For="@(() => AddEditOrgModel.UserId)" @bind-Value="AddEditOrgModel.UserId" Label="@_localizer["Chief ID"]" />
+                </MudItem>
+                <MudItem xs="6" Class="input-field">
+                    <MudTextField For="@(() => AddEditOrgModel.UserSnils)" @bind-Value="AddEditOrgModel.UserSnils" Label="@_localizer["Chief SNILS"]" />
+                </MudItem>*@
+
+                <MudItem xs="6" Class="input-field">
+                    <MudTextField For="@(() => AddEditOrgModel.Email)" @bind-Value="AddEditOrgModel.Email" Label="@_localizer["EMail"]" InputType="InputType.Email" ReadOnly="@(!_canSystemEdit)"/>
+                </MudItem>
+
+                <MudItem xs="6" Class="input-field">
+                    <MudTextField For="@(() => AddEditOrgModel.Phone)" @bind-Value="AddEditOrgModel.Phone" Label="@_localizer["Phone"]" ReadOnly="@(!_canSystemEdit)"/>
+                </MudItem>
+
+                <MudItem xs="6" Class="input-field">
+                    <MudSelect T="OrgTypes" Label="@_localizer["Type"]" @bind-Value="AddEditOrgModel.Type" ReadOnly="@(!_canSystemEdit)">
+                        <MudSelectItem T="OrgTypes" Value="OrgTypes.MO">
+                            <div class="d-flex flex-row" style="height: 24px;">
+                                <MudIcon Icon="@Icons.Material.Outlined.MedicalServices" Color="Color.Primary" Size="Size.Small" Class="mr-2"/>Медицинская организация
+                            </div>
+                        </MudSelectItem>
+                        <MudSelectItem T="OrgTypes" Value="OrgTypes.SMO">
+                            <div class="d-flex flex-row" style="height: 24px;">
+                                <MudIcon Icon="@Icons.Material.Outlined.Museum" Color="Color.Success" Size="Size.Small" Class="mr-2"/>Страховая медицинская организация
+                            </div>
+                        </MudSelectItem>
+                        <MudSelectItem T="OrgTypes" Value="OrgTypes.Fund">
+                            <div class="d-flex flex-row" style="height: 24px;">
+                                <MudIcon Icon="@Icons.Material.Outlined.HealthAndSafety" Color="Color.Error" Size="Size.Small" Class="mr-2"/>ФОНД ОМС
+                            </div>
+                        </MudSelectItem>
+                    </MudSelect>
+                </MudItem>
+
+                <MudItem xs="6" Class="input-field">
+                    <MudSelect T="OrgStates" Label="@_localizer["Status"]" @bind-Value="AddEditOrgModel.State" ReadOnly="@(!_canSystemEdit)">
+                        <MudSelectItem T="OrgStates" Value="OrgStates.OnSubmit">
+                            <div class="d-flex flex-row" style="height: 24px;">
+                                <MudIcon Icon="@Icons.Material.Outlined.SkipNext" Color="Color.Warning" Size="Size.Small" Class="mr-2"/>На регистрации
+                            </div>
+                         </MudSelectItem>
+                        <MudSelectItem T="OrgStates" Value="OrgStates.Active">
+                            <div class="d-flex flex-row" style="height: 24px;">
+                                <MudIcon Icon="@Icons.Material.Outlined.PlayArrow" Color="Color.Success" Size="Size.Small" Class="mr-2"/>Активна
+                            </div>
+                        </MudSelectItem>
+                        <MudSelectItem T="OrgStates" Value="OrgStates.Inactive">
+                            <div class="d-flex flex-row" style="height: 24px;">
+                                <MudIcon Icon="@Icons.Material.Outlined.Pause" Color="Color.Default" Size="Size.Small" Class="mr-2"/>Приостановлена
+                            </div>
+                        </MudSelectItem>
+                        <MudSelectItem T="OrgStates" Value="OrgStates.Blocked">
+                            <div class="d-flex flex-row" style="height: 24px;">
+                                <MudIcon Icon="@Icons.Material.Outlined.Stop" Color="Color.Error" Size="Size.Small" Class="mr-2"/>Заблокирована
+                            </div>
+                        </MudSelectItem>
+                        @*<MudSelectItem T="int" Value="5">Закрыта</MudSelectItem>*@
+                    </MudSelect>
+                </MudItem>
+            </MudGrid>
+        </DialogContent>
+
+        <DialogActions>
+            <MudItem xs="12" Class="d-flex justify-center">
+                <MudButton FullWidth="true" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large"
+                    ButtonType="ButtonType.Submit" Disabled="@(!Validated || !_canSystemEdit)">
+                        @(AddEditOrgModel.Id != 0 ? _localizer["Update"] : _localizer["Save"]) 
+                </MudButton>
+            </MudItem>
+        </DialogActions>
+    </MudDialog>
+</EditForm>

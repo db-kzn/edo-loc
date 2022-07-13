@@ -1,0 +1,294 @@
+﻿@namespace EDO_FOMS.Client.Pages.Admin
+
+@page "/admin/orgs"
+
+@using EDO_FOMS.Application.Features.Orgs.Queries
+@using EDO_FOMS.Domain.Enums
+
+@attribute [Authorize(Policy = Permissions.System.View)]
+@inject Microsoft.Extensions.Localization.IStringLocalizer<Orgs> _localizer
+
+<MudPaper Square="true" Elevation="3" Style="z-index: 1;">
+    <MudToolBar  Elevation="2">
+        <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Manage Organizations"]" Color="Color.Tertiary" Placement="Placement.Right">
+            <MudText Typo="Typo.button">@_localizer["Orgs"]</MudText>
+        </MudTooltip>
+
+        <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Renew"]" Color="Color.Tertiary" Placement="Placement.Right">
+            <MudIconButton Icon="@Icons.Material.Outlined.Sync" aria-label="Renew" OnClick="RenewAsync"></MudIconButton>
+        </MudTooltip>
+
+        <MudSpacer />
+
+        <MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" Class="search-field" Immediate="false" FullWidth=false 
+            Placeholder="@_localizer["Search For Orgs"]" T="string" Clearable="true" ValueChanged="@(s => OnSearch(s))"
+            Adornment="Adornment.Start" AdornmentColor="Color.Primary" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" >
+        </MudTextField>
+
+        <MudTooltip Delay="@delay" Duration="@duration" Placement="Placement.Left" Color="Color.Tertiary" Arrow="true"
+            Text="@(matchCase ? _localizer["Match Case On"] : _localizer["Match Case Off"])">
+            <MudToggleIconButton Toggled="@matchCase" ToggledChanged="OnToggledMatchCase"
+                 Icon="@Icons.Material.Filled.FormatStrikethrough" Color="@Color.Default"
+                 ToggledIcon="@Icons.Material.Filled.TextFields" ToggledColor="@Color.Default"/>
+        </MudTooltip>
+
+        <MudTooltip Delay="@delay" Duration="@duration" Placement="Placement.Left" Color="Color.Tertiary" Arrow="true"
+            Text="@_localizer["Rows density"]">
+
+            <MudToggleIconButton Toggled="@dense" ToggledChanged="OnToggledDense"
+                 Icon="@Icons.Material.Filled.DensityMedium" Color="@Color.Default"
+                 ToggledIcon="@Icons.Material.Filled.DensitySmall" ToggledColor="@Color.Default"/>
+        </MudTooltip>
+
+        <MudTooltip Delay="@delay" Duration="@duration" Placement="Placement.Left" Color="Color.Tertiary" Arrow="true" Text="@_localizer["Filter"]">
+            <MudIconButton Icon="@Icons.Material.TwoTone.FilterAlt" Color="@(Filter.IsActive ? Color.Error : Color.Default)" OnClick="@ToggleFilter" /> @*Edge="Edge.End"*@
+        </MudTooltip>
+    </MudToolBar>
+</MudPaper>
+
+<MudContainer MaxWidth="MaxWidth.False" Class="pa-6">
+    <MudTable Hover="true" Dense="@dense" Bordered="false" Striped="true" Breakpoint="Breakpoint.Xs" 
+        @ref="_mudTable" T="OrgsResponse" @bind-SelectedItem="_org" OnRowClick="EditOrgAsync"
+        ServerData="@(new Func<TableState, Task<TableData<OrgsResponse>>>(ServerReloadAsync))"
+        Loading="@(!_loaded)" LoadingProgressColor="Color.Info"  RowsPerPage="@_rowsPerPage">
+        
+        <ColGroup>
+            <col /><col /><col /><col /><col />
+            <col /><col /><col />
+            <col class="col-date-time" />
+        </ColGroup>
+
+        <HeaderContent>
+            <MudTh><MudTableSortLabel T="OrgsResponse" SortLabel="Id">@_localizer["ID"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="OrgsResponse" SortLabel="Inn">@_localizer["Org INN"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="OrgsResponse" SortLabel="Ogrn">@_localizer["Org OGRN"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="OrgsResponse" SortLabel="Name">@_localizer["Org Name"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="OrgsResponse" SortLabel="ShortName">@_localizer["Org Short Name"]</MudTableSortLabel></MudTh>
+
+            <MudTh><MudTableSortLabel T="OrgsResponse" SortLabel="Email">@_localizer["Email"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="OrgsResponse" SortLabel="Phone">@_localizer["Phone"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="OrgsResponse" SortLabel="State">@_localizer["State"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="OrgsResponse" SortLabel="CreatedOn">@_localizer["Created"]</MudTableSortLabel></MudTh>
+        </HeaderContent>
+
+        <RowTemplate>
+            <MudTd DataLabel="@_localizer["ID"]">
+                <MudHighlighter Text="@context.Id.ToString()" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="@_localizer["Org INN"]">
+                <MudHighlighter Text="@context.Inn" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="@_localizer["Org OGRN"]">
+                <MudHighlighter Text="@context.Ogrn" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="@_localizer["Org Name"]">
+                <MudHighlighter Text="@context.Name" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="@_localizer["Org Short Name"]">
+                <MudHighlighter Text="@context.ShortName" HighlightedText="@_searchString" />
+            </MudTd>
+
+            @*<MudTd DataLabel="@_localizer["Chief SNILS"]">
+                <MudHighlighter Text="@context.UserSnils" HighlightedText="@_searchString" />
+            </MudTd>*@
+
+            <MudTd DataLabel="@_localizer["Email"]">
+                <MudHighlighter Text="@context.Email" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="@_localizer["Phone"]">
+                <MudHighlighter Text="@context.Phone" HighlightedText="@_searchString" />
+            </MudTd>
+
+            <MudTd DataLabel="@_localizer["State"]">
+                @if (@context.Type == OrgTypes.MO)
+                {
+                    <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["MO"]" Placement="Placement.Left" Color="Color.Tertiary">
+                        <MudIcon Icon="@Icons.Material.Outlined.MedicalServices" Color="Color.Primary" Class="mx-2"/>
+                    </MudTooltip>
+                }
+                else if (@context.Type == OrgTypes.SMO)
+                {
+                    <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["SMO"]" Placement="Placement.Left" Color="Color.Tertiary">
+                        <MudIcon Icon="@Icons.Material.Outlined.Museum" Color="Color.Success" Class="mx-2"/>
+                    </MudTooltip>
+                }
+                else if (@context.Type == OrgTypes.Fund)
+                {
+                    <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Fund OMS"]" Placement="Placement.Left" Color="Color.Tertiary">
+                        <MudIcon Icon="@Icons.Material.Outlined.HealthAndSafety" Color="Color.Error" Class="mx-2"/>
+                    </MudTooltip>
+                }
+                
+                @if(@context.State == OrgStates.Active)
+                {
+                    <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Active"]" Placement="Placement.Left" Color="Color.Tertiary">
+                        <MudIcon Icon="@Icons.Material.Outlined.PlayArrow" Color="Color.Success" Class="mx-2"/>
+                    </MudTooltip>
+                } 
+                else if (@context.State == OrgStates.Inactive)
+                {
+                    <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Inactive"]" Placement="Placement.Left" Color="Color.Tertiary">
+                        <MudIcon Icon="@Icons.Material.Outlined.Pause" Color="Color.Default" Class="mx-2"/>
+                    </MudTooltip>
+                }
+                else if (@context.State == OrgStates.OnSubmit)
+                {
+                    <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["On Submit"]" Placement="Placement.Left" Color="Color.Tertiary">
+                        <MudIcon Icon="@Icons.Material.Outlined.SkipNext" Color="Color.Warning" Class="mx-2"/>
+                    </MudTooltip>
+                }
+                else if (@context.State == OrgStates.Blocked)
+                {
+                    <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Block"]" Placement="Placement.Left" Color="Color.Tertiary">
+                        <MudIcon Icon="@Icons.Material.Outlined.Stop" Color="Color.Error" Class="mx-2"/>
+                    </MudTooltip>
+                }
+            </MudTd>
+
+            <MudTd DataLabel="@_localizer["Created"]">
+                <MudHighlighter Text="@context.CreatedOn.ToString()" HighlightedText="@_searchString" />
+            </MudTd>
+        </RowTemplate>
+
+        <PagerContent>
+            <TablePager />
+        </PagerContent>
+    </MudTable>
+</MudContainer>
+
+<MudDrawer @bind-Open="@openFilter" Anchor="Anchor.Right" Elevation="1" Variant="@DrawerVariant.Persistent" ClipMode="DrawerClipMode.Always">
+
+    <MudDrawerHeader Style="padding: 8px 4px 8px 16px;">
+        <MudText Style="align-self:center;" Typo="Typo.button" Inline="true">@_localizer["Advanced filter"]</MudText>
+        <MudSpacer />
+        <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Reset"]" Color="Color.Tertiary" Placement="Placement.Left" Arrow="true">
+            <MudIconButton Icon="@Icons.Material.Outlined.SettingsBackupRestore" Color="Color.Primary" OnClick="FilterReset" Disabled="@(!Filter.IsActive)"/>
+        </MudTooltip>
+    </MudDrawerHeader>
+
+    <MudDivider />
+
+    <MudList Clickable="true" Class="py-0">
+        <MudListItem Icon="@Icons.Material.Outlined.FontDownload" Text="@_localizer["Text"]" InitiallyExpanded="false"
+            AdornmentColor="Color.Primary" IconColor="@(Filter.ChangedText ? Color.Error : Color.Primary)">
+            <NestedList>
+                <MudTextField Class="mx-2" Label="@_localizer["ID"]" Variant="Variant.Text" Margin="Margin.Dense"
+                    @bind-Value="Filter.TextOrgId" TextChanged="@(() => OnText())">
+                </MudTextField>
+                <MudTextField Class="mx-2" Label="@_localizer["Org INN"]" Variant="Variant.Text" Margin="Margin.Dense"
+                    @bind-Value="Filter.TextInnLe" TextChanged="@(() => OnText())">
+                </MudTextField>
+                <MudTextField Class="mx-2" Label="@_localizer["Org OGRN"]" Variant="Variant.Text" Margin="Margin.Dense"
+                    @bind-Value="Filter.TextOgrn" TextChanged="@(() => OnText())">
+                </MudTextField>
+
+                <MudTextField Class="mx-2" Label="@_localizer["Org Name"]" Variant="Variant.Text" Margin="Margin.Dense"
+                    @bind-Value="Filter.TextName" TextChanged="@(() => OnText())">
+                </MudTextField>
+                <MudTextField Class="mx-2" Label="@_localizer["Org Short Name"]" Variant="Variant.Text" Margin="Margin.Dense"
+                    @bind-Value="Filter.TextShortName" TextChanged="@(() => OnText())">
+                </MudTextField>
+
+                <MudTextField Class="mx-2" Label="@_localizer["Email"]" Variant="Variant.Text" Margin="Margin.Dense"
+                    @bind-Value="Filter.TextEmail" TextChanged="@(() => OnText())">
+                </MudTextField>
+                <MudTextField Class="mx-2" Label="@_localizer["Phone"]" Variant="Variant.Text" Margin="Margin.Dense"
+                    @bind-Value="Filter.TextPhone" TextChanged="@(() => OnText())">
+                </MudTextField>
+            </NestedList>
+        </MudListItem>
+
+        <MudDivider />
+
+        <MudListItem Icon="@Icons.Material.Outlined.LibraryAddCheck" Text="@_localizer["Organizations"]" InitiallyExpanded="false"
+            AdornmentColor="Color.Primary" IconColor="@(Filter.ChangedTypes ? Color.Error : Color.Primary)">
+            <NestedList>
+                <MudListItem Icon="@(Filter.TypeMO ? Icons.Material.Outlined.MedicalServices : Icons.Material.Outlined.CheckBoxOutlineBlank)"
+                    IconColor="@(Filter.TypeMO ? Color.Primary : Color.Default)" OnClick="@(() => OnType("MO"))">
+                    @_localizer["MO"]
+                </MudListItem>
+                
+                <MudListItem Icon="@(Filter.TypeSMO ? Icons.Material.Outlined.Museum : Icons.Material.Outlined.CheckBoxOutlineBlank)"
+                    IconColor="@(Filter.TypeSMO ? Color.Success : Color.Default)" OnClick="@(() => OnType("SMO"))">
+                    @_localizer["SMO"]
+                </MudListItem>
+
+                <MudListItem Icon="@(Filter.TypeFund ? Icons.Material.Outlined.HealthAndSafety : Icons.Material.Outlined.CheckBoxOutlineBlank)"
+                    IconColor="@(Filter.TypeFund ? Color.Error : Color.Default)" OnClick="@(() => OnType("Fund"))">
+                    @_localizer["Fund OMS"]
+                </MudListItem>
+            </NestedList>
+        </MudListItem>
+
+        <MudDivider />
+
+        <MudListItem Icon="@Icons.Material.Outlined.Domain" Text="@_localizer["State"]" InitiallyExpanded="false"
+            AdornmentColor="Color.Primary" IconColor="@(Filter.ChangedStates ? Color.Error : Color.Primary)">
+            <NestedList>
+                <MudListItem Icon="@(Filter.StateActive ? Icons.Material.TwoTone.PlayArrow : Icons.Material.Outlined.CheckBoxOutlineBlank)"
+                    IconColor="@(Filter.StateActive ? Color.Success : Color.Default)" OnClick="@(() => OnState("Active"))">
+                    @_localizer["Active"]
+                </MudListItem>
+                
+                <MudListItem Icon="@(Filter.StateInactive ? Icons.Material.TwoTone.Pause : Icons.Material.Outlined.CheckBoxOutlineBlank)"
+                    IconColor="@(Filter.StateInactive ? Color.Default : Color.Default)" OnClick="@(() => OnState("Inactive"))">
+                    @_localizer["Inactive"]
+                </MudListItem>
+
+                <MudListItem Icon="@(Filter.StateOnSubmit ? Icons.Material.TwoTone.SkipNext : Icons.Material.Outlined.CheckBoxOutlineBlank)"
+                    IconColor="@(Filter.StateOnSubmit ? Color.Warning : Color.Default)" OnClick="@(() => OnState("On Submit"))">
+                    @_localizer["On Submit"]
+                </MudListItem>
+
+                <MudListItem Icon="@(Filter.StateBlocked ? Icons.Material.TwoTone.Stop : Icons.Material.Outlined.CheckBoxOutlineBlank)"
+                    IconColor="@(Filter.StateBlocked ? Color.Error : Color.Default)" OnClick="@(() => OnState("Block"))">
+                    @_localizer["Block"]
+                </MudListItem>
+            </NestedList>
+        </MudListItem>
+
+        <MudDivider />
+
+        <MudListItem Icon="@Icons.Material.Outlined.DateRange" Text="@_localizer["Create on"]" InitiallyExpanded="false"
+            AdornmentColor="Color.Primary" IconColor="@(Filter.ChangedCreateOn ? Color.Error : Color.Primary)">
+            <NestedList>
+                <MudDatePicker Class="mx-2" Label="@_localizer["From"]" Editable="false" DisableToolbar="true" AdornmentIcon="@Icons.Material.TwoTone.Today"
+                    @ref="_createOnFrom" Date="Filter.CreateOnFrom" DateChanged="@((d) => OnCreateOn("From", d))" AutoClose="true">
+                    <PickerActions>
+                        <MudButton StartIcon="@Icons.Material.TwoTone.EventBusy" OnClick="@(() => _createOnFrom.Clear())">@_localizer["Clear"]</MudButton>
+                        @*<MudButton StartIcon="@Icons.Material.Outlined.Clear" OnClick="@(() => _createOnFrom.Close(false))">@_localizer["Cancel"]</MudButton>*@
+                        @*<MudButton Color="Color.Primary" OnClick="@(() => _createOnFrom.Close())">@_localizer["Ok"]</MudButton>*@
+                    </PickerActions>
+                </MudDatePicker>
+
+                <MudDatePicker Class="mx-2" Label="@_localizer["To"]" Editable="false" DisableToolbar="true" AdornmentIcon="@Icons.Material.TwoTone.Event"
+                    @ref="_createOnTo" Date="Filter.CreateOnTo" DateChanged="@((d) => OnCreateOn("To", d))" AutoClose="true">
+                    <PickerActions>
+                        <MudButton StartIcon="@Icons.Material.TwoTone.EventBusy" OnClick="@(() => _createOnTo.Clear())">@_localizer["Clear"]</MudButton>
+                        @*<MudButton OnClick="@(() => _createOnTo.Close(false))">@_localizer["Cancel"]</MudButton>*@
+                        @*<MudButton Color="Color.Primary" OnClick="@(() => _createOnTo.Close())">@_localizer["Ok"]</MudButton>*@
+                    </PickerActions>
+                </MudDatePicker>
+            </NestedList>
+        </MudListItem>
+
+        <MudDivider />
+
+        @*Disabled="@(Filter.IsEmpty)" *@
+        <MudListItem>
+            <MudButton FullWidth="true" Variant="Variant.Outlined" StartIcon="@Icons.Outlined.Done" Color="Color.Primary"
+                 OnClick="ApplyFilter">@_localizer["Apply"]</MudButton>
+        </MudListItem>
+
+         <MudDivider />
+    </MudList>
+</MudDrawer>
+
+@if (_canSystemEdit)
+{
+    <MudItem Class="fab-btn-add">
+        <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Add new org"]" Color="Color.Tertiary" Placement="Placement.Left">
+            <MudFab Color="Color.Secondary" Icon="@Icons.Material.Filled.Add" aria-label="add" OnClick="AddOrgAsync"/>
+        </MudTooltip>
+    </MudItem>
+}

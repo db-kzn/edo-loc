@@ -1,0 +1,98 @@
+﻿@namespace EDO_FOMS.Client.Pages.Personal
+
+@inject Microsoft.Extensions.Localization.IStringLocalizer<AccountNotice> _localizer
+
+<MudCard>
+    @*<MudCardHeader>
+        <CardHeaderContent>
+            <MudText>Notifications</MudText>
+        </CardHeaderContent>
+    </MudCardHeader>*@
+    <MudCardContent>
+        <MudGrid>
+            <MudItem xs="12">
+                @*<MudText>
+                    <b>e-mail</b>
+                </MudText>*@
+                <MudText Typo="Typo.button">@_localizer["Notify me about"]: </MudText>
+
+                <div class="d-flex flex-column xs-12">
+
+                    <MudCheckBox @bind-Checked="@Subscribe.Email.AgreementIncoming" Label=@_localizer["Receipt of new documents."] Color="Color.Primary">
+                        <MudTooltip Delay="@delay" Duration="@duration" Arrow="true" Placement="Placement.Bottom" Color="Color.Tertiary">
+                            <ChildContent>
+                                <MudIcon Icon="@Icons.Material.TwoTone.HelpOutline" Title="Info" Size="Size.Small" Color="Color.Tertiary" Class="ml-2 mt-2"/>
+                            </ChildContent>
+                            <TooltipContent>
+                                <MudText Typo="Typo.body2">@_localizer["Notify me about"]</MudText>
+                                <MudText Typo="Typo.body2">@_localizer["receipt of new documents"]</MudText>
+                                <MudText Typo="Typo.body2">@_localizer["for signing (approval)"]</MudText>
+                            </TooltipContent>
+                        </MudTooltip>
+                    </MudCheckBox>
+
+                    <MudCheckBox @bind-Checked="@Subscribe.Email.DocumentRejected" Label=@_localizer["Comments and rejections of documents."] Color="Color.Error">
+                        <MudTooltip Delay="@delay" Duration="@duration" Arrow="true" Placement="Placement.Bottom" Color="Color.Tertiary">
+                            <ChildContent>
+                                <MudIcon Icon="@Icons.Material.TwoTone.HelpOutline" Title="Info" Size="Size.Small" Color="Color.Tertiary" Class="ml-2 mt-2"/>
+                            </ChildContent>
+                            <TooltipContent>
+                                <MudText Typo="Typo.body2">@_localizer["Notify me about"]</MudText>
+                                <MudText Typo="Typo.body2">@_localizer["comments and rejection"]</MudText>
+                                <MudText Typo="Typo.body2">@_localizer["in signing documents"],</MudText>
+                                <MudText Typo="Typo.body2">@_localizer["sent by me for signing"]</MudText>
+                            </TooltipContent>
+                        </MudTooltip>
+                    </MudCheckBox>
+
+                    <MudCheckBox @bind-Checked="@Subscribe.Email.DocumentApproved" Label=@_localizer["Approval/signing of documents."] Color="Color.Warning">
+                        <MudTooltip Delay="@delay" Duration="@duration" Arrow="true" Placement="Placement.Bottom" Color="Color.Tertiary">
+                            <ChildContent>
+                                <MudIcon Icon="@Icons.Material.Outlined.HelpOutline" Title="Info" Size="Size.Small" Color="Color.Tertiary" Class="ml-2 mt-2"/>
+                            </ChildContent>
+                            <TooltipContent>
+                                <MudText Typo="Typo.body2">@_localizer["Notify me about"]</MudText>
+                                <MudText Typo="Typo.body2">@_localizer["approval/signing of documents"],</MudText>
+                                <MudText Typo="Typo.body2">@_localizer["sent by me for signing"]</MudText>
+                            </TooltipContent>
+                        </MudTooltip>
+                    </MudCheckBox>
+
+                    <MudCheckBox @bind-Checked="@Subscribe.Email.DocumentAgreed" Label=@_localizer["Completion of the signing process."] Color="Color.Success">
+                        <MudTooltip Delay="@delay" Duration="@duration" Arrow="true" Placement="Placement.Bottom" Color="Color.Tertiary">
+                            <ChildContent>
+                                <MudIcon Icon="@Icons.Material.Outlined.HelpOutline" Title="Info" Size="Size.Small" Color="Color.Tertiary" Class="ml-2 mt-2"/>
+                            </ChildContent>
+                            <TooltipContent>
+                                <MudText Typo="Typo.body2">@_localizer["Notify me about"]</MudText>
+                                <MudText Typo="Typo.body2">@_localizer["completion of the process of signing documents"],</MudText>
+                                <MudText Typo="Typo.body2">@_localizer["sent by me and signed by all parties"]</MudText>
+                            </TooltipContent>
+                        </MudTooltip>
+                    </MudCheckBox>
+                    
+                </div>
+            </MudItem>
+            @*<MudItem xs="12" sm="8">
+                <MudText>
+                    <b>Chat</b>
+                </MudText>
+                <MudText Typo="Typo.body2">
+                    What type of system notifications you want to recieve in the phone application.
+                </MudText>
+                <div class="d-flex flex-column mt-6">
+                    <MudCheckBox @bind-Checked="@NotificationChat_1" Label="Threat Detection" Color="Color.Primary"></MudCheckBox>
+                    <MudCheckBox @bind-Checked="@NotificationChat_2" Label="Server Errors" Color="Color.Error"></MudCheckBox>
+                    <MudCheckBox @bind-Checked="@NotificationChat_3" Label="Server Warnings" Color="Color.Warning"></MudCheckBox>
+                    <MudCheckBox @bind-Checked="@NotificationChat_4" Label="Spam" Color="Color.Success"></MudCheckBox>
+                </div>
+            </MudItem>*@
+        </MudGrid>
+    </MudCardContent>
+
+    <MudDivider />
+
+    <MudCardActions>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" @onclick="@(() => SaveChanges())">@_localizer["Save Changes"]</MudButton>
+    </MudCardActions>
+</MudCard>

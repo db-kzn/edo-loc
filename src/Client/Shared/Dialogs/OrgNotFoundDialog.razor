@@ -1,0 +1,30 @@
+﻿@namespace EDO_FOMS.Client.Shared.Dialogs
+
+@inject Microsoft.Extensions.Localization.IStringLocalizer<OrgNotFoundDialog> localizer
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Color="Color.Warning"  Icon="@Icons.Material.Outlined.Report" Class="mr-3 mb-n1" />
+            @localizer["Organization not found"]
+        </MudText>
+    </TitleContent>
+
+    <DialogContent>
+        <MudText>
+            @localizer["The chief's key is required for registration"]
+        </MudText>
+    </DialogContent>
+
+    <DialogActions>
+        @*<MudButton Color="Color.Warning" Variant="Variant.Outlined" FullWidth="true" StartIcon="@Icons.Material.Outlined.Clear" OnClick="Cancel">@localizer["No"]</MudButton>*@
+        <MudButton Color="Color.Primary" Variant="Variant.Outlined" FullWidth="true" StartIcon="@Icons.Material.Outlined.Done" OnClick="Submit">@localizer["Ok"]</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    void Submit() => MudDialog.Close(DialogResult.Ok(true));
+    //void Cancel() => MudDialog.Close(DialogResult.Ok(false));
+}

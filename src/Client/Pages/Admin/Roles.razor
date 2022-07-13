@@ -1,0 +1,39 @@
+﻿@namespace EDO_FOMS.Client.Pages.Admin
+
+@page "/admin/roles"
+
+@attribute [Authorize(Policy = Permissions.System.View)]
+@inject Microsoft.Extensions.Localization.IStringLocalizer<Roles> _localizer
+
+<MudPaper Square="true" Elevation="3" Style="z-index: 1;">
+    <MudToolBar  Elevation="2">
+        <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Manage Roles"]" Color="Color.Tertiary" Placement="Placement.Right">
+            <MudText Typo="Typo.button">@_localizer["Roles"]</MudText>
+        </MudTooltip>
+
+        <MudSpacer />
+
+        @*<MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" Class="search-field" 
+            Immediate="true" FullWidth=false Placeholder="@_localizer["Search For Users"]" @bind-Value="_searchString" 
+            Adornment="Adornment.End" AdornmentColor="Color.Primary" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" >
+        </MudTextField>*@
+
+        @*Class="mt-0 mb-3"*@
+        @*<MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Link to the organization"]" Color="Color.Tertiary" Placement="Placement.Left">
+            <MudIconButton Icon="@Icons.Material.Outlined.AddLink" Color="Color.Inherit" Edge="Edge.End"/>
+        </MudTooltip>*@
+    </MudToolBar>
+</MudPaper>
+
+@code {
+    //List<OrganizationRequest> orgs = new();
+
+    private int delay;
+    private int duration;
+
+    protected override void OnInitialized()
+    {
+        delay = _stateService.TooltipDelay;
+        duration = _stateService.TooltipDuration;
+    }
+}

@@ -1,0 +1,252 @@
+﻿@namespace EDO_FOMS.Client.Pages.Admin
+@page "/admin/certs"
+
+@using EDO_FOMS.Application.Features.Certs.Queries
+
+@attribute [Authorize(Policy = Permissions.System.View)]
+@inject Microsoft.Extensions.Localization.IStringLocalizer<Certs> _localizer
+
+<MudPaper Square="true" Elevation="3" Style="z-index: 1;">
+    <MudToolBar  Elevation="2">
+        <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Manage Certs"]" Color="Color.Tertiary" Placement="Placement.Right">
+            <MudText Typo="Typo.button">@_localizer["Certs"]</MudText>
+        </MudTooltip>
+
+        <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Renew"]" Color="Color.Tertiary" Placement="Placement.Right">
+            <MudIconButton Icon="@Icons.Material.Outlined.Sync" aria-label="Renew" OnClick="RenewAsync"></MudIconButton>
+        </MudTooltip>
+
+        <MudSpacer />
+
+        <MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" Class="search-field" Immediate="false" FullWidth=false 
+            Placeholder="@_localizer["Search For Certs"]" @bind-Value="_searchString" Clearable="true"
+            Adornment="Adornment.Start" AdornmentColor="Color.Primary" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" >
+        </MudTextField>
+
+        <MudTooltip Delay="@delay" Duration="@duration" Placement="Placement.Left" Color="Color.Tertiary" Arrow="true"
+            Text="@(matchCase ? _localizer["Match Case On"] : _localizer["Match Case Off"])">
+            <MudToggleIconButton Toggled="@matchCase" ToggledChanged="OnToggledMatchCase"
+                 Icon="@Icons.Material.Filled.FormatStrikethrough" Color="@Color.Default"
+                 ToggledIcon="@Icons.Material.Filled.TextFields" ToggledColor="@Color.Default"/>
+        </MudTooltip>
+
+        <MudTooltip Delay="@delay" Duration="@duration" Placement="Placement.Left" Color="Color.Tertiary" Arrow="true"
+            Text="@_localizer["Rows density"]">
+            <MudToggleIconButton Toggled="@dense" ToggledChanged="OnToggledDense"
+                 Icon="@Icons.Material.Filled.DensityMedium" Color="@Color.Default"
+                 ToggledIcon="@Icons.Material.Filled.DensitySmall" ToggledColor="@Color.Default"/>
+        </MudTooltip>
+
+        <MudTooltip Delay="@delay" Duration="@duration" Placement="Placement.Left" Color="Color.Tertiary" Arrow="true" Text="@_localizer["Filter"]">
+            <MudIconButton Icon="@Icons.Material.TwoTone.FilterAlt" Color="@(Filter.IsActive ? Color.Error : Color.Default)" OnClick="@ToggleFilter" /> @*Edge="Edge.End"*@
+        </MudTooltip>
+    </MudToolBar>
+</MudPaper>
+
+<MudContainer MaxWidth="MaxWidth.False" Class="pa-6">
+    <MudTable Hover="true" Dense="@dense" Bordered="false" Striped="true" Breakpoint="Breakpoint.Xs" 
+              @ref="_mudTable" T="CertsResponse" @bind-SelectedItem="_cert" OnRowClick="EditCert"
+              ServerData="@(new Func<TableState, Task<TableData<CertsResponse>>>(ServerReloadAsync))"
+              Loading="@(!_loaded)" LoadingProgressColor="Color.Info" RowsPerPage="@_rowsPerPage">
+          
+        <ColGroup>
+            <col /><col /><col />
+            <col /><col /><col />
+            <col class="col-date-time" />
+        </ColGroup>
+
+         <HeaderContent>
+             <MudTh><MudTableSortLabel T="CertsResponse" SortLabel="Id">@_localizer["ID"]</MudTableSortLabel></MudTh>
+             <MudTh><MudTableSortLabel T="CertsResponse" SortLabel="Thumbprint">@_localizer["Thumbprint"]</MudTableSortLabel></MudTh>
+             <MudTh><MudTableSortLabel T="CertsResponse" SortLabel="Snils">@_localizer["Snils"]</MudTableSortLabel></MudTh>
+
+             <MudTh><MudTableSortLabel T="CertsResponse" SortLabel="FromDate">@_localizer["From Date"]</MudTableSortLabel></MudTh>
+             <MudTh><MudTableSortLabel T="CertsResponse" SortLabel="TillDate">@_localizer["Till Date"]</MudTableSortLabel></MudTh>
+             
+             <MudTh><MudTableSortLabel T="CertsResponse" SortLabel="IsActive">@_localizer["Status"]</MudTableSortLabel></MudTh>
+             <MudTh><MudTableSortLabel T="CertsResponse" SortLabel="CreatedOn">@_localizer["Created"]</MudTableSortLabel></MudTh>
+         </HeaderContent>
+
+         <RowTemplate>
+             <MudTd DataLabel="@_localizer["ID"]">
+                <MudHighlighter Text="@context.Id.ToString()" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="@_localizer["Thumbprint"]">
+                <MudHighlighter Text="@context.Thumbprint" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="@_localizer["Snils"]">
+                <MudHighlighter Text="@context.Snils" HighlightedText="@_searchString" />
+            </MudTd>
+
+            <MudTd DataLabel="@_localizer["From Date"]">
+                <MudHighlighter Text="@context.FromDate.ToString("d")" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="@_localizer["Till Date"]">
+                <MudHighlighter Text="@context.TillDate.ToString("d")" HighlightedText="@_searchString" />
+            </MudTd>
+
+            <MudTd DataLabel="@_localizer["Status"]">
+                @if (@context.IsActive)
+                {
+                    <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Active"]" Placement="Placement.Left" Color="Color.Tertiary">
+                        <MudIcon Icon="@Icons.Material.Outlined.GppGood" Color="Color.Success" Class="mx-2"/>
+                    </MudTooltip>
+                }
+                else
+                {
+                    <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Inactive"]" Placement="Placement.Left" Color="Color.Tertiary">
+                        <MudIcon Icon="@Icons.Material.Outlined.GppBad" Color="Color.Error" Class="mx-2"/>
+                    </MudTooltip>
+                }
+
+                @if (@context.SignAllowed)
+                {
+                    <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Allowed"]" Placement="Placement.Left" Color="Color.Tertiary">
+                        <MudIcon Icon="@Icons.Material.Outlined.Draw" Color="Color.Success" Class="mx-2"/>
+                    </MudTooltip>
+                }
+                else
+                {
+                    <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Not allowed"]" Placement="Placement.Left" Color="Color.Tertiary">
+                        <MudIcon Icon="@Icons.Material.Outlined.EditOff" Color="Color.Error" Class="mx-2"/>
+                    </MudTooltip>
+                }
+            </MudTd>
+
+            <MudTd DataLabel="@_localizer["Created"]">
+                <MudHighlighter Text="@context.CreatedOn.ToString()" HighlightedText="@_searchString" />
+            </MudTd>
+         </RowTemplate>
+
+         <PagerContent>
+            <TablePager />
+        </PagerContent>
+    </MudTable>
+</MudContainer>
+
+<MudDrawer @bind-Open="@openFilter" Anchor="Anchor.Right" Elevation="1" Variant="@DrawerVariant.Persistent" ClipMode="DrawerClipMode.Always">
+
+    <MudDrawerHeader Style="padding: 8px 4px 8px 16px;">
+        <MudText Style="align-self:center;" Typo="Typo.button" Inline="true">@_localizer["Advanced filter"]</MudText>
+        <MudSpacer />
+        <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Reset"]" Color="Color.Tertiary" Placement="Placement.Left" Arrow="true">
+            <MudIconButton Icon="@Icons.Material.Outlined.SettingsBackupRestore" Color="Color.Primary" OnClick="FilterReset" Disabled="@(!Filter.IsActive)"/>
+        </MudTooltip>
+    </MudDrawerHeader>
+
+    <MudDivider />
+
+    <MudList Clickable="true" Class="py-0">
+        <MudListItem Icon="@Icons.Material.Outlined.FontDownload" Text="@_localizer["Text"]" InitiallyExpanded="false"
+            AdornmentColor="Color.Primary" IconColor="@(Filter.ChangedText ? Color.Error : Color.Primary)">
+            <NestedList>
+                <MudTextField Class="mx-2" Label="@_localizer["ID"]" Variant="Variant.Text" Margin="Margin.Dense"
+                    @bind-Value="Filter.TextCertId" TextChanged="@(() => OnText())">
+                </MudTextField>
+                <MudTextField Class="mx-2" Label="@_localizer["Thumbprint"]" Variant="Variant.Text" Margin="Margin.Dense"
+                    @bind-Value="Filter.TextThumbPrint" TextChanged="@(() => OnText())">
+                </MudTextField>
+                <MudTextField Class="mx-2" Label="@_localizer["Snils"]" Variant="Variant.Text" Margin="Margin.Dense"
+                    @bind-Value="Filter.TextSnils" TextChanged="@(() => OnText())">
+                </MudTextField>
+            </NestedList>
+        </MudListItem>
+
+        <MudDivider />
+
+        <MudListItem Icon="@Icons.Material.Outlined.Domain" Text="@_localizer["Status"]" InitiallyExpanded="false"
+            AdornmentColor="Color.Primary" IconColor="@(Filter.ChangedStates ? Color.Error : Color.Primary)">
+            <NestedList>
+                <MudListItem OnClick="@(() => OnState("CertIsActive"))"
+                    Icon="@(Filter.CertIsActive == null ? Icons.Material.Outlined.Remove
+                    : Filter.CertIsActive == false ? Icons.Material.Outlined.GppBad : Icons.Material.Outlined.GppGood)"
+                    IconColor="@(Filter.CertIsActive == null ? Color.Default : Filter.CertIsActive == false ? Color.Error : Color.Success)">
+                    @_localizer["Cert Is Active"]
+                </MudListItem>
+
+                <MudListItem OnClick="@(() => OnState("SignAllowed"))"
+                    Icon="@(Filter.SignAllowed == null ? Icons.Material.Outlined.Remove
+                    : Filter.SignAllowed == false ? Icons.Material.Outlined.EditOff : Icons.Material.Outlined.Draw)"
+                    IconColor="@(Filter.SignAllowed == null ? Color.Default : Filter.SignAllowed == false ? Color.Error : Color.Success)">
+                    @_localizer["Sign Allowed"]
+                </MudListItem>
+            </NestedList>
+        </MudListItem>
+
+        <MudDivider />
+
+        <MudListItem Icon="@Icons.Material.Outlined.DateRange" Text="@_localizer["From Date"]" InitiallyExpanded="false"
+            AdornmentColor="Color.Primary" IconColor="@(Filter.ChangedCreateOn ? Color.Error : Color.Primary)">
+            <NestedList>
+                <MudDatePicker Class="mx-2" Label="@_localizer["From"]" Editable="false" DisableToolbar="true" AdornmentIcon="@Icons.Material.TwoTone.Today"
+                    @ref="_fromDateFrom" Date="Filter.FromDateFrom" DateChanged="@((d) => OnFromDate("From", d))" AutoClose="true">
+                    <PickerActions>
+                        <MudButton StartIcon="@Icons.Material.TwoTone.EventBusy" OnClick="@(() => _fromDateFrom.Clear())">@_localizer["Clear"]</MudButton>
+                    </PickerActions>
+                </MudDatePicker>
+
+                <MudDatePicker Class="mx-2" Label="@_localizer["To"]" Editable="false" DisableToolbar="true" AdornmentIcon="@Icons.Material.TwoTone.Event"
+                    @ref="_fromDateTo" Date="Filter.FromDateTo" DateChanged="@((d) => OnFromDate("To", d))" AutoClose="true">
+                    <PickerActions>
+                        <MudButton StartIcon="@Icons.Material.TwoTone.EventBusy" OnClick="@(() => _fromDateTo.Clear())">@_localizer["Clear"]</MudButton>
+                    </PickerActions>
+                </MudDatePicker>
+            </NestedList>
+        </MudListItem>
+
+        <MudDivider />
+
+        <MudListItem Icon="@Icons.Material.Outlined.DateRange" Text="@_localizer["Till Date"]" InitiallyExpanded="false"
+            AdornmentColor="Color.Primary" IconColor="@(Filter.ChangedCreateOn ? Color.Error : Color.Primary)">
+            <NestedList>
+                <MudDatePicker Class="mx-2" Label="@_localizer["From"]" Editable="false" DisableToolbar="true" AdornmentIcon="@Icons.Material.TwoTone.Today"
+                    @ref="_tillDateFrom" Date="Filter.TillDateFrom" DateChanged="@((d) => OnTillDate("From", d))" AutoClose="true">
+                    <PickerActions>
+                        <MudButton StartIcon="@Icons.Material.TwoTone.EventBusy" OnClick="@(() => _tillDateFrom.Clear())">@_localizer["Clear"]</MudButton>
+                    </PickerActions>
+                </MudDatePicker>
+
+                <MudDatePicker Class="mx-2" Label="@_localizer["To"]" Editable="false" DisableToolbar="true" AdornmentIcon="@Icons.Material.TwoTone.Event"
+                    @ref="_tillDateTo" Date="Filter.TillDateTo" DateChanged="@((d) => OnTillDate("To", d))" AutoClose="true">
+                    <PickerActions>
+                        <MudButton StartIcon="@Icons.Material.TwoTone.EventBusy" OnClick="@(() => _tillDateTo.Clear())">@_localizer["Clear"]</MudButton>
+                    </PickerActions>
+                </MudDatePicker>
+            </NestedList>
+        </MudListItem>
+
+        <MudDivider />
+
+        <MudListItem Icon="@Icons.Material.Outlined.DateRange" Text="@_localizer["Create on"]" InitiallyExpanded="false"
+            AdornmentColor="Color.Primary" IconColor="@(Filter.ChangedCreateOn ? Color.Error : Color.Primary)">
+            <NestedList>
+                <MudDatePicker Class="mx-2" Label="@_localizer["From"]" Editable="false" DisableToolbar="true" AdornmentIcon="@Icons.Material.TwoTone.Today"
+                    @ref="_createOnFrom" Date="Filter.CreateOnFrom" DateChanged="@((d) => OnCreateOn("From", d))" AutoClose="true">
+                    <PickerActions>
+                        <MudButton StartIcon="@Icons.Material.TwoTone.EventBusy" OnClick="@(() => _createOnFrom.Clear())">@_localizer["Clear"]</MudButton>
+                        @*<MudButton StartIcon="@Icons.Material.Outlined.Clear" OnClick="@(() => _createOnFrom.Close(false))">@_localizer["Cancel"]</MudButton>*@
+                        @*<MudButton Color="Color.Primary" OnClick="@(() => _createOnFrom.Close())">@_localizer["Ok"]</MudButton>*@
+                    </PickerActions>
+                </MudDatePicker>
+
+                <MudDatePicker Class="mx-2" Label="@_localizer["To"]" Editable="false" DisableToolbar="true" AdornmentIcon="@Icons.Material.TwoTone.Event"
+                    @ref="_createOnTo" Date="Filter.CreateOnTo" DateChanged="@((d) => OnCreateOn("To", d))" AutoClose="true">
+                    <PickerActions>
+                        <MudButton StartIcon="@Icons.Material.TwoTone.EventBusy" OnClick="@(() => _createOnTo.Clear())">@_localizer["Clear"]</MudButton>
+                        @*<MudButton OnClick="@(() => _createOnTo.Close(false))">@_localizer["Cancel"]</MudButton>*@
+                        @*<MudButton Color="Color.Primary" OnClick="@(() => _createOnTo.Close())">@_localizer["Ok"]</MudButton>*@
+                    </PickerActions>
+                </MudDatePicker>
+            </NestedList>
+        </MudListItem>
+
+        <MudDivider />
+
+        <MudListItem>
+            <MudButton FullWidth="true" Variant="Variant.Outlined" StartIcon="@Icons.Outlined.Done" Color="Color.Primary"
+                 Disabled="@(Filter.IsEmpty)" OnClick="ApplyFilter">@_localizer["Apply"]</MudButton>
+        </MudListItem>
+
+        <MudDivider />
+    </MudList>
+</MudDrawer>

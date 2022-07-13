@@ -1,0 +1,630 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>EDO_FOMS.Server</name>
+    </assembly>
+    <members>
+        <member name="T:EDO_FOMS.Server.Controllers.BaseApiController`1">
+            <summary>
+            Abstract BaseApi Controller Class
+            </summary>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Communication.ChatsController.GetChatHistoryAsync(System.String)">
+            <summary>
+            Get user wise chat history
+            </summary>
+            <param name="contactId"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Communication.ChatsController.GetChatUsersAsync">
+            <summary>
+            get available users
+            </summary>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Communication.ChatsController.SaveMessageAsync(EDO_FOMS.Application.Models.Chat.ChatHistory{EDO_FOMS.Application.Interfaces.Chat.IChatUser})">
+            <summary>
+            Save Chat Message
+            </summary>
+            <param name="message"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Directories.DirectoriesController.GetCompanies(System.Int32,System.Int32,System.String,System.Boolean,System.String)">
+            <summary>
+            Get Companies
+            </summary>
+            <param name="pageNumber"></param>
+            <param name="pageSize"></param>
+            <param name="searchString"></param>
+            <param name="matchCase"></param>
+            <param name="orderBy"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Directories.DirectoriesController.SearchCompanies(EDO_FOMS.Application.Requests.Directories.SearchCompaniesRequest)">
+            <summary>
+            Search Companies
+            </summary>
+            <param name="request"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Directories.DirectoriesController.CheckCompaniesForImports">
+            <summary>
+            Check Companies For Imports
+            </summary>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Directories.DirectoriesController.ImportFoms">
+            <summary>
+            Import FOMS Companies
+            </summary>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Directories.DirectoriesController.ImportSmo">
+            <summary>
+            Import SMO Companies
+            </summary>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Directories.DirectoriesController.ImportMo">
+            <summary>
+            Import MO Companies
+            </summary>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Docums.DocumentsController.GetAll(System.Int32,System.Int32,System.String,EDO_FOMS.Domain.Enums.DocStages,System.Boolean,System.String)">
+            <summary>
+            Get Documents
+            </summary>
+            <param name="pageNumber"></param>
+            <param name="pageSize"></param>
+            <param name="searchString"></param>
+            <param name="docStage"></param>
+            <param name="matchCase"></param>
+            <param name="orderBy"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Docums.DocumentsController.GetArgs(System.Int32,System.Int32,System.String,EDO_FOMS.Domain.Enums.AgreementStates,System.Boolean,System.String)">
+            <summary>
+            Get Agreements
+            </summary>
+            <param name="pageNumber"></param>
+            <param name="pageSize"></param>
+            <param name="searchString"></param>
+            <param name="agrState"></param>
+            <param name="matchCase"></param>
+            <param name="orderBy"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Docums.DocumentsController.GetImportsCount">
+            <summary>
+            Get Imports Count
+            </summary>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Docums.DocumentsController.Search(EDO_FOMS.Application.Requests.Documents.SearchDocsRequest)">
+            <summary>
+            Search Documents
+            </summary>
+            <param name="request"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Docums.DocumentsController.AgrsSearch(EDO_FOMS.Application.Requests.Agreements.SearchAgrsRequest)">
+            <summary>
+            Search Agreements
+            </summary>
+            <param name="request"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Docums.DocumentsController.SearchOrgsByString(System.String)">
+            <summary>
+            Search Organizations By String
+            </summary>
+            <param name="search"></param>
+            <returns>Status 200 Ok</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Docums.DocumentsController.GetFoundContacts(EDO_FOMS.Domain.Enums.OrgTypes,EDO_FOMS.Domain.Enums.UserBaseRoles,System.String)">
+            <summary>
+            Get Found Users
+            </summary>
+            <param name="orgType"></param>
+            <param name="baseRole"></param>
+            <param name="search"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Docums.DocumentsController.GetAgreementMembers(System.Int32,System.String)">
+            <summary>
+            Get Found Users
+            </summary>
+            <param name="orgId"></param>
+            <param name="search"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Docums.DocumentsController.GetDocAgreements(System.Int32)">
+            <summary>
+            Get Found Document Agreements
+            </summary>
+            <param name="docId"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Docums.DocumentsController.GetAgreementsProgress(System.Int32,System.Nullable{System.Int32})">
+            <summary>
+            Get Document Agreements Progress
+            </summary>
+            <param name="docId"></param>
+            <param name="agrId"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Docums.DocumentsController.GetEmployeeAgreements(EDO_FOMS.Domain.Enums.AgreementStates)">
+            <summary>
+            Get Found User Agreements
+            </summary>
+            <param name="state"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Docums.DocumentsController.GetById(System.Int32)">
+            <summary>
+            Get Document By Id
+            </summary>
+            <param name="id"></param>
+            <returns>Status 200 Ok</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Docums.DocumentsController.Post(EDO_FOMS.Application.Features.Documents.Commands.AddEdit.AddEditDocumentCommand)">
+            <summary>
+            Add/Edit Document
+            </summary>
+            <param name="command"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Docums.DocumentsController.Post(EDO_FOMS.Application.Features.Documents.Commands.AddEdit.ChangeDocStageCommand)">
+            <summary>
+            Change Document Stage
+            </summary>
+            <param name="command"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Docums.DocumentsController.PostMembers(EDO_FOMS.Application.Features.Agreements.Commands.AddAgreementMembersCommand)">
+            <summary>
+            Add Agreement Members
+            </summary>
+            <param name="command"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Docums.DocumentsController.PostAgreementAnswer(EDO_FOMS.Application.Features.Agreements.Commands.AgreementAnswerCommand)">
+            <summary>
+            Agreement Answer
+            </summary>
+            <param name="command"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Docums.DocumentsController.PostAgreementSigned(EDO_FOMS.Application.Features.Agreements.Commands.AgreementSignedCommand)">
+            <summary>
+            Agreement Signed
+            </summary>
+            <param name="command"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Docums.DocumentsController.Delete(System.Int32)">
+            <summary>
+            Delete a Document
+            </summary>
+            <param name="id"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Docums.DocumentTypesController.GetAll">
+            <summary>
+            Get All Document Types
+            </summary>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Docums.DocumentTypesController.GetById(System.Int32)">
+            <summary>
+            Get Document Type By Id
+            </summary>
+            <param name="id"></param>
+            <returns>Status 200 Ok</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Docums.DocumentTypesController.Post(EDO_FOMS.Application.Features.DocumentTypes.Commands.AddEdit.AddEditDocumentTypeCommand)">
+            <summary>
+            Create/Update a Document Type
+            </summary>
+            <param name="command"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Docums.DocumentTypesController.Delete(System.Int32)">
+            <summary>
+            Delete a Document Type
+            </summary>
+            <param name="id"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Docums.DocumentTypesController.Export(System.String)">
+            <summary>
+            Search Document Types and Export to Excel
+            </summary>
+            <param name="searchString"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Identity.AccountController.UpdateProfile(EDO_FOMS.Application.Requests.Identity.UpdateProfileRequest)">
+            <summary>
+            Update Profile
+            </summary>
+            <param name="model"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Identity.AccountController.ChangePassword(EDO_FOMS.Application.Requests.Identity.ChangePasswordRequest)">
+            <summary>
+            Change Password
+            </summary>
+            <param name="model"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Identity.AccountController.GetProfilePictureAsync(System.String)">
+            <summary>
+            Get Profile picture by Id
+            </summary>
+            <param name="userId"></param>
+            <returns>Status 200 OK </returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Identity.AccountController.UpdateProfilePictureAsync(EDO_FOMS.Application.Requests.Identity.UpdateProfilePictureRequest)">
+            <summary>
+            Update Profile Picture
+            </summary>
+            <param name="request"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Identity.TokenController.Get(EDO_FOMS.Application.Requests.Identity.TokenRequest)">
+            <summary>
+            Get Token (Email, Password)
+            </summary>
+            <param name="model"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Identity.TokenController.Refresh(EDO_FOMS.Application.Requests.Identity.RefreshTokenRequest)">
+            <summary>
+            Refresh Token
+            </summary>
+            <param name="model"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Identity.TokenController.Cert(EDO_FOMS.Application.Requests.Identity.CertCheckRequest)">
+            <summary>
+            Cert SignIn
+            </summary>
+            <param name="model"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Identity.TokenController.CertCheck(EDO_FOMS.Application.Requests.Identity.CertCheckRequest)">
+            <summary>
+            Check Cert
+            </summary>
+            <param name="model"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Identity.UserController.GetUserOrgExists(System.String)">
+            <summary>
+            Checking the existence of the user's organization
+            </summary>
+            <param name="inn"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Identity.UserController.RegisterByCertAsync(EDO_FOMS.Application.Requests.Identity.RegisterByCertRequest)">
+            <summary>
+            Register a User by Certificate
+            </summary>
+            <param name="request"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Identity.UserController.GetById(System.String)">
+            <summary>
+            Get User By Id
+            </summary>
+            <param name="id"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Identity.UserController.GetByInn(System.String)">
+            <summary>
+            Get a Organization By Inn
+            </summary>
+            <param name="inn"></param>
+            <returns>Status 200 Ok</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Identity.UserController.GetAllByOrgId(System.Int32)">
+            <summary>
+            Get User Details
+            </summary>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Identity.UserController.AddEditEmployeeAsync(EDO_FOMS.Application.Requests.Person.AddEditEmployeeRequest)">
+            <summary>
+            Adding or Updating a employee by the chief
+            </summary>
+            <param name="request"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Identity.UserController.ConfirmEmailAsync(System.String,System.String)">
+            <summary>
+            Confirm Email
+            </summary>
+            <param name="userId"></param>
+            <param name="code"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.RoleClaimController.GetAll">
+            <summary>
+            Get All Role Claims(e.g. Product Create Permission)
+            </summary>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.RoleClaimController.GetAllByRoleId(System.String)">
+            <summary>
+            Get All Role Claims By Id
+            </summary>
+            <param name="roleId"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.RoleClaimController.Post(EDO_FOMS.Application.Requests.Identity.RoleClaimRequest)">
+            <summary>
+            Add a Role Claim
+            </summary>
+            <param name="request"></param>
+            <returns>Status 200 OK </returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.RoleClaimController.Delete(System.Int32)">
+            <summary>
+            Delete a Role Claim
+            </summary>
+            <param name="id"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.RoleController.GetAll">
+            <summary>
+            Get All Roles (basic, admin etc.)
+            </summary>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.RoleController.Post(EDO_FOMS.Application.Requests.Identity.RoleRequest)">
+            <summary>
+            Add a Role
+            </summary>
+            <param name="request"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.RoleController.Delete(System.String)">
+            <summary>
+            Delete a Role
+            </summary>
+            <param name="id"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.RoleController.GetPermissionsByRoleId(System.String)">
+            <summary>
+            Get Permissions By Role Id
+            </summary>
+            <param name="roleId"></param>
+            <returns>Status 200 Ok</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.RoleController.Update(EDO_FOMS.Application.Requests.Identity.PermissionRequest)">
+            <summary>
+            Edit a Role Claim
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.System.AdminController.GetPagedOrgs(System.Int32,System.Int32,System.String,System.Boolean,System.String)">
+            <summary>
+            Get Paged Organizations
+            </summary>
+            <param name="pageNumber"></param>
+            <param name="pageSize"></param>
+            <param name="searchString"></param>
+            <param name="matchCase"></param>
+            <param name="orderBy"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.System.AdminController.Search(EDO_FOMS.Application.Requests.Orgs.SearchOrgsRequest)">
+            <summary>
+            Search Organizations
+            </summary>
+            <param name="request"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.System.AdminController.GetPagedUsers(System.Int32,System.Int32,System.String,System.Boolean,System.String)">
+            <summary>
+            Get Paged Users
+            </summary>
+            <param name="pageNumber"></param>
+            <param name="pageSize"></param>
+            <param name="searchString"></param>
+            <param name="matchCase"></param>
+            <param name="orderBy"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.System.AdminController.Search(EDO_FOMS.Application.Requests.Admin.SearchUsersRequest)">
+            <summary>
+            Search Users
+            </summary>
+            <param name="request"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.System.AdminController.GetPagedCerts(System.Int32,System.Int32,System.String,System.Boolean,System.String)">
+            <summary>
+            Get Paged Certs
+            </summary>
+            <param name="pageNumber"></param>
+            <param name="pageSize"></param>
+            <param name="searchString"></param>
+            <param name="matchCase"></param>
+            <param name="orderBy"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.System.AdminController.SearchCerts(EDO_FOMS.Application.Requests.Admin.SearchCertsRequest)">
+            <summary>
+            Search Certs
+            </summary>
+            <param name="request"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.System.AdminController.GetUserCerts(System.String)">
+            <summary>
+            Get User Certificates
+            </summary>
+            <param name="userId"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.System.AdminController.Post(EDO_FOMS.Application.Features.Orgs.Commands.AddEditOrgCommand)">
+            <summary>
+            Create/Update a Organization
+            </summary>
+            <param name="command"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.System.AdminController.Post(EDO_FOMS.Application.Models.MailModel)">
+            <summary>
+            Send Mail
+            </summary>
+            <param name="mail"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.System.AdminController.NewUserAsync(EDO_FOMS.Application.Requests.Admin.NewUserRequest)">
+            <summary>
+            Adding a new user by the administrator
+            </summary>
+            <param name="request"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.System.AdminController.EditUserAsync(EDO_FOMS.Application.Requests.Admin.EditUserRequest)">
+            <summary>
+            Updating a user by the administrator
+            </summary>
+            <param name="request"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.System.AdminController.UpdateUsersOrgType(EDO_FOMS.Application.Requests.Admin.UpdateUsersOrgTypeRequest)">
+            <summary>
+            Update Users OrgType
+            </summary>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.System.AdminController.Post(EDO_FOMS.Application.Features.Certs.Commands.AddEditCertCommand)">
+            <summary>
+            Create/Update a Certificate
+            </summary>
+            <param name="command"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.System.AdminController.DeleteCert(System.Int32)">
+            <summary>
+            Delete Certificate
+            </summary>
+            <param name="certId"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.System.StateController.GetNavCounts(System.String)">
+            <summary>
+            Navigation Counts
+            <param name="userId"></param>
+            </summary>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.System.StateController.GetSubscribe(System.String)">
+            <summary>
+            Notices Subscribe
+            <param name="userId"></param>
+            </summary>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.System.StateController.PostSubscribe(EDO_FOMS.Domain.Entities.Public.Subscribe)">
+            <summary>
+            Notices Subscribe
+            <param name="command"></param>
+            </summary>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Utilities.AuditsController.GetUserTrailsAsync">
+            <summary>
+            Get Current User Audit Trails
+            </summary>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Utilities.AuditsController.ExportExcel(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Search Audit Trails and Export to Excel
+            </summary>
+            <param name="searchString"></param>
+            <param name="searchInOldValues"></param>
+            <param name="searchInNewValues"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="T:EDO_FOMS.Server.Controllers.Utilities.ExtendedAttributesController`4">
+            <summary>
+            Abstract Extended Attributes Controller Class
+            </summary>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Utilities.ExtendedAttributesController`4.GetAll">
+            <summary>
+            Get All Entity Extended Attributes
+            </summary>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Utilities.ExtendedAttributesController`4.GetAllByEntityId(`1)">
+            <summary>
+            Get All Entity Extended Attributes by entity id
+            </summary>
+            <param name="entityId"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Utilities.ExtendedAttributesController`4.GetById(`0)">
+            <summary>
+            Get Entity Extended Attribute By Id
+            </summary>
+            <param name="id"></param>
+            <returns>Status 200 Ok</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Utilities.ExtendedAttributesController`4.Post(EDO_FOMS.Application.Features.ExtendedAttributes.Commands.AddEdit.AddEditExtendedAttributeCommand{`0,`1,`2,`3})">
+            <summary>
+            Create/Update a Entity Extended Attribute
+            </summary>
+            <param name="command"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Utilities.ExtendedAttributesController`4.Delete(`0)">
+            <summary>
+            Delete a Entity Extended Attribute
+            </summary>
+            <param name="id"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Utilities.ExtendedAttributesController`4.Export(System.String,`1,System.Boolean,System.Boolean,System.String)">
+            <summary>
+            Search Entity Extended Attribute and Export to Excel
+            </summary>
+            <param name="searchString"></param>
+            <param name="entityId"></param>
+            <param name="includeEntity"></param>
+            <param name="onlyCurrentGroup"></param>
+            <param name="currentGroup"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Utilities.PreferencesController.ChangeLanguageAsync(System.String)">
+            <summary>
+            Change Language Preference
+            </summary>
+            <param name="languageCode"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.v1.Orgs.OrgsController.GetById(System.Int32)">
+            <summary>
+            Get a Organization By Id
+            </summary>
+            <param name="id"></param>
+            <returns>Status 200 Ok</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.v1.Orgs.OrgsController.Post(EDO_FOMS.Application.Features.Orgs.Commands.AddEditOrgCommand)">
+            <summary>
+            Create/Update a Organization
+            </summary>
+            <param name="command"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+    </members>
+</doc>
