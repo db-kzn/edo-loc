@@ -169,7 +169,7 @@
     <value>Справочники</value>
   </data>
   <data name="Doc Types" xml:space="preserve">
-    <value>Документы</value>
+    <value>Типы док-в</value>
   </data>
   <data name="Docs" xml:space="preserve">
     <value>Документы</value>
@@ -242,6 +242,9 @@
   </data>
   <data name="Quick Start Guide" xml:space="preserve">
     <value>Краткое руководство</value>
+  </data>
+  <data name="Registries" xml:space="preserve">
+    <value>Реестры НСИ</value>
   </data>
   <data name="Reject" xml:space="preserve">
     <value>Отклоненные</value>

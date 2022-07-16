@@ -117,82 +117,46 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Added" xml:space="preserve">
-    <value>Добавлено</value>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
   </data>
-  <data name="Address" xml:space="preserve">
-    <value>Адрес</value>
+  <data name="Directory document types" xml:space="preserve">
+    <value>Directory document types</value>
   </data>
-  <data name="Advanced filter" xml:space="preserve">
-    <value>Фильтр</value>
+  <data name="Doc.Types" xml:space="preserve">
+    <value>Types of Documents</value>
   </data>
-  <data name="Apply" xml:space="preserve">
-    <value>Применить</value>
+  <data name="Icon" xml:space="preserve">
+    <value>Icon</value>
   </data>
-  <data name="Clear" xml:space="preserve">
-    <value>Очистить</value>
+  <data name="Id" xml:space="preserve">
+    <value>ID</value>
   </data>
-  <data name="Code" xml:space="preserve">
-    <value>КОД</value>
-  </data>
-  <data name="Contacts" xml:space="preserve">
-    <value>Контакты</value>
-  </data>
-  <data name="Directory of medical organizations" xml:space="preserve">
-    <value>Справочник медицинских организаций</value>
-  </data>
-  <data name="Filter" xml:space="preserve">
-    <value>Фильтр</value>
-  </data>
-  <data name="FOMS" xml:space="preserve">
-    <value>ФОМС</value>
-  </data>
-  <data name="Head" xml:space="preserve">
-    <value>Руководитель</value>
-  </data>
-  <data name="INN" xml:space="preserve">
-    <value>ИНН</value>
+  <data name="Label" xml:space="preserve">
+    <value>Label</value>
   </data>
   <data name="Match Case Off" xml:space="preserve">
-    <value>Без учета регистра</value>
+    <value>Match Case Off</value>
   </data>
   <data name="Match Case On" xml:space="preserve">
-    <value>Учитывать регистр</value>
-  </data>
-  <data name="Med.Orgs" xml:space="preserve">
-    <value>Мед.организации</value>
-  </data>
-  <data name="MO" xml:space="preserve">
-    <value>МО</value>
+    <value>Match Case On</value>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>Наименование</value>
+    <value>Name</value>
+  </data>
+  <data name="NameEn" xml:space="preserve">
+    <value>In English</value>
   </data>
   <data name="Renew" xml:space="preserve">
-    <value>Обновить</value>
-  </data>
-  <data name="Reset" xml:space="preserve">
-    <value>Сбросить</value>
+    <value>Renew</value>
   </data>
   <data name="Rows density" xml:space="preserve">
-    <value>Плотность строк</value>
+    <value>Rows density</value>
   </data>
-  <data name="Search For Orgs" xml:space="preserve">
-    <value>Поиск по организациям</value>
+  <data name="Search For Types" xml:space="preserve">
+    <value>Search For Types</value>
   </data>
-  <data name="Short Name" xml:space="preserve">
-    <value>Кратко</value>
-  </data>
-  <data name="Skipped" xml:space="preserve">
-    <value>Пропущено</value>
-  </data>
-  <data name="SMO" xml:space="preserve">
-    <value>СМО</value>
-  </data>
-  <data name="Total" xml:space="preserve">
-    <value>Обработано</value>
-  </data>
-  <data name="Updated" xml:space="preserve">
-    <value>Обновлено</value>
+  <data name="Short" xml:space="preserve">
+    <value>Short</value>
   </data>
 </root>

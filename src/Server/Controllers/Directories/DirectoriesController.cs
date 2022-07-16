@@ -13,6 +13,39 @@ namespace EDO_FOMS.Server.Controllers.Directories
     public class DirectoriesController : BaseApiController<DirectoriesController>
     {
         /// <summary>
+        /// Get DocTypes
+        /// </summary>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="searchString"></param>
+        /// <param name="matchCase"></param>
+        /// <param name="orderBy"></param>
+        /// <returns>Status 200 OK</returns>
+        [Authorize(Policy = Permissions.Documents.View)]
+        [HttpGet("doc-types")]
+        public async Task<IActionResult> GetDocTypes(int pageNumber, int pageSize, string searchString, bool matchCase = false, string orderBy = "")
+        {
+            var companies = await _mediator.Send(
+                new GetDocTypesQuery(
+                    new GetPagedDocTypesRequest(pageSize, pageNumber, searchString, orderBy, matchCase)
+                ));
+            return Ok(companies);
+        }
+
+        /// <summary>
+        /// Search DocTypes
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns>Status 200 OK</returns>
+        [Authorize(Policy = Permissions.Documents.View)]
+        [HttpPost("search-doc-types")]
+        public async Task<IActionResult> SearchDocTypes(SearchDocTypesRequest request)
+        {
+            var docs = await _mediator.Send(new SearchDocTypesQuery(request));
+            return Ok(docs);
+        }
+
+        /// <summary>
         /// Get Companies
         /// </summary>
         /// <param name="pageNumber"></param>

@@ -14,6 +14,7 @@ namespace EDO_FOMS.Client.Infrastructure.Routes
         public const string ImportMo = $"{Ctrl}/import-mo";
 
         public const string SearchCompaniesPaged = $"{Ctrl}/search-companies";
+        public const string SearchDocTypesPaged = $"{Ctrl}/search-doc-types";
 
         public static string GetCompaniesPaged(GetPagedCompaniesRequest r)
         {
@@ -30,5 +31,21 @@ namespace EDO_FOMS.Client.Infrastructure.Routes
 
             return $"{Ctrl}/companies?pageNumber={r.PageNumber}&pageSize={r.PageSize}&searchString={r.SearchString}&matchCase={r.MatchCase}&orderBy={sort}";
         }
+        public static string GetDocTypesPaged(GetPagedDocTypesRequest r)
+        {
+            var sort = (r.OrderBy?.Any() == true) ? string.Join(",", r.OrderBy) : ""; // Id Descending
+
+            //if (r.OrderBy?.Any() == true)
+            //{
+            //    foreach (var orderBy in r.OrderBy)
+            //    {
+            //        sort += $"{orderBy},";
+            //    }
+            //    sort = sort[..^1]; // loose training ,
+            //}
+
+            return $"{Ctrl}/doc-types?pageNumber={r.PageNumber}&pageSize={r.PageSize}&searchString={r.SearchString}&matchCase={r.MatchCase}&orderBy={sort}";
+        }
+
     }
 }

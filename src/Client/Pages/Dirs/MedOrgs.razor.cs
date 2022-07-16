@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace EDO_FOMS.Client.Pages.Dirs;
 
-public partial class Med_orgs
+public partial class MedOrgs
 {
     public Origin TransformOrigin { get; set; } = Origin.TopRight;
     public Origin AnchorOrigin { get; set; } = Origin.BottomRight;
@@ -28,14 +28,14 @@ public partial class Med_orgs
     private CompaniesResponse _company;
     private readonly List<CompaniesResponse> _companies = new();
 
-    private readonly bool resetValueOnEmptyText = true;
-    private readonly bool coerceText = true;
-    private readonly bool coerceValue = true;
+    //private readonly bool resetValueOnEmptyText = true;
+    //private readonly bool coerceText = true;
+    //private readonly bool coerceValue = true;
     //private readonly bool clearable = true;
 
-    private bool openFilter = true;
-    private readonly MedOrgFilter Filter = new();
-    private readonly MedOrgFilter FilterDefault = new();
+    //private bool openFilter = true;
+    //private readonly MedOrgFilter Filter = new();
+    //private readonly MedOrgFilter FilterDefault = new();
 
     private bool _loaded = false;
     private string _searchString = "";
@@ -70,7 +70,7 @@ public partial class Med_orgs
         _rowsPerPage = _stateService.RowsPerPage;
         dense = _stateService.Dense;
         matchCase = _stateService.MatchCase;
-        openFilter = _stateService.FilterIsOpen;
+        //openFilter = _stateService.FilterIsOpen;
 
         delay = _stateService.TooltipDelay;
         duration = _stateService.TooltipDuration;
@@ -89,11 +89,11 @@ public partial class Med_orgs
         _stateService.MatchCase = matchCase;
         await _mudTable.ReloadServerData();
     }
-    private void ToggleFilter()
-    {
-        openFilter = !openFilter;
-        _stateService.FilterIsOpen = openFilter;
-    }
+    //private void ToggleFilter()
+    //{
+    //    openFilter = !openFilter;
+    //    _stateService.FilterIsOpen = openFilter;
+    //}
 
     private async Task ImportFOMS()
     {
@@ -159,7 +159,7 @@ public partial class Med_orgs
     private async Task ApplyFilter() => await _mudTable.ReloadServerData();
     private async Task RenewAsync()
     {
-        FilterReset();
+        //FilterReset();
         await _mudTable.ReloadServerData();
         await CheckCompaniesForImportsAsync();
     }
@@ -200,46 +200,46 @@ public partial class Med_orgs
 
         PaginatedResult<CompaniesResponse> response = null;
 
-        if (Filter.IsActive && !Filter.IsEmpty)
-        {
-            //List<DocStages> stages = new();
-            //if (!Filter.StageDraft && !Filter.StageInProgress && !Filter.StageRejected)
-            //{
-            //    stages.AddRange(new List<DocStages> { DocStages.Draft, DocStages.InProgress, DocStages.Rejected });
-            //}
-            //else
-            //{
-            //    if (Filter.StageDraft) { stages.Add(DocStages.Draft); }
-            //    if (Filter.StageInProgress) { stages.Add(DocStages.InProgress); }
-            //    if (Filter.StageRejected) { stages.Add(DocStages.Rejected); }
-            //}
+        //if (Filter.IsActive && !Filter.IsEmpty)
+        //{
+        //    //List<DocStages> stages = new();
+        //    //if (!Filter.StageDraft && !Filter.StageInProgress && !Filter.StageRejected)
+        //    //{
+        //    //    stages.AddRange(new List<DocStages> { DocStages.Draft, DocStages.InProgress, DocStages.Rejected });
+        //    //}
+        //    //else
+        //    //{
+        //    //    if (Filter.StageDraft) { stages.Add(DocStages.Draft); }
+        //    //    if (Filter.StageInProgress) { stages.Add(DocStages.InProgress); }
+        //    //    if (Filter.StageRejected) { stages.Add(DocStages.Rejected); }
+        //    //}
 
-            //List<int> types = new();
-            //if (!Filter.TypeContract && !Filter.TypeAgreement)
-            //{
-            //    types.AddRange(new List<int> { 1, 2 }); // ID from db
-            //}
-            //else
-            //{
-            //    if (Filter.TypeContract) { types.Add(1); }
-            //    if (Filter.TypeAgreement) { types.Add(2); }
-            //}
+        //    //List<int> types = new();
+        //    //if (!Filter.TypeContract && !Filter.TypeAgreement)
+        //    //{
+        //    //    types.AddRange(new List<int> { 1, 2 }); // ID from db
+        //    //}
+        //    //else
+        //    //{
+        //    //    if (Filter.TypeContract) { types.Add(1); }
+        //    //    if (Filter.TypeAgreement) { types.Add(2); }
+        //    //}
 
-            //var filter = new SearchDocsRequest()
-            //{
-            //    PageSize = _rowsPerPage,
-            //    PageNumber = _pageNumber,
+        //    //var filter = new SearchDocsRequest()
+        //    //{
+        //    //    PageSize = _rowsPerPage,
+        //    //    PageNumber = _pageNumber,
 
-            //    OrderBy = orderings,
-            //    MatchCase = matchCase,
-            //    SearchString = _searchString,
-            //};
+        //    //    OrderBy = orderings,
+        //    //    MatchCase = matchCase,
+        //    //    SearchString = _searchString,
+        //    //};
 
-            //await _jsRuntime.InvokeVoidAsync("azino.Console", filter, "Docs Filter");
-            //response = await DirManager.SearchCompaniesAsync(filter);
-        }
-        else
-        {
+        //    //await _jsRuntime.InvokeVoidAsync("azino.Console", filter, "Docs Filter");
+        //    //response = await DirManager.SearchCompaniesAsync(filter);
+        //}
+        //else
+        //{
             //var sort = "";
             //if (orderings?.Any() == true)
             //{
@@ -259,7 +259,7 @@ public partial class Med_orgs
 
             await _jsRuntime.InvokeVoidAsync("azino.Console", request, "Dir Companies Request");
             response = await DirManager.GetCompaniesAsync(request);
-        }
+        //}
 
         await _jsRuntime.InvokeVoidAsync("azino.Console", response, "Dir Companies Response");
 
@@ -283,37 +283,37 @@ public partial class Med_orgs
         _loaded = true;
     }
 
-    private async Task OnRowClickAsync() { }
+    private void OnRowClickAsync() { }
 
-    private void FilterReset()
-    {
-        Filter.TextOrgId = FilterDefault.TextOrgId;
-        Filter.TextInnLe = FilterDefault.TextInnLe;
-        Filter.TextOgrn = FilterDefault.TextOgrn;
+    //private void FilterReset()
+    //{
+    //    Filter.TextOrgId = FilterDefault.TextOrgId;
+    //    Filter.TextInnLe = FilterDefault.TextInnLe;
+    //    Filter.TextOgrn = FilterDefault.TextOgrn;
 
-        Filter.TextName = FilterDefault.TextName;
-        Filter.TextShortName = FilterDefault.TextShortName;
-        Filter.TextEmail = FilterDefault.TextEmail;
-        Filter.TextPhone = FilterDefault.TextPhone;
+    //    Filter.TextName = FilterDefault.TextName;
+    //    Filter.TextShortName = FilterDefault.TextShortName;
+    //    Filter.TextEmail = FilterDefault.TextEmail;
+    //    Filter.TextPhone = FilterDefault.TextPhone;
 
-        Filter.TypeMO = FilterDefault.TypeMO;
-        Filter.TypeSMO = FilterDefault.TypeSMO;
-        Filter.TypeFund = FilterDefault.TypeFund;
+    //    Filter.TypeMO = FilterDefault.TypeMO;
+    //    Filter.TypeSMO = FilterDefault.TypeSMO;
+    //    Filter.TypeFund = FilterDefault.TypeFund;
 
-        Filter.StateActive = FilterDefault.StateActive;
-        Filter.StateInactive = FilterDefault.StateInactive;
-        Filter.StateOnSubmit = FilterDefault.StateOnSubmit;
-        Filter.StateBlocked = FilterDefault.StateBlocked;
+    //    Filter.StateActive = FilterDefault.StateActive;
+    //    Filter.StateInactive = FilterDefault.StateInactive;
+    //    Filter.StateOnSubmit = FilterDefault.StateOnSubmit;
+    //    Filter.StateBlocked = FilterDefault.StateBlocked;
 
-        Filter.CreateOnFrom = FilterDefault.CreateOnFrom;
-        Filter.CreateOnTo = FilterDefault.CreateOnTo;
+    //    Filter.CreateOnFrom = FilterDefault.CreateOnFrom;
+    //    Filter.CreateOnTo = FilterDefault.CreateOnTo;
 
-        Filter.ChangedText = false;
-        Filter.ChangedTypes = false;
-        Filter.ChangedStates = false;
-        Filter.ChangedCreateOn = false;
+    //    Filter.ChangedText = false;
+    //    Filter.ChangedTypes = false;
+    //    Filter.ChangedStates = false;
+    //    Filter.ChangedCreateOn = false;
 
-        Filter.IsActive = false;
-        Filter.IsEmpty = false;
-    }
+    //    Filter.IsActive = false;
+    //    Filter.IsEmpty = false;
+    //}
 }

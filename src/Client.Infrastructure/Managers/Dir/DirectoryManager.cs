@@ -29,6 +29,17 @@ namespace EDO_FOMS.Client.Infrastructure.Managers.Dir
             return await response.ToPaginatedResult<CompaniesResponse>();
         }
 
+        public async Task<PaginatedResult<DocTypesResponse>> GetDocTypesAsync(GetPagedDocTypesRequest request)
+        {
+            var response = await _httpClient.GetAsync(Routes.DirectoriesEndpoints.GetDocTypesPaged(request));
+            return await response.ToPaginatedResult<DocTypesResponse>();
+        }
+        public async Task<PaginatedResult<DocTypesResponse>> SearchDocTypesAsync(SearchDocTypesRequest request)
+        {
+            var response = await _httpClient.PostAsJsonAsync(Routes.DirectoriesEndpoints.SearchDocTypesPaged, request);
+            return await response.ToPaginatedResult<DocTypesResponse>();
+        }
+
         public async Task<IResult<CheckCompaniesForImportsResponse>> CheckCompaniesForImportsAsync()
         {
             var response = await _httpClient.GetAsync(Routes.DirectoriesEndpoints.CheckCompaniesForImports);

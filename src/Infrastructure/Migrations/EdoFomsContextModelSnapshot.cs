@@ -166,6 +166,9 @@ namespace EDO_FOMS.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("Color")
+                        .HasColumnType("integer");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
 
@@ -175,8 +178,14 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
+                    b.Property<int>("Icon")
+                        .HasColumnType("integer");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
+
+                    b.Property<string>("Label")
+                        .HasColumnType("text");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("text");

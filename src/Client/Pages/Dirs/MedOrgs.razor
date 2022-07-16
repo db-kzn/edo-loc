@@ -1,10 +1,10 @@
 ﻿@namespace EDO_FOMS.Client.Pages.Dirs
 
-@page "/dirs/med_orgs"
+@page "/dirs/med-orgs"
 
 @using EDO_FOMS.Application.Features.Directories.Queries
 
-@inject Microsoft.Extensions.Localization.IStringLocalizer<Med_orgs> _localizer
+@inject Microsoft.Extensions.Localization.IStringLocalizer<MedOrgs> _localizer
 
 <MudPaper Square="true" Elevation="3" Style="z-index: 1;">
     <MudToolBar>
@@ -64,9 +64,11 @@
                  ToggledIcon="@Icons.Material.Filled.DensitySmall" ToggledColor="@Color.Default"/>
         </MudTooltip>
 
+        @*
         <MudTooltip Delay="@delay" Duration="@duration" Placement="Placement.Left" Color="Color.Tertiary" Arrow="true" Text="@_localizer["Filter"]">
-            <MudIconButton Icon="@Icons.Material.TwoTone.FilterAlt" Color="@(Filter.IsActive ? Color.Error : Color.Default)" OnClick="@ToggleFilter" /> @*Edge="Edge.End"*@
+            <MudIconButton Icon="@Icons.Material.TwoTone.FilterAlt" Color="@(Filter.IsActive ? Color.Error : Color.Default)" OnClick="@ToggleFilter" />
         </MudTooltip>
+        *@
     </MudToolBar>
 </MudPaper>
 
@@ -77,26 +79,28 @@
         Loading="@(!_loaded)" LoadingProgressColor="Color.Info" RowsPerPage="@_rowsPerPage">
 
         <ColGroup>
-            <col />
+            <col /><col />
             <col /><col /><col />
             <col /><col />
         </ColGroup>
 
         <HeaderContent>
-            <MudTh><MudTableSortLabel T="CompaniesResponse" SortLabel="Code">@_localizer["Code"]-@_localizer["INN"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="CompaniesResponse" SortLabel="Code">@_localizer["Code"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="CompaniesResponse" SortLabel="Inn">@_localizer["INN"]</MudTableSortLabel></MudTh>
 
-            <MudTh><MudTableSortLabel T="CompaniesResponse" SortLabel="Code">@_localizer["Name"]</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel T="CompaniesResponse" SortLabel="Code">@_localizer["Short Name"]</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel T="CompaniesResponse" SortLabel="Code">@_localizer["Address"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="CompaniesResponse" SortLabel="Name">@_localizer["Name"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="CompaniesResponse" SortLabel="ShortName">@_localizer["Short Name"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="CompaniesResponse" SortLabel="Address">@_localizer["Address"]</MudTableSortLabel></MudTh>
 
-            <MudTh><MudTableSortLabel T="CompaniesResponse" SortLabel="Code">@_localizer["Contacts"]</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel T="CompaniesResponse" SortLabel="Code">@_localizer["Head"]</MudTableSortLabel></MudTh>
-
+            <MudTh>@_localizer["Contacts"]</MudTh>
+            <MudTh><MudTableSortLabel T="CompaniesResponse" SortLabel="HeadLastName">@_localizer["Head"]</MudTableSortLabel></MudTh>
         </HeaderContent>
 
         <RowTemplate>
-            <MudTd DataLabel="@($"{_localizer["Code"]}-{_localizer["INN"]}")">
-                <MudHighlighter Text="@context.Code" HighlightedText="@_searchString" /> - 
+            <MudTd DataLabel="@_localizer["Code"]">
+                <MudHighlighter Text="@context.Code" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="@_localizer["INN"]">
                 <MudHighlighter Text="@context.Inn" HighlightedText="@_searchString" />
             </MudTd>
 
@@ -121,7 +125,6 @@
                 <p><MudHighlighter Text="@context.HeadName" HighlightedText="@_searchString" /></p>
                 <p><MudHighlighter Text="@context.HeadMidName" HighlightedText="@_searchString" /></p>
             </MudTd>
-            
         </RowTemplate>
 
         <PagerContent>

@@ -12,6 +12,9 @@ namespace EDO_FOMS.Client.Infrastructure.Managers.Dir
         Task<PaginatedResult<CompaniesResponse>> GetCompaniesAsync(GetPagedCompaniesRequest request);
         Task<PaginatedResult<CompaniesResponse>> SearchCompaniesAsync(SearchCompaniesRequest request);
 
+        Task<PaginatedResult<DocTypesResponse>> GetDocTypesAsync(GetPagedDocTypesRequest request);
+        Task<PaginatedResult<DocTypesResponse>> SearchDocTypesAsync(SearchDocTypesRequest request);
+
         Task<IResult<CheckCompaniesForImportsResponse>> CheckCompaniesForImportsAsync();
         Task<IResult<ImportResponse>> ImportFomsAsync();
         Task<IResult<ImportResponse>> ImportSmoAsync();

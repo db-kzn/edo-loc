@@ -63,6 +63,29 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 oldType: "character varying(10)",
                 oldMaxLength: 10);
 
+            migrationBuilder.AddColumn<int>(
+                name: "Color",
+                schema: "dic",
+                table: "DocumentTypes",
+                type: "integer",
+                nullable: false,
+                defaultValue: 0);
+
+            migrationBuilder.AddColumn<int>(
+                name: "Icon",
+                schema: "dic",
+                table: "DocumentTypes",
+                type: "integer",
+                nullable: false,
+                defaultValue: 0);
+
+            migrationBuilder.AddColumn<string>(
+                name: "Label",
+                schema: "dic",
+                table: "DocumentTypes",
+                type: "text",
+                nullable: true);
+
             migrationBuilder.CreateTable(
                 name: "Companies",
                 schema: "dic",
@@ -171,6 +194,21 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 name: "IX_Documents_EmplOrgId",
                 schema: "doc",
                 table: "Documents");
+
+            migrationBuilder.DropColumn(
+                name: "Color",
+                schema: "dic",
+                table: "DocumentTypes");
+
+            migrationBuilder.DropColumn(
+                name: "Icon",
+                schema: "dic",
+                table: "DocumentTypes");
+
+            migrationBuilder.DropColumn(
+                name: "Label",
+                schema: "dic",
+                table: "DocumentTypes");
 
             migrationBuilder.RenameTable(
                 name: "Subscribes",

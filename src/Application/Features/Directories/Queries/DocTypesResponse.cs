@@ -1,11 +1,11 @@
-﻿using EDO_FOMS.Domain.Contracts;
-using EDO_FOMS.Domain.Enums;
+﻿using EDO_FOMS.Domain.Enums;
 using MudBlazor;
 
-namespace EDO_FOMS.Domain.Entities.Dir
+namespace EDO_FOMS.Application.Features.Directories.Queries
 {
-    public class DocumentType : AuditableEntity<int>
+    public class DocTypesResponse
     {
+        public int Id { get; set; }
         public bool IsActive { get; set; } = true;
         public DocIcons Icon { get; set; } = DocIcons.Undefined;
         public Color Color { get; set; } = Color.Primary;

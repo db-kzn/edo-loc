@@ -117,169 +117,46 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Account" xml:space="preserve">
-    <value>Account</value>
+  <data name="Description" xml:space="preserve">
+    <value>Описание</value>
   </data>
-  <data name="Administration" xml:space="preserve">
-    <value>Administration</value>
+  <data name="Directory document types" xml:space="preserve">
+    <value>Справочник типов документов</value>
   </data>
-  <data name="Administrator" xml:space="preserve">
-    <value>Administrator</value>
+  <data name="Doc.Types" xml:space="preserve">
+    <value>Типы документов</value>
   </data>
-  <data name="Approved" xml:space="preserve">
-    <value>Approved</value>
+  <data name="Icon" xml:space="preserve">
+    <value>Иконка</value>
   </data>
-  <data name="Archive" xml:space="preserve">
-    <value>Archive</value>
+  <data name="Id" xml:space="preserve">
+    <value>№</value>
   </data>
-  <data name="Audit Trails" xml:space="preserve">
-    <value>Audit Trails</value>
+  <data name="Label" xml:space="preserve">
+    <value>Ярлык</value>
   </data>
-  <data name="Brands" xml:space="preserve">
-    <value>Brands</value>
+  <data name="Match Case Off" xml:space="preserve">
+    <value>Без учета регистра</value>
   </data>
-  <data name="Canceled" xml:space="preserve">
-    <value>Canceled</value>
+  <data name="Match Case On" xml:space="preserve">
+    <value>Учитывать регистр</value>
   </data>
-  <data name="Catalog Management" xml:space="preserve">
-    <value>Catalog Management</value>
+  <data name="Name" xml:space="preserve">
+    <value>Наименование</value>
   </data>
-  <data name="Certifications" xml:space="preserve">
-    <value>Certifications</value>
+  <data name="NameEn" xml:space="preserve">
+    <value>На английском</value>
   </data>
-  <data name="Certs" xml:space="preserve">
-    <value>Certificates</value>
+  <data name="Renew" xml:space="preserve">
+    <value>Обновить</value>
   </data>
-  <data name="Chat" xml:space="preserve">
-    <value>Chat</value>
+  <data name="Rows density" xml:space="preserve">
+    <value>Плотность строк</value>
   </data>
-  <data name="Communication" xml:space="preserve">
-    <value>Communication</value>
+  <data name="Search For Types" xml:space="preserve">
+    <value>Поиск по типам</value>
   </data>
-  <data name="Completed" xml:space="preserve">
-    <value>Completed</value>
-  </data>
-  <data name="Dashboard" xml:space="preserve">
-    <value>Dashboard</value>
-  </data>
-  <data name="Deleted" xml:space="preserve">
-    <value>Deleted</value>
-  </data>
-  <data name="Directories" xml:space="preserve">
-    <value>Directories</value>
-  </data>
-  <data name="Doc Types" xml:space="preserve">
-    <value>Doc Types</value>
-  </data>
-  <data name="Docs" xml:space="preserve">
-    <value>Docs</value>
-  </data>
-  <data name="Document Management" xml:space="preserve">
-    <value>Document Management</value>
-  </data>
-  <data name="Document Store" xml:space="preserve">
-    <value>Document Store</value>
-  </data>
-  <data name="Document Types" xml:space="preserve">
-    <value>Document Types</value>
-  </data>
-  <data name="Documents" xml:space="preserve">
-    <value>Documents</value>
-  </data>
-  <data name="Drafts" xml:space="preserve">
-    <value>Drafts</value>
-  </data>
-  <data name="Employees" xml:space="preserve">
-    <value>Employees</value>
-  </data>
-  <data name="FAQs" xml:space="preserve">
-    <value>FAQs</value>
-  </data>
-  <data name="Features" xml:space="preserve">
-    <value>Features</value>
-  </data>
-  <data name="Find" xml:space="preserve">
-    <value>Find</value>
-  </data>
-  <data name="Home" xml:space="preserve">
-    <value>Home</value>
-  </data>
-  <data name="Inbox" xml:space="preserve">
-    <value>Inbox</value>
-  </data>
-  <data name="Keys" xml:space="preserve">
-    <value>Keys</value>
-  </data>
-  <data name="Mail" xml:space="preserve">
-    <value>Mail</value>
-  </data>
-  <data name="My Org" xml:space="preserve">
-    <value>Organization</value>
-  </data>
-  <data name="Organization" xml:space="preserve">
-    <value>Organization</value>
-  </data>
-  <data name="Organizations" xml:space="preserve">
-    <value>Organizations</value>
-  </data>
-  <data name="Outbox" xml:space="preserve">
-    <value>Outbox</value>
-  </data>
-  <data name="Personal" xml:space="preserve">
-    <value>Personal</value>
-  </data>
-  <data name="Processes" xml:space="preserve">
-    <value>Processes</value>
-  </data>
-  <data name="Products" xml:space="preserve">
-    <value>Products</value>
-  </data>
-  <data name="Profile" xml:space="preserve">
-    <value>Profile</value>
-  </data>
-  <data name="Progress" xml:space="preserve">
-    <value>Progress</value>
-  </data>
-  <data name="Quick Start Guide" xml:space="preserve">
-    <value>Quick Start Guide</value>
-  </data>
-  <data name="Registries" xml:space="preserve">
-    <value>Registries</value>
-  </data>
-  <data name="Reject" xml:space="preserve">
-    <value>Reject</value>
-  </data>
-  <data name="Requisites" xml:space="preserve">
-    <value>Requisites</value>
-  </data>
-  <data name="Resources" xml:space="preserve">
-    <value>Resources</value>
-  </data>
-  <data name="Roles" xml:space="preserve">
-    <value>Roles</value>
-  </data>
-  <data name="Routes" xml:space="preserve">
-    <value>Routes</value>
-  </data>
-  <data name="Send Mail" xml:space="preserve">
-    <value>Send Mail</value>
-  </data>
-  <data name="Services" xml:space="preserve">
-    <value>Services</value>
-  </data>
-  <data name="Signed" xml:space="preserve">
-    <value>Signed</value>
-  </data>
-  <data name="Swagger" xml:space="preserve">
-    <value>Swagger</value>
-  </data>
-  <data name="System" xml:space="preserve">
-    <value>System</value>
-  </data>
-  <data name="Under" xml:space="preserve">
-    <value>Under</value>
-  </data>
-  <data name="Users" xml:space="preserve">
-    <value>Users</value>
+  <data name="Short" xml:space="preserve">
+    <value>Кратко</value>
   </data>
 </root>

@@ -29,6 +29,24 @@
             <param name="message"></param>
             <returns>Status 200 OK</returns>
         </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Directories.DirectoriesController.GetDocTypes(System.Int32,System.Int32,System.String,System.Boolean,System.String)">
+            <summary>
+            Get DocTypes
+            </summary>
+            <param name="pageNumber"></param>
+            <param name="pageSize"></param>
+            <param name="searchString"></param>
+            <param name="matchCase"></param>
+            <param name="orderBy"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Directories.DirectoriesController.SearchDocTypes(EDO_FOMS.Application.Requests.Directories.SearchDocTypesRequest)">
+            <summary>
+            Search DocTypes
+            </summary>
+            <param name="request"></param>
+            <returns>Status 200 OK</returns>
+        </member>
         <member name="M:EDO_FOMS.Server.Controllers.Directories.DirectoriesController.GetCompanies(System.Int32,System.Int32,System.String,System.Boolean,System.String)">
             <summary>
             Get Companies

@@ -189,8 +189,14 @@ namespace EDO_FOMS.Infrastructure
             {
                 var contract = new DocumentType()
                 {
-                    Name = "Договор",
+                    IsActive = true,
+                    Icon = DocIcons.Description,
+                    Color = MudBlazor.Color.Default,
+
                     Short = "Дог",
+                    Label = "Договор",
+                    Name = "Договор",
+
                     NameEn = "Contract",
                     Description = "Догово́р (мн. ч. — догово́ры) — соглашение между собой двух или более сторон (субъектов), по какому-либо вопросу с целью установления, изменения или прекращения правовых отношений."
                 };
@@ -203,8 +209,14 @@ namespace EDO_FOMS.Infrastructure
 
                 var agreement = new DocumentType()
                 {
-                    Name = "Доп.соглашение",
+                    IsActive = true,
+                    Icon = DocIcons.NoteAdd,
+                    Color = MudBlazor.Color.Default,
+
                     Short = "Д/С",
+                    Label = "Соглашение",
+                    Name = "Доп.соглашение",
+
                     NameEn = "Supplementary agreement",
                     Description = "Документ, в котором содержатся дополнения и изменения, вносимые в ранее заключённый договор."
                 };
@@ -215,7 +227,68 @@ namespace EDO_FOMS.Infrastructure
                     await _db.DocumentTypes.AddAsync(agreement);
                 }
 
-                if (contractInDb == null || agreementInDb == null)
+                var amek = new DocumentType()
+                {
+                    IsActive = true,
+                    Icon = DocIcons.Receipt,
+                    Color = MudBlazor.Color.Default,
+
+                    Short = "АМЭК",
+                    Label = "Акт МЭК",
+                    Name = "Акт медико-экономического контроля",
+
+                    NameEn = "The act of medical and economic control",
+                    Description = ""
+                };
+
+                var amekInDb = _db.DocumentTypes.FirstOrDefault(c => c.Name == amek.Name);
+                if (amekInDb == null)
+                {
+                    await _db.DocumentTypes.AddAsync(amek);
+                }
+
+                var zrmek = new DocumentType()
+                {
+                    IsActive = true,
+                    Icon = DocIcons.FactCheck,
+                    Color = MudBlazor.Color.Default,
+
+                    Short = "ЗпРМЭК",
+                    Label = "Заключение по РМЭК",
+                    Name = "Заключение по результатам медико-экономического контроля",
+
+                    NameEn = "Conclusion on the results of medical and economic control",
+                    Description = ""
+                };
+
+                var zrmekInDb = _db.DocumentTypes.FirstOrDefault(c => c.Name == zrmek.Name);
+                if (zrmekInDb == null)
+                {
+                    await _db.DocumentTypes.AddAsync(zrmek);
+                }
+
+                var rzrmek = new DocumentType()
+                {
+                    IsActive = true,
+                    Icon = DocIcons.TableChart,
+                    Color = MudBlazor.Color.Default,
+
+                    Short = "РЗпРМЭК",
+                    Label = "Реестр заключений по РМЭК",
+                    Name = "Реестр заключений по результатам медико-экономического контроля",
+
+                    NameEn = "Register of conclusions based on the results of medical and economic control",
+                    Description = ""
+                };
+
+                var rzrmekInDb = _db.DocumentTypes.FirstOrDefault(c => c.Name == rzrmek.Name);
+                if (rzrmekInDb == null)
+                {
+                    await _db.DocumentTypes.AddAsync(rzrmek);
+                }
+
+
+                if (contractInDb is null || agreementInDb is null || amekInDb is null || zrmekInDb is null || rzrmekInDb is null)
                 {
                     await _db.SaveChangesAsync();
                 }
