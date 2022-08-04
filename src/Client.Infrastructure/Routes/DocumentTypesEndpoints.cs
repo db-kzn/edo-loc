@@ -7,11 +7,11 @@
             return $"{Export}?searchString={searchString}";
         }
 
-        public static string Export = "api/documentTypes/export";
+        public const string Export = "api/documentTypes/export";
 
-        public static string GetAll = "api/documentTypes";
-        public static string Delete = "api/documentTypes";
-        public static string Save = "api/documentTypes";
-        public static string GetCount = "api/documentTypes/count";
+        public const string GetAll = "api/documentTypes";
+        public const string Delete = "api/documentTypes";
+        public const string Save = "api/documentTypes";
+        public const string GetCount = "api/documentTypes/count";
     }
 }

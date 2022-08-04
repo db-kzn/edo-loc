@@ -1,0 +1,283 @@
+﻿@namespace EDO_FOMS.Client.Pages.Dirs
+
+@using EDO_FOMS.Application.Features.DocumentTypes.Queries
+@using EDO_FOMS.Domain.Enums
+@using EDO_FOMS.Domain.Entities.Dir
+@using Microsoft.AspNetCore.Components
+@using System.ComponentModel.DataAnnotations
+
+@page "/dirs/routes/route-card"
+
+@inject Microsoft.Extensions.Localization.IStringLocalizer<RouteCard> _localizer
+
+<MudPaper Square="true" Elevation="3" Style="z-index: 1;">
+    <MudToolBar>
+        <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Document signing routes"]" Color="Color.Tertiary" Placement="Placement.Right">
+            @*<MudButton Variant="Variant.Text" Href="/dirs/routes" >@_localizer["Routes"]</MudButton>*@
+            <MudIconButton Icon="@Icons.Material.Outlined.Map" Href="/dirs/routes" aria-label="Routes"></MudIconButton>
+        </MudTooltip>
+
+        <MudIcon Icon="@Icons.Material.Outlined.NavigateNext" Title=">" Color="Color.Default" />
+
+        <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Route Card"]" Color="Color.Tertiary" Placement="Placement.Right">
+            <MudText Class="ml-1" Typo="Typo.button">@_localizer["Card"]</MudText>
+        </MudTooltip>
+
+    </MudToolBar>
+</MudPaper>
+
+<MudContainer MaxWidth="MaxWidth.False" Class="pa-6">
+    <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" @ref="_tabs">
+        <ChildContent>
+            <MudTabPanel Text="@_localizer["Title"]">
+                <MudCard>
+                    <MudCardContent>
+                        <MudGrid Style="max-height: 70vh; overflow-y: scroll;">
+                            <MudItem xs="6">
+                                <MudTextField @bind-Value="_route.Name" Label="@_localizer["Name"]" />
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudTextField @bind-Value="_route.Description" Label="@_localizer["Description"]" />
+                            </MudItem>
+
+                            <MudItem xs="6">
+                                <MudSelect MultiSelection="true" SelectAll="true" SelectAllText="@_localizer["Select all"]" Label="@_localizer["Document Types"]"
+                                           AdornmentIcon="@Icons.Material.Outlined.Ballot" AnchorOrigin="Origin.BottomCenter"
+                                           @bind-SelectedValues="SelectedDocTypes" T="DocTypeResponse" MultiSelectionTextFunc="@(new Func<List<string>, string>(GetMultiDocTypesText))">
+                                    @foreach (var type in _docTypes)
+                                    {
+                                        <MudSelectItem T="DocTypeResponse" Value="@type">@type.Label</MudSelectItem>
+                                    }
+                                </MudSelect>
+                            </MudItem>
+
+                            <MudItem xs="6">
+                                <MudSelect MultiSelection="true" SelectAll="true" SelectAllText="@_localizer["Select all"]" Label="@_localizer["Org Types"]"
+                                           AdornmentIcon="@Icons.Material.Outlined.Ballot" AnchorOrigin="Origin.BottomCenter"
+                                           @bind-SelectedValues="SelectedOrgTypes" T="OrgTypes" MultiSelectionTextFunc="@(new Func<List<string>, string>(GetMultiOrgTypesText))">
+
+                                    <MudSelectItem T="OrgTypes" Value="@OrgTypes.MO">@_localizer["MO"]</MudSelectItem>
+                                    <MudSelectItem T="OrgTypes" Value="@OrgTypes.SMO">@_localizer["SMO"]</MudSelectItem>
+                                    <MudSelectItem T="OrgTypes" Value="@OrgTypes.Fund">@_localizer["Fund"]</MudSelectItem>
+
+                                    <MudSelectItem T="OrgTypes" Value="@OrgTypes.MEO">@_localizer["MEO"]</MudSelectItem>
+                                    <MudSelectItem T="OrgTypes" Value="@OrgTypes.Treasury">@_localizer["Treasury"]</MudSelectItem>
+                                </MudSelect>
+                            </MudItem>
+
+                            <MudItem xs="6">
+                                <MudSelect T="UserBaseRoles" @bind-Value="_route.ForUserRole" Label="@_localizer["User Role"]" >
+                                    <MudSelectItem T="UserBaseRoles" Value="@UserBaseRoles.Employee">@_localizer["Employee"]</MudSelectItem>
+                                    <MudSelectItem T="UserBaseRoles" Value="@UserBaseRoles.User">@_localizer["User"]</MudSelectItem>
+                                </MudSelect>
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudSelect T="EndActions" @bind-Value="_route.EndAction" Label="@_localizer["End Action"]" >
+                                    <MudSelectItem T="EndActions" Value="@EndActions.SignedByAll">@_localizer["Signed by all"]</MudSelectItem>
+                                    <MudSelectItem T="EndActions" Value="@EndActions.ToArchive">@_localizer["To archive"]</MudSelectItem>
+                                </MudSelect>
+                            </MudItem>
+
+                            <MudItem xs="3">
+                                <MudSwitch @bind-Checked="@_route.IsPackage" Label="@_localizer["Package"]" Color="Color.Primary" />
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudSwitch @bind-Checked="@_route.CalcHash" Label="@_localizer["Calculate hash"]" Color="Color.Primary" />
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudSwitch @bind-Checked="@_route.AttachedSign" Label="@_localizer["Attached Sign"]" Color="Color.Primary" />
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudSwitch @bind-Checked="@_route.DisplayedSign" Label="@_localizer["Displayed Sign"]" Color="Color.Primary" Disabled="@(!_route.AttachedSign)" />
+                            </MudItem>
+                        </MudGrid>
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudButton Size="Size.Large" Class="mr-1" FullWidth Variant="Variant.Outlined" StartIcon="@Icons.Material.Rounded.Close" Color="Color.Primary"
+                                   OnClick="Close">
+                            @_localizer["Cancel"]
+                        </MudButton>
+                        <MudButton Size="Size.Large" Class="ml-1" FullWidth Variant="Variant.Outlined" EndIcon="@Icons.Material.Rounded.KeyboardDoubleArrowRight" Color="Color.Default"
+                                   OnClick="() => _tabs.ActivatePanel(1)">
+                            @_localizer["Stages"]
+                        </MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudTabPanel>
+
+            <MudTabPanel Text="@_localizer["Stages"]" Disabled="false">
+                <MudCard>
+                    <MudCardContent>
+                        <MudGrid Style="max-height: 70vh; overflow-y: scroll;">
+                            <MudDropContainer T="RouteStageStep" @ref="_dropContainer" Items="@_steps" ItemsSelector="@((step, column) => step.StageNumber.ToString() == column)" ItemDropped="StepUpdated" Class="d-flex flex-row" CanDropClass="mud-border-success">
+                                <ChildContent>
+                                    @foreach (var stage in _stages)
+                                    {
+                                        <MudPaper Elevation="0" Width="250px" MinHeight="600px" Class="pa-0 ma-4 d-flex flex-column rounded-lg border-2 border-dashed mud-border-lines-default">
+                                            <MudToolBar DisableGutters="true">
+                                                <MudText Class="ml-4" Typo="Typo.button">@_localizer["Stage"] № @stage.Number</MudText>
+                                                <MudSpacer />
+                                                @if (stage.Number > 1 && stage.Number == _stages.Count)
+                                                {
+                                                    <MudIconButton Icon="@Icons.Material.Rounded.Close" OnClick="DeleteStage" aria-label="delete"></MudIconButton>
+                                                }
+                                            </MudToolBar>
+
+                                            <MudDivider />
+
+                                            <MudList Clickable="true" Class="px-4 py-0 mud-height-full">
+                                                <MudDropZone T="RouteStageStep" Identifier="@stage.Number.ToString()" Class="mud-height-full"></MudDropZone>
+                                            </MudList>
+
+                                            <MudButton OnClick="@(() => AddStepAsync(stage.Number))" StartIcon="@Icons.Filled.Add"
+                                                   FullWidth="true" Color="Color.Primary" Size="Size.Large">
+                                                @_localizer["Step"]
+                                            </MudButton>
+                                        </MudPaper>
+                                    }
+                                    <MudPaper Class="pa-4" Elevation="0" Width="250px">
+                                        <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Filled.Add"
+                                                   Color="Color.Default" Class="rounded-lg py-2" FullWidth="true" Style="height: 56px;"
+                                                   OnClick="AddNewStage">
+                                            @_localizer["Stage"]
+                                        </MudButton>
+                                    </MudPaper>
+                                </ChildContent>
+
+                                <ItemRenderer>
+                                    <MudListItem Class="@StepClass(context.Requred)" OnClick="(() => EditStepAsync(context))">
+
+                                        <div class="d-flex flex-row" style="padding: 4px 16px; height: 32px; background-color: var(--mud-palette-background-grey) !important;">
+                                            @if (context.ActType == ActTypes.Signing)
+                                            {
+                                                <MudIcon Class="mr-2" Color="Color.Error" Icon="@Icons.Material.Outlined.QrCode2" />
+                                            }
+                                            else if (context.ActType == ActTypes.Agreement)
+                                            {
+                                                <MudIcon Class="mr-2" Color="Color.Success" Icon="@Icons.Material.Outlined.FactCheck" />
+                                            }
+                                            else
+                                            {
+                                                <MudIcon Class="mr-2" Color="Color.Warning" Icon="@Icons.Material.Outlined.MapsUgc" />
+                                            }
+
+                                            <MudText Style="vertical-align: middle;">
+                                                @_localizer[context.ActType.ToString()]
+                                            </MudText>
+                                        </div>
+
+                                        <MudDivider />
+
+                                        @if (context.OnlyHead)
+                                        {
+                                            <div class="d-flex flex-row" style="padding: 4px 16px; height: 32px;">
+                                                <MudIcon Icon="@Icons.Material.Outlined.WorkspacePremium" Color="Color.Warning" Class="mr-2" />
+                                                <MudText Style="vertical-align: middle;">Руководитель</MudText>
+                                            </div>
+                                        }
+
+                                        @if (context.OrgType == OrgTypes.Undefined)
+                                        {
+                                            <div class="d-flex flex-row" style="padding: 4px 16px; height: 32px;">
+                                                <MudIcon Icon="@Icons.Material.Outlined.Domain" Color="Color.Default" Size="Size.Small" Class="mr-2" />
+                                                <MudText Style="vertical-align: middle;">Любая орг-я</MudText>
+                                            </div>
+                                        }
+                                        else if (context.OrgType == OrgTypes.MO)
+                                        {
+                                            <div class="d-flex flex-row" style="padding: 4px 16px; height: 32px;">
+                                                <MudIcon Icon="@Icons.Material.Outlined.MedicalServices" Color="Color.Primary" Size="Size.Small" Class="mr-2" />
+                                                <MudText Style="vertical-align: middle;">МО</MudText>
+                                            </div>
+                                        }
+                                        else if (context.OrgType == OrgTypes.SMO)
+                                        {
+                                            <div class="d-flex flex-row" style="padding: 4px 16px; height: 32px;">
+                                                <MudIcon Icon="@Icons.Material.Outlined.Museum" Color="Color.Success" Size="Size.Small" Class="mr-2" />
+                                                <MudText Style="vertical-align: middle;">СМО</MudText>
+                                            </div>
+                                        }
+                                        else if (context.OrgType == OrgTypes.Fund)
+                                        {
+                                            <div class="d-flex flex-row" style="padding: 4px 16px; height: 32px;">
+                                                <MudIcon Icon="@Icons.Material.Outlined.HealthAndSafety" Color="Color.Error" Size="Size.Small" Class="mr-2" />
+                                                <MudText Style="vertical-align: middle;">ФОМС</MudText>
+                                            </div>
+                                        }
+                                        else if (context.OrgType == OrgTypes.MEO)
+                                        {
+                                            <div class="d-flex flex-row" style="padding: 4px 16px; height: 32px;">
+                                                <MudIcon Icon="@Icons.Material.Outlined.LocalPolice" Color="Color.Secondary" Size="Size.Small" Class="mr-2" />
+                                                <MudText Style="vertical-align: middle;">Военкомат</MudText>
+                                            </div>
+                                        }
+                                        else if (context.OrgType == OrgTypes.Treasury)
+                                        {
+                                            <div class="d-flex flex-row" style="padding: 4px 16px; height: 32px;">
+                                                <MudIcon Icon="@Icons.Material.Outlined.AccountBalance" Color="Color.Warning" Size="Size.Small" Class="mr-2" />
+                                                <MudText Style="vertical-align: middle;">Казначейство</MudText>
+                                            </div>
+                                        }
+
+                                        <MudDivider />
+
+                                        @*<div class="d-flex flex-row" style="padding: 4px 16px; height: 32px;">
+                                        <MudIcon Icon="@Icons.Material.Outlined.ReportProblem" Color="Color.Error" Class="mr-2" />
+                                        <MudText Style="vertical-align: middle;">Обязательно</MudText>
+                                        </div>*@
+
+                                        @if (context.SomeParticipants)
+                                        {
+                                            <div class="d-flex flex-row" style="padding: 4px 16px; height: 32px;">
+                                                <MudIcon Icon="@Icons.Material.Outlined.Groups" Color="Color.Default" Class="mr-2" />
+                                                <MudText Style="vertical-align: middle;">@(context.AllRequred ? "Группа (все)": "Группа (любой)")</MudText>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="d-flex flex-row" style="padding: 4px 16px; height: 32px;">
+                                                <MudIcon Icon="@Icons.Material.Outlined.Person" Color="Color.Default" Class="mr-2" />
+                                                <MudText Style="vertical-align: middle;">Только один</MudText>
+                                            </div>
+                                        }
+
+                                        @if (context.HasAgreement)
+                                        {
+                                            <div class="d-flex flex-row" style="padding: 4px 16px; height: 32px;">
+                                                <MudIcon Icon="@Icons.Material.Outlined.FactCheck" Color="Color.Default" Class="mr-2" />
+                                                <MudText Style="vertical-align: middle;">Доп.согласование</MudText>
+                                            </div>
+                                        }
+
+                                        @if (context.HasReview)
+                                        {
+                                            <div class="d-flex flex-row" style="padding: 4px 16px; height: 32px;">
+                                                <MudIcon Icon="@Icons.Material.Outlined.MapsUgc" Color="Color.Default" Class="mr-2" />
+                                                <MudText Style="vertical-align: middle;">Рецензирование</MudText>
+                                            </div>
+                                        }
+                                    </MudListItem>
+                                </ItemRenderer>
+                            </MudDropContainer>
+                        </MudGrid>
+                    </MudCardContent>
+
+                    <MudCardActions>
+                        <MudButton Class="mr-1" Size="Size.Large" FullWidth Variant="Variant.Outlined" StartIcon="@Icons.Material.Rounded.KeyboardDoubleArrowLeft" Color="Color.Default"
+                                   OnClick="() => _tabs.ActivatePanel(0)">
+                            @_localizer["Title"]
+                        </MudButton>
+                        <MudButton Class="ml-1" Size="Size.Large" FullWidth Variant="Variant.Filled" StartIcon="@Icons.Material.Rounded.DoneOutline" Color="Color.Primary">
+                            @_localizer["Save"]
+                        </MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudTabPanel>
+        </ChildContent>
+
+        <Header>
+            <MudDivider Vertical />
+            <MudIconButton Variant="Variant.Text" Icon="@Icons.Material.Outlined.Close" OnClick="Close" aria-label="Routes"></MudIconButton>
+        </Header>
+    </MudTabs>
+</MudContainer>

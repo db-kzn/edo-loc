@@ -1,6 +1,6 @@
 ﻿using Blazored.FluentValidation;
 using EDO_FOMS.Application.Features.Documents.Commands.AddEdit;
-using EDO_FOMS.Application.Features.DocumentTypes.Queries.GetAll;
+using EDO_FOMS.Application.Features.DocumentTypes.Queries;
 using EDO_FOMS.Application.Requests;
 using EDO_FOMS.Application.Requests.Documents;
 using EDO_FOMS.Application.Responses.Docums;
@@ -24,6 +24,7 @@ namespace EDO_FOMS.Client.Pages.Docs
     {
         [Inject] private IDocumentManager DocManager { get; set; }
         [Inject] private IDocumentTypeManager DocTypeManager { get; set; }
+        private List<DocTypeResponse> _docTypes = new();
 
         [CascadingParameter] private MudDialogInstance MudDialog { get; set; }
         [Parameter] public AddEditDocumentCommand _doc { get; set; } = new();
@@ -47,8 +48,6 @@ namespace EDO_FOMS.Client.Pages.Docs
         public Dictionary<string, ContactResponse> SmoContacts = new();
         public Dictionary<string, ContactResponse> MoContacts = new();
         public Dictionary<string, ContactResponse> HeadContacts = new();
-
-        private List<GetAllDocumentTypesResponse> _docTypes = new();
 
         private int delay;
         private int duration;

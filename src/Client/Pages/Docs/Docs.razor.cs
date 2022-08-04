@@ -289,11 +289,7 @@ namespace EDO_FOMS.Client.Pages.Docs
 
         private async Task AddDocAsync()
         {
-            var result = await AddEditDocAsync(new()
-            {
-                TypeId = 1,
-                Date = DateTime.Today
-            });
+            var result = await AddEditDocAsync(new(1, DateTime.Today));
 
             if (!result.Cancelled) {await _mudTable.ReloadServerData();}
         }

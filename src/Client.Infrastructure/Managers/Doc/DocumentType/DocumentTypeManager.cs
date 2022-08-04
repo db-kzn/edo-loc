@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using EDO_FOMS.Application.Features.DocumentTypes.Commands.AddEdit;
-using EDO_FOMS.Application.Features.DocumentTypes.Queries.GetAll;
+using EDO_FOMS.Application.Features.DocumentTypes.Queries;
 using EDO_FOMS.Client.Infrastructure.Extensions;
 using EDO_FOMS.Shared.Wrapper;
 
@@ -32,10 +32,10 @@ namespace EDO_FOMS.Client.Infrastructure.Managers.Doc.DocumentType
             return await response.ToResult<int>();
         }
 
-        public async Task<IResult<List<GetAllDocumentTypesResponse>>> GetAllAsync()
+        public async Task<IResult<List<DocTypeResponse>>> GetAllAsync()
         {
             var response = await _httpClient.GetAsync(Routes.DocumentTypesEndpoints.GetAll);
-            return await response.ToResult<List<GetAllDocumentTypesResponse>>();
+            return await response.ToResult<List<DocTypeResponse>>();
         }
 
         public async Task<IResult<int>> SaveAsync(AddEditDocumentTypeCommand request)

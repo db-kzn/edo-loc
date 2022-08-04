@@ -214,8 +214,8 @@ namespace EDO_FOMS.Infrastructure
                     Color = MudBlazor.Color.Default,
 
                     Short = "Д/С",
-                    Label = "Соглашение",
-                    Name = "Доп.соглашение",
+                    Label = "Доп.соглашение",
+                    Name = "Дополнительное соглашение",
 
                     NameEn = "Supplementary agreement",
                     Description = "Документ, в котором содержатся дополнения и изменения, вносимые в ранее заключённый договор."
@@ -254,7 +254,7 @@ namespace EDO_FOMS.Infrastructure
                     Color = MudBlazor.Color.Default,
 
                     Short = "ЗпРМЭК",
-                    Label = "Заключение по РМЭК",
+                    Label = "Закл-e РМЭК",
                     Name = "Заключение по результатам медико-экономического контроля",
 
                     NameEn = "Conclusion on the results of medical and economic control",
@@ -274,7 +274,7 @@ namespace EDO_FOMS.Infrastructure
                     Color = MudBlazor.Color.Default,
 
                     Short = "РЗпРМЭК",
-                    Label = "Реестр заключений по РМЭК",
+                    Label = "Реестр закл-й РМЭК",
                     Name = "Реестр заключений по результатам медико-экономического контроля",
 
                     NameEn = "Register of conclusions based on the results of medical and economic control",

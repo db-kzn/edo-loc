@@ -4,17 +4,15 @@
 
 <audio id="notification" src="/media/notification.mp3" />
 
-<MudThemeProvider @ref="@_mudThemeProvider" @bind-IsDarkMode="@_isDarkMode" Theme="_theme"/>
+<MudThemeProvider @ref="@_mudThemeProvider" @bind-IsDarkMode="@_isDarkMode" Theme="_theme" />
 
-<MudDialogProvider
-    NoHeader="false"
-    FullWidth="false"
-    CloseButton="true"
-    DisableBackdropClick="true"
-    CloseOnEscapeKey="true"
-    MaxWidth="MaxWidth.Large"
-    Position="DialogPosition.Center"
-/>
+<MudDialogProvider NoHeader="false"
+                   FullWidth="false"
+                   CloseButton="true"
+                   DisableBackdropClick="false"
+                   CloseOnEscapeKey="true"
+                   MaxWidth="MaxWidth.Large"
+                   Position="DialogPosition.Center" />
 <MudSnackbarProvider />
 
 <AuthorizeView>
@@ -59,66 +57,65 @@
                     <MudText Typo="Typo.body2" Class="px-4 py-2"><b>@localizer["Support"]</b></MudText>
                     <MudMenuItem Link="Files/Manuals/UserGuide.pdf" Target="_blank">@localizer["User Guide"]</MudMenuItem>
                     <MudMenuItem Disabled="true">@localizer["Check settings"]</MudMenuItem>
-                    
+
                     <MudDivider />
-                    
+
                     <MudMenuItem OnClick="@OnSignDoc">@localizer["Sign Doc"]</MudMenuItem>
                     <MudMenuItem Disabled="true">@localizer["Create Hash"]</MudMenuItem>
                     <MudMenuItem Disabled="true">@localizer["Verify Signature"]</MudMenuItem>
                 </MudMenu>
 
-                <MudDivider Vertical="true" FlexItem="true" DividerType="DividerType.Middle" Class="mx-4 my-5"/>
+                <MudDivider Vertical="true" FlexItem="true" DividerType="DividerType.Middle" Class="mx-4 my-5" />
 
                 @*<LanguageSelector />*@
                 <MudTooltip Delay="@delay" Duration="@duration" Text="@localizer["Toggle Dark Mode"]">
                     <MudIconButton OnClick="@((e) => DarkMode())"
-                        Icon="@(_isDarkMode ? Icons.Material.TwoTone.LightMode : Icons.Material.TwoTone.DarkMode)"
-                        Color="@(_isDarkMode ? Color.Warning : Color.Dark)" />
+                                   Icon="@(_isDarkMode ? Icons.Material.TwoTone.LightMode : Icons.Material.TwoTone.DarkMode)"
+                                   Color="@(_isDarkMode ? Color.Warning : Color.Dark)" />
                 </MudTooltip>
 
                 <MudMenu Icon="@Icons.Material.Filled.AccountCircle" Color="Color.Inherit" Direction="Direction.Right" OffsetY>
                     <ChildContent>
                         <UserCard Class="mt-n2" />
-                        
+
                         <MudDivider />
-                        
-                        <MudMenuItem Link="/personal/account" >
+
+                        <MudMenuItem Link="/personal/account">
                             <div class="d-flex flex-row" style="height: 24px;">
-                                <MudIcon Icon="@Icons.Material.Outlined.Person" Color="Color.Default" Class="mr-4"/>
+                                <MudIcon Icon="@Icons.Material.Outlined.Person" Color="Color.Default" Class="mr-4" />
                                 <MudItem Class="my-auto">@localizer["Account"]</MudItem>
                             </div>
                         </MudMenuItem>
-                        
+
                         <MudMenuItem OnClick="(() => Logout())">
-                                <div class="d-flex flex-row" style="height: 24px;">
-                                    <MudIcon Icon="@Icons.Material.Filled.Logout" Color="Color.Default" Class="mr-4"/>
-                                    <MudItem Class="my-auto">@localizer["Logout"]</MudItem>
-                                </div>
+                            <div class="d-flex flex-row" style="height: 24px;">
+                                <MudIcon Icon="@Icons.Material.Filled.Logout" Color="Color.Default" Class="mr-4" />
+                                <MudItem Class="my-auto">@localizer["Logout"]</MudItem>
+                            </div>
                         </MudMenuItem>
                     </ChildContent>
                 </MudMenu>
             </MudAppBar>
 
             <MudDrawer @bind-Open="_drawerOpen" Elevation="25" ClipMode="DrawerClipMode.Never" Variant="@DrawerVariant.Mini" OpenMiniOnHover="false">
-                
-                    <NavMenu IsOpen=@_drawerOpen NavCounts=@NavCounts />
-                
+
+                <NavMenu IsOpen=@_drawerOpen NavCounts=@NavCounts />
+
             </MudDrawer>
 
             <MudMainContent>
                 <!--<MudHidden Breakpoint="Breakpoint.SmAndDown">
                     <MudToolBar DisableGutters="true">
-                        @*<MudBreadcrumbs Items="_items"></MudBreadcrumbs>*@
+                @*<MudBreadcrumbs Items="_items"></MudBreadcrumbs>*@
                         <MudSpacer />
                         <MudButton Variant="Variant.Text" Link="https://mudblazor.com/" Style="color:#594AE2;">MudBlazor</MudButton>
                         <MudButton Variant="Variant.Text" Link="https://github.com/" Style="color:#424242;" Class="mr-3">Source Code</MudButton>
                     </MudToolBar>
                 </MudHidden>-->
-
                 @*<CascadingValue Value="hubConnection"></CascadingValue>*@
-                    <CascadingValue Value="@this.NavCounts">
-                        @Body
-                    </CascadingValue>
+                <CascadingValue Value="@this.NavCounts">
+                    @Body
+                </CascadingValue>
             </MudMainContent>
 
         </MudLayout>

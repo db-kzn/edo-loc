@@ -4,7 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using EDO_FOMS.Application.Features.DocumentTypes.Commands.AddEdit;
-using EDO_FOMS.Application.Features.DocumentTypes.Queries.GetAll;
+using EDO_FOMS.Application.Features.DocumentTypes.Queries;
 using EDO_FOMS.Client.Extensions;
 using EDO_FOMS.Client.Infrastructure.Managers.Doc.DocumentType;
 using EDO_FOMS.Shared.Constants.Application;
@@ -23,8 +23,8 @@ namespace EDO_FOMS.Client.Pages.Docs
 
         [CascadingParameter] private HubConnection HubConnection { get; set; }
 
-        private List<GetAllDocumentTypesResponse> _documentTypeList = new();
-        private GetAllDocumentTypesResponse _documentType = new();
+        private List<DocTypeResponse> _documentTypeList = new();
+        private DocTypeResponse _documentType = new();
         private string _searchString = "";
         private bool _dense = false;
         private bool _striped = true;
@@ -153,11 +153,11 @@ namespace EDO_FOMS.Client.Pages.Docs
 
         private async Task Reset()
         {
-            _documentType = new GetAllDocumentTypesResponse();
+            _documentType = new DocTypeResponse();
             await GetDocumentTypesAsync();
         }
 
-        private bool Search(GetAllDocumentTypesResponse brand)
+        private bool Search(DocTypeResponse brand)
         {
             if (string.IsNullOrWhiteSpace(_searchString)) return true;
             if (brand.Name?.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true)

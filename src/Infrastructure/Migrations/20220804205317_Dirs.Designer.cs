@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EDO_FOMS.Infrastructure.Migrations
 {
     [DbContext(typeof(EdoFomsContext))]
-    [Migration("20220716025200_Dirs")]
+    [Migration("20220804205317_Dirs")]
     partial class Dirs
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -157,7 +157,7 @@ namespace EDO_FOMS.Infrastructure.Migrations
 
                     b.HasIndex("TfOkato");
 
-                    b.ToTable("Companies", "dic");
+                    b.ToTable("Companies", "dir");
                 });
 
             modelBuilder.Entity("EDO_FOMS.Domain.Entities.Dir.DocumentType", b =>
@@ -201,12 +201,17 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.Property<string>("NameEn")
                         .HasColumnType("text");
 
+                    b.Property<int?>("RouteId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Short")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.ToTable("DocumentTypes", "dic");
+                    b.HasIndex("RouteId");
+
+                    b.ToTable("DocumentTypes", "dir");
                 });
 
             modelBuilder.Entity("EDO_FOMS.Domain.Entities.Dir.Route", b =>
@@ -217,11 +222,41 @@ namespace EDO_FOMS.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("AllowRevocation")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("AttachedSign")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("CalcHash")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("DisplayedSign")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("EndAction")
+                        .HasColumnType("integer");
+
+                    b.Property<int[]>("ForOrgTypes")
+                        .HasColumnType("integer[]");
+
+                    b.Property<int>("ForUserRole")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsPackage")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("text");
@@ -229,9 +264,132 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("UseVersioning")
+                        .HasColumnType("boolean");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Routes", "dic");
+                    b.ToTable("RouteStageSteps", "dir");
+                });
+
+            modelBuilder.Entity("EDO_FOMS.Domain.Entities.Dir.RouteStage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ActType")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("AllRequred")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("Color")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("DenyRevocation")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("InSeries")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Number")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("RouteId")
+                        .HasColumnType("integer");
+
+                    b.Property<TimeSpan>("Validity")
+                        .HasColumnType("interval");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RouteId");
+
+                    b.ToTable("RouteStages");
+                });
+
+            modelBuilder.Entity("EDO_FOMS.Domain.Entities.Dir.RouteStageStep", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ActType")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("AllRequred")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("HasAgreement")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("HasReview")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Number")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("OnlyHead")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("OrgType")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("Requred")
+                        .HasColumnType("boolean");
+
+                    b.Property<int?>("RouteStageId")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("SomeParticipants")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("StageNumber")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RouteStageId");
+
+                    b.ToTable("RouteStageSteps");
                 });
 
             modelBuilder.Entity("EDO_FOMS.Domain.Entities.Doc.Agreement", b =>
@@ -991,6 +1149,27 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.Navigation("ToUser");
                 });
 
+            modelBuilder.Entity("EDO_FOMS.Domain.Entities.Dir.DocumentType", b =>
+                {
+                    b.HasOne("EDO_FOMS.Domain.Entities.Dir.Route", null)
+                        .WithMany("DocTypes")
+                        .HasForeignKey("RouteId");
+                });
+
+            modelBuilder.Entity("EDO_FOMS.Domain.Entities.Dir.RouteStage", b =>
+                {
+                    b.HasOne("EDO_FOMS.Domain.Entities.Dir.Route", null)
+                        .WithMany("Stages")
+                        .HasForeignKey("RouteId");
+                });
+
+            modelBuilder.Entity("EDO_FOMS.Domain.Entities.Dir.RouteStageStep", b =>
+                {
+                    b.HasOne("EDO_FOMS.Domain.Entities.Dir.RouteStage", null)
+                        .WithMany("Steps")
+                        .HasForeignKey("RouteStageId");
+                });
+
             modelBuilder.Entity("EDO_FOMS.Domain.Entities.Doc.Agreement", b =>
                 {
                     b.HasOne("EDO_FOMS.Domain.Entities.Doc.Document", "Document")
@@ -1268,6 +1447,18 @@ namespace EDO_FOMS.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("EDO_FOMS.Domain.Entities.Dir.Route", b =>
+                {
+                    b.Navigation("DocTypes");
+
+                    b.Navigation("Stages");
+                });
+
+            modelBuilder.Entity("EDO_FOMS.Domain.Entities.Dir.RouteStage", b =>
+                {
+                    b.Navigation("Steps");
                 });
 
             modelBuilder.Entity("EDO_FOMS.Domain.Entities.Doc.Document", b =>

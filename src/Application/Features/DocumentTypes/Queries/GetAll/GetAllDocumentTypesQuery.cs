@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -12,14 +12,14 @@ using MediatR;
 
 namespace EDO_FOMS.Application.Features.DocumentTypes.Queries.GetAll
 {
-    public class GetAllDocumentTypesQuery : IRequest<Result<List<GetAllDocumentTypesResponse>>>
+    public class GetAllDocumentTypesQuery : IRequest<Result<List<DocTypeResponse>>>
     {
         public GetAllDocumentTypesQuery()
         {
         }
     }
 
-    internal class GetAllDocumentTypesQueryHandler : IRequestHandler<GetAllDocumentTypesQuery, Result<List<GetAllDocumentTypesResponse>>>
+    internal class GetAllDocumentTypesQueryHandler : IRequestHandler<GetAllDocumentTypesQuery, Result<List<DocTypeResponse>>>
     {
         private readonly IUnitOfWork<int> _unitOfWork;
         private readonly IMapper _mapper;
@@ -32,12 +32,12 @@ namespace EDO_FOMS.Application.Features.DocumentTypes.Queries.GetAll
             _cache = cache;
         }
 
-        public async Task<Result<List<GetAllDocumentTypesResponse>>> Handle(GetAllDocumentTypesQuery request, CancellationToken cancellationToken)
+        public async Task<Result<List<DocTypeResponse>>> Handle(GetAllDocumentTypesQuery request, CancellationToken cancellationToken)
         {
-            Func<Task<List<DocumentType>>> getAllDocumentTypes = () => _unitOfWork.Repository<DocumentType>().GetAllAsync();
+            Task<List<DocumentType>> getAllDocumentTypes() => _unitOfWork.Repository<DocumentType>().GetAllAsync();
             var documentTypeList = await _cache.GetOrAddAsync(AppConstants.Cache.GetAllDocumentTypesCacheKey, getAllDocumentTypes);
-            var mappedDocumentTypes = _mapper.Map<List<GetAllDocumentTypesResponse>>(documentTypeList);
-            return await Result<List<GetAllDocumentTypesResponse>>.SuccessAsync(mappedDocumentTypes);
+            var mappedDocumentTypes = _mapper.Map<List<DocTypeResponse>>(documentTypeList.OrderBy(o => o.Id));
+            return await Result<List<DocTypeResponse>>.SuccessAsync(mappedDocumentTypes);
         }
     }
 }

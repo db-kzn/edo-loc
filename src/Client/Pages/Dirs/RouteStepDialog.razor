@@ -1,0 +1,127 @@
+﻿@using EDO_FOMS.Domain.Entities.Dir
+@using EDO_FOMS.Domain.Enums
+
+@namespace EDO_FOMS.Client.Pages.Dirs
+
+@inject Microsoft.Extensions.Localization.IStringLocalizer<RouteStepDialog> _localizer
+
+@*Style="background-color: var(--mud-palette-background-grey);"*@
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Outlined.Assignment" Class="mr-3 mb-n1" />
+            @_localizer["Step"]
+        </MudText>
+    </TitleContent>
+
+    <DialogContent>
+        <MudGrid>
+            <MudItem xs="6">
+                <MudSelect T="ActTypes" @bind-Value="@Step.ActType" Label="@_localizer["Action"]" Variant="Variant.Text" AnchorOrigin="Origin.BottomCenter">
+                    <MudSelectItem T="ActTypes" Value="@ActTypes.Signing">
+                        <div class="d-flex flex-row" style="height: 24px; vertical-align: middle;">
+                            <MudIcon Icon="@Icons.Material.Outlined.QrCode2" Color="Color.Error" Title="Signing" Size="Size.Small" Class="mr-2" />
+                            @_localizer[nameof(ActTypes.Signing)]
+                        </div>
+                    </MudSelectItem>
+
+                    <MudSelectItem T="ActTypes" Value="@ActTypes.Agreement">
+                        <div class="d-flex flex-row" style="height: 24px; vertical-align: middle;">
+                            <MudIcon Icon="@Icons.Material.Outlined.FactCheck" Color="Color.Success" Title="Agreement" Size="Size.Small" Class="mr-2" />
+                            @_localizer[nameof(ActTypes.Agreement)]
+                        </div>
+                    </MudSelectItem>
+
+                    <MudSelectItem T="ActTypes" Value="@ActTypes.Review">
+                        <div class="d-flex flex-row" style="height: 24px; vertical-align: middle;">
+                            <MudIcon Icon="@Icons.Material.Outlined.MapsUgc" Color="Color.Warning" Title="Review" Size="Size.Small" Class="mr-2" />
+                            @_localizer[nameof(ActTypes.Review)]
+                        </div>
+                    </MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="6">
+                <MudSelect T="OrgTypes" @bind-Value="Step.OrgType" Label="@_localizer["Org Type"]" Variant="Variant.Text" AnchorOrigin="Origin.BottomCenter">
+                    <MudSelectItem T="OrgTypes" Value="@OrgTypes.Undefined">
+                        <div class="d-flex flex-row" style="height: 24px; vertical-align: middle;">
+                            <MudIcon Icon="@Icons.Material.Outlined.Domain" Color="Color.Default" Size="Size.Small" Class="mr-2" />
+                            @_localizer["Any Type"]
+                        </div>
+                    </MudSelectItem>
+
+                    <MudSelectItem T="OrgTypes" Value="@OrgTypes.MO">
+                        <div class="d-flex flex-row" style="height: 24px; vertical-align: middle;">
+                            <MudIcon Icon="@Icons.Material.Outlined.MedicalServices" Color="Color.Primary" Size="Size.Small" Class="mr-2" />
+                            @_localizer["MO"]
+                        </div>
+                    </MudSelectItem>
+
+                    <MudSelectItem T="OrgTypes" Value="@OrgTypes.SMO">
+                        <div class="d-flex flex-row" style="height: 24px; vertical-align: middle;">
+                            <MudIcon Icon="@Icons.Material.Outlined.Museum" Color="Color.Success" Size="Size.Small" Class="mr-2" />
+                            @_localizer["SMO"]
+                        </div>
+                    </MudSelectItem>
+
+                    <MudSelectItem T="OrgTypes" Value="@OrgTypes.Fund">
+                        <div class="d-flex flex-row" style="height: 24px; vertical-align: middle;">
+                            <MudIcon Icon="@Icons.Material.Outlined.HealthAndSafety" Color="Color.Error" Size="Size.Small" Class="mr-2" />
+                            @_localizer["Fund"]
+                        </div>
+                    </MudSelectItem>
+
+                    <MudSelectItem T="OrgTypes" Value="@OrgTypes.MEO">
+                        <div class="d-flex flex-row" style="height: 24px; vertical-align: middle;">
+                            <MudIcon Icon="@Icons.Material.Outlined.LocalPolice" Color="Color.Tertiary" Size="Size.Small" Class="mr-2" />
+                            @_localizer["MEO"]
+                        </div>
+                    </MudSelectItem>
+
+                    <MudSelectItem T="OrgTypes" Value="@OrgTypes.Treasury">
+                        <div class="d-flex flex-row" style="height: 24px; vertical-align: middle;">
+                            <MudIcon Icon="@Icons.Material.Outlined.AccountBalance" Color="Color.Warning" Size="Size.Small" Class="mr-2" />
+                            @_localizer["Treasury"]
+                        </div>
+                    </MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="6">
+                <MudSwitch @bind-Checked="@Step.OnlyHead" Label="@_localizer["Only Chief"]" Color="Color.Primary" />
+            </MudItem>
+
+            <MudItem xs="6">
+                <MudSwitch @bind-Checked="@Step.Requred" Label="@_localizer["Requred"]" Color="Color.Primary" />
+            </MudItem>
+
+            <MudItem xs="6">
+                <MudSwitch @bind-Checked="@Step.SomeParticipants" Label="@_localizer["Some Participants"]" Color="Color.Primary" />
+            </MudItem>
+
+            <MudItem xs="6">
+                <MudSwitch @bind-Checked="@Step.AllRequred" Label="@_localizer["All Requred"]" Color="Color.Primary" Disabled="@(!Step.SomeParticipants)" />
+            </MudItem>
+
+            <MudItem xs="6">
+                <MudSwitch @bind-Checked="@Step.HasAgreement" Label="@_localizer["Has Agreement"]" Color="Color.Primary" />
+            </MudItem>
+
+            <MudItem xs="6">
+                <MudSwitch @bind-Checked="@Step.HasReview" Label="@_localizer["Has Review"]" Color="Color.Primary" />
+            </MudItem>
+        </MudGrid>
+    </DialogContent>
+
+    <DialogActions>
+        <MudButton Variant="Variant.Outlined" FullWidth="true" Color="Color.Default" StartIcon="@Icons.Material.Outlined.Clear"
+                   OnClick="() => Delete()">
+            @_localizer["Delete"]
+        </MudButton>
+        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Outlined" FullWidth="true" Color="Color.Primary" EndIcon="@Icons.Material.Outlined.Done"
+                   OnClick="() => Ok()">
+            @_localizer["Ok"]
+        </MudButton>
+    </DialogActions>
+</MudDialog>

@@ -4,11 +4,11 @@
 
 @inject Microsoft.Extensions.Localization.IStringLocalizer<DraftDialog> _localizer
 
-    <EditForm Model="@_doc" OnValidSubmit="SendAsync">
-        <FluentValidationValidator @ref="_fluentValidationValidator" />
+<EditForm Model="@_doc" OnValidSubmit="SendAsync">
+    <FluentValidationValidator @ref="_fluentValidationValidator" />
 
-        <MudDialog Style="background-color: var(--mud-palette-background-grey);">
-            <TitleContent>
+    <MudDialog Style="background-color: var(--mud-palette-background-grey);">
+        <TitleContent>
             @{
                 if (_doc.Id == 0)
                 {
@@ -30,26 +30,26 @@
         <DialogContent>
             <MudGrid Style="max-height: 70vh; overflow-y: scroll;">
                 <MudItem xs="12">
-                    <InputFile id="fileInput" hidden OnChange="UploadFiles" accept=".pdf"/>
+                    <InputFile id="fileInput" hidden OnChange="UploadFiles" accept=".pdf" />
 
                     @if (_doc.Id == 0)
                     {
-                        <MudButtonGroup  Color="Color.Default" Variant="Variant.Outlined" Style="width: 100%; background-color: var(--mud-palette-surface);">
+                        <MudButtonGroup Color="Color.Default" Variant="Variant.Outlined" Style="width: 100%; background-color: var(--mud-palette-surface);">
                             <MudButton Variant="Variant.Outlined" FullWidth="true" Color="Color.Default" Size="Size.Large" Disabled="@onUpload"
                                    StartIcon="@Icons.Material.Outlined.AttachFile" IconColor="Color.Default" Style="height: 56px;"
                                    for="fileInput" HtmlTag="label">
-                                    @if(_file == null || string.IsNullOrEmpty(_file.Name))
-                                    {
-                                        <MudText Typo="Typo.button" Color="Color.Error">
-                                            @_localizer["Upload file"]
-                                        </MudText>
-                                    } 
-                                    else
-                                    {
-                                        <MudText Typo="Typo.button" Color="Color.Default">
-                                            @_file.Name
-                                        </MudText>
-                                    }
+                                @if (_file == null || string.IsNullOrEmpty(_file.Name))
+                                {
+                                    <MudText Typo="Typo.button" Color="Color.Error">
+                                        @_localizer["Upload file"]
+                                    </MudText>
+                                }
+                                else
+                                {
+                                    <MudText Typo="Typo.button" Color="Color.Default">
+                                        @_file.Name
+                                    </MudText>
+                                }
                             </MudButton>
 
                             <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["View document from server"]" Color="Color.Tertiary" Placement="Placement.Left" Arrow="true">
@@ -59,16 +59,16 @@
                     }
                     else
                     {
-                        <MudButtonGroup  Color="Color.Default" Variant="Variant.Outlined" Style="width: 100%; background-color: var(--mud-palette-surface);">
+                        <MudButtonGroup Color="Color.Default" Variant="Variant.Outlined" Style="width: 100%; background-color: var(--mud-palette-surface);">
                             <MudButton Variant="Variant.Outlined" FullWidth="true" Color="Color.Default" Size="Size.Large" Disabled="@onUpload"
                                    StartIcon="@Icons.Material.Outlined.AttachFile" IconColor="Color.Default" Style="height: 56px;"
                                    for="fileInput" HtmlTag="label">
                                 @((_file != null && !string.IsNullOrEmpty(_file.Name)) ? _file.Name :
-                                (string.IsNullOrEmpty(_doc.UploadRequest.FileName)) ? _localizer["No file"] : _doc.UploadRequest.FileName)
+                            (string.IsNullOrEmpty(_doc.UploadRequest.FileName)) ? _localizer["No file"] : _doc.UploadRequest.FileName)
                             </MudButton>
 
                             <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["View document from server"]" Color="Color.Tertiary" Placement="Placement.Left" Arrow="true">
-                                @if(string.IsNullOrEmpty(_doc.URL))
+                                @if (string.IsNullOrEmpty(_doc.URL))
                                 {
                                     <MudIconButton Icon="@Icons.Material.TwoTone.MenuBook" Style="height: 56px;" Disabled></MudIconButton>
                                 }
@@ -83,34 +83,34 @@
                 </MudItem>
 
                 @*<MudItem xs="6">
-                    <MudAutocomplete T="int" Label="@_localizer["Document type"]"
-                            For="@(() => _doc.TypeId)" @bind-Value="_doc.TypeId"
-                            ResetValueOnEmptyText="true" SearchFunc="@SearchDocumentTypes" Variant="Variant.Text"
-                            ToStringFunc="@(i => _documentTypes.FirstOrDefault(b => b.Id == i)?.Name ?? string.Empty)" OffsetY="true" />
+                <MudAutocomplete T="int" Label="@_localizer["Document type"]"
+                For="@(() => _doc.TypeId)" @bind-Value="_doc.TypeId"
+                ResetValueOnEmptyText="true" SearchFunc="@SearchDocumentTypes" Variant="Variant.Text"
+                ToStringFunc="@(i => _documentTypes.FirstOrDefault(b => b.Id == i)?.Name ?? string.Empty)" OffsetY="true" />
                 </MudItem>*@
 
                 <MudItem xs="4">
                     <MudSelect T="int" Label="@_localizer["Document type"]" Disabled="@onUpload"
-                        AdornmentIcon="@Icons.Material.Outlined.DocumentScanner" Adornment="Adornment.Start"
-                        For="@(() => _doc.TypeId)" @bind-Value="_doc.TypeId">
-                            @foreach (var type in _docTypes)
-                            {
-                                <MudSelectItem Value="@type.Id">@type.Name</MudSelectItem>
-                            }
+                               AdornmentIcon="@Icons.Material.Outlined.DocumentScanner" Adornment="Adornment.Start"
+                               For="@(() => _doc.TypeId)" @bind-Value="_doc.TypeId">
+                        @foreach (var type in _docTypes)
+                        {
+                            <MudSelectItem Value="@type.Id">@type.Label</MudSelectItem>
+                        }
                     </MudSelect>
                 </MudItem>
 
                 <MudItem xs="4">
-                    <MudTextField For="@(() => _doc.Number)" @bind-Value="_doc.Number" Label="@_localizer["Number"]"  Disabled="@onUpload"/>
+                    <MudTextField For="@(() => _doc.Number)" @bind-Value="_doc.Number" Label="@_localizer["Number"]" Disabled="@onUpload" />
                 </MudItem>
 
                 <MudItem xs="4">
-                  <MudDatePicker Label="@_localizer["Document Date"]" DisableToolbar="true" Elevation="2" Disabled="@onUpload"
-                    For="@(() => _doc.Date)" @bind-Date="_doc.Date"/>
+                    <MudDatePicker Label="@_localizer["Document Date"]" DisableToolbar="true" Elevation="2" Disabled="@onUpload"
+                                   For="@(() => _doc.Date)" @bind-Date="_doc.Date" />
                 </MudItem>
 
                 <MudItem xs="12">
-                    <MudTextField For="@(() => _doc.Title)" @bind-Value="_doc.Title" Label="@_localizer["Title"]" Disabled="@onUpload"/>
+                    <MudTextField For="@(() => _doc.Title)" @bind-Value="_doc.Title" Label="@_localizer["Title"]" Disabled="@onUpload" />
                 </MudItem>
 
                 <MudItem xs="12">
@@ -118,17 +118,17 @@
                 </MudItem>
 
                 <MudExpansionPanels MultiExpansion="true" Style="width: 100%;" Class="mb-4">
-                    <MudExpansionPanel xs="12" Text="I. Согласование в фонде" IsInitiallyExpanded  Disabled="@onUpload">
+                    <MudExpansionPanel xs="12" Text="I. Согласование в фонде" IsInitiallyExpanded Disabled="@onUpload">
                         <MudItem xs="12">
                             <div class="d-flex">
                                 <MudAutocomplete T="ContactResponse" Label="@_localizer["Employee of the Fund OMS"]" @bind-Value="fundContact" SearchFunc="@SearchFundContactsAsync"
-                                    ResetValueOnEmptyText="@resetValueOnEmptyText" CoerceText="@coerceText" CoerceValue="@coerceValue"  Clearable="false"
-                                    Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Outlined.HealthAndSafety" AdornmentColor="Color.Default"
-                                    ToStringFunc="@(e => (e == null) ? null : ContactName(e))" Disabled="@onUpload"/>
+                                                 ResetValueOnEmptyText="@resetValueOnEmptyText" CoerceText="@coerceText" CoerceValue="@coerceValue" Clearable="false"
+                                                 Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Outlined.HealthAndSafety" AdornmentColor="Color.Default"
+                                                 ToStringFunc="@(e => (e == null) ? null : ContactName(e))" Disabled="@onUpload" />
                                 <MudIconButton Icon="@Icons.Material.Filled.Add" Style="height:48px;" Color="Color.Primary" OnClick="AddFund" Disabled="@(fundContact == null)"></MudIconButton>
                             </div>
 
-                             <MudChipSet AllClosable="true" OnClose="DelFund">
+                            <MudChipSet AllClosable="true" OnClose="DelFund">
                                 @foreach (var c in FundContacts)
                                 {
                                     <MudChip Text="@c.Key" Variant="Variant.Outlined" Color="Color.Default" Disabled="@onUpload"></MudChip>
@@ -136,17 +136,17 @@
                             </MudChipSet>
                         </MudItem>
                     </MudExpansionPanel>
-                
+
 
                     <MudExpansionPanel xs="12" Text="II. Подписание СМО и МО" IsInitiallyExpanded Disabled="@onUpload">
                         <MudItem xs="12">
-                            
+
                             <div class="d-flex">
                                 <MudAutocomplete T="ContactResponse" Label="@_localizer["Employee of a MO"]" @bind-Value="moContact" SearchFunc="@SearchMoContactsAsync"
                                                  ResetValueOnEmptyText="@resetValueOnEmptyText" CoerceText="@coerceText" CoerceValue="@coerceValue" Clearable="false"
                                                  Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Outlined.MedicalServices" AdornmentColor="Color.Default"
-                                                 ToStringFunc="@(e => (e == null) ? null : ContactName(e))" Disabled="@onUpload"/>
-                        
+                                                 ToStringFunc="@(e => (e == null) ? null : ContactName(e))" Disabled="@onUpload" />
+
                                 <MudIconButton Icon="@Icons.Material.Filled.Add" Style="height:48px;" Color="Color.Primary" OnClick="AddMo" Disabled="@(moContact == null)"></MudIconButton>
                             </div>
 
@@ -162,15 +162,15 @@
                         <MudItem xs="12">
 
                             <div class="d-flex">
-                            <MudAutocomplete T="ContactResponse" Label="@_localizer["Employee of a SMO"]" @bind-Value="smoContact" SearchFunc="@SearchSmoContactsAsync"
-                                             ResetValueOnEmptyText="@resetValueOnEmptyText" CoerceText="@coerceText" CoerceValue="@coerceValue"  Clearable="false"
-                                             Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Outlined.Museum" AdornmentColor="Color.Default"
-                                             ToStringFunc="@(e => (e == null) ? null : ContactName(e))" Disabled="@onUpload"/>
+                                <MudAutocomplete T="ContactResponse" Label="@_localizer["Employee of a SMO"]" @bind-Value="smoContact" SearchFunc="@SearchSmoContactsAsync"
+                                                 ResetValueOnEmptyText="@resetValueOnEmptyText" CoerceText="@coerceText" CoerceValue="@coerceValue" Clearable="false"
+                                                 Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Outlined.Museum" AdornmentColor="Color.Default"
+                                                 ToStringFunc="@(e => (e == null) ? null : ContactName(e))" Disabled="@onUpload" />
 
                                 <MudIconButton Icon="@Icons.Material.Filled.Add" Style="height:48px;" Color="Color.Primary" OnClick="AddSmo" Disabled="@(smoContact == null)"></MudIconButton>
-                             </div>
+                            </div>
 
-                             <MudChipSet AllClosable="true" OnClose="DelSmo">
+                            <MudChipSet AllClosable="true" OnClose="DelSmo">
                                 @foreach (var c in SmoContacts)
                                 {
                                     <MudChip Text="@c.Key" Variant="Variant.Outlined" Color="Color.Default" Disabled="@onUpload"></MudChip>
@@ -185,10 +185,10 @@
 
                             <div class="d-flex">
                                 <MudAutocomplete T="ContactResponse" Label="@_localizer["Head of the Fund OMS"]" @bind-Value="headContact" SearchFunc="@SearchHeadContactsAsync"
-                                             ResetValueOnEmptyText="@resetValueOnEmptyText" CoerceText="@coerceText" CoerceValue="@coerceValue" Clearable="false"
-                                             Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Outlined.HealthAndSafety" AdornmentColor="Color.Default"
-                                             ToStringFunc="@(e => (e == null) ? null : ContactName(e))" Disabled="@onUpload" />
-                    
+                                                 ResetValueOnEmptyText="@resetValueOnEmptyText" CoerceText="@coerceText" CoerceValue="@coerceValue" Clearable="false"
+                                                 Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Outlined.HealthAndSafety" AdornmentColor="Color.Default"
+                                                 ToStringFunc="@(e => (e == null) ? null : ContactName(e))" Disabled="@onUpload" />
+
                                 <MudIconButton Icon="@Icons.Material.Filled.Add" Style="height:48px;" Color="Color.Primary" OnClick="AddHead" Disabled="@(headContact == null)"></MudIconButton>
                             </div>
 
@@ -207,11 +207,11 @@
         </DialogContent>
 
         <DialogActions>
-            <MudButton Variant="Variant.Outlined" OnClick="(() => SaveAsync())" FullWidth="true"  Color="Color.Primary"
-                Disabled="@(!Validated || onUpload || (_file == null && string.IsNullOrEmpty(_doc.UploadRequest.FileName)))">
+            <MudButton Variant="Variant.Outlined" OnClick="(() => SaveAsync())" FullWidth="true" Color="Color.Primary"
+                       Disabled="@(!Validated || onUpload || (_file == null && string.IsNullOrEmpty(_doc.UploadRequest.FileName)))">
                 @if (onUpload)
                 {
-                    <MudProgressCircular Size="Size.Small" Indeterminate="true"/>
+                    <MudProgressCircular Size="Size.Small" Indeterminate="true" />
                     <MudText Typo="Typo.button" Class="ms-4">@_localizer["Uploading"]</MudText>
                 }
                 else
@@ -220,11 +220,11 @@
                 }
             </MudButton>
 
-            <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit"  FullWidth="true" Color="Color.Primary"
-                Disabled="@(!Validated || onUpload || (_file == null && string.IsNullOrEmpty(_doc.UploadRequest.FileName)))">
+            <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" FullWidth="true" Color="Color.Primary"
+                       Disabled="@(!Validated || onUpload || (_file == null && string.IsNullOrEmpty(_doc.UploadRequest.FileName)))">
                 @if (onUpload)
                 {
-                    <MudProgressCircular Size="Size.Small" Indeterminate="true"/>
+                    <MudProgressCircular Size="Size.Small" Indeterminate="true" />
                     <MudText Typo="Typo.button" Class="ms-4">@_localizer["Uploading"]</MudText>
                 }
                 else
@@ -232,8 +232,7 @@
                     @_localizer["Send"]
                 }
             </MudButton>
-
-         </DialogActions>
+        </DialogActions>
 
     </MudDialog>
 

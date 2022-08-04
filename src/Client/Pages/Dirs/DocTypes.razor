@@ -75,10 +75,8 @@
 
             <MudTd DataLabel="@_localizer["Icon"]">
                 <MudIcon Color="@context.Color" Class="mx-2"
-                    Icon="@((context.Icon == DocIcons.Description) ? Icons.Material.Outlined.Description :
-                            (context.Icon == DocIcons.NoteAdd) ? Icons.Material.Outlined.NoteAdd :
-                            (context.Icon == DocIcons.Receipt) ? Icons.Material.Outlined.Receipt :
-                            (context.Icon == DocIcons.FactCheck) ? Icons.Material.Outlined.FactCheck :
+                    Icon="@((context.Icon == DocIcons.Description) ? Icons.Material.Outlined.Description : (context.Icon == DocIcons.NoteAdd) ? Icons.Material.Outlined.NoteAdd :
+                            (context.Icon == DocIcons.Receipt) ? Icons.Material.Outlined.Receipt : (context.Icon == DocIcons.FactCheck) ? Icons.Material.Outlined.FactCheck :
                             (context.Icon == DocIcons.TableChart) ? Icons.Material.Outlined.TableChart : Icons.Material.Outlined.HelpOutline)" />
             </MudTd>
             <MudTd DataLabel="@_localizer["Label"]">

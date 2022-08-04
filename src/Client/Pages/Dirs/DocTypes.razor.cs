@@ -40,7 +40,7 @@ public partial class DocTypes
 
     private ClaimsPrincipal _authUser;
     private string userId;
-    private bool _canDocsCreate;
+    private bool _canSystemEdit;
 
     private int tz;
     private bool dense;
@@ -57,7 +57,7 @@ public partial class DocTypes
     {
         _authUser = await _authManager.CurrentUser();
         //_authUser = await _authStateProvider.GetAuthenticationStateProviderUserAsync();
-        _canDocsCreate = (await _authService.AuthorizeAsync(_authUser, Permissions.System.Edit)).Succeeded;
+        _canSystemEdit = (await _authService.AuthorizeAsync(_authUser, Permissions.System.Edit)).Succeeded;
 
         userId = _authUser.GetUserId();
         tz = _stateService.Timezone;

@@ -9,7 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Blazored.FluentValidation;
-using EDO_FOMS.Application.Features.DocumentTypes.Queries.GetAll;
+using EDO_FOMS.Application.Features.DocumentTypes.Queries;
 using EDO_FOMS.Client.Infrastructure.Managers.Doc.Document;
 using EDO_FOMS.Client.Infrastructure.Managers.Doc.DocumentType;
 using EDO_FOMS.Domain.Enums;
@@ -26,7 +26,7 @@ namespace EDO_FOMS.Client.Pages.Docs
 
         private FluentValidationValidator _fluentValidationValidator;
         private bool Validated => _fluentValidationValidator.Validate(options => options.IncludeAllRuleSets());
-        private List<GetAllDocumentTypesResponse> _documentTypes = new();
+        private List<DocTypeResponse> _documentTypes = new();
 
         public void Cancel()
         {

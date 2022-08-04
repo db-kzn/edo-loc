@@ -3,7 +3,7 @@
 
 @attribute [Authorize(Policy = Permissions.DocumentTypes.View)]
 @inject Microsoft.Extensions.Localization.IStringLocalizer<DocumentTypes> _localizer
-@using EDO_FOMS.Application.Features.DocumentTypes.Queries.GetAll
+@using EDO_FOMS.Application.Features.DocumentTypes.Queries
 
 <style>
     .mud-table-container {
@@ -18,7 +18,7 @@
 }
 else
 {
-    <MudTable Hover="true" Elevation="25" Items="_documentTypeList" Dense="@_dense" Bordered="@_bordered" Striped="@_striped" Filter="new Func<GetAllDocumentTypesResponse, bool>(Search)" @bind-brand="_documentType">
+    <MudTable Hover="true" Elevation="25" Items="_documentTypeList" Dense="@_dense" Bordered="@_bordered" Striped="@_striped" Filter="new Func<DocTypeResponse, bool>(Search)" @bind-brand="_documentType">
         <ToolBarContent>
             <div class="justify-center mud-text-align-center">
                 @if (_canCreateDocumentTypes)
@@ -46,9 +46,9 @@ else
             }
         </ToolBarContent>
         <HeaderContent>
-            <MudTh><MudTableSortLabel SortBy="new Func<GetAllDocumentTypesResponse, object>(x => x.Id)">@_localizer["Id"]</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<GetAllDocumentTypesResponse, object>(x => x.Name)">@_localizer["Name"]</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<GetAllDocumentTypesResponse, object>(x => x.Description)">@_localizer["Description"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<DocTypeResponse, object>(x => x.Id)">@_localizer["Id"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<DocTypeResponse, object>(x => x.Name)">@_localizer["Name"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<DocTypeResponse, object>(x => x.Description)">@_localizer["Description"]</MudTableSortLabel></MudTh>
             <MudTh Style="text-align:right">@_localizer["Actions"]</MudTh>
         </HeaderContent>
         <RowTemplate>

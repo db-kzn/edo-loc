@@ -39,6 +39,10 @@
     /*padding-bottom: 64px;*/
 }
 
+.mud-drop-item .mud-list-item-text {
+    margin-top: 0;
+}
+
 .mud-table {
     margin-bottom: 64px;
 }

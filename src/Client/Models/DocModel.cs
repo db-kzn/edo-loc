@@ -9,7 +9,7 @@ namespace EDO_FOMS.Client.Models
         public int EmplOrgId { get; set; }   // Организация издатель - Issuer
         public string EmplId { get; set; }   // Исполнитель
         public int? AgreementId { get; set; } = null; // Согласование шага "0" - отправитель документа - контроль
-        
+
         public List<int> Recipients { get; set; } // Список организаций получателей
 
         //public OrgTypes EmplOrgType { get; set; } // Организация отправителя
@@ -45,5 +45,12 @@ namespace EDO_FOMS.Client.Models
         public string CreatedBy { get; set; }
         public DateTime CreatedOn { get; set; }
         public string CreatedOnStr { get; set; }
+
+        public DocModel() { }
+        public DocModel (int typeId, DateTime date)
+        {
+            TypeId = typeId;
+            Date = date;
+        }
     }
 }

@@ -8,12 +8,12 @@ using MediatR;
 
 namespace EDO_FOMS.Application.Features.DocumentTypes.Queries.GetById
 {
-    public class GetDocumentTypeByIdQuery : IRequest<Result<GetDocumentTypeByIdResponse>>
+    public class GetDocumentTypeByIdQuery : IRequest<Result<DocTypeResponse>>
     {
         public int Id { get; set; }
     }
 
-    internal class GetDocumentTypeByIdQueryHandler : IRequestHandler<GetDocumentTypeByIdQuery, Result<GetDocumentTypeByIdResponse>>
+    internal class GetDocumentTypeByIdQueryHandler : IRequestHandler<GetDocumentTypeByIdQuery, Result<DocTypeResponse>>
     {
         private readonly IUnitOfWork<int> _unitOfWork;
         private readonly IMapper _mapper;
@@ -24,11 +24,11 @@ namespace EDO_FOMS.Application.Features.DocumentTypes.Queries.GetById
             _mapper = mapper;
         }
 
-        public async Task<Result<GetDocumentTypeByIdResponse>> Handle(GetDocumentTypeByIdQuery query, CancellationToken cancellationToken)
+        public async Task<Result<DocTypeResponse>> Handle(GetDocumentTypeByIdQuery query, CancellationToken cancellationToken)
         {
             var documentType = await _unitOfWork.Repository<DocumentType>().GetByIdAsync(query.Id);
-            var mappedDocumentType = _mapper.Map<GetDocumentTypeByIdResponse>(documentType);
-            return await Result<GetDocumentTypeByIdResponse>.SuccessAsync(mappedDocumentType);
+            var mappedDocumentType = _mapper.Map<DocTypeResponse>(documentType);
+            return await Result<DocTypeResponse>.SuccessAsync(mappedDocumentType);
         }
     }
 }

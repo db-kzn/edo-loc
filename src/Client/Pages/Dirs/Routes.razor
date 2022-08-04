@@ -2,3 +2,25 @@
 
 @page "/dirs/routes"
 
+@inject Microsoft.Extensions.Localization.IStringLocalizer<Routes> _localizer
+
+<MudPaper Square="true" Elevation="3" Style="z-index: 1;">
+    <MudToolBar>
+        <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Document signing routes"]" Color="Color.Tertiary" Placement="Placement.Right">
+            <MudText Typo="Typo.button">@_localizer["Routes"]</MudText>
+        </MudTooltip>
+
+        <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Renew"]" Color="Color.Tertiary" Placement="Placement.Right">
+            <MudIconButton Icon="@Icons.Material.Outlined.Sync" OnClick="RenewAsync"></MudIconButton>
+        </MudTooltip>
+    </MudToolBar>
+</MudPaper>
+
+@if (_canSystemEdit)
+{
+    <MudItem Class="fab-btn-add">
+        <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Add route"]" Color="Color.Tertiary" Placement="Placement.Left" Arrow="true">
+            <MudFab Color="Color.Secondary" Icon="@Icons.Material.Rounded.Add" aria-label="upload" OnClick="AddRouteAsync" />
+        </MudTooltip>
+    </MudItem>
+}

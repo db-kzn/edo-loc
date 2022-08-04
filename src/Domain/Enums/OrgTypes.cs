@@ -8,6 +8,8 @@
         SMO = 2,
         MO = 3,
 
-        CA = 4
+        CA = 4,
+        Treasury = 5,
+        MEO = 6
     }
 }

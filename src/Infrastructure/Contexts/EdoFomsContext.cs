@@ -31,6 +31,8 @@ namespace EDO_FOMS.Infrastructure.Contexts
         public DbSet<Company> Companies { get; set; }
         public DbSet<DocumentType> DocumentTypes { get; set; }
         public DbSet<Route> Routes { get; set; }
+        public DbSet<RouteStage> RouteStages { get; set; }
+        public DbSet<RouteStageStep> RouteStageSteps { get; set; }
 
         public DbSet<Organization> Organizations { get; set; }
         public DbSet<Certificate> Certificates { get; set; }
@@ -80,9 +82,11 @@ namespace EDO_FOMS.Infrastructure.Contexts
 
             base.OnModelCreating(builder);
 
-            builder.Entity<Company>(entity => entity.ToTable(name: "Companies", "dic"));
-            builder.Entity<DocumentType>(entity => entity.ToTable(name: "DocumentTypes", "dic"));
-            builder.Entity<Route>(entity => entity.ToTable(name: "Routes", "dic"));
+            builder.Entity<Company>(entity => entity.ToTable(name: "Companies", "dir"));
+            builder.Entity<DocumentType>(entity => entity.ToTable(name: "DocumentTypes", "dir"));
+            builder.Entity<Route>(entity => entity.ToTable(name: "Routes", "dir"));
+            builder.Entity<Route>(entity => entity.ToTable(name: "RouteStages", "dir"));
+            builder.Entity<Route>(entity => entity.ToTable(name: "RouteStageSteps", "dir"));
 
             builder.Entity<Organization>(entity => entity.ToTable(name: "Organizations", "org"));
             builder.Entity<Certificate>(entity => entity.ToTable(name: "Certificates", "org"));
