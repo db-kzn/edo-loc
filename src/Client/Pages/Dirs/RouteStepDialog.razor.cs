@@ -1,7 +1,6 @@
-﻿using EDO_FOMS.Domain.Entities.Dir;
+﻿using EDO_FOMS.Application.Features.Directories.Commands;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using System.Threading.Tasks;
 
 namespace EDO_FOMS.Client.Pages.Dirs
 {
@@ -10,9 +9,9 @@ namespace EDO_FOMS.Client.Pages.Dirs
         [CascadingParameter]
         private MudDialogInstance MudDialog { get; set; }
         [Parameter]
-        public RouteStageStep Step { get; set; }
+        public RouteStageStepModel Step { get; set; }
 
         private void Ok() => MudDialog.Close(DialogResult.Ok(Step));
-        private void Delete() => MudDialog.Close(DialogResult.Ok<RouteStageStep>(null));
+        private void Delete() => MudDialog.Close(DialogResult.Ok<RouteStageStepModel>(null));
     }
 }

@@ -1,5 +1,6 @@
 ﻿@namespace EDO_FOMS.Client.Pages.Dirs
 
+@using EDO_FOMS.Application.Features.Directories.Commands
 @using EDO_FOMS.Application.Features.DocumentTypes.Queries
 @using EDO_FOMS.Domain.Enums
 @using EDO_FOMS.Domain.Entities.Dir
@@ -34,10 +35,10 @@
                     <MudCardContent>
                         <MudGrid Style="max-height: 70vh; overflow-y: scroll;">
                             <MudItem xs="6">
-                                <MudTextField @bind-Value="_route.Name" Label="@_localizer["Name"]" />
+                                <MudTextField @bind-Value="Route.Name" Label="@_localizer["Name"]" />
                             </MudItem>
                             <MudItem xs="6">
-                                <MudTextField @bind-Value="_route.Description" Label="@_localizer["Description"]" />
+                                <MudTextField @bind-Value="Route.Description" Label="@_localizer["Description"]" />
                             </MudItem>
 
                             <MudItem xs="6">
@@ -66,29 +67,69 @@
                             </MudItem>
 
                             <MudItem xs="6">
-                                <MudSelect T="UserBaseRoles" @bind-Value="_route.ForUserRole" Label="@_localizer["User Role"]" >
-                                    <MudSelectItem T="UserBaseRoles" Value="@UserBaseRoles.Employee">@_localizer["Employee"]</MudSelectItem>
-                                    <MudSelectItem T="UserBaseRoles" Value="@UserBaseRoles.User">@_localizer["User"]</MudSelectItem>
+                                <MudSelect T="UserBaseRoles" @bind-Value="Route.ForUserRole" Label="@_localizer["User Role"]">
+                                    <MudSelectItem T="UserBaseRoles" Value="UserBaseRoles.Employee">
+                                        <div class="d-flex flex-row" style="height: 24px;">
+                                            <MudIcon Icon="@Icons.Material.Outlined.HistoryEdu" Color="Color.Success" Size="Size.Small" Class="mr-2" />
+                                            @_localizer["Employee"]
+                                        </div>
+                                    </MudSelectItem>
+
+                                    <MudSelectItem T="UserBaseRoles" Value="UserBaseRoles.User">
+                                        <div class="d-flex flex-row" style="height: 24px;">
+                                            <MudIcon Icon="@Icons.Material.Outlined.Person" Color="Color.Default" Size="Size.Small" Class="mr-2" />
+                                            @_localizer["User"]
+                                        </div>
+                                    </MudSelectItem>
                                 </MudSelect>
                             </MudItem>
+
                             <MudItem xs="6">
-                                <MudSelect T="EndActions" @bind-Value="_route.EndAction" Label="@_localizer["End Action"]" >
-                                    <MudSelectItem T="EndActions" Value="@EndActions.SignedByAll">@_localizer["Signed by all"]</MudSelectItem>
-                                    <MudSelectItem T="EndActions" Value="@EndActions.ToArchive">@_localizer["To archive"]</MudSelectItem>
+                                <MudSelect T="EndActions" @bind-Value="Route.EndAction" Label="@_localizer["End Action"]">
+                                    <MudSelectItem T="EndActions" Value="@EndActions.SignedByAll">
+                                        <div class="d-flex flex-row" style="height: 24px;">
+                                            <MudIcon Icon="@Icons.Material.Outlined.AssignmentTurnedIn" Color="Color.Success" Size="Size.Small" Class="mr-2" />
+                                            @_localizer["Signed by all"]
+                                        </div>
+                                    </MudSelectItem>
+
+                                    <MudSelectItem T="EndActions" Value="@EndActions.ToArchive">
+                                        <div class="d-flex flex-row" style="height: 24px;">
+                                            <MudIcon Icon="@Icons.Material.Outlined.Archive" Color="Color.Tertiary" Size="Size.Small" Class="mr-2" />
+                                            @_localizer["To archive"]
+                                        </div>
+                                    </MudSelectItem>
                                 </MudSelect>
                             </MudItem>
 
                             <MudItem xs="3">
-                                <MudSwitch @bind-Checked="@_route.IsPackage" Label="@_localizer["Package"]" Color="Color.Primary" />
+                                <MudCheckBox @bind-Checked="@Route.IsPackage" Label="@_localizer["Package"]" Color="Color.Primary"
+                                             CheckedIcon="@Icons.Material.Outlined.ListAlt" UnCheckedColor="Color.Default" Disabled />
                             </MudItem>
                             <MudItem xs="3">
-                                <MudSwitch @bind-Checked="@_route.CalcHash" Label="@_localizer["Calculate hash"]" Color="Color.Primary" />
+                                <MudCheckBox @bind-Checked="@Route.CalcHash" Label="@_localizer["Calculate hash"]" Color="Color.Primary"
+                                             CheckedIcon="@Icons.Material.Outlined.Calculate" UnCheckedColor="Color.Default" Disabled />
                             </MudItem>
                             <MudItem xs="3">
-                                <MudSwitch @bind-Checked="@_route.AttachedSign" Label="@_localizer["Attached Sign"]" Color="Color.Primary" />
+                                <MudCheckBox @bind-Checked="@Route.AttachedSign" Label="@_localizer["Attached Sign"]" Color="Color.Primary"
+                                             CheckedIcon="@Icons.Material.Outlined.AttachFile" UnCheckedColor="Color.Default" Disabled />
                             </MudItem>
                             <MudItem xs="3">
-                                <MudSwitch @bind-Checked="@_route.DisplayedSign" Label="@_localizer["Displayed Sign"]" Color="Color.Primary" Disabled="@(!_route.AttachedSign)" />
+                                <MudCheckBox @bind-Checked="@Route.DisplayedSign" Label="@_localizer["Displayed Sign"]" Color="Color.Primary"
+                                             CheckedIcon="@Icons.Material.Outlined.FormatShapes" UnCheckedColor="Color.Default" Disabled="@(!Route.AttachedSign)" />
+                            </MudItem>
+
+                            <MudItem xs="3">
+                                <MudCheckBox @bind-Checked="@Route.IsActive" Label="@_localizer["Is Active"]" Color="Color.Primary"
+                                             CheckedIcon="@Icons.Material.Outlined.PlayCircle" UnCheckedColor="Color.Default" />
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudCheckBox @bind-Checked="@Route.AllowRevocation" Label="@_localizer["Allow Revocation"]" Color="Color.Primary"
+                                             CheckedIcon="@Icons.Material.Outlined.SettingsBackupRestore" UnCheckedColor="Color.Default" />
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudCheckBox @bind-Checked="@Route.UseVersioning" Label="@_localizer["Use Versioning"]" Color="Color.Primary"
+                                             CheckedIcon="@Icons.Material.Outlined.Pin" UnCheckedColor="Color.Default" Disabled />
                             </MudItem>
                         </MudGrid>
                     </MudCardContent>
@@ -109,15 +150,17 @@
                 <MudCard>
                     <MudCardContent>
                         <MudGrid Style="max-height: 70vh; overflow-y: scroll;">
-                            <MudDropContainer T="RouteStageStep" @ref="_dropContainer" Items="@_steps" ItemsSelector="@((step, column) => step.StageNumber.ToString() == column)" ItemDropped="StepUpdated" Class="d-flex flex-row" CanDropClass="mud-border-success">
+                            <MudDropContainer T="RouteStageStepModel" @ref="_dropContainer" Items="@Route.Steps"
+                                              ItemsSelector="@((step, column) => step.StageNumber.ToString() == column)" ItemDropped="StepUpdated"
+                                              Class="d-flex flex-row" CanDropClass="mud-border-success">
                                 <ChildContent>
-                                    @foreach (var stage in _stages)
+                                    @foreach (var stage in Route.Stages)
                                     {
-                                        <MudPaper Elevation="0" Width="250px" MinHeight="600px" Class="pa-0 ma-4 d-flex flex-column rounded-lg border-2 border-dashed mud-border-lines-default">
+                                        <MudPaper Elevation="0" Width="250px" MinHeight="560px" Class="pa-0 ma-4 d-flex flex-column rounded-lg border-2 border-dashed mud-border-lines-default">
                                             <MudToolBar DisableGutters="true">
                                                 <MudText Class="ml-4" Typo="Typo.button">@_localizer["Stage"] № @stage.Number</MudText>
                                                 <MudSpacer />
-                                                @if (stage.Number > 1 && stage.Number == _stages.Count)
+                                                @if (stage.Number > 1 && stage.Number == Route.Stages.Count)
                                                 {
                                                     <MudIconButton Icon="@Icons.Material.Rounded.Close" OnClick="DeleteStage" aria-label="delete"></MudIconButton>
                                                 }
@@ -126,7 +169,7 @@
                                             <MudDivider />
 
                                             <MudList Clickable="true" Class="px-4 py-0 mud-height-full">
-                                                <MudDropZone T="RouteStageStep" Identifier="@stage.Number.ToString()" Class="mud-height-full"></MudDropZone>
+                                                <MudDropZone T="RouteStageStepModel" Identifier="@stage.Number.ToString()" Class="mud-height-full"></MudDropZone>
                                             </MudList>
 
                                             <MudButton OnClick="@(() => AddStepAsync(stage.Number))" StartIcon="@Icons.Filled.Add"
@@ -229,8 +272,16 @@
                                         @if (context.SomeParticipants)
                                         {
                                             <div class="d-flex flex-row" style="padding: 4px 16px; height: 32px;">
-                                                <MudIcon Icon="@Icons.Material.Outlined.Groups" Color="Color.Default" Class="mr-2" />
-                                                <MudText Style="vertical-align: middle;">@(context.AllRequred ? "Группа (все)": "Группа (любой)")</MudText>
+                                                @if (context.AllRequred)
+                                                {
+                                                    <MudIcon Icon="@Icons.Material.TwoTone.Groups" Color="Color.Default" Class="mr-2" />
+                                                    <MudText Style="vertical-align: middle;">Группа (все)</MudText>
+                                                }
+                                                else
+                                                {
+                                                    <MudIcon Icon="@Icons.Material.Outlined.SafetyDivider" Color="Color.Default" Class="mr-2" />
+                                                    <MudText Style="vertical-align: middle;">Группа (любой)</MudText>
+                                                }
                                             </div>
                                         }
                                         else
@@ -267,7 +318,8 @@
                                    OnClick="() => _tabs.ActivatePanel(0)">
                             @_localizer["Title"]
                         </MudButton>
-                        <MudButton Class="ml-1" Size="Size.Large" FullWidth Variant="Variant.Filled" StartIcon="@Icons.Material.Rounded.DoneOutline" Color="Color.Primary">
+                        <MudButton Class="ml-1" Size="Size.Large" FullWidth Variant="Variant.Filled" StartIcon="@Icons.Material.Rounded.DoneOutline" Color="Color.Primary"
+                                   OnClick="() => SaveAsync()">
                             @_localizer["Save"]
                         </MudButton>
                     </MudCardActions>

@@ -31,14 +31,20 @@ namespace EDO_FOMS.Client.Pages.Dirs
         private int duration;
 
         MudTabs _tabs;
-        public AddEditRouteCommand _route { get; set; } = new();
+        private MudDropContainer<RouteStageStepModel> _dropContainer;
+        public AddEditRouteCommand Route { get; set; } = new()
+        {
+            DocTypes = new(),
+            ForOrgTypes = new(),
+            Stages = new() { new RouteStageModel() { Number = 1 } },
+            Steps = new()
+        };
 
         private IEnumerable<DocTypeResponse> SelectedDocTypes { get; set; } = new HashSet<DocTypeResponse>() { };
         private IEnumerable<OrgTypes> SelectedOrgTypes { get; set; } = new HashSet<OrgTypes>() {};
 
-        private MudDropContainer<RouteStageStep> _dropContainer;
-        private readonly List<RouteStage> _stages = new() { new RouteStage() { Number = 1 } };
-        private List<RouteStageStep> _steps = new() { };
+        //private List<RouteStageModel> _stages;
+        //private List<RouteStageStepModel> _steps;
 
         protected override async Task OnInitializedAsync()
         {
@@ -51,6 +57,17 @@ namespace EDO_FOMS.Client.Pages.Dirs
             tz = _stateService.Timezone;
             delay = _stateService.TooltipDelay;
             duration = _stateService.TooltipDuration;
+
+            //Route = new()
+            //{
+            //    DocTypes = new(),
+            //    ForOrgTypes = new(),
+            //    Stages = new() { new RouteStageModel() { Number = 1 } },
+            //    Steps = new()
+            //};
+
+            //_stages = Route.Stages;
+            //_steps = Route.Steps;
 
             await LoadDocumentTypesAsync();
         }
@@ -75,7 +92,6 @@ namespace EDO_FOMS.Client.Pages.Dirs
 
             return string.Join(", ", selectedDocTypes.Select(x => x));
         }
-
         private string GetMultiOrgTypesText(List<string> selectedOrgTypes)
         {
             if (selectedOrgTypes == null || selectedOrgTypes.Count == 0)
@@ -92,29 +108,38 @@ namespace EDO_FOMS.Client.Pages.Dirs
         }
 
         private void Close() => _navigationManager.NavigateTo("/dirs/routes");
+        private async Task SaveAsync()
+        {
+            await _jsRuntime.InvokeVoidAsync("azino.Console", Route, "Save Route");
 
-        private void AddNewStage() => _stages.Add(new RouteStage() { Number = _stages.Count + 1 });
+
+        }
+
+        private void AddNewStage() => Route.Stages.Add(new RouteStageModel() { Number = Route.Stages.Count + 1 });
         private void DeleteStage()
         {
-            int count = _stages.Count;
+            int count = Route.Stages.Count;
             if (count == 1) return;
-            _stages.RemoveAt(count - 1);
-            _steps = _steps.Where(s => s.StageNumber != count).ToList();
+
+            Route.Stages.RemoveAt(count - 1);
+
+            var steps = Route.Steps.Where(s => s.StageNumber != count).ToList();
+            Route.Steps.Clear();
+            steps.ForEach(s => Route.Steps.Add(s));
         }
 
         private async Task AddStepAsync(int stageNumber)
         {
-            var step = new RouteStageStep() { StageNumber = stageNumber };
-            _steps.Add(step);
+            var step = new RouteStageStepModel() { StageNumber = stageNumber };
+            Route.Steps.Add(step);
 
             await AddEditStepAsync(step);
         }
-        private async Task EditStepAsync(RouteStageStep step)
+        private async Task EditStepAsync(RouteStageStepModel step)
         {
             await AddEditStepAsync(step);
         }
-
-        private async Task AddEditStepAsync(RouteStageStep step)
+        private async Task AddEditStepAsync(RouteStageStepModel step)
         {
             var parameters = new DialogParameters() { { nameof(RouteStepDialog.Step), step } };
 
@@ -123,13 +148,12 @@ namespace EDO_FOMS.Client.Pages.Dirs
 
             if (!result.Cancelled)
             {
-                var s = (RouteStageStep)result.Data;
-                if (s is null) { _steps.Remove(step); }
+                var s = (RouteStageStepModel)result.Data;
+                if (s is null) { Route.Steps.Remove(step); }
                 _dropContainer.Refresh();
             }
         }
-
-        private static void StepUpdated(MudItemDropInfo<RouteStageStep> info)
+        private static void StepUpdated(MudItemDropInfo<RouteStageStepModel> info)
         {
             if (int.TryParse(info.DropzoneIdentifier, out int stageNumber))
             {
@@ -137,7 +161,7 @@ namespace EDO_FOMS.Client.Pages.Dirs
             }
         }
 
-        private string StepClass(bool required)
+        private static string StepClass(bool required)
         {
             var border = required ? "border-solid" : "border-dotted";
             var css = $"{border} px-0 py-0 my-4 rounded-lg border-2 mud-border-lines-default";

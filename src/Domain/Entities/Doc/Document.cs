@@ -13,8 +13,7 @@ namespace EDO_FOMS.Domain.Entities.Doc
         public virtual List<Agreement> Agreements { get; set; } = new();
 
         public string EmplId { get; set; }          // Инициатор документа -> Заменить на EmployeeId
-        
-        public int EmplOrgId { get; set; }     // Отправитель - организация инициатора        
+        public int EmplOrgId { get; set; }          // Отправитель - организация инициатора        
         [ForeignKey("EmplOrgId")]
         public virtual Organization Issuer { get; set; }
         

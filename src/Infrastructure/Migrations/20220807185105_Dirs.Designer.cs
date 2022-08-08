@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EDO_FOMS.Infrastructure.Migrations
 {
     [DbContext(typeof(EdoFomsContext))]
-    [Migration("20220804205317_Dirs")]
+    [Migration("20220807185105_Dirs")]
     partial class Dirs
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -267,12 +267,15 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
+                    b.Property<int>("Number")
+                        .HasColumnType("integer");
+
                     b.Property<bool>("UseVersioning")
                         .HasColumnType("boolean");
 
                     b.HasKey("Id");
 
-                    b.ToTable("RouteStageSteps", "dir");
+                    b.ToTable("Routes", "dir");
                 });
 
             modelBuilder.Entity("EDO_FOMS.Domain.Entities.Dir.RouteStage", b =>
@@ -319,7 +322,7 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.Property<int>("Number")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("RouteId")
+                    b.Property<int>("RouteId")
                         .HasColumnType("integer");
 
                     b.Property<TimeSpan>("Validity")
@@ -329,7 +332,7 @@ namespace EDO_FOMS.Infrastructure.Migrations
 
                     b.HasIndex("RouteId");
 
-                    b.ToTable("RouteStages");
+                    b.ToTable("RouteStages", "dir");
                 });
 
             modelBuilder.Entity("EDO_FOMS.Domain.Entities.Dir.RouteStageStep", b =>
@@ -376,7 +379,7 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.Property<bool>("Requred")
                         .HasColumnType("boolean");
 
-                    b.Property<int?>("RouteStageId")
+                    b.Property<int>("RouteId")
                         .HasColumnType("integer");
 
                     b.Property<bool>("SomeParticipants")
@@ -387,9 +390,9 @@ namespace EDO_FOMS.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RouteStageId");
+                    b.HasIndex("RouteId");
 
-                    b.ToTable("RouteStageSteps");
+                    b.ToTable("RouteStageSteps", "dir");
                 });
 
             modelBuilder.Entity("EDO_FOMS.Domain.Entities.Doc.Agreement", b =>
@@ -1158,16 +1161,24 @@ namespace EDO_FOMS.Infrastructure.Migrations
 
             modelBuilder.Entity("EDO_FOMS.Domain.Entities.Dir.RouteStage", b =>
                 {
-                    b.HasOne("EDO_FOMS.Domain.Entities.Dir.Route", null)
+                    b.HasOne("EDO_FOMS.Domain.Entities.Dir.Route", "Route")
                         .WithMany("Stages")
-                        .HasForeignKey("RouteId");
+                        .HasForeignKey("RouteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Route");
                 });
 
             modelBuilder.Entity("EDO_FOMS.Domain.Entities.Dir.RouteStageStep", b =>
                 {
-                    b.HasOne("EDO_FOMS.Domain.Entities.Dir.RouteStage", null)
+                    b.HasOne("EDO_FOMS.Domain.Entities.Dir.Route", "Route")
                         .WithMany("Steps")
-                        .HasForeignKey("RouteStageId");
+                        .HasForeignKey("RouteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Route");
                 });
 
             modelBuilder.Entity("EDO_FOMS.Domain.Entities.Doc.Agreement", b =>
@@ -1454,10 +1465,7 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.Navigation("DocTypes");
 
                     b.Navigation("Stages");
-                });
 
-            modelBuilder.Entity("EDO_FOMS.Domain.Entities.Dir.RouteStage", b =>
-                {
                     b.Navigation("Steps");
                 });
 

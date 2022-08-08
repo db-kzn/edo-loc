@@ -120,6 +120,9 @@
   <data name="Agreement" xml:space="preserve">
     <value>Agreement</value>
   </data>
+  <data name="Allow Revocation" xml:space="preserve">
+    <value>Allow Revocation</value>
+  </data>
   <data name="Any Docs" xml:space="preserve">
     <value>Any Docs</value>
   </data>
@@ -158,6 +161,9 @@
   </data>
   <data name="Fund" xml:space="preserve">
     <value>Fund</value>
+  </data>
+  <data name="Is Active" xml:space="preserve">
+    <value>Is Active</value>
   </data>
   <data name="MEO" xml:space="preserve">
     <value>MEO</value>
@@ -212,6 +218,9 @@
   </data>
   <data name="Treasury" xml:space="preserve">
     <value>Treasury</value>
+  </data>
+  <data name="Use Versioning" xml:space="preserve">
+    <value>Use Versioning</value>
   </data>
   <data name="User" xml:space="preserve">
     <value>User</value>

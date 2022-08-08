@@ -5,6 +5,9 @@ namespace EDO_FOMS.Domain.Entities.Dir
 {
     public class RouteStageStep : AuditableEntity<int>
     {
+        public int RouteId { get; set; }                          // - Внешний индекс
+        public virtual Route Route { get; set; }
+
         public int StageNumber { get; set; }                      // + Номер этапа
         public int Number { get; set; }                           // - Номер процесса в этапе, для сортировки последовательности
 

@@ -120,6 +120,9 @@
   <data name="Agreement" xml:space="preserve">
     <value>Согласование</value>
   </data>
+  <data name="Allow Revocation" xml:space="preserve">
+    <value>Отзыв разрешен</value>
+  </data>
   <data name="Any Docs" xml:space="preserve">
     <value>Любые документы</value>
   </data>
@@ -159,6 +162,9 @@
   <data name="Fund" xml:space="preserve">
     <value>ФОМС</value>
   </data>
+  <data name="Is Active" xml:space="preserve">
+    <value>Активный</value>
+  </data>
   <data name="MEO" xml:space="preserve">
     <value>Военкомат</value>
   </data>
@@ -172,7 +178,7 @@
     <value>Организация инициатор</value>
   </data>
   <data name="Package" xml:space="preserve">
-    <value>Является пакетом</value>
+    <value>Несколько файлов</value>
   </data>
   <data name="Review" xml:space="preserve">
     <value>Рецензирование</value>
@@ -212,6 +218,9 @@
   </data>
   <data name="Treasury" xml:space="preserve">
     <value>Казначейство</value>
+  </data>
+  <data name="Use Versioning" xml:space="preserve">
+    <value>Использовать версионность</value>
   </data>
   <data name="User" xml:space="preserve">
     <value>Пользователь системы</value>

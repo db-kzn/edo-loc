@@ -1,4 +1,4 @@
-﻿@using EDO_FOMS.Domain.Entities.Dir
+﻿@using EDO_FOMS.Application.Features.Directories.Commands
 @using EDO_FOMS.Domain.Enums
 
 @namespace EDO_FOMS.Client.Pages.Dirs
@@ -10,7 +10,7 @@
 <MudDialog>
     <TitleContent>
         <MudText Typo="Typo.h6">
-            <MudIcon Icon="@Icons.Material.Outlined.Assignment" Class="mr-3 mb-n1" />
+            <MudIcon Icon="@Icons.Material.Outlined.AddTask" Class="mr-3 mb-n1" />
             @_localizer["Step"]
         </MudText>
     </TitleContent>
@@ -89,27 +89,33 @@
             </MudItem>
 
             <MudItem xs="6">
-                <MudSwitch @bind-Checked="@Step.OnlyHead" Label="@_localizer["Only Chief"]" Color="Color.Primary" />
+                <MudCheckBox @bind-Checked="@Step.OnlyHead" Label="@_localizer["Only Chief"]" Color="Color.Primary"
+                    CheckedIcon="@Icons.Material.Outlined.WorkspacePremium" UnCheckedColor="Color.Default" />
             </MudItem>
 
             <MudItem xs="6">
-                <MudSwitch @bind-Checked="@Step.Requred" Label="@_localizer["Requred"]" Color="Color.Primary" />
+                <MudCheckBox @bind-Checked="@Step.Requred" Label="@_localizer["Requred"]" Color="Color.Primary"
+                    CheckedIcon="@Icons.Material.Outlined.NewReleases" UnCheckedColor="Color.Default" />
             </MudItem>
 
             <MudItem xs="6">
-                <MudSwitch @bind-Checked="@Step.SomeParticipants" Label="@_localizer["Some Participants"]" Color="Color.Primary" />
+                <MudCheckBox @bind-Checked="@Step.SomeParticipants" Label="@_localizer["Some Participants"]" Color="Color.Primary"
+                    CheckedIcon="@Icons.Material.Outlined.SafetyDivider" UnCheckedColor="Color.Default" />
             </MudItem>
 
             <MudItem xs="6">
-                <MudSwitch @bind-Checked="@Step.AllRequred" Label="@_localizer["All Requred"]" Color="Color.Primary" Disabled="@(!Step.SomeParticipants)" />
+                <MudCheckBox @bind-Checked="@Step.AllRequred" Label="@_localizer["All Requred"]" Color="Color.Primary" Disabled="@(!Step.SomeParticipants)"
+                    CheckedIcon="@Icons.Material.Outlined.Groups" UnCheckedColor="Color.Default" />
             </MudItem>
 
             <MudItem xs="6">
-                <MudSwitch @bind-Checked="@Step.HasAgreement" Label="@_localizer["Has Agreement"]" Color="Color.Primary" />
+                <MudCheckBox @bind-Checked="@Step.HasAgreement" Label="@_localizer["Has Agreement"]" Color="Color.Primary"
+                    CheckedIcon="@Icons.Material.Outlined.FactCheck" UnCheckedColor="Color.Default" />
             </MudItem>
 
             <MudItem xs="6">
-                <MudSwitch @bind-Checked="@Step.HasReview" Label="@_localizer["Has Review"]" Color="Color.Primary" />
+                <MudCheckBox @bind-Checked="@Step.HasReview" Label="@_localizer["Has Review"]" Color="Color.Primary"
+                    CheckedIcon="@Icons.Material.Outlined.MapsUgc" UnCheckedColor="Color.Default" />
             </MudItem>
         </MudGrid>
     </DialogContent>

@@ -131,12 +131,13 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RouteStageSteps",
+                name: "Routes",
                 schema: "dir",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Number = table.Column<int>(type: "integer", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
                     Description = table.Column<string>(type: "text", nullable: true),
                     ForOrgTypes = table.Column<int[]>(type: "integer[]", nullable: true),
@@ -156,15 +157,17 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RouteStageSteps", x => x.Id);
+                    table.PrimaryKey("PK_Routes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "RouteStages",
+                schema: "dir",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    RouteId = table.Column<int>(type: "integer", nullable: false),
                     Number = table.Column<int>(type: "integer", nullable: false),
                     Color = table.Column<int>(type: "integer", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
@@ -174,7 +177,6 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     AllRequred = table.Column<bool>(type: "boolean", nullable: false),
                     DenyRevocation = table.Column<bool>(type: "boolean", nullable: false),
                     Validity = table.Column<TimeSpan>(type: "interval", nullable: false),
-                    RouteId = table.Column<int>(type: "integer", nullable: true),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastModifiedBy = table.Column<string>(type: "text", nullable: true),
@@ -184,19 +186,22 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_RouteStages", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RouteStages_RouteStageSteps_RouteId",
+                        name: "FK_RouteStages_Routes_RouteId",
                         column: x => x.RouteId,
                         principalSchema: "dir",
-                        principalTable: "RouteStageSteps",
-                        principalColumn: "Id");
+                        principalTable: "Routes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "RouteStageSteps",
+                schema: "dir",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    RouteId = table.Column<int>(type: "integer", nullable: false),
                     StageNumber = table.Column<int>(type: "integer", nullable: false),
                     Number = table.Column<int>(type: "integer", nullable: false),
                     ActType = table.Column<int>(type: "integer", nullable: false),
@@ -207,7 +212,6 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     AllRequred = table.Column<bool>(type: "boolean", nullable: false),
                     HasAgreement = table.Column<bool>(type: "boolean", nullable: false),
                     HasReview = table.Column<bool>(type: "boolean", nullable: false),
-                    RouteStageId = table.Column<int>(type: "integer", nullable: true),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastModifiedBy = table.Column<string>(type: "text", nullable: true),
@@ -217,10 +221,12 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_RouteStageSteps", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RouteStageSteps_RouteStages_RouteStageId",
-                        column: x => x.RouteStageId,
-                        principalTable: "RouteStages",
-                        principalColumn: "Id");
+                        name: "FK_RouteStageSteps_Routes_RouteId",
+                        column: x => x.RouteId,
+                        principalSchema: "dir",
+                        principalTable: "Routes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -255,13 +261,15 @@ namespace EDO_FOMS.Infrastructure.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_RouteStages_RouteId",
+                schema: "dir",
                 table: "RouteStages",
                 column: "RouteId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RouteStageSteps_RouteStageId",
+                name: "IX_RouteStageSteps_RouteId",
+                schema: "dir",
                 table: "RouteStageSteps",
-                column: "RouteStageId");
+                column: "RouteId");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Documents_Organizations_EmplOrgId",
@@ -274,12 +282,12 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_DocumentTypes_RouteStageSteps_RouteId",
+                name: "FK_DocumentTypes_Routes_RouteId",
                 schema: "dir",
                 table: "DocumentTypes",
                 column: "RouteId",
                 principalSchema: "dir",
-                principalTable: "RouteStageSteps",
+                principalTable: "Routes",
                 principalColumn: "Id");
         }
 
@@ -291,7 +299,7 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 table: "Documents");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_DocumentTypes_RouteStageSteps_RouteId",
+                name: "FK_DocumentTypes_Routes_RouteId",
                 schema: "dir",
                 table: "DocumentTypes");
 
@@ -300,13 +308,15 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 schema: "dir");
 
             migrationBuilder.DropTable(
-                name: "RouteStageSteps");
-
-            migrationBuilder.DropTable(
-                name: "RouteStages");
+                name: "RouteStages",
+                schema: "dir");
 
             migrationBuilder.DropTable(
                 name: "RouteStageSteps",
+                schema: "dir");
+
+            migrationBuilder.DropTable(
+                name: "Routes",
                 schema: "dir");
 
             migrationBuilder.DropIndex(
