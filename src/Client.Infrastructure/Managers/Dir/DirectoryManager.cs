@@ -3,6 +3,7 @@ using EDO_FOMS.Application.Features.Directories.Queries;
 using EDO_FOMS.Application.Requests.Directories;
 using EDO_FOMS.Client.Infrastructure.Extensions;
 using EDO_FOMS.Shared.Wrapper;
+using MediatR;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
@@ -40,6 +41,23 @@ namespace EDO_FOMS.Client.Infrastructure.Managers.Dir
             return await response.ToPaginatedResult<DocTypesResponse>();
         }
 
+        public async Task<PaginatedResult<RoutesResponse>> GetRoutesAsync(GetPagedRoutesRequest request)
+        {
+            var response = await _httpClient.GetAsync(Routes.DirectoriesEndpoints.GetRoutesPaged(request));
+            return await response.ToPaginatedResult<RoutesResponse>();
+        }
+        public async Task<IResult<RouteCardResponse>> GetRouteCardAsync(int id)
+        {
+            var response = await _httpClient.GetAsync(Routes.DirectoriesEndpoints.GetRouteCard(id));
+            return await response.ToResult<RouteCardResponse>();
+        }
+
+        public async Task<IResult<int>> RoutePostAsync(AddEditRouteCommand command)
+        {
+            var response = await _httpClient.PostAsJsonAsync(Routes.DirectoriesEndpoints.AddEditRoute, command);
+            return await response.ToResult<int>();
+        }
+
         public async Task<IResult<CheckCompaniesForImportsResponse>> CheckCompaniesForImportsAsync()
         {
             var response = await _httpClient.GetAsync(Routes.DirectoriesEndpoints.CheckCompaniesForImports);
@@ -61,5 +79,6 @@ namespace EDO_FOMS.Client.Infrastructure.Managers.Dir
             var response = await _httpClient.GetAsync(Routes.DirectoriesEndpoints.ImportMo);
             return await response.ToResult<ImportResponse>();
         }
+
     }
 }

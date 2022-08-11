@@ -65,6 +65,24 @@
             <param name="request"></param>
             <returns>Status 200 OK</returns>
         </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Directories.DirectoriesController.GetRoutes(System.Int32,System.Int32,System.String,System.Boolean,System.String)">
+            <summary>
+            Get Routes
+            </summary>
+            <param name="pageNumber"></param>
+            <param name="pageSize"></param>
+            <param name="searchString"></param>
+            <param name="matchCase"></param>
+            <param name="orderBy"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Directories.DirectoriesController.GetRouteCard(System.Int32)">
+            <summary>
+            Get Route Card
+            </summary>
+            <param name="id"></param>
+            <returns>Status 200 OK</returns>
+        </member>
         <member name="M:EDO_FOMS.Server.Controllers.Directories.DirectoriesController.CheckCompaniesForImports">
             <summary>
             Check Companies For Imports
@@ -87,6 +105,13 @@
             <summary>
             Import MO Companies
             </summary>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Directories.DirectoriesController.Post(EDO_FOMS.Application.Features.Directories.Commands.AddEditRouteCommand)">
+            <summary>
+            Add/Edit Route
+            </summary>
+            <param name="command"></param>
             <returns>Status 200 OK</returns>
         </member>
         <member name="M:EDO_FOMS.Server.Controllers.Docums.DocumentsController.GetAll(System.Int32,System.Int32,System.String,EDO_FOMS.Domain.Enums.DocStages,System.Boolean,System.String)">

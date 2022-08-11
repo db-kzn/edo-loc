@@ -17,7 +17,7 @@ namespace EDO_FOMS.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.7")
+                .HasAnnotation("ProductVersion", "6.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -199,15 +199,10 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.Property<string>("NameEn")
                         .HasColumnType("text");
 
-                    b.Property<int?>("RouteId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Short")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("RouteId");
 
                     b.ToTable("DocumentTypes", "dir");
                 });
@@ -244,11 +239,11 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.Property<int>("EndAction")
                         .HasColumnType("integer");
 
-                    b.Property<int[]>("ForOrgTypes")
-                        .HasColumnType("integer[]");
-
                     b.Property<int>("ForUserRole")
                         .HasColumnType("integer");
+
+                    b.Property<bool>("HasDetails")
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -274,6 +269,54 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Routes", "dir");
+                });
+
+            modelBuilder.Entity("EDO_FOMS.Domain.Entities.Dir.RouteDocType", b =>
+                {
+                    b.Property<int?>("RouteId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("DocumentTypeId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("RouteId", "DocumentTypeId");
+
+                    b.HasIndex("DocumentTypeId");
+
+                    b.ToTable("RouteDocTypes", "dir");
+                });
+
+            modelBuilder.Entity("EDO_FOMS.Domain.Entities.Dir.RouteOrgType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("OrgType")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("RouteId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RouteId");
+
+                    b.ToTable("RouteOrgTypes", "dir");
                 });
 
             modelBuilder.Entity("EDO_FOMS.Domain.Entities.Dir.RouteStage", b =>
@@ -1150,11 +1193,32 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.Navigation("ToUser");
                 });
 
-            modelBuilder.Entity("EDO_FOMS.Domain.Entities.Dir.DocumentType", b =>
+            modelBuilder.Entity("EDO_FOMS.Domain.Entities.Dir.RouteDocType", b =>
                 {
-                    b.HasOne("EDO_FOMS.Domain.Entities.Dir.Route", null)
-                        .WithMany("DocTypes")
+                    b.HasOne("EDO_FOMS.Domain.Entities.Dir.DocumentType", "DocumentType")
+                        .WithMany("RouteDocTypes")
+                        .HasForeignKey("DocumentTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EDO_FOMS.Domain.Entities.Dir.Route", "Route")
+                        .WithMany("RouteDocTypes")
+                        .HasForeignKey("RouteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DocumentType");
+
+                    b.Navigation("Route");
+                });
+
+            modelBuilder.Entity("EDO_FOMS.Domain.Entities.Dir.RouteOrgType", b =>
+                {
+                    b.HasOne("EDO_FOMS.Domain.Entities.Dir.Route", "Route")
+                        .WithMany("ForOrgTypes")
                         .HasForeignKey("RouteId");
+
+                    b.Navigation("Route");
                 });
 
             modelBuilder.Entity("EDO_FOMS.Domain.Entities.Dir.RouteStage", b =>
@@ -1458,9 +1522,16 @@ namespace EDO_FOMS.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("EDO_FOMS.Domain.Entities.Dir.DocumentType", b =>
+                {
+                    b.Navigation("RouteDocTypes");
+                });
+
             modelBuilder.Entity("EDO_FOMS.Domain.Entities.Dir.Route", b =>
                 {
-                    b.Navigation("DocTypes");
+                    b.Navigation("ForOrgTypes");
+
+                    b.Navigation("RouteDocTypes");
 
                     b.Navigation("Stages");
 

@@ -30,7 +30,10 @@ namespace EDO_FOMS.Infrastructure.Contexts
 
         public DbSet<Company> Companies { get; set; }
         public DbSet<DocumentType> DocumentTypes { get; set; }
+
         public DbSet<Route> Routes { get; set; }
+        public DbSet<RouteDocType> RouteDocTypes { get; set; }
+        public DbSet<RouteOrgType> OrganizationTypes { get; set; }
         public DbSet<RouteStage> RouteStages { get; set; }
         public DbSet<RouteStageStep> RouteStageSteps { get; set; }
 
@@ -83,10 +86,43 @@ namespace EDO_FOMS.Infrastructure.Contexts
             base.OnModelCreating(builder);
 
             builder.Entity<Company>(entity => entity.ToTable(name: "Companies", "dir"));
-            builder.Entity<DocumentType>(entity => entity.ToTable(name: "DocumentTypes", "dir"));
-            builder.Entity<Route>(entity => entity.ToTable(name: "Routes", "dir"));
+
+            builder.Entity<RouteOrgType>(entity => entity.ToTable(name: "RouteOrgTypes", "dir"));
             builder.Entity<RouteStage>(entity => entity.ToTable(name: "RouteStages", "dir"));
             builder.Entity<RouteStageStep>(entity => entity.ToTable(name: "RouteStageSteps", "dir"));
+
+            builder.Entity<DocumentType>(entity =>
+            {
+                entity.ToTable(name: "DocumentTypes", "dir");
+
+                entity.HasMany(r => r.Routes)
+                    .WithMany(dt => dt.DocTypes)
+                    .UsingEntity<RouteDocType>();
+            });
+
+            builder.Entity<Route>(entity =>
+            {
+                entity.ToTable(name: "Routes", "dir");
+
+                entity.HasMany(r => r.DocTypes)
+                    .WithMany(dt => dt.Routes)
+                    .UsingEntity<RouteDocType>();
+            });
+
+            builder.Entity<RouteDocType>(entity =>
+            {
+                entity.ToTable(name: "RouteDocTypes", "dir");
+
+                entity.HasOne(rdt => rdt.Route)
+                    .WithMany(r => r.RouteDocTypes)
+                    .HasForeignKey(rdt => rdt.RouteId);
+
+                entity.HasOne(rdt => rdt.DocumentType)
+                    .WithMany(dt => dt.RouteDocTypes)
+                    .HasForeignKey(rdt => rdt.DocumentTypeId);
+
+                entity.HasKey(rdt => new { rdt.RouteId, rdt.DocumentTypeId });
+            });
 
             builder.Entity<Organization>(entity => entity.ToTable(name: "Organizations", "org"));
             builder.Entity<Certificate>(entity => entity.ToTable(name: "Certificates", "org"));

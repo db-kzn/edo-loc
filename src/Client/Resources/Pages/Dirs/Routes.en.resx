@@ -120,13 +120,37 @@
   <data name="Add route" xml:space="preserve">
     <value>Add route</value>
   </data>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
   <data name="Document signing routes" xml:space="preserve">
     <value>Document signing routes</value>
+  </data>
+  <data name="Id" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="Match Case Off" xml:space="preserve">
+    <value>Match Case Off</value>
+  </data>
+  <data name="Match Case On" xml:space="preserve">
+    <value>Match Case On</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Params" xml:space="preserve">
+    <value>Params</value>
   </data>
   <data name="Renew" xml:space="preserve">
     <value>Renew</value>
   </data>
+  <data name="Route search" xml:space="preserve">
+    <value>Route search</value>
+  </data>
   <data name="Routes" xml:space="preserve">
     <value>Routes</value>
+  </data>
+  <data name="Rows density" xml:space="preserve">
+    <value>Rows density</value>
   </data>
 </root>

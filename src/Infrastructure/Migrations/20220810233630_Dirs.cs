@@ -86,13 +86,6 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 type: "text",
                 nullable: true);
 
-            migrationBuilder.AddColumn<int>(
-                name: "RouteId",
-                schema: "dir",
-                table: "DocumentTypes",
-                type: "integer",
-                nullable: true);
-
             migrationBuilder.CreateTable(
                 name: "Companies",
                 schema: "dir",
@@ -140,7 +133,6 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     Number = table.Column<int>(type: "integer", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
                     Description = table.Column<string>(type: "text", nullable: true),
-                    ForOrgTypes = table.Column<int[]>(type: "integer[]", nullable: true),
                     ForUserRole = table.Column<int>(type: "integer", nullable: false),
                     EndAction = table.Column<int>(type: "integer", nullable: false),
                     IsPackage = table.Column<bool>(type: "boolean", nullable: false),
@@ -148,8 +140,9 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     AttachedSign = table.Column<bool>(type: "boolean", nullable: false),
                     DisplayedSign = table.Column<bool>(type: "boolean", nullable: false),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false),
-                    UseVersioning = table.Column<bool>(type: "boolean", nullable: false),
                     AllowRevocation = table.Column<bool>(type: "boolean", nullable: false),
+                    UseVersioning = table.Column<bool>(type: "boolean", nullable: false),
+                    HasDetails = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastModifiedBy = table.Column<string>(type: "text", nullable: true),
@@ -158,6 +151,58 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Routes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RouteDocTypes",
+                schema: "dir",
+                columns: table => new
+                {
+                    RouteId = table.Column<int>(type: "integer", nullable: false),
+                    DocumentTypeId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RouteDocTypes", x => new { x.RouteId, x.DocumentTypeId });
+                    table.ForeignKey(
+                        name: "FK_RouteDocTypes_DocumentTypes_DocumentTypeId",
+                        column: x => x.DocumentTypeId,
+                        principalSchema: "dir",
+                        principalTable: "DocumentTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RouteDocTypes_Routes_RouteId",
+                        column: x => x.RouteId,
+                        principalSchema: "dir",
+                        principalTable: "Routes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RouteOrgTypes",
+                schema: "dir",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    RouteId = table.Column<int>(type: "integer", nullable: true),
+                    OrgType = table.Column<int>(type: "integer", nullable: false),
+                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "text", nullable: true),
+                    LastModifiedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RouteOrgTypes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RouteOrgTypes_Routes_RouteId",
+                        column: x => x.RouteId,
+                        principalSchema: "dir",
+                        principalTable: "Routes",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -236,12 +281,6 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 column: "EmplOrgId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DocumentTypes_RouteId",
-                schema: "dir",
-                table: "DocumentTypes",
-                column: "RouteId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Companies_Code",
                 schema: "dir",
                 table: "Companies",
@@ -258,6 +297,18 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 schema: "dir",
                 table: "Companies",
                 column: "TfOkato");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RouteDocTypes_DocumentTypeId",
+                schema: "dir",
+                table: "RouteDocTypes",
+                column: "DocumentTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RouteOrgTypes_RouteId",
+                schema: "dir",
+                table: "RouteOrgTypes",
+                column: "RouteId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RouteStages_RouteId",
@@ -280,15 +331,6 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 principalTable: "Organizations",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_DocumentTypes_Routes_RouteId",
-                schema: "dir",
-                table: "DocumentTypes",
-                column: "RouteId",
-                principalSchema: "dir",
-                principalTable: "Routes",
-                principalColumn: "Id");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -298,13 +340,16 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 schema: "doc",
                 table: "Documents");
 
-            migrationBuilder.DropForeignKey(
-                name: "FK_DocumentTypes_Routes_RouteId",
-                schema: "dir",
-                table: "DocumentTypes");
-
             migrationBuilder.DropTable(
                 name: "Companies",
+                schema: "dir");
+
+            migrationBuilder.DropTable(
+                name: "RouteDocTypes",
+                schema: "dir");
+
+            migrationBuilder.DropTable(
+                name: "RouteOrgTypes",
                 schema: "dir");
 
             migrationBuilder.DropTable(
@@ -324,11 +369,6 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 schema: "doc",
                 table: "Documents");
 
-            migrationBuilder.DropIndex(
-                name: "IX_DocumentTypes_RouteId",
-                schema: "dir",
-                table: "DocumentTypes");
-
             migrationBuilder.DropColumn(
                 name: "Color",
                 schema: "dir",
@@ -341,11 +381,6 @@ namespace EDO_FOMS.Infrastructure.Migrations
 
             migrationBuilder.DropColumn(
                 name: "Label",
-                schema: "dir",
-                table: "DocumentTypes");
-
-            migrationBuilder.DropColumn(
-                name: "RouteId",
                 schema: "dir",
                 table: "DocumentTypes");
 

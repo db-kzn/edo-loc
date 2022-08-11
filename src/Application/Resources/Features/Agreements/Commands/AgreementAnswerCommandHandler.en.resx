@@ -135,17 +135,17 @@
   <data name="Document rejected" xml:space="preserve">
     <value>Document rejected</value>
   </data>
-  <data name="In the EDO system of the Ministry of Health of the Republic of Tatarstan, the document you sent for signing is № {0} from {1:d} {2} approved by one of the participants: {3}, {4}" xml:space="preserve">
-    <value>In the EDO system of the Ministry of Health of the Republic of Tatarstan, the document you sent for signing is № {0} from {1:d} {2} approved by one of the participants: {3}, {4}</value>
+  <data name="In the EDO system of the Ministry of Health, the document you sent for signing is № {0} from {1:d} {2} approved by one of the participants: {3}, {4}" xml:space="preserve">
+    <value>In the EDO system of the Ministry of Health, the document you sent for signing is № {0} from {1:d} {2} approved by one of the participants: {3}, {4}</value>
   </data>
-  <data name="In the EDO system of the Ministry of Health of the Republic of Tatarstan, the document you sent for signing is № {0} from {1:d} {2} signed by all parties." xml:space="preserve">
-    <value>In the EDO system of the Ministry of Health of the Republic of Tatarstan, the document you sent for signing is № {0} from {1:d} {2} signed by all parties.</value>
+  <data name="In the EDO system of the Ministry of Health, the document you sent for signing is № {0} from {1:d} {2} signed by all parties." xml:space="preserve">
+    <value>In the EDO system of the Ministry of Health, the document you sent for signing is № {0} from {1:d} {2} signed by all parties.</value>
   </data>
-  <data name="In the EDO system of the Ministry of Health of the Republic of Tatarstan, the document you sent for signing is № {0} from {1:d} {2} signed by one of the participants: {3}, {4}" xml:space="preserve">
-    <value>In the EDO system of the Ministry of Health of the Republic of Tatarstan, the document you sent for signing is № {0} from {1:d} {2} signed by one of the participants: {3}, {4}</value>
+  <data name="In the EDO system of the Ministry of Health, the document you sent for signing is № {0} from {1:d} {2} signed by one of the participants: {3}, {4}" xml:space="preserve">
+    <value>In the EDO system of the Ministry of Health, the document you sent for signing is № {0} from {1:d} {2} signed by one of the participants: {3}, {4}</value>
   </data>
-  <data name="In the EDO system of the Ministry of Health of the Republic of Tatarstan, the document you sent for signing is № {0} from {1:d} {2} was refused to sign or approve, indicating the following remark. {3}, {4}: {5}" xml:space="preserve">
-    <value>In the EDO system of the Ministry of Health of the Republic of Tatarstan, the document you sent for signing is № {0} from {1:d} {2} was refused to sign or approve, indicating the following remark. {3}, {4}: {5}</value>
+  <data name="In the EDO system of the Ministry of Health, the document you sent for signing is № {0} from {1:d} {2} was refused to sign or approve, indicating the following remark. {3}, {4}: {5}" xml:space="preserve">
+    <value>In the EDO system of the Ministry of Health, the document you sent for signing is № {0} from {1:d} {2} was refused to sign or approve, indicating the following remark. {3}, {4}: {5}</value>
   </data>
   <data name="New document received" xml:space="preserve">
     <value>New document received</value>

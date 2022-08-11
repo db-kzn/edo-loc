@@ -1,14 +1,15 @@
-﻿using EDO_FOMS.Domain.Contracts;
+﻿using EDO_FOMS.Domain.Entities.Dir;
 using EDO_FOMS.Domain.Enums;
 
-namespace EDO_FOMS.Domain.Entities.Dir
+namespace EDO_FOMS.Application.Models.Dir
 {
-    public class RouteStageStep : AuditableEntity<int>
+    public class RouteStageStepModel
     {
+        public int Id { get; set; }
         public int RouteId { get; set; }                          // - Внешний индекс
-        public virtual Route Route { get; set; }
+        //public virtual Route Route { get; set; }
 
-        public int StageNumber { get; set; }                      // + Номер этапа, к которому относится процесс
+        public int StageNumber { get; set; }                      // + Номер этапа
         public int Number { get; set; }                           // - Номер процесса в этапе, для сортировки последовательности
 
         public ActTypes ActType { get; set; } = ActTypes.Signing; // + Тип шага: подписание, согласование или рецензирование
@@ -21,5 +22,26 @@ namespace EDO_FOMS.Domain.Entities.Dir
 
         public bool HasAgreement { get; set; } = false;           // + Содержит согласование
         public bool HasReview { get; set; } = false;              // + Содержит рецензирование
+
+        public RouteStageStepModel() { }
+        public RouteStageStepModel(RouteStageStep s)
+        {
+            Id = s.Id;
+            RouteId = s.RouteId;
+
+            StageNumber = s.StageNumber;
+            Number = s.Number;
+
+            ActType = s.ActType;
+            OrgType = s.OrgType;
+            OnlyHead = s.OnlyHead;
+
+            Requred = s.Requred;
+            SomeParticipants = s.SomeParticipants;
+            AllRequred = s.AllRequred;
+
+            HasAgreement = s.HasAgreement;
+            HasReview = s.HasReview;
+        }
     }
 }

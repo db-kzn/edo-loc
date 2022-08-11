@@ -90,7 +90,7 @@ namespace EDO_FOMS.Application.Features.Agreements.Commands
                         {
                             UserId = doc.EmplId,
                             Theme = _localizer["The document you sent for signing №. {0} from {1:d} {2} signed by one of the participants.", doc.Number, doc.Date, doc.Title],
-                            Text = $"{_localizer["Dear user!"]}<br/><br/>{_localizer["In the EDO system of the Ministry of Health of the Republic of Tatarstan, the document you sent for signing is № {0} from {1:d} {2} signed by one of the participants: {3}, {4}", doc.Number, doc.Date, doc.Title, memberOrgName, memberName]}"
+                            Text = $"{_localizer["Dear user!"]}<br/><br/>{_localizer["In the EDO system of the Ministry of Health, the document you sent for signing is № {0} from {1:d} {2} signed by one of the participants: {3}, {4}", doc.Number, doc.Date, doc.Title, memberOrgName, memberName]}"
                         };
 
                         mails.Add(mail);
@@ -109,7 +109,7 @@ namespace EDO_FOMS.Application.Features.Agreements.Commands
                         {
                             UserId = doc.EmplId,
                             Theme = _localizer["The document you sent for signing №. {0} from {1:d} {2} approved by one of the participants.", doc.Number, doc.Date, doc.Title],
-                            Text = $"{_localizer["Dear user!"]}<br/><br/>{_localizer["In the EDO system of the Ministry of Health of the Republic of Tatarstan, the document you sent for signing is № {0} from {1:d} {2} approved by one of the participants: {3}, {4}", doc.Number, doc.Date, doc.Title, memberOrgName, memberName]}"
+                            Text = $"{_localizer["Dear user!"]}<br/><br/>{_localizer["In the EDO system of the Ministry of Health, the document you sent for signing is № {0} from {1:d} {2} approved by one of the participants: {3}, {4}", doc.Number, doc.Date, doc.Title, memberOrgName, memberName]}"
                         };
 
                         mails.Add(mail);
@@ -184,7 +184,7 @@ namespace EDO_FOMS.Application.Features.Agreements.Commands
                             {
                                 UserId = doc.EmplId,
                                 Theme = _localizer["The document you sent for signing № {0} from {1:d} {2} signed by all parties.", doc.Number, doc.Date, doc.Title],
-                                Text = $"{_localizer["Dear user!"]}<br/><br/>{_localizer["In the EDO system of the Ministry of Health of the Republic of Tatarstan, the document you sent for signing is № {0} from {1:d} {2} signed by all parties.", doc.Number, doc.Date, doc.Title]}"
+                                Text = $"{_localizer["Dear user!"]}<br/><br/>{_localizer["In the EDO system of the Ministry of Health, the document you sent for signing is № {0} from {1:d} {2} signed by all parties.", doc.Number, doc.Date, doc.Title]}"
                             };
 
                             mails.Add(mail);
@@ -217,7 +217,7 @@ namespace EDO_FOMS.Application.Features.Agreements.Commands
                     {
                         UserId = doc.EmplId,
                         Theme = _localizer["The document you sent for signing № {0} from {1:d} {2} was refused to sign or approve.", doc.Number, doc.Date, doc.Title],
-                        Text = _localizer["In the EDO system of the Ministry of Health of the Republic of Tatarstan, the document you sent for signing is № {0} from {1:d} {2} was refused to sign or approve, indicating the following remark. {3}, {4}: {5}", doc.Number, doc.Date, doc.Title, memberOrgName, memberName, command.Remark]
+                        Text = _localizer["In the EDO system of the Ministry of Health, the document you sent for signing is № {0} from {1:d} {2} was refused to sign or approve, indicating the following remark. {3}, {4}: {5}", doc.Number, doc.Date, doc.Title, memberOrgName, memberName, command.Remark]
                     };
 
                     mails.Add(mail);

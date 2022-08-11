@@ -11,6 +11,7 @@ using EDO_FOMS.Shared.Constants.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
+using MudBlazor;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -44,6 +45,7 @@ namespace EDO_FOMS.Infrastructure
         {
             CreateRoles();
             CreateDocTypes();
+            //CreateOrgTypes();
 
             AddFond();
 
@@ -182,6 +184,87 @@ namespace EDO_FOMS.Infrastructure
                 }
             }).GetAwaiter().GetResult();
         }
+
+        //private void CreateOrgTypes()
+        //{
+        //    Task.Run(async () =>
+        //    {
+        //        var undef = new OrganizationType()
+        //        {
+        //            Id = (int)OrgTypes.Undefined,
+        //            Icon = Icons.Material.Outlined.Business,
+        //            Color = Color.Default,
+        //            Name = "Undefined"
+        //        };
+        //        var undefInDb = _db.OrganizationTypes.FirstOrDefault(o => o.Name == undef.Name);
+        //        if (undefInDb is null) { await _db.OrganizationTypes.AddAsync(undef); }
+
+        //        var fund = new OrganizationType()
+        //        {
+        //            Id = (int)OrgTypes.Fund,
+        //            Icon = Icons.Material.Outlined.HealthAndSafety,
+        //            Color = Color.Error,
+        //            Name = "Fund"
+        //        };
+        //        var fundInDb = _db.OrganizationTypes.FirstOrDefault(o => o.Name == fund.Name);
+        //        if (fundInDb is null) { await _db.OrganizationTypes.AddAsync(fund); }
+
+        //        var smo = new OrganizationType()
+        //        {
+        //            Id = (int)OrgTypes.SMO,
+        //            Icon = Icons.Material.Outlined.Museum,
+        //            Color = Color.Success,
+        //            Name = "SMO"
+        //        };
+        //        var smoInDb = _db.OrganizationTypes.FirstOrDefault(o => o.Name == smo.Name);
+        //        if (smoInDb is null) { await _db.OrganizationTypes.AddAsync(smo); }
+
+        //        var mo = new OrganizationType()
+        //        {
+        //            Id = (int)OrgTypes.MO,
+        //            Icon = Icons.Material.Outlined.MedicalServices,
+        //            Color = Color.Primary,
+        //            Name = "MO"
+        //        };
+        //        var moInDb = _db.OrganizationTypes.FirstOrDefault(o => o.Name == mo.Name);
+        //        if (moInDb is null) { await _db.OrganizationTypes.AddAsync(mo); }
+
+        //        var ca = new OrganizationType()
+        //        {
+        //            Id = (int)OrgTypes.CA,
+        //            Icon = Icons.Material.Outlined.Token,
+        //            Color = Color.Secondary,
+        //            Name = "CA"
+        //        };
+        //        var caInDb = _db.OrganizationTypes.FirstOrDefault(o => o.Name == ca.Name);
+        //        if (caInDb is null) { await _db.OrganizationTypes.AddAsync(ca); }
+
+        //        var treasury = new OrganizationType()
+        //        {
+        //            Id = (int)OrgTypes.Treasury,
+        //            Icon = Icons.Material.Outlined.AccountBalance,
+        //            Color = Color.Warning,
+        //            Name = "Treasury"
+        //        };
+        //        var treasuryInDb = _db.OrganizationTypes.FirstOrDefault(o => o.Name == treasury.Name);
+        //        if (treasuryInDb is null) { await _db.OrganizationTypes.AddAsync(treasury); }
+
+        //        var meo = new OrganizationType()
+        //        {
+        //            Id = (int)OrgTypes.MEO,
+        //            Icon = Icons.Material.Outlined.LocalPolice,
+        //            Color = Color.Tertiary,
+        //            Name = "MEO"
+        //        };
+        //        var meoInDb = _db.OrganizationTypes.FirstOrDefault(o => o.Name == meo.Name);
+        //        if (meoInDb is null) { await _db.OrganizationTypes.AddAsync(meo); }
+
+        //        if (undefInDb is null || fundInDb is null || smoInDb is null || moInDb is null || caInDb is null || treasuryInDb is null || meoInDb is null)
+        //        {
+        //            await _db.SaveChangesAsync();
+        //        }
+        //    }).GetAwaiter().GetResult();
+        //}
 
         private void CreateDocTypes()
         {

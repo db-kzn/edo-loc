@@ -1,15 +1,16 @@
 ﻿using EDO_FOMS.Application.Features.Directories.Commands;
+using EDO_FOMS.Application.Features.Directories.Queries;
 using EDO_FOMS.Application.Features.DocumentTypes.Queries;
+using EDO_FOMS.Application.Models.Dir;
 using EDO_FOMS.Client.Extensions;
+using EDO_FOMS.Client.Infrastructure.Managers.Dir;
 using EDO_FOMS.Client.Infrastructure.Managers.Doc.DocumentType;
-using EDO_FOMS.Domain.Entities.Dir;
 using EDO_FOMS.Domain.Enums;
 using EDO_FOMS.Shared.Constants.Permission;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using MudBlazor;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -19,6 +20,9 @@ namespace EDO_FOMS.Client.Pages.Dirs
 {
     public partial class RouteCard
     {
+        [Parameter]
+        public int? Id { get; set; }
+        [Inject] private IDirectoryManager DirManager { get; set; }
         [Inject] private IDocumentTypeManager DocTypeManager { get; set; }
         private List<DocTypeResponse> _docTypes = new();
 
@@ -32,19 +36,10 @@ namespace EDO_FOMS.Client.Pages.Dirs
 
         MudTabs _tabs;
         private MudDropContainer<RouteStageStepModel> _dropContainer;
-        public AddEditRouteCommand Route { get; set; } = new()
-        {
-            DocTypes = new(),
-            ForOrgTypes = new(),
-            Stages = new() { new RouteStageModel() { Number = 1 } },
-            Steps = new()
-        };
 
+        public AddEditRouteCommand Route { get; set; } = new();
         private IEnumerable<DocTypeResponse> SelectedDocTypes { get; set; } = new HashSet<DocTypeResponse>() { };
         private IEnumerable<OrgTypes> SelectedOrgTypes { get; set; } = new HashSet<OrgTypes>() {};
-
-        //private List<RouteStageModel> _stages;
-        //private List<RouteStageStepModel> _steps;
 
         protected override async Task OnInitializedAsync()
         {
@@ -58,24 +53,73 @@ namespace EDO_FOMS.Client.Pages.Dirs
             delay = _stateService.TooltipDelay;
             duration = _stateService.TooltipDuration;
 
-            //Route = new()
-            //{
-            //    DocTypes = new(),
-            //    ForOrgTypes = new(),
-            //    Stages = new() { new RouteStageModel() { Number = 1 } },
-            //    Steps = new()
-            //};
-
-            //_stages = Route.Stages;
-            //_steps = Route.Steps;
-
             await LoadDocumentTypesAsync();
+
+            if (Id is null || Id == 0)
+            {
+                Route.Stages.Add(new RouteStageModel() { Number = 1 });
+            }
+            else
+            {
+                var response = await DirManager.GetRouteCardAsync((int)Id);
+
+                if (response.Succeeded)
+                {
+                    var card = response.Data;
+                    await _jsRuntime.InvokeVoidAsync("azino.Console", card, "Route Card");
+                    SetRouteCard(card);
+                }
+                else
+                {
+                    // Error
+                }
+            }
         }
 
         private async Task LoadDocumentTypesAsync()
         {
             var response = await DocTypeManager.GetAllAsync();
             if (response.Succeeded) { _docTypes = response.Data; }
+        }
+        private void SetRouteCard(RouteCardResponse card)
+        {
+            Route.DocTypeIds.Clear();
+            HashSet<DocTypeResponse> docTypes = new();
+            card.DocTypeIds.ForEach(id =>
+            {
+                var dt = _docTypes.Find(t => t.Id == id);
+                docTypes.Add(dt);
+            });
+            SelectedDocTypes = docTypes;
+
+            Route.ForOrgTypes = card.ForOrgTypes;
+            HashSet<OrgTypes> orgTypes = new();
+            card.ForOrgTypes.ForEach(t =>
+            {
+                orgTypes.Add(t);
+            });
+            SelectedOrgTypes = orgTypes;
+
+            Route.Stages = card.Stages;
+            Route.Steps = card.Steps;
+
+            Route.Id = card.Id;
+            Route.Number = card.Number;
+            Route.Name = card.Name;
+            Route.Description = card.Description;
+
+            Route.ForUserRole = card.ForUserRole;
+            Route.EndAction = card.EndAction;
+
+            Route.IsPackage = card.IsPackage;
+            Route.CalcHash = card.CalcHash;
+            Route.AttachedSign = card.AttachedSign;
+            Route.DisplayedSign = card.DisplayedSign;
+
+            Route.IsActive = card.IsActive;
+            Route.AllowRevocation = card.AllowRevocation;
+            Route.UseVersioning = card.UseVersioning;
+            Route.HasDetails = card.HasDetails;
         }
 
         private string GetMultiDocTypesText(List<string> selectedDocTypes)
@@ -110,9 +154,22 @@ namespace EDO_FOMS.Client.Pages.Dirs
         private void Close() => _navigationManager.NavigateTo("/dirs/routes");
         private async Task SaveAsync()
         {
+            Route.DocTypeIds = SelectedDocTypes.Select(t => t.Id).ToList();
+            Route.ForOrgTypes = SelectedOrgTypes.ToList();
+
             await _jsRuntime.InvokeVoidAsync("azino.Console", Route, "Save Route");
 
+            var response = await DirManager.RoutePostAsync(Route);
 
+            if (response.Succeeded)
+            {
+                response.Messages.ForEach(m => _snackBar.Add(m, Severity.Success));
+                _navigationManager.NavigateTo("/dirs/routes");
+            }
+            else
+            {
+                response.Messages.ForEach(m => _snackBar.Add(m, Severity.Error));
+            }
         }
 
         private void AddNewStage() => Route.Stages.Add(new RouteStageModel() { Number = Route.Stages.Count + 1 });

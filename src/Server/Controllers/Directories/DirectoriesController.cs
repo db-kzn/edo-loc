@@ -79,6 +79,37 @@ namespace EDO_FOMS.Server.Controllers.Directories
         }
 
         /// <summary>
+        /// Get Routes
+        /// </summary>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="searchString"></param>
+        /// <param name="matchCase"></param>
+        /// <param name="orderBy"></param>
+        /// <returns>Status 200 OK</returns>
+        [Authorize(Policy = Permissions.Documents.View)]
+        [HttpGet("routes")]
+        public async Task<IActionResult> GetRoutes(int pageNumber, int pageSize, string searchString, bool matchCase = false, string orderBy = "")
+        {
+            var routes = await _mediator.Send(
+                new GetRoutesQuery(new GetPagedRoutesRequest(pageSize, pageNumber, searchString, orderBy, matchCase)));
+            return Ok(routes);
+        }
+
+        /// <summary>
+        /// Get Route Card
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Status 200 OK</returns>
+        [Authorize(Policy = Permissions.Documents.View)]
+        [HttpGet("route-card")]
+        public async Task<IActionResult> GetRouteCard(int id)
+        {
+            var routeCard = await _mediator.Send(new GetRouteCardQuery(id));
+            return Ok(routeCard);
+        }
+
+        /// <summary>
         /// Check Companies For Imports
         /// </summary>
         /// <returns>Status 200 OK</returns>
@@ -120,6 +151,18 @@ namespace EDO_FOMS.Server.Controllers.Directories
         public async Task<IActionResult> ImportMo()
         {
             return Ok(await _mediator.Send(new ImportMoCommand()));
+        }
+
+        /// <summary>
+        /// Add/Edit Route
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns>Status 200 OK</returns>
+        [Authorize(Policy = Permissions.System.Edit)]
+        [HttpPost("route")]
+        public async Task<IActionResult> Post(AddEditRouteCommand command)
+        {
+            return Ok(await _mediator.Send(command));
         }
     }
 }

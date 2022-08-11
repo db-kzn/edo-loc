@@ -29,6 +29,7 @@ namespace EDO_FOMS.Infrastructure.Extensions
                 .AddTransient<ICompanyRepository, CompanyRepository>()
                 .AddTransient<IDocumentRepository, DocumentRepository>()
                 .AddTransient<IDocumentTypeRepository, DocumentTypeRepository>()
+                //.AddTransient<IRouteRepository, RouteRepository>()
                 .AddTransient(typeof(IUnitOfWork<>), typeof(UnitOfWork<>));
         }
 

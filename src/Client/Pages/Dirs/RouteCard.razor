@@ -2,12 +2,13 @@
 
 @using EDO_FOMS.Application.Features.Directories.Commands
 @using EDO_FOMS.Application.Features.DocumentTypes.Queries
+@using EDO_FOMS.Application.Models.Dir
 @using EDO_FOMS.Domain.Enums
 @using EDO_FOMS.Domain.Entities.Dir
 @using Microsoft.AspNetCore.Components
 @using System.ComponentModel.DataAnnotations
 
-@page "/dirs/routes/route-card"
+@page "/dirs/routes/route-card/{Id:int?}"
 
 @inject Microsoft.Extensions.Localization.IStringLocalizer<RouteCard> _localizer
 
@@ -21,9 +22,8 @@
         <MudIcon Icon="@Icons.Material.Outlined.NavigateNext" Title=">" Color="Color.Default" />
 
         <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Route Card"]" Color="Color.Tertiary" Placement="Placement.Right">
-            <MudText Class="ml-1" Typo="Typo.button">@_localizer["Card"]</MudText>
+            <MudText Class="ml-1" Typo="Typo.button">@_localizer[Id is null ? "New card": "Card"]</MudText>
         </MudTooltip>
-
     </MudToolBar>
 </MudPaper>
 
@@ -130,6 +130,10 @@
                             <MudItem xs="3">
                                 <MudCheckBox @bind-Checked="@Route.UseVersioning" Label="@_localizer["Use Versioning"]" Color="Color.Primary"
                                              CheckedIcon="@Icons.Material.Outlined.Pin" UnCheckedColor="Color.Default" Disabled />
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudCheckBox @bind-Checked="@Route.HasDetails" Label="@_localizer["Stage Details"]" Color="Color.Primary"
+                                             CheckedIcon="@Icons.Material.Outlined.Settings" UnCheckedColor="Color.Default" Disabled />
                             </MudItem>
                         </MudGrid>
                     </MudCardContent>

@@ -120,13 +120,37 @@
   <data name="Add route" xml:space="preserve">
     <value>Добавить маршрут</value>
   </data>
+  <data name="Description" xml:space="preserve">
+    <value>Описание</value>
+  </data>
   <data name="Document signing routes" xml:space="preserve">
     <value>Маршруты подписания документов</value>
+  </data>
+  <data name="Id" xml:space="preserve">
+    <value>№</value>
+  </data>
+  <data name="Match Case Off" xml:space="preserve">
+    <value>Без учета регистра</value>
+  </data>
+  <data name="Match Case On" xml:space="preserve">
+    <value>Учитывать регистр</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Наименование</value>
+  </data>
+  <data name="Params" xml:space="preserve">
+    <value>Параметры</value>
   </data>
   <data name="Renew" xml:space="preserve">
     <value>Обновить</value>
   </data>
+  <data name="Route search" xml:space="preserve">
+    <value>Поиск маршрутов</value>
+  </data>
   <data name="Routes" xml:space="preserve">
     <value>Маршруты</value>
+  </data>
+  <data name="Rows density" xml:space="preserve">
+    <value>Плотность строк</value>
   </data>
 </root>

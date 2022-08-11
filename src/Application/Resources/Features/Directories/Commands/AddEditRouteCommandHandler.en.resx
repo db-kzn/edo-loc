@@ -117,55 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Agreement not found" xml:space="preserve">
-    <value>Согласование не найдено</value>
+  <data name="Route Not Found!" xml:space="preserve">
+    <value>Route Not Found!</value>
   </data>
-  <data name="Agreement Updated" xml:space="preserve">
-    <value>Согласование обновлено</value>
+  <data name="Route Saved" xml:space="preserve">
+    <value>Route Saved</value>
   </data>
-  <data name="Dear user!" xml:space="preserve">
-    <value>Уважаемый пользователь!</value>
-  </data>
-  <data name="Document agreed" xml:space="preserve">
-    <value>Документ подписан всеми сторонами</value>
-  </data>
-  <data name="Document not found" xml:space="preserve">
-    <value>Документ не найден</value>
-  </data>
-  <data name="Document rejected" xml:space="preserve">
-    <value>Отказ в подписании или согласовании</value>
-  </data>
-  <data name="In the EDO system of the Ministry of Health, the document you sent for signing is № {0} from {1:d} {2} approved by one of the participants: {3}, {4}" xml:space="preserve">
-    <value>В системе ЭДО ОМС отправленный Вами на подписание документ «№ {0} от {1:d} {2}» согласован одним из участников: {3}, {4}</value>
-  </data>
-  <data name="In the EDO system of the Ministry of Health, the document you sent for signing is № {0} from {1:d} {2} signed by all parties." xml:space="preserve">
-    <value>В системе ЭДО ОМС отправленный Вами на подписание документ «№ {0} от {1:d} {2}» подписан всеми сторонами.</value>
-  </data>
-  <data name="In the EDO system of the Ministry of Health, the document you sent for signing is № {0} from {1:d} {2} signed by one of the participants: {3}, {4}" xml:space="preserve">
-    <value>В системе ЭДО ОМС отправленный Вами на подписание документ «№ {0} от {1:d} {2}» подписан одним из участников: {3}, {4}</value>
-  </data>
-  <data name="In the EDO system of the Ministry of Health, the document you sent for signing is № {0} from {1:d} {2} was refused to sign or approve, indicating the following remark. {3}, {4}: {5}" xml:space="preserve">
-    <value>В системе ЭДО ОМС отправленный Вами на подписание документ «№ {0} от {1:d} {2}» получил отказ в подписании или согласовании с указанием нижеследующего замечания. {3}, {4}: {5}</value>
-  </data>
-  <data name="New document received" xml:space="preserve">
-    <value>Поступил новый документ на рассмотрение</value>
-  </data>
-  <data name="The document you sent for signing № {0} from {1:d} {2} signed by all parties." xml:space="preserve">
-    <value>В системе ЭДО ОМС отправленный Вами на подписание документ «№ {0} от {1:d} {2}» подписан всеми сторонами.</value>
-  </data>
-  <data name="The document you sent for signing № {0} from {1:d} {2} was refused to sign or approve." xml:space="preserve">
-    <value>Отправленный Вами на подписание документ «№ {0} от {1:d} {2}» получил отказ в подписании или согласовании.</value>
-  </data>
-  <data name="The document you sent for signing №. {0} from {1:d} {2} approved by one of the participants." xml:space="preserve">
-    <value>Отправленный Вами на подписание документ «№ {0} от {1:d} {2}» согласован одним из участников.</value>
-  </data>
-  <data name="The document you sent for signing №. {0} from {1:d} {2} signed by one of the participants." xml:space="preserve">
-    <value>Отправленный Вами на подписание документ «№ {0} от {1:d} {2}» подписан одним из участников.</value>
-  </data>
-  <data name="You have received a new document for signing (approval) {0} of {1:d} {2}" xml:space="preserve">
-    <value>В системе ЭДО ОМС Вам поступил новый документ на подписание (согласование)  «№ {0} от {1:d} {2}»</value>
-  </data>
-  <data name="Сhange of agreement status is not allowed" xml:space="preserve">
-    <value>Изменения статуса согласования не разрешено</value>
+  <data name="Route Updated" xml:space="preserve">
+    <value>Route Updated</value>
   </data>
 </root>

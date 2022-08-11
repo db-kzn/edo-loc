@@ -182,7 +182,6 @@ namespace EDO_FOMS.Application.Features.Documents.Commands.AddEdit
 
             return await Result<int>.SuccessAsync(doc.Id, _localizer["Document Saved"]);
         }
-
         private async Task<Result<int>> EditDocAsync(AddEditDocumentCommand command, CancellationToken cancellationToken)
         {
             Document doc = await _unitOfWork.Repository<Document>().GetByIdAsync(command.Id);
@@ -286,7 +285,6 @@ namespace EDO_FOMS.Application.Features.Documents.Commands.AddEdit
 
             return await Result<int>.SuccessAsync(doc.Id, _localizer["Document Updated"]);
         }
-
         private void Upload(ref Document d, UploadRequest request)
         {
             if (request.Data != null)
