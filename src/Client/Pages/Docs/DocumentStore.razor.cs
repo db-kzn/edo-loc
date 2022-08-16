@@ -146,7 +146,7 @@ namespace EDO_FOMS.Client.Pages.Docs
                         Description = doc.Description,
                         URL = doc.URL,
                         IsPublic = doc.IsPublic,
-                        TypeId = doc.TypeId
+                        TypeId = (int)doc.TypeId
                     });
                 }
             }

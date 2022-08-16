@@ -19,23 +19,14 @@ namespace EDO_FOMS.Application.Features.Directories.Queries;
 public class GetRouteCardQuery : IRequest<Result<RouteCardResponse>>
 {
     public int Id { get; }
-    public GetRouteCardQuery() { }
-    public GetRouteCardQuery(int id)
-    {
-        Id = id;
-    }
+    //public GetRouteCardQuery() { }
+    public GetRouteCardQuery(int id) { Id = id; }
 }
 
 internal class GetRouteCardQueryHandler : IRequestHandler<GetRouteCardQuery, Result<RouteCardResponse>>
 {
     private readonly IUnitOfWork<int> _unitOfWork;
-
-    public GetRouteCardQueryHandler(
-        IUnitOfWork<int> unitOfWork
-        )
-    {
-        _unitOfWork = unitOfWork;
-    }
+    public GetRouteCardQueryHandler(IUnitOfWork<int> unitOfWork) { _unitOfWork = unitOfWork; }
 
     public async Task<Result<RouteCardResponse>> Handle(GetRouteCardQuery request, CancellationToken cancellationToken)
     {

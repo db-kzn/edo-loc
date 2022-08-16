@@ -4,8 +4,8 @@
     {
         Undefined = 0,
 
-        Signing = 1,
-        Agreement = 2,
-        Review = 3
+        Signing = 1,   // Подписание
+        Agreement = 2, // Согласование
+        Review = 3     // Рецензирование
     }
 }

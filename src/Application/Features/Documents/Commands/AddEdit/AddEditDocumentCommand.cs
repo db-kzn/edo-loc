@@ -23,12 +23,12 @@ namespace EDO_FOMS.Application.Features.Documents.Commands.AddEdit
     public partial class AddEditDocumentCommand : IRequest<Result<int>>
     {
         public int Id { get; set; } = 0; // 0 - Новый документ
-        public string EmplId { get; set; } // Инициатор подписания
-        public int EmplOrgId { get; set; } // Организация инициатора
         public int? DocParentId { get; set; } // Родительский документ
 
-        public int TypeId { get; set; } = 1; // Тип документа: 1 - Договор, 2 - Приложение ...
-        //Type
+        public string EmplId { get; set; } // Инициатор подписания
+        public int EmplOrgId { get; set; } // Организация инициатора
+
+        public int TypeId { get; set; } = 0; // Тип документа: 1 - Договор, 2 - Приложение ...
         [JsonConverter(typeof(TrimmingJsonConverter))]
         public string Number { get; set; } = ""; // Номер
         public DateTime? Date { get; set; } = DateTime.Today; // Дата
@@ -39,17 +39,13 @@ namespace EDO_FOMS.Application.Features.Documents.Commands.AddEdit
         public string Description { get; set; } = ""; // Описание
         public bool IsPublic { get; set; } = false; // Публичный документ - виден всем пользователям
 
-        public int RouteId { get; set; } = 1; // Пока только один в системе
-        //public int StatusIx { get; set; } = 0;// Статус: 0 - черновик
+        public int RouteId { get; set; } = 0; // Пока только один в системе
         public DocStages Stage { get; set; } // Статус документа:
         public int CurrentStep { get; set; } // Текущий этап подписания
-        public int TotalSteps { get; set; } // Всего этапов подписания
-        // Version
+        public int TotalSteps { get; set; } // Всего этапов в маршруте
 
         public string URL { get; set; } // Ссылка для загрузки
         public UploadRequest UploadRequest { get; set; } // Сервис загруки файла
-        // StoragePath
-        // FileName
 
         // Участники согласования и подписания
         public List<AgreementContact> Contacts { get; set; }

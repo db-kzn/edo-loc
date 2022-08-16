@@ -39,14 +39,20 @@ namespace EDO_FOMS.Client.Pages.Docs
         private IBrowserFile _file;
         private bool onUpload = false;
 
+        // Step 1
         public ContactResponse fundContact;
-        public ContactResponse smoContact;
-        public ContactResponse moContact;
-        public ContactResponse headContact;
-
         public Dictionary<string, ContactResponse> FundContacts = new();
+
+        // Step 2
+        public ContactResponse smoContact;
         public Dictionary<string, ContactResponse> SmoContacts = new();
+
+        // Step 3
+        public ContactResponse moContact;
         public Dictionary<string, ContactResponse> MoContacts = new();
+
+        // Step 4
+        public ContactResponse headContact;
         public Dictionary<string, ContactResponse> HeadContacts = new();
 
         private int delay;

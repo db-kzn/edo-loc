@@ -20,6 +20,7 @@ namespace EDO_FOMS.Client.Infrastructure.Routes
         public const string SearchAgrsPaged = $"{Ctrl}/agreements-search";
 
         public const string GetImportsCount = $"{Ctrl}/imports-count";
+        public const string GetRouteTitles = $"{Ctrl}/route-titles";
 
         public static string GetById(int documentId) => $"{Ctrl}/{documentId}";
         public static string GetDocAgreements(int docId) => $"{Ctrl}/agreements?docId={docId}";

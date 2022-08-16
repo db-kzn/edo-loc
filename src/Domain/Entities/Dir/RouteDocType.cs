@@ -7,7 +7,7 @@ namespace EDO_FOMS.Domain.Entities.Dir
         public int? RouteId { get; set; }
         public Route Route { get; set; }
 
-        public int? DocumentTypeId { get; set; }
+        public int DocumentTypeId { get; set; }
         public DocumentType DocumentType { get; set; }
     }
 }

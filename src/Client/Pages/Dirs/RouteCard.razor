@@ -192,9 +192,8 @@
                                 </ChildContent>
 
                                 <ItemRenderer>
-                                    <MudListItem Class="@StepClass(context.Requred)" OnClick="(() => EditStepAsync(context))">
-
-                                        <div class="d-flex flex-row" style="padding: 4px 16px; height: 32px; background-color: var(--mud-palette-background-grey) !important;">
+                                    <MudListItem DisableRipple Class="@StepClass(context.Requred)" OnClick="() => EditStepAsync(context)">
+                                        <div class="d-flex flex-row rounded-lg" style="padding: 4px 16px; height: 32px; background-color: var(--mud-palette-background-grey) !important;">
                                             @if (context.ActType == ActTypes.Signing)
                                             {
                                                 <MudIcon Class="mr-2" Color="Color.Error" Icon="@Icons.Material.Outlined.QrCode2" />
@@ -211,6 +210,9 @@
                                             <MudText Style="vertical-align: middle;">
                                                 @_localizer[context.ActType.ToString()]
                                             </MudText>
+
+                                            @*<MudSpacer />
+                                            <MudIconButton Icon="@Icons.Material.Rounded.Close" Size="Size.Small" Edge="Edge.End" OnClick="() => DeleteStep()" />*@
                                         </div>
 
                                         <MudDivider />
@@ -337,3 +339,14 @@
         </Header>
     </MudTabs>
 </MudContainer>
+
+<MudDrawer Anchor="Anchor.Right" Elevation="1" Variant="@DrawerVariant.Persistent" ClipMode="DrawerClipMode.Always">
+    <MudDrawerHeader Style="padding: 8px 4px 8px 16px;">
+        <MudText Style="align-self:center;" Typo="Typo.h6" Inline="true">@_localizer[""]</MudText>
+    </MudDrawerHeader>
+
+    <MudDivider />
+
+    <MudList Clickable="true" Class="py-0">
+    </MudList>
+</MudDrawer>

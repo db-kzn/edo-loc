@@ -1,6 +1,7 @@
 ﻿using EDO_FOMS.Application.Features.Documents.Commands.AddEdit;
 using EDO_FOMS.Application.Features.Documents.Queries;
 using EDO_FOMS.Application.Features.Orgs.Queries;
+using EDO_FOMS.Application.Models.Dir;
 using EDO_FOMS.Application.Requests.Documents;
 using EDO_FOMS.Application.Responses.Docums;
 using EDO_FOMS.Client.Extensions;
@@ -33,7 +34,9 @@ namespace EDO_FOMS.Client.Pages.Docs
         private MudTable<DocModel> _mudTable;
         private IEnumerable<DocModel> _pagedData;
         private DocModel _doc;
+
         private readonly List<DocModel> _docs = new();
+        private readonly List<RouteTitleModel> _routeTitles = new();
 
         public OrgsResponse orgContact;
         public ContactResponse employeeContact;
@@ -43,7 +46,7 @@ namespace EDO_FOMS.Client.Pages.Docs
         private readonly bool coerceValue = true;
         //private readonly bool clearable = true;
 
-        private bool openFilter = true;
+        private bool openFilter = false;
         private readonly DocFilter Filter = new();
         private readonly DocFilter FilterDefault = new();
 
@@ -62,11 +65,12 @@ namespace EDO_FOMS.Client.Pages.Docs
         private int duration;
 
         private int _totalItems;
-        private int _importsCount;
         private int _pageNumber = 1;
         private int _rowsPerPage;
         //private int _currentPage;
         //private int _pageSize = 10;
+
+        private int _importsCount;
 
         private MudDatePicker _dateFrom;
         private MudDatePicker _dateTo;
@@ -89,6 +93,15 @@ namespace EDO_FOMS.Client.Pages.Docs
 
             delay = _stateService.TooltipDelay;
             duration = _stateService.TooltipDuration;
+
+            var response = await DocManager.GetRouteTitlesAsync();
+
+            if (response.Succeeded)
+            {
+                _routeTitles.Clear();
+                response.Data.ForEach(rt => _routeTitles.Add(rt));
+                await _jsRuntime.InvokeVoidAsync("azino.Console", _routeTitles, "Route Titles");
+            }
 
             if (_canDocsCreate)
             {
@@ -287,11 +300,11 @@ namespace EDO_FOMS.Client.Pages.Docs
             }
         }
 
-        private async Task AddDocAsync()
+        private void AddDocAsync(int id)
         {
-            var result = await AddEditDocAsync(new(1, DateTime.Today));
-
-            if (!result.Cancelled) {await _mudTable.ReloadServerData();}
+            //var result = await AddEditDocAsync(new(1, DateTime.Today));
+            //if (!result.Cancelled) { await _mudTable.ReloadServerData(); }
+            _navigationManager.NavigateTo($"/docs/doc-card/{id}/{0}");
         }
         private async Task<DialogResult> AddEditDocAsync(DocModel doc)
         {
@@ -310,7 +323,7 @@ namespace EDO_FOMS.Client.Pages.Docs
                         RouteId = doc.RouteId,
                         Stage = doc.Stage,
 
-                        TypeId = doc.TypeId,
+                        TypeId = doc.TypeId ?? 0,
                         Number = doc.Number,
                         Date = doc.Date,
 
@@ -332,14 +345,14 @@ namespace EDO_FOMS.Client.Pages.Docs
         private async Task<DialogResult> ShowInProcessAsync(DocModel doc)
         {
             //var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true, DisableBackdropClick = true };
-            var parameters = new DialogParameters() {{ nameof(InProgressDialog.Doc), doc }};
+            var parameters = new DialogParameters() { { nameof(InProgressDialog.Doc), doc } };
             var options = new DialogOptions { CloseButton = true };
 
             var dialog = _dialogService.Show<InProgressDialog>("", parameters, options);
             return await dialog.Result;
         }
 
-        private void ImportFiles() {}
+        private void ImportFiles() { }
 
         private static string OrgName(OrgsResponse c)
         {

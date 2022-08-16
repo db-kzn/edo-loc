@@ -4,6 +4,7 @@ using EDO_FOMS.Application.Features.ExtendedAttributes.Commands.AddEdit;
 using EDO_FOMS.Application.Validators.Features.ExtendedAttributes.Commands.AddEdit;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace EDO_FOMS.Server.Extensions
@@ -12,13 +13,17 @@ namespace EDO_FOMS.Server.Extensions
     {
         internal static IMvcBuilder AddValidators(this IMvcBuilder builder)
         {
-            builder.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<AppConfiguration>());
+            //builder.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<AppConfiguration>());
             return builder;
         }
 
         internal static void AddExtendedAttributesValidators(this IServiceCollection services)
         {
             #region AddEditExtendedAttributeCommandValidator
+
+            services.AddFluentValidationAutoValidation();
+            services.AddValidatorsFromAssemblyContaining<AppConfiguration>();
+            //services.AddFluentValidationClientsideAdapters();
 
             var addEditExtendedAttributeCommandValidatorType = typeof(AddEditExtendedAttributeCommandValidator<,,,>);
             var validatorTypes = addEditExtendedAttributeCommandValidatorType

@@ -1,10 +1,12 @@
-﻿using EDO_FOMS.Application.Features.Directories.Commands;
+﻿using AutoMapper;
+using EDO_FOMS.Application.Features.Directories.Commands;
 using EDO_FOMS.Application.Features.Directories.Queries;
 using EDO_FOMS.Application.Features.DocumentTypes.Queries;
 using EDO_FOMS.Application.Models.Dir;
 using EDO_FOMS.Client.Extensions;
 using EDO_FOMS.Client.Infrastructure.Managers.Dir;
 using EDO_FOMS.Client.Infrastructure.Managers.Doc.DocumentType;
+using EDO_FOMS.Client.Infrastructure.Mappings;
 using EDO_FOMS.Domain.Enums;
 using EDO_FOMS.Shared.Constants.Permission;
 using Microsoft.AspNetCore.Authorization;
@@ -26,6 +28,8 @@ namespace EDO_FOMS.Client.Pages.Dirs
         [Inject] private IDocumentTypeManager DocTypeManager { get; set; }
         private List<DocTypeResponse> _docTypes = new();
 
+        private readonly IMapper _mapper = new MapperConfiguration(c => { c.AddProfile<RouteProfile>(); }).CreateMapper();
+
         private ClaimsPrincipal _authUser;
         private string userId;
         private bool _canSystemEdit;
@@ -33,6 +37,8 @@ namespace EDO_FOMS.Client.Pages.Dirs
         private int tz;
         private int delay;
         private int duration;
+
+        private const bool openFilter = false;
 
         MudTabs _tabs;
         private MudDropContainer<RouteStageStepModel> _dropContainer;
@@ -76,6 +82,8 @@ namespace EDO_FOMS.Client.Pages.Dirs
             }
         }
 
+        //private void DeleteStep() { }
+
         private async Task LoadDocumentTypesAsync()
         {
             var response = await DocTypeManager.GetAllAsync();
@@ -83,43 +91,33 @@ namespace EDO_FOMS.Client.Pages.Dirs
         }
         private void SetRouteCard(RouteCardResponse card)
         {
-            Route.DocTypeIds.Clear();
-            HashSet<DocTypeResponse> docTypes = new();
-            card.DocTypeIds.ForEach(id =>
-            {
-                var dt = _docTypes.Find(t => t.Id == id);
-                docTypes.Add(dt);
-            });
-            SelectedDocTypes = docTypes;
+            SelectedDocTypes = card.DocTypeIds.Select(id => _docTypes.Find(t => t.Id == id)).ToHashSet();
+            SelectedOrgTypes = card.ForOrgTypes.ToHashSet();
 
-            Route.ForOrgTypes = card.ForOrgTypes;
-            HashSet<OrgTypes> orgTypes = new();
-            card.ForOrgTypes.ForEach(t =>
-            {
-                orgTypes.Add(t);
-            });
-            SelectedOrgTypes = orgTypes;
+            Route = _mapper.Map<AddEditRouteCommand>(card);
 
-            Route.Stages = card.Stages;
-            Route.Steps = card.Steps;
+            //Route.DocTypeIds = card.DocTypeIds;
+            //Route.ForOrgTypes = card.ForOrgTypes;
+            //Route.Stages = card.Stages;
+            //Route.Steps = card.Steps;
 
-            Route.Id = card.Id;
-            Route.Number = card.Number;
-            Route.Name = card.Name;
-            Route.Description = card.Description;
+            //Route.Id = card.Id;
+            //Route.Number = card.Number;
+            //Route.Name = card.Name;
+            //Route.Description = card.Description;
 
-            Route.ForUserRole = card.ForUserRole;
-            Route.EndAction = card.EndAction;
+            //Route.ForUserRole = card.ForUserRole;
+            //Route.EndAction = card.EndAction;
 
-            Route.IsPackage = card.IsPackage;
-            Route.CalcHash = card.CalcHash;
-            Route.AttachedSign = card.AttachedSign;
-            Route.DisplayedSign = card.DisplayedSign;
+            //Route.IsPackage = card.IsPackage;
+            //Route.CalcHash = card.CalcHash;
+            //Route.AttachedSign = card.AttachedSign;
+            //Route.DisplayedSign = card.DisplayedSign;
 
-            Route.IsActive = card.IsActive;
-            Route.AllowRevocation = card.AllowRevocation;
-            Route.UseVersioning = card.UseVersioning;
-            Route.HasDetails = card.HasDetails;
+            //Route.IsActive = card.IsActive;
+            //Route.AllowRevocation = card.AllowRevocation;
+            //Route.UseVersioning = card.UseVersioning;
+            //Route.HasDetails = card.HasDetails;
         }
 
         private string GetMultiDocTypesText(List<string> selectedDocTypes)

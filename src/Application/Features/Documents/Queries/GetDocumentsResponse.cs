@@ -10,7 +10,7 @@ namespace EDO_FOMS.Application.Features.Documents.Queries
         public int EmplOrgId { get; set; }
         public int? ParentId { get; set; }
 
-        public int TypeId { get; set; } = 1;
+        public int? TypeId { get; set; } = 1;
         public string TypeName { get; set; }
         public string TypeShort { get; set; }
         public string Number { get; set; } = "";

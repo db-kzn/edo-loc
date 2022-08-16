@@ -21,7 +21,7 @@ namespace EDO_FOMS.Client.Models
         public int RouteId { get; set; }   // Маршрут
         public bool IsPublic { get; set; } // Публичность документа
 
-        public int TypeId { get; set; }
+        public int? TypeId { get; set; }
         //public string Type { get; set; }
         public string TypeName { get; set; }
         public string TypeShort { get; set; }

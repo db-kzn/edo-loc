@@ -44,7 +44,7 @@ namespace EDO_FOMS.Client.Pages.Archive
         private readonly bool coerceValue = true;
         //private readonly bool clearable = true;
 
-        private bool openFilter = true;
+        private bool openFilter = false;
         private readonly ArchiveFilter Filter = new();
         private readonly ArchiveFilter FilterDefault = new();
 

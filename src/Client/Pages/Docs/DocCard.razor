@@ -1,0 +1,200 @@
+﻿@namespace EDO_FOMS.Client.Pages.Docs
+
+@page "/docs/doc-card/{RouteId:int?}/{DocId:int?}"
+
+@inject Microsoft.Extensions.Localization.IStringLocalizer<DocCard> _localizer
+
+@using EDO_FOMS.Application.Responses.Docums
+
+<MudPaper Square="true" Elevation="3" Style="z-index: 1;">
+    <MudToolBar>
+        <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Documents"]" Color="Color.Tertiary" Placement="Placement.Right">
+            @*<MudButton Variant="Variant.Text" Href="/dirs/routes" >@_localizer["Routes"]</MudButton>*@
+            <MudIconButton Icon="@Icons.Material.Outlined.Assignment" Href="/docs" aria-label="Docs"></MudIconButton>
+        </MudTooltip>
+
+        <MudIcon Icon="@Icons.Material.Outlined.NavigateNext" Title=">" Color="Color.Default" />
+
+        <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Document Card"]" Color="Color.Tertiary" Placement="Placement.Right">
+            <MudText Class="ml-1" Typo="Typo.button">@_localizer[DocId is null ? "New card": "Card"]</MudText>
+        </MudTooltip>
+    </MudToolBar>
+</MudPaper>
+
+<MudContainer MaxWidth="MaxWidth.False" Class="pa-6" Style="overflow: hidden; padding-bottom: 90px !important;">
+    <MudCard Style="background-color: var(--mud-palette-background-grey); max-height: 100%;" Elevation="3">
+        <MudCardHeader>
+            <CardHeaderContent>
+                @if (Doc.Id == 0)
+                {
+                    <MudText Typo="Typo.h6">
+                        <MudIcon Icon="@Icons.Material.Outlined.Upload" Class="mr-3 mb-n1" />
+                        @_localizer["Upload document"]
+                    </MudText>
+                }
+                else
+                {
+                    <MudText Typo="Typo.h6">
+                        <MudIcon Icon="@Icons.Material.Outlined.PublishedWithChanges" Class="mr-3 mb-n1" />
+                        @_localizer["Update document"]
+                    </MudText>
+                }
+            </CardHeaderContent>
+            <CardHeaderActions>
+                <MudIconButton Icon="@Icons.Material.Rounded.Close" Color="Color.Default" OnClick="Close" />
+            </CardHeaderActions>
+        </MudCardHeader>
+
+        <MudCardContent Style="max-height: 70vh; overflow-y: scroll;">
+            <MudGrid>
+                <MudItem xs="12">
+                    <InputFile id="fileInput" hidden OnChange="UploadFiles" accept=".pdf" />
+
+                    @if (Doc.Id == 0)
+                    {
+                        <MudButtonGroup Color="Color.Default" Variant="Variant.Outlined" Style="width: 100%; background-color: var(--mud-palette-surface);">
+                            <MudButton FullWidth="true" Size="Size.Large" Disabled="@onUpload"
+                                   StartIcon="@Icons.Material.Outlined.AttachFile" IconColor="Color.Default" Style="height: 56px;"
+                                   for="fileInput" HtmlTag="label">
+                                @if (_file == null || string.IsNullOrEmpty(_file.Name))
+                                {
+                                    <MudText Typo="Typo.button" Color="Color.Error">
+                                        @_localizer["Upload file"]
+                                    </MudText>
+                                }
+                                else
+                                {
+                                    <MudText Typo="Typo.button" Color="Color.Default">
+                                        @_file.Name
+                                    </MudText>
+                                }
+                            </MudButton>
+
+                            <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["View document from server"]" Color="Color.Tertiary" Placement="Placement.Left" Arrow="true">
+                                <MudIconButton Icon="@Icons.Material.TwoTone.MenuBook" Style="height: 56px;" Disabled></MudIconButton>
+                            </MudTooltip>
+                        </MudButtonGroup>
+                    }
+                    else
+                    {
+                        <MudButtonGroup Color="Color.Default" Variant="Variant.Outlined" Style="width: 100%; background-color: var(--mud-palette-surface);">
+                            <MudButton Variant="Variant.Outlined" FullWidth="true" Color="Color.Default" Size="Size.Large" Disabled="@onUpload"
+                                   StartIcon="@Icons.Material.Outlined.AttachFile" IconColor="Color.Default" Style="height: 56px;"
+                                   for="fileInput" HtmlTag="label">
+                                @((_file != null && !string.IsNullOrEmpty(_file.Name)) ? _file.Name :
+                                    (string.IsNullOrEmpty(Doc.UploadRequest.FileName)) ? _localizer["No file"] : Doc.UploadRequest.FileName)
+                            </MudButton>
+
+                            <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["View document from server"]" Color="Color.Tertiary" Placement="Placement.Left" Arrow="true">
+                                @if (string.IsNullOrEmpty(Doc.URL))
+                                {
+                                    <MudIconButton Icon="@Icons.Material.TwoTone.MenuBook" Style="height: 56px;" Disabled></MudIconButton>
+                                }
+                                else
+                                {
+                                    <MudIconButton Icon="@Icons.Material.TwoTone.MenuBook" Style="height: 56px;" Link="@Doc.URL" Target="_blank" Disabled="@(Doc.UploadRequest.Data != null)"></MudIconButton>
+                                }
+                            </MudTooltip>
+                        </MudButtonGroup>
+                    }
+
+                </MudItem>
+
+                @*<MudItem xs="6">
+                <MudAutocomplete T="int" Label="@_localizer["Document type"]"
+                For="@(() => _doc.TypeId)" @bind-Value="_doc.TypeId"
+                ResetValueOnEmptyText="true" SearchFunc="@SearchDocumentTypes" Variant="Variant.Text"
+                ToStringFunc="@(i => _documentTypes.FirstOrDefault(b => b.Id == i)?.Name ?? string.Empty)" OffsetY="true" />
+                </MudItem>*@
+
+                <MudItem xs="4">
+                    <MudSelect T="int" Label="@_localizer["Document type"]" Disabled="@onUpload"
+                               AdornmentIcon="@Icons.Material.Outlined.DocumentScanner" Adornment="Adornment.Start"
+                               For="@(() => Doc.TypeId)" @bind-Value="Doc.TypeId">
+                        @foreach (var type in RouteDocTypes) //_allDocTypes
+                        {
+                            <MudSelectItem Value="@type.Id">@type.Label</MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudItem>
+
+                <MudItem xs="4">
+                    <MudTextField For="@(() => Doc.Number)" @bind-Value="Doc.Number" Label="@_localizer["Number"]" Disabled="@onUpload" />
+                </MudItem>
+
+                <MudItem xs="4">
+                    <MudDatePicker Label="@_localizer["Document Date"]" DisableToolbar="true" Elevation="2" Disabled="@onUpload"
+                                   For="@(() => Doc.Date)" @bind-Date="Doc.Date" />
+                </MudItem>
+
+                <MudItem xs="12">
+                    <MudTextField For="@(() => Doc.Title)" @bind-Value="Doc.Title" Label="@_localizer["Title"]" Disabled="@onUpload" />
+                </MudItem>
+
+                <MudItem xs="12">
+                    <MudTextField For="@(() => Doc.Description)" @bind-Value="Doc.Description" Label="@_localizer["Description"]" Disabled="@onUpload" />
+                </MudItem>
+
+                <MudItem xs="12">
+                    <MudExpansionPanels MultiExpansion="true" Style="width: 100%;" Class="mb-4">
+                        @foreach (var stage in Route.Stages)
+                        {
+                            <MudExpansionPanel xs="12" Text="@($"{_localizer["Stage"]} {stage.Number}")" IsInitiallyExpanded Disabled="@onUpload">
+                                <!-- Acts -->
+                                @foreach (var act in ActsByStage(stage.Number))
+                                {
+                                    <div class="d-flex">
+                                        <MudAutocomplete T="ContactResponse" @bind-Value="act.Contact" SearchFunc="@((text) => SearchContactsAsync(act, text))"
+                                                 ResetValueOnEmptyText="@resetValueOnEmptyText" CoerceText="@coerceText" CoerceValue="@coerceValue" Clearable="false"
+                                                 Adornment="Adornment.Start" AdornmentColor="Color.Default" AdornmentIcon="@IconByOrgType(act.Step.OrgType)"
+                                                 Label="@LabelByStep(act.Step)"
+                                                 ToStringFunc="@(e => (e == null) ? null : ContactName(e))" Disabled="@onUpload">
+
+                                            <NoItemsTemplate>
+                                                <MudText Align="Align.Start" Class="px-4 py-1" Color="Color.Warning">
+                                                    @_localizer["Employees not found"]
+                                                </MudText>
+                                            </NoItemsTemplate>
+                                        </MudAutocomplete>
+
+                                        <MudIconButton Icon="@Icons.Material.Filled.Add" Style="height:48px;" Color="Color.Primary" OnClick="@(() => AddContact(act))" Disabled="@(act.Contact == null)"></MudIconButton>
+                                    </div>
+
+                                    <MudChipSet AllClosable="true" OnClose="@((chip) => DelContact(act, chip))">
+                                        @foreach (var c in act.Contacts)
+                                        {
+                                            <MudChip Text="@c.Key" Variant="Variant.Outlined" Color="Color.Default" Disabled="@onUpload"></MudChip>
+                                        }
+                                    </MudChipSet>
+                                }
+                            </MudExpansionPanel>
+                        }
+                    </MudExpansionPanels>
+                </MudItem>
+            </MudGrid>
+        </MudCardContent>
+
+        <MudCardActions>
+            <MudButton Class="mx-2" FullWidth Variant="Variant.Outlined" Color="Color.Primary" Size="Size.Large"
+                       StartIcon="@Icons.Material.Rounded.SaveAlt" OnClick="SaveAsync"
+                       Style="background-color: var(--mud-palette-surface);">
+                @_localizer["Save"]
+            </MudButton>
+
+            <MudButton Class="mx-2" FullWidth Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large"
+                       EndIcon="@Icons.Material.Rounded.Send" OnClick="SendAsync">
+                @_localizer["Send"]
+            </MudButton>
+        </MudCardActions>
+    </MudCard>
+</MudContainer>
+
+<MudDrawer Anchor="Anchor.Right" Elevation="1" Variant="@DrawerVariant.Persistent" ClipMode="DrawerClipMode.Always">
+    <MudDrawerHeader Style="padding: 8px 4px 8px 16px;">
+        <MudText Style="align-self:center;" Typo="Typo.h6" Inline="true">@_localizer[""]</MudText>
+    </MudDrawerHeader>
+
+    <MudDivider />
+
+    <MudList Clickable="true" Class="py-0"></MudList>
+</MudDrawer>

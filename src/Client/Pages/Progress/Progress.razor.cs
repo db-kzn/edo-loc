@@ -36,6 +36,7 @@ namespace EDO_FOMS.Client.Pages.Progress
         private MudTable<AgreementModel> _mudTable;
         private IEnumerable<AgreementModel> _pagedData;
         private AgreementModel _agreement;
+
         private readonly List<AgreementModel> _agreements = new();
         private HashSet<AgreementModel> _selectedItems = new();
 
@@ -47,7 +48,7 @@ namespace EDO_FOMS.Client.Pages.Progress
         private readonly bool coerceValue = true;
         //private readonly bool clearable = true;
 
-        private bool openFilter = true;
+        private bool openFilter = false;
         private readonly ProgressFilter Filter = new();
         private readonly ProgressFilter FilterDefault = new();
 

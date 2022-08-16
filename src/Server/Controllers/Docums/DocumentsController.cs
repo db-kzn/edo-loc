@@ -15,6 +15,7 @@ using EDO_FOMS.Application.Requests.Documents;
 using EDO_FOMS.Application.Requests.Agreements;
 using EDO_FOMS.Application.Features.Orgs.Queries;
 using System.Collections.Generic;
+using EDO_FOMS.Application.Features.Directories.Queries;
 
 namespace EDO_FOMS.Server.Controllers.Docums
 {
@@ -80,6 +81,17 @@ namespace EDO_FOMS.Server.Controllers.Docums
         public async Task<IActionResult> GetImportsCount()
         {
             return Ok(await _mediator.Send(new CheckForImportsQuery()));
+        }
+
+        /// <summary>
+        /// Get Route Titles
+        /// </summary>
+        /// <returns>Status 200 OK</returns>
+        [Authorize(Policy = Permissions.Documents.Create)]
+        [HttpGet("route-titles")]
+        public async Task<IActionResult> GetRouteTitles()
+        {
+            return Ok(await _mediator.Send(new GetRouteTitlesQuery()));
         }
 
         /// <summary>

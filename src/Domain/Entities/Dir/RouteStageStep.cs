@@ -19,7 +19,7 @@ namespace EDO_FOMS.Domain.Entities.Dir
         public bool SomeParticipants { get; set; } = true;        // - Несколько участников
         public bool AllRequred { get; set; } = true;              // + Если несколько, то условие завершения: все или любой
 
-        public bool HasAgreement { get; set; } = false;           // + Содержит согласование
+        public bool HasAgreement { get; set; } = false;           // + Содержит доп.согласование
         public bool HasReview { get; set; } = false;              // + Содержит рецензирование
     }
 }

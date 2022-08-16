@@ -68,7 +68,7 @@ namespace EDO_FOMS.Server
                 services.AddHangfireServer();
             }
 
-            services.AddControllers().AddValidators();
+            services.AddControllers();//.AddValidators();
             services.AddExtendedAttributesValidators();
             services.AddExtendedAttributesHandlers();
             services.AddRazorPages();
