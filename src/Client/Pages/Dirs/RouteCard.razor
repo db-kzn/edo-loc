@@ -154,7 +154,7 @@
                 <MudCard>
                     <MudCardContent>
                         <MudGrid Style="max-height: 70vh; overflow-y: scroll;">
-                            <MudDropContainer T="RouteStageStepModel" @ref="_dropContainer" Items="@Route.Steps"
+                            <MudDropContainer T="RouteStepModel" @ref="_dropContainer" Items="@Route.Steps"
                                               ItemsSelector="@((step, column) => step.StageNumber.ToString() == column)" ItemDropped="StepUpdated"
                                               Class="d-flex flex-row" CanDropClass="mud-border-success">
                                 <ChildContent>
@@ -173,7 +173,7 @@
                                             <MudDivider />
 
                                             <MudList Clickable="true" Class="px-4 py-0 mud-height-full">
-                                                <MudDropZone T="RouteStageStepModel" Identifier="@stage.Number.ToString()" Class="mud-height-full"></MudDropZone>
+                                                <MudDropZone T="RouteStepModel" Identifier="@stage.Number.ToString()" Class="mud-height-full"></MudDropZone>
                                             </MudList>
 
                                             <MudButton OnClick="@(() => AddStepAsync(stage.Number))" StartIcon="@Icons.Filled.Add"
@@ -311,6 +311,19 @@
                                             <div class="d-flex flex-row" style="padding: 4px 16px; height: 32px;">
                                                 <MudIcon Icon="@Icons.Material.Outlined.MapsUgc" Color="Color.Default" Class="mr-2" />
                                                 <MudText Style="vertical-align: middle;">Рецензирование</MudText>
+                                            </div>
+                                        }
+
+                                        @if (context.AutoSearch > 0)
+                                        {
+                                            <MudDivider />
+                                        }
+
+                                        @if (context.AutoSearch > 0)
+                                        {
+                                            <div class="d-flex flex-row" style="padding: 4px 16px; height: 32px;">
+                                                <MudIcon Icon="@Icons.Material.Outlined.Search" Color="Color.Default" Class="mr-2" />
+                                                <MudText Style="vertical-align: middle;">Поиск: @context.AutoSearch</MudText>
                                             </div>
                                         }
                                     </MudListItem>

@@ -75,7 +75,7 @@
                                 @_localizer["To Signed"]
                             </MudListItem>
                         }
-                        else if (context.Action == AgreementActions.ToVerify)
+                        else if (context.Action == AgreementActions.ToReview)
                         {
                             <MudListItem Icon="@Icons.Material.TwoTone.Done" IconColor="Color.Success"
                                 OnClick="(() => ApproveAnAgreementAsync(context))">

@@ -135,7 +135,7 @@
                                         <MudIcon Icon="@Icons.Material.Outlined.Rule" Color="Color.Default" Class="mx-2"/>
                                     </MudTooltip>
                                 }
-                                else if(context.Action == AgreementActions.ToVerify)
+                                else if(context.Action == AgreementActions.ToReview)
                                 {
                                     <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["To Check"]" Placement="Placement.Left" Color="Color.Tertiary">
                                             <MudIcon Icon="@Icons.Material.Outlined.AddTask" Color="Color.Default" Class="mx-2"/>
@@ -286,7 +286,7 @@
             <MudButton Variant="Variant.Outlined" FullWidth="true" Color="Color.Error" Size="Size.Large"
                 StartIcon="@Icons.Material.Filled.Close" IconColor="Color.Error" OnClick="ClickReject">
                     <MudText Typo="Typo.button" Class="ms-4">
-                        @((_action == nameof(AgreementActions.ToVerify)) ? _localizer["Refuse"] : _localizer["Reject"])
+                        @((_action == nameof(AgreementActions.ToReview)) ? _localizer["Refuse"] : _localizer["Reject"])
                     </MudText>
             </MudButton>
         }

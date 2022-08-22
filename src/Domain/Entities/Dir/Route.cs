@@ -11,8 +11,9 @@ public class Route : AuditableEntity<int>
     public virtual List<RouteOrgType> ForOrgTypes { get; set; } = new();     // + Типы организаций которые могут использовать маршрут
 
     public virtual List<RouteStage> Stages { get; set; } = new();            // + Стадии текущего маршрута
-    public virtual List<RouteStageStep> Steps { get; set; } = new();         // + Процессы этапы
+    public virtual List<RouteStep> Steps { get; set; } = new();              // + Процессы этапы
 
+    // Id
     public int Number { get; set; }                                          // - Порядковый номер маршрута, для сортировки
     public string Name { get; set; } = string.Empty;                         // + Наименование маршрута
     public string Description { get; set; } = string.Empty;                  // + Описание маршрута

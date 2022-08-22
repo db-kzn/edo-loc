@@ -9,6 +9,7 @@ namespace EDO_FOMS.Client.Infrastructure.Routes
     {
         public const string Ctrl = "api/documents";
         public const string AddEdit = Ctrl;
+        public const string AddEditDoc = $"{Ctrl}/doc";
         public const string Delete = Ctrl;
 
         public const string ChangeStage = $"{Ctrl}/stage";

@@ -35,7 +35,8 @@ namespace EDO_FOMS.Infrastructure.Contexts
         public DbSet<RouteDocType> RouteDocTypes { get; set; }
         public DbSet<RouteOrgType> OrganizationTypes { get; set; }
         public DbSet<RouteStage> RouteStages { get; set; }
-        public DbSet<RouteStageStep> RouteStageSteps { get; set; }
+        public DbSet<RouteStep> RouteSteps { get; set; }
+        public DbSet<RouteStepMember> RouteStepMembers { get; set; }
 
         public DbSet<Organization> Organizations { get; set; }
         public DbSet<Certificate> Certificates { get; set; }
@@ -85,15 +86,20 @@ namespace EDO_FOMS.Infrastructure.Contexts
 
             base.OnModelCreating(builder);
 
-            builder.Entity<Company>(entity => entity.ToTable(name: "Companies", "dir"));
+            builder.Entity<Company>(entity => entity.ToTable(name: "Companies", schema: "dir"));
 
-            builder.Entity<RouteOrgType>(entity => entity.ToTable(name: "RouteOrgTypes", "dir"));
-            builder.Entity<RouteStage>(entity => entity.ToTable(name: "RouteStages", "dir"));
-            builder.Entity<RouteStageStep>(entity => entity.ToTable(name: "RouteStageSteps", "dir"));
+            builder.Entity<RouteOrgType>(entity => entity.ToTable(name: "RouteOrgTypes", schema: "dir"));
+            builder.Entity<RouteStage>(entity => entity.ToTable(name: "RouteStages", schema: "dir"));
+            builder.Entity<RouteStep>(entity => entity.ToTable(name: "RouteSteps", schema: "dir"));
+            builder.Entity<RouteStepMember>(entity =>
+            {
+                entity.ToTable(name: "RouteStepMembers", schema: "dir");
+                entity.HasKey(m => new { m.RouteStepId, m.UserId });
+            });
 
             builder.Entity<DocumentType>(entity =>
             {
-                entity.ToTable(name: "DocumentTypes", "dir");
+                entity.ToTable(name: "DocumentTypes", schema: "dir");
 
                 entity.HasMany(r => r.Routes)
                     .WithMany(dt => dt.DocTypes)
@@ -102,7 +108,7 @@ namespace EDO_FOMS.Infrastructure.Contexts
 
             builder.Entity<Route>(entity =>
             {
-                entity.ToTable(name: "Routes", "dir");
+                entity.ToTable(name: "Routes", schema: "dir");
 
                 entity.HasMany(r => r.DocTypes)
                     .WithMany(dt => dt.Routes)
@@ -111,7 +117,7 @@ namespace EDO_FOMS.Infrastructure.Contexts
 
             builder.Entity<RouteDocType>(entity =>
             {
-                entity.ToTable(name: "RouteDocTypes", "dir");
+                entity.ToTable(name: "RouteDocTypes", schema: "dir");
 
                 entity.HasOne(rdt => rdt.Route)
                     .WithMany(r => r.RouteDocTypes)
@@ -124,20 +130,20 @@ namespace EDO_FOMS.Infrastructure.Contexts
                 entity.HasKey(rdt => new { rdt.RouteId, rdt.DocumentTypeId });
             });
 
-            builder.Entity<Organization>(entity => entity.ToTable(name: "Organizations", "org"));
-            builder.Entity<Certificate>(entity => entity.ToTable(name: "Certificates", "org"));
+            builder.Entity<Organization>(entity => entity.ToTable(name: "Organizations", schema: "org"));
+            builder.Entity<Certificate>(entity => entity.ToTable(name: "Certificates", schema: "org"));
 
-            builder.Entity<Document>(entity => entity.ToTable(name: "Documents", "doc"));
-            builder.Entity<Agreement>(entity => entity.ToTable(name: "Agreements", "doc"));
-            builder.Entity<DocumentStatus>(entity => entity.ToTable(name: "DocumentStatuses", "doc"));
-            builder.Entity<DocumentExtendedAttribute>(entity => entity.ToTable(name: "DocumentExtendedAttributes", "doc"));
+            builder.Entity<Document>(entity => entity.ToTable(name: "Documents", schema: "doc"));
+            builder.Entity<Agreement>(entity => entity.ToTable(name: "Agreements", schema: "doc"));
+            builder.Entity<DocumentStatus>(entity => entity.ToTable(name: "DocumentStatuses", schema: "doc"));
+            builder.Entity<DocumentExtendedAttribute>(entity => entity.ToTable(name: "DocumentExtendedAttributes", schema: "doc"));
 
-            builder.Entity<Subscribe>(entity => entity.ToTable(name: "Subscribes", "sys"));
-            builder.Entity<Audit>(entity => entity.ToTable(name: "AuditTrails", "sys"));
+            builder.Entity<Subscribe>(entity => entity.ToTable(name: "Subscribes", schema: "sys"));
+            builder.Entity<Audit>(entity => entity.ToTable(name: "AuditTrails", schema: "sys"));
 
             builder.Entity<ChatHistory<EdoFomsUser>>(entity =>
             {
-                entity.ToTable("ChatHistory", "sys");
+                entity.ToTable(name: "ChatHistory", schema: "sys");
 
                 entity.HasOne(d => d.FromUser)
                     .WithMany(p => p.ChatHistoryFromUsers)
@@ -152,19 +158,19 @@ namespace EDO_FOMS.Infrastructure.Contexts
 
             builder.Entity<EdoFomsUser>(entity =>
             {
-                entity.ToTable(name: "Users", "identity");
+                entity.ToTable(name: "Users", schema: "identity");
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();
             });
 
-            builder.Entity<EdoFomsRole>(entity => entity.ToTable(name: "Roles", "identity"));
-            builder.Entity<IdentityUserRole<string>>(entity => entity.ToTable("UserRoles", "identity"));
-            builder.Entity<IdentityUserClaim<string>>(entity => entity.ToTable("UserClaims", "identity"));
-            builder.Entity<IdentityUserLogin<string>>(entity => entity.ToTable("UserLogins", "identity"));
-            builder.Entity<IdentityUserToken<string>>(entity => entity.ToTable("UserTokens", "identity"));
+            builder.Entity<EdoFomsRole>(entity => entity.ToTable(name: "Roles", schema: "identity"));
+            builder.Entity<IdentityUserRole<string>>(entity => entity.ToTable(name: "UserRoles", schema: "identity"));
+            builder.Entity<IdentityUserClaim<string>>(entity => entity.ToTable(name: "UserClaims", schema: "identity"));
+            builder.Entity<IdentityUserLogin<string>>(entity => entity.ToTable(name: "UserLogins", schema: "identity"));
+            builder.Entity<IdentityUserToken<string>>(entity => entity.ToTable(name: "UserTokens", schema: "identity"));
 
             builder.Entity<EdoFomsRoleClaim>(entity =>
             {
-                entity.ToTable(name: "RoleClaims", "identity");
+                entity.ToTable(name: "RoleClaims", schema: "identity");
 
                 entity.HasOne(d => d.Role)
                     .WithMany(p => p.RoleClaims)

@@ -688,6 +688,23 @@ namespace EDO_FOMS.Infrastructure.Services.Identity
 
             return employee;
         }
+        public async Task<ContactResponse> GetContactAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            var org = await _db.Organizations.FirstOrDefaultAsync(o => o.Id == user.OrgId);
+
+            return new ContactResponse()
+            {
+                Id = userId,
+                Surname = user.Surname,
+                GivenName = user.GivenName,
+
+                OrgId = user.OrgId,
+                OrgShortName = org.ShortName,
+                InnLe = user.InnLe
+            };
+        }
+
         public async Task<IResult<Organization>> GerUserOrgAsync(string inn)
         {
             var org = await _db.Organizations.FirstOrDefaultAsync(o => o.Inn == inn) ?? new();

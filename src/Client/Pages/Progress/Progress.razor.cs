@@ -300,7 +300,7 @@ namespace EDO_FOMS.Client.Pages.Progress
 
                 await _jsRuntime.InvokeVoidAsync("azino.Console", action, "ACTION: ");
 
-                if (action == nameof(AgreementActions.ToVerify)) { await VerifyAnAgreementAsync(a); }
+                if (action == nameof(AgreementActions.ToReview)) { await VerifyAnAgreementAsync(a); }
                 else if (action == nameof(AgreementActions.ToRefuse)) { await RefuseAnAgreementAsync(a); }
                 else if (action == nameof(AgreementActions.ToApprove)) { await ApproveAnAgreementAsync(a); }
                 else if (action == nameof(AgreementActions.ToSign)) { await SignAnAgreementAsync(a); }
@@ -538,7 +538,7 @@ namespace EDO_FOMS.Client.Pages.Progress
         {
             return new()
             {
-                EmplOrgId = a.EmplOrgId,  // Организация получателя
+                EmplOrgId = (int)a.EmplOrgId,  // Организация получателя
                 EmplId = a.EmplId,
                 AgreementId = a.AgreementId,
 

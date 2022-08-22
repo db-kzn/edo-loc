@@ -123,14 +123,29 @@
   <data name="Agreement" xml:space="preserve">
     <value>Agreement</value>
   </data>
+  <data name="Agreementers" xml:space="preserve">
+    <value>Agreementers</value>
+  </data>
   <data name="All Requred" xml:space="preserve">
     <value>All Requred</value>
   </data>
   <data name="Any Type" xml:space="preserve">
     <value>Any Type</value>
   </data>
+  <data name="Auto Search" xml:space="preserve">
+    <value>Auto Search</value>
+  </data>
+  <data name="Chief" xml:space="preserve">
+    <value>Chief</value>
+  </data>
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
+  </data>
+  <data name="Employee" xml:space="preserve">
+    <value>Employee</value>
+  </data>
+  <data name="Employees not found" xml:space="preserve">
+    <value>Employees not found</value>
   </data>
   <data name="FOMS" xml:space="preserve">
     <value>FOMS</value>
@@ -144,6 +159,12 @@
   <data name="Has Review" xml:space="preserve">
     <value>Has Review</value>
   </data>
+  <data name="Main member" xml:space="preserve">
+    <value>Main member</value>
+  </data>
+  <data name="Members" xml:space="preserve">
+    <value>Members</value>
+  </data>
   <data name="MEO" xml:space="preserve">
     <value>MEO</value>
   </data>
@@ -152,6 +173,9 @@
   </data>
   <data name="New step" xml:space="preserve">
     <value>New step</value>
+  </data>
+  <data name="of the" xml:space="preserve">
+    <value>of the</value>
   </data>
   <data name="Ok" xml:space="preserve">
     <value>Ok</value>
@@ -168,6 +192,9 @@
   <data name="Review" xml:space="preserve">
     <value>Review</value>
   </data>
+  <data name="Reviewers" xml:space="preserve">
+    <value>Reviewers</value>
+  </data>
   <data name="Signing" xml:space="preserve">
     <value>Signing</value>
   </data>
@@ -182,6 +209,9 @@
   </data>
   <data name="Treasury" xml:space="preserve">
     <value>Treasury</value>
+  </data>
+  <data name="Undefined" xml:space="preserve">
+    <value>Undefined</value>
   </data>
   <data name="Update step" xml:space="preserve">
     <value>Update step</value>

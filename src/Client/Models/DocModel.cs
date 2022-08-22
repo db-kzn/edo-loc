@@ -7,7 +7,7 @@ namespace EDO_FOMS.Client.Models
     public class DocModel
     {
         public int EmplOrgId { get; set; }   // Организация издатель - Issuer
-        public string EmplId { get; set; }   // Исполнитель
+        public string EmplId { get; set; }    // Исполнитель
         public int? AgreementId { get; set; } = null; // Согласование шага "0" - отправитель документа - контроль
 
         public List<int> Recipients { get; set; } // Список организаций получателей

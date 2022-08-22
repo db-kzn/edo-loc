@@ -1,4 +1,5 @@
 ﻿@using EDO_FOMS.Application.Features.Directories.Commands
+@using EDO_FOMS.Application.Responses.Docums
 @using EDO_FOMS.Domain.Enums
 
 @namespace EDO_FOMS.Client.Pages.Dirs
@@ -7,7 +8,7 @@
 
 @*Style="background-color: var(--mud-palette-background-grey);"*@
 
-<MudDialog>
+<MudDialog DefaultFocus="DefaultFocus.LastChild">
     <TitleContent>
         <MudText Typo="Typo.h6">
             <MudIcon Icon="@Icons.Material.Outlined.AddTask" Class="mr-3 mb-n1" />
@@ -16,7 +17,7 @@
     </TitleContent>
 
     <DialogContent>
-        <MudGrid>
+        <MudGrid Style="max-height: 70vh; overflow-y: scroll;">
             <MudItem xs="6">
                 <MudSelect T="ActTypes" @bind-Value="@Step.ActType" Label="@_localizer["Action"]" Variant="Variant.Text" AnchorOrigin="Origin.BottomCenter">
                     <MudSelectItem T="ActTypes" Value="@ActTypes.Signing">
@@ -90,42 +91,125 @@
 
             <MudItem xs="6">
                 <MudCheckBox @bind-Checked="@Step.OnlyHead" Label="@_localizer["Only Chief"]" Color="Color.Primary"
-                    CheckedIcon="@Icons.Material.Outlined.WorkspacePremium" UnCheckedColor="Color.Default" />
+                             CheckedIcon="@Icons.Material.Outlined.WorkspacePremium" UnCheckedColor="Color.Default" />
             </MudItem>
 
             <MudItem xs="6">
                 <MudCheckBox @bind-Checked="@Step.Requred" Label="@_localizer["Requred"]" Color="Color.Primary"
-                    CheckedIcon="@Icons.Material.Outlined.NewReleases" UnCheckedColor="Color.Default" />
+                             CheckedIcon="@Icons.Material.Outlined.NewReleases" UnCheckedColor="Color.Default" />
             </MudItem>
 
             <MudItem xs="6">
                 <MudCheckBox @bind-Checked="@Step.SomeParticipants" Label="@_localizer["Some Participants"]" Color="Color.Primary"
-                    CheckedIcon="@Icons.Material.Outlined.SafetyDivider" UnCheckedColor="Color.Default" />
+                             CheckedIcon="@Icons.Material.Outlined.SafetyDivider" UnCheckedColor="Color.Default" />
             </MudItem>
 
             <MudItem xs="6">
                 <MudCheckBox @bind-Checked="@Step.AllRequred" Label="@_localizer["All Requred"]" Color="Color.Primary" Disabled="@(!Step.SomeParticipants)"
-                    CheckedIcon="@Icons.Material.Outlined.Groups" UnCheckedColor="Color.Default" />
+                             CheckedIcon="@Icons.Material.Outlined.Groups" UnCheckedColor="Color.Default" />
             </MudItem>
 
             <MudItem xs="6">
                 <MudCheckBox @bind-Checked="@Step.HasAgreement" Label="@_localizer["Has Agreement"]" Color="Color.Primary"
-                    CheckedIcon="@Icons.Material.Outlined.FactCheck" UnCheckedColor="Color.Default" />
+                             CheckedIcon="@Icons.Material.Outlined.FactCheck" UnCheckedColor="Color.Default" />
             </MudItem>
 
             <MudItem xs="6">
                 <MudCheckBox @bind-Checked="@Step.HasReview" Label="@_localizer["Has Review"]" Color="Color.Primary"
-                    CheckedIcon="@Icons.Material.Outlined.MapsUgc" UnCheckedColor="Color.Default" />
+                             CheckedIcon="@Icons.Material.Outlined.MapsUgc" UnCheckedColor="Color.Default" />
             </MudItem>
+
+            @*<MudItem xs="12"><MudDivider /></MudItem>*@
+
+            <MudItem xs="6">
+                <div class="d-flex">
+                    <MudAutocomplete T="ContactResponse" @bind-Value="Members.Contact" 
+                                     SearchFunc="@((text) => SearchContactsAsync(Step.OnlyHead ? UserBaseRoles.Chief : UserBaseRoles.Undefined, text))"
+                                     ResetValueOnEmptyText="@resetValueOnEmptyText" CoerceText="@coerceText" CoerceValue="@coerceValue" Clearable="false"
+                                     Adornment="Adornment.Start" AdornmentColor="Color.Default" AdornmentIcon="@Icons.Material.Outlined.GroupAdd"
+                                     Label="@_localizer["Members"]" ToStringFunc="@(e => (e == null) ? null : ContactName(e))">
+
+                        <NoItemsTemplate>
+                            <MudText Align="Align.Start" Class="px-4 py-1" Color="Color.Warning">
+                                @_localizer["Employees not found"]
+                            </MudText>
+                        </NoItemsTemplate>
+                    </MudAutocomplete>
+
+                    <MudIconButton Icon="@Icons.Material.Filled.Add" Style="height:48px;" Color="Color.Primary" OnClick="@(() => AddContact(Members))" Disabled="@(Members.Contact is null)"></MudIconButton>
+                </div>
+
+                <MudChipSet AllClosable="true" OnClose="@((chip) => DelContact(Members, chip))">
+                    @foreach (var c in Members.Contacts)
+                    {
+                        <MudChip Text="@c.Key" Variant="Variant.Outlined" Color="Color.Default"></MudChip>
+                    }
+                </MudChipSet>
+            </MudItem>
+
+            <MudItem xs="6">
+                <MudNumericField @bind-Value="Step.AutoSearch" Label="@_localizer["Auto Search"]" Variant="Variant.Text" Min="0" Max="10" />
+            </MudItem>
+
+            <MudItem xs="6">
+                <div class="d-flex">
+                    <MudAutocomplete T="ContactResponse" @bind-Value="Agreementers.Contact" SearchFunc="@((text) => SearchContactsAsync(UserBaseRoles.Undefined, text))"
+                                     ResetValueOnEmptyText="@resetValueOnEmptyText" CoerceText="@coerceText" CoerceValue="@coerceValue" Clearable="false"
+                                     Adornment="Adornment.Start" AdornmentColor="Color.Default" AdornmentIcon="@Icons.Material.Outlined.FactCheck"
+                                     Label="@_localizer["Agreementers"]" ToStringFunc="@(e => (e == null) ? null : ContactName(e))">
+
+                        <NoItemsTemplate>
+                            <MudText Align="Align.Start" Class="px-4 py-1" Color="Color.Warning">
+                                @_localizer["Employees not found"]
+                            </MudText>
+                        </NoItemsTemplate>
+                    </MudAutocomplete>
+
+                    <MudIconButton Icon="@Icons.Material.Filled.Add" Style="height:48px;" Color="Color.Primary" OnClick="@(() => AddContact(Agreementers))" Disabled="@(Agreementers.Contact is null)"></MudIconButton>
+                </div>
+
+                <MudChipSet AllClosable="true" OnClose="@((chip) => DelContact(Agreementers, chip))">
+                    @foreach (var c in Agreementers.Contacts)
+                    {
+                        <MudChip Text="@c.Key" Variant="Variant.Outlined" Color="Color.Default"></MudChip>
+                    }
+                </MudChipSet>
+            </MudItem>
+
+            <MudItem xs="6">
+                <div class="d-flex">
+                    <MudAutocomplete T="ContactResponse" @bind-Value="Reviewers.Contact" SearchFunc="@((text) => SearchContactsAsync(UserBaseRoles.Undefined, text))"
+                                     ResetValueOnEmptyText="@resetValueOnEmptyText" CoerceText="@coerceText" CoerceValue="@coerceValue" Clearable="false"
+                                     Adornment="Adornment.Start" AdornmentColor="Color.Default" AdornmentIcon="@Icons.Material.Outlined.MapsUgc"
+                                     Label="@_localizer["Reviewers"]" ToStringFunc="@(e => (e == null) ? null : ContactName(e))">
+
+                        <NoItemsTemplate>
+                            <MudText Align="Align.Start" Class="px-4 py-1" Color="Color.Warning">
+                                @_localizer["Employees not found"]
+                            </MudText>
+                        </NoItemsTemplate>
+                    </MudAutocomplete>
+
+                    <MudIconButton Icon="@Icons.Material.Filled.Add" Style="height:48px;" Color="Color.Primary" OnClick="@(() => AddContact(Reviewers))" Disabled="@(Reviewers.Contact is null)"></MudIconButton>
+                </div>
+
+                <MudChipSet AllClosable="true" OnClose="@((chip) => DelContact(Reviewers, chip))">
+                    @foreach (var c in Reviewers.Contacts)
+                    {
+                        <MudChip Text="@c.Key" Variant="Variant.Outlined" Color="Color.Default"></MudChip>
+                    }
+                </MudChipSet>
+            </MudItem>
+
         </MudGrid>
     </DialogContent>
 
     <DialogActions>
-        <MudButton Variant="Variant.Outlined" FullWidth="true" Color="Color.Default" StartIcon="@Icons.Material.Outlined.Clear"
+        <MudButton Class="mx-2" Variant="Variant.Outlined" FullWidth="true" Color="Color.Default" StartIcon="@Icons.Material.Outlined.Clear"
                    OnClick="() => Delete()">
             @_localizer["Delete"]
         </MudButton>
-        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Outlined" FullWidth="true" Color="Color.Primary" EndIcon="@Icons.Material.Outlined.Done"
+        <MudButton Class="mx-2" ButtonType="ButtonType.Submit" Variant="Variant.Outlined" FullWidth="true" Color="Color.Primary" EndIcon="@Icons.Material.Outlined.Done"
                    OnClick="() => Ok()">
             @_localizer["Ok"]
         </MudButton>

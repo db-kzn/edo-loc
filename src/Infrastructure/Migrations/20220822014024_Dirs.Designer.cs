@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EDO_FOMS.Infrastructure.Migrations
 {
     [DbContext(typeof(EdoFomsContext))]
-    [Migration("20220810233630_Dirs")]
+    [Migration("20220822014024_Dirs")]
     partial class Dirs
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -278,7 +278,7 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.Property<int?>("RouteId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("DocumentTypeId")
+                    b.Property<int>("DocumentTypeId")
                         .HasColumnType("integer");
 
                     b.HasKey("RouteId", "DocumentTypeId");
@@ -378,7 +378,7 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.ToTable("RouteStages", "dir");
                 });
 
-            modelBuilder.Entity("EDO_FOMS.Domain.Entities.Dir.RouteStageStep", b =>
+            modelBuilder.Entity("EDO_FOMS.Domain.Entities.Dir.RouteStep", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -392,6 +392,9 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.Property<bool>("AllRequred")
                         .HasColumnType("boolean");
 
+                    b.Property<int>("AutoSearch")
+                        .HasColumnType("integer");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
 
@@ -402,6 +405,9 @@ namespace EDO_FOMS.Infrastructure.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<bool>("HasReview")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
                     b.Property<string>("LastModifiedBy")
@@ -435,7 +441,26 @@ namespace EDO_FOMS.Infrastructure.Migrations
 
                     b.HasIndex("RouteId");
 
-                    b.ToTable("RouteStageSteps", "dir");
+                    b.ToTable("RouteSteps", "dir");
+                });
+
+            modelBuilder.Entity("EDO_FOMS.Domain.Entities.Dir.RouteStepMember", b =>
+                {
+                    b.Property<int>("RouteStepId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Act")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IsAdditional")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("RouteStepId", "UserId");
+
+                    b.ToTable("RouteStepMembers", "dir");
                 });
 
             modelBuilder.Entity("EDO_FOMS.Domain.Entities.Doc.Agreement", b =>
@@ -479,8 +504,11 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.Property<DateTime?>("Opened")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("OrgId")
+                    b.Property<int?>("OrgId")
                         .HasColumnType("integer");
+
+                    b.Property<string>("OrgInn")
+                        .HasColumnType("text");
 
                     b.Property<int?>("ParentId")
                         .HasColumnType("integer");
@@ -1234,7 +1262,7 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.Navigation("Route");
                 });
 
-            modelBuilder.Entity("EDO_FOMS.Domain.Entities.Dir.RouteStageStep", b =>
+            modelBuilder.Entity("EDO_FOMS.Domain.Entities.Dir.RouteStep", b =>
                 {
                     b.HasOne("EDO_FOMS.Domain.Entities.Dir.Route", "Route")
                         .WithMany("Steps")
@@ -1243,6 +1271,17 @@ namespace EDO_FOMS.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Route");
+                });
+
+            modelBuilder.Entity("EDO_FOMS.Domain.Entities.Dir.RouteStepMember", b =>
+                {
+                    b.HasOne("EDO_FOMS.Domain.Entities.Dir.RouteStep", "Step")
+                        .WithMany("Members")
+                        .HasForeignKey("RouteStepId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Step");
                 });
 
             modelBuilder.Entity("EDO_FOMS.Domain.Entities.Doc.Agreement", b =>
@@ -1255,9 +1294,7 @@ namespace EDO_FOMS.Infrastructure.Migrations
 
                     b.HasOne("EDO_FOMS.Domain.Entities.Org.Organization", "Org")
                         .WithMany()
-                        .HasForeignKey("OrgId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OrgId");
 
                     b.Navigation("Document");
 
@@ -1538,6 +1575,11 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.Navigation("Stages");
 
                     b.Navigation("Steps");
+                });
+
+            modelBuilder.Entity("EDO_FOMS.Domain.Entities.Dir.RouteStep", b =>
+                {
+                    b.Navigation("Members");
                 });
 
             modelBuilder.Entity("EDO_FOMS.Domain.Entities.Doc.Document", b =>

@@ -147,7 +147,8 @@
                                         <MudAutocomplete T="ContactResponse" @bind-Value="act.Contact" SearchFunc="@((text) => SearchContactsAsync(act, text))"
                                                  ResetValueOnEmptyText="@resetValueOnEmptyText" CoerceText="@coerceText" CoerceValue="@coerceValue" Clearable="false"
                                                  Adornment="Adornment.Start" AdornmentColor="Color.Default" AdornmentIcon="@IconByOrgType(act.Step.OrgType)"
-                                                 Label="@LabelByStep(act.Step)"
+                                                 Label="@LabelByStep(act.Step)" Required="act.Step.Requred"
+                                                 Placeholder="@(act.Contacts.Count > 0 ? "" : act.Step.Requred ? _localizer["Required to fill"] : _localizer["Not necessary"])"
                                                  ToStringFunc="@(e => (e == null) ? null : ContactName(e))" Disabled="@onUpload">
 
                                             <NoItemsTemplate>
@@ -176,7 +177,7 @@
 
         <MudCardActions>
             <MudButton Class="mx-2" FullWidth Variant="Variant.Outlined" Color="Color.Primary" Size="Size.Large"
-                       StartIcon="@Icons.Material.Rounded.SaveAlt" OnClick="SaveAsync"
+                       StartIcon="@Icons.Material.Rounded.SaveAlt" OnClick="() => SaveAsync()"
                        Style="background-color: var(--mud-palette-surface);">
                 @_localizer["Save"]
             </MudButton>

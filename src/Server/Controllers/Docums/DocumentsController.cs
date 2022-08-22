@@ -16,6 +16,7 @@ using EDO_FOMS.Application.Requests.Agreements;
 using EDO_FOMS.Application.Features.Orgs.Queries;
 using System.Collections.Generic;
 using EDO_FOMS.Application.Features.Directories.Queries;
+using EDO_FOMS.Application.Features.Documents.Commands;
 
 namespace EDO_FOMS.Server.Controllers.Docums
 {
@@ -223,6 +224,18 @@ namespace EDO_FOMS.Server.Controllers.Docums
         [Authorize(Policy = Permissions.Documents.Create)]
         [HttpPost]
         public async Task<IActionResult> Post(AddEditDocumentCommand command)
+        {
+            return Ok(await _mediator.Send(command));
+        }
+
+        /// <summary>
+        /// Add/Edit Doc
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns>Status 200 OK</returns>
+        [Authorize(Policy = Permissions.Documents.Create)]
+        [HttpPost]
+        public async Task<IActionResult> PostDoc(AddEditDocCommand command)
         {
             return Ok(await _mediator.Send(command));
         }

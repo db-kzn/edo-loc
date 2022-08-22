@@ -53,7 +53,8 @@ namespace EDO_FOMS.Client.Pages.Agreements
 
         private async Task<IEnumerable<ContactResponse>> SearchMembersAsync(string search)
         {
-            var response = await DocManager.GetAgreementMembersAsync(_agreement.EmplOrgId, search);
+            if (_agreement.EmplOrgId is null) { return new List<ContactResponse>(); }
+            var response = await DocManager.GetAgreementMembersAsync((int)_agreement.EmplOrgId, search);
             return (response.Succeeded) ? response.Data : new();
         }
 

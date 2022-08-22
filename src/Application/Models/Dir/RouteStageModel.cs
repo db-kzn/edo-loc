@@ -2,7 +2,6 @@
 using EDO_FOMS.Domain.Enums;
 using MudBlazor;
 using System;
-using System.Security.Cryptography;
 
 namespace EDO_FOMS.Application.Models.Dir
 {
@@ -10,8 +9,6 @@ namespace EDO_FOMS.Application.Models.Dir
     {
         public int Id { get; set; }
         public int RouteId { get; set; }                   // - Внешний индекс
-        //public virtual Route Route { get; set; }
-
         public int Number { get; set; }                    // + Номер этапа в цепочке маршрута
 
         public Color Color { get; set; }                   // + Цвет формы
@@ -25,10 +22,7 @@ namespace EDO_FOMS.Application.Models.Dir
         public bool DenyRevocation { get; set; }           // - Возможность отзывать документ с маршрута
         public TimeSpan Validity { get; set; }             // - Срок на прохождение этапа
 
-        //public List<RouteStageStep> Steps { get; set; }    // + Процессы этапы
-
         public RouteStageModel() { }
-
         public RouteStageModel(RouteStage s)
         {
             Id = s.Id;

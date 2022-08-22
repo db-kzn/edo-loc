@@ -6,7 +6,7 @@ namespace EDO_FOMS.Client.Models
 {
     public class DocActModel
     {
-        public RouteStageStepModel Step { get; set; }
+        public RouteStepModel Step { get; set; }
         public ContactResponse Contact { get; set; }
         public Dictionary<string, ContactResponse> Contacts { get; set; } = new();
     }

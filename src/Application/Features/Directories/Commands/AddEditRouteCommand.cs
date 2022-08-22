@@ -2,19 +2,17 @@
 using EDO_FOMS.Application.Interfaces.Repositories;
 using EDO_FOMS.Application.Models.Dir;
 using EDO_FOMS.Domain.Entities.Dir;
-using EDO_FOMS.Domain.Entities.Doc;
 using EDO_FOMS.Domain.Enums;
 using EDO_FOMS.Shared.Wrapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
-using Newtonsoft.Json;
+using MudBlazor;
+using System;
 using System.Collections.Generic;
-using System.Security.AccessControl;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Xml.Linq;
-using static MudBlazor.FilterOperator;
 
 namespace EDO_FOMS.Application.Features.Directories.Commands
 {
@@ -22,8 +20,9 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
     {
         public List<int> DocTypeIds { get; set; } = new();              // + Типы документов для которых предназначен маршрут
         public List<OrgTypes> ForOrgTypes { get; set; } = new();        // + Типы организаций которые могут использовать маршрут
-        public List<RouteStageModel> Stages { get; set; } = new();    // + Стадии текущего маршрута
-        public List<RouteStageStepModel> Steps { get; set; } = new(); // + Процессы этапы
+
+        public List<RouteStageCommand> Stages { get; set; } = new();           // + Стадии текущего маршрута
+        public List<RouteStepCommand> Steps { get; set; } = new();             // + Процессы в этапе + Участники процесса
 
         public int Id { get; set; }                                     // - Идентификатор маршрута
         public int Number { get; set; }                                 // - Ценность маршрута, для сортировки
@@ -43,6 +42,52 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
         public bool UseVersioning { get; set; } = false;                // - Используется версионность
         public bool HasDetails { get; set; } = false;                   // - Отображать параметры этапов
     }
+    public class RouteStageCommand
+    {
+        public int Id { get; set; }
+        public int RouteId { get; set; }                   // - Внешний индекс
+        public int Number { get; set; }                    // + Номер этапа в цепочке маршрута
+
+        public Color Color { get; set; }                   // + Цвет формы
+        public string Name { get; set; }                   // + Наименование этапа
+        public string Description { get; set; }            // - Описание этапа
+
+        public ActTypes ActType { get; set; }              // - Тип этапа: неопределенный, подписание, согласование или рецензирование
+        public bool InSeries { get; set; } = false;        // - Последовательное прохождение
+        public bool AllRequred { get; set; } = true;       // - Если параллельно, то требуются все
+
+        public bool DenyRevocation { get; set; }           // - Возможность отзывать документ с маршрута
+        public TimeSpan Validity { get; set; }             // - Срок на прохождение этапа
+    }
+    public class RouteStepCommand
+    {
+        public int Id { get; set; }                                 // - RouteStepId
+        public int RouteId { get; set; }                            // - Внешний индекс
+        // IsDeleted - на клиенте не используется, только на сервере
+        public int StageNumber { get; set; }                        // + Номер этапа
+        public int Number { get; set; }                             // - Номер процесса в этапе, для сортировки последовательности
+
+        public ActTypes ActType { get; set; } = ActTypes.Signing;   // + Тип шага: подписание, согласование или рецензирование
+        public OrgTypes OrgType { get; set; } = OrgTypes.Undefined; // + Тип организации, может быть не определен
+        public int AutoSearch { get; set; } = 0;                    // + Автопоиск - количество записей
+        public List<RouteStepMemberCommand> Members { get; set; } = new(); // + Список участников
+
+        public bool OnlyHead { get; set; }                          // + Требуется руководитель
+        public bool Requred { get; set; } = true;                   // + Обязательный шаг
+        public bool SomeParticipants { get; set; } = true;          // - Несколько участников
+
+        public bool AllRequred { get; set; } = true;                // + Если несколько, то условие завершения: все или любой
+        public bool HasAgreement { get; set; } = false;             // + Содержит согласование
+        public bool HasReview { get; set; } = false;                // + Содержит рецензирование
+    }
+    public class RouteStepMemberCommand
+    {
+        public int RouteStepId { get; set; }                    // Идентификатор процесса (шага)
+        public ActTypes Act { get; set; } = ActTypes.Undefined; // Тип действия
+        public bool IsAdditional { get; set; } = false;         // Дополнительный, не основной
+        public string UserId { get; set; } = string.Empty;      // Участник
+    }
+
 
     internal class AddEditRouteCommandHandler : IRequestHandler<AddEditRouteCommand, Result<int>>
     {
@@ -99,25 +144,33 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
                 })
             );
 
-            command.Steps.ForEach(step =>
-                route.Steps.Add(new RouteStageStep()
+            command.Steps.ForEach(s =>
+            {
+                var step = new RouteStep()
                 {
                     Route = route,
-                    StageNumber = step.StageNumber,
-                    Number = step.Number,
+                    IsDeleted = false,
+                    StageNumber = s.StageNumber,
+                    Number = s.Number,
 
-                    ActType = step.ActType,
-                    OrgType = step.OrgType,
-                    OnlyHead = step.OnlyHead,
+                    ActType = s.ActType,
+                    OrgType = s.OrgType,
+                    AutoSearch = s.AutoSearch,
+                    Members = new(),
 
-                    Requred = step.Requred,
-                    SomeParticipants = step.SomeParticipants,
-                    AllRequred = step.AllRequred,
+                    OnlyHead = s.OnlyHead,
+                    Requred = s.Requred,
+                    SomeParticipants = s.SomeParticipants,
 
-                    HasAgreement = step.HasAgreement,
-                    HasReview = step.HasReview
-                })
-            );
+                    AllRequred = s.AllRequred,
+                    HasAgreement = s.HasAgreement,
+                    HasReview = s.HasReview
+                };
+
+                step.Members = s.Members.Select(m => NewMember(step, m)).ToList();
+
+                route.Steps.Add(step);
+            });
 
             await _unitOfWork.Repository<Route>().AddAsync(route);
             await _unitOfWork.Commit(cancellationToken);
@@ -148,8 +201,6 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
             route.UseVersioning = command.UseVersioning;
             route.HasDetails = command.HasDetails;
 
-            //List<DocumentType> DocTypes -> List<RouteDocType> RouteDocTypes
-            //route.RouteDocTypes.Clear();
             route.RouteDocTypes.RemoveAll(r => !command.DocTypeIds.Exists(id => id == r.DocumentTypeId));
             command.DocTypeIds.ForEach(id =>
             {
@@ -159,8 +210,6 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
                 }
             });
 
-            //List<RouteOrgType> ForOrgTypes
-            //route.ForOrgTypes.Clear();
             route.ForOrgTypes.RemoveAll(r => !command.ForOrgTypes.Exists(t => t == r.OrgType));
             command.ForOrgTypes.ForEach(t =>
             {
@@ -170,8 +219,6 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
                 }
             });
 
-            //List<RouteStage> Stages
-            //route.Stages.Clear();
             route.Stages.RemoveAll(r => !command.Stages.Exists(c => c.Id == r.Id));
             command.Stages.ForEach(c =>
             {
@@ -215,47 +262,59 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
                 }
             });
 
-            //List<RouteStageStep> Steps
-            //route.Steps.Clear();
-            route.Steps.RemoveAll(r => !command.Steps.Exists(c => c.Id == r.Id));
+            route.Steps.ForEach(r =>
+            {
+                if (!command.Steps.Exists(c => c.Id == r.Id)) { r.IsDeleted = true; }
+            });
+
             command.Steps.ForEach(c =>
             {
                 if (c.Id == 0)
                 {
-                    route.Steps.Add(new RouteStageStep()
+                    var step = new RouteStep()
                     {
                         Route = route,
+                        IsDeleted = false,
                         StageNumber = c.StageNumber,
                         Number = c.Number,
 
                         ActType = c.ActType,
                         OrgType = c.OrgType,
-                        OnlyHead = c.OnlyHead,
+                        AutoSearch = c.AutoSearch,
+                        Members = new(),
 
+                        OnlyHead = c.OnlyHead,
                         Requred = c.Requred,
                         SomeParticipants = c.SomeParticipants,
-                        AllRequred = c.AllRequred,
 
+                        AllRequred = c.AllRequred,
                         HasAgreement = c.HasAgreement,
                         HasReview = c.HasReview
-                    });
+                    };
+
+                    step.Members = c.Members.Select(m => NewMember(step, m)).ToList();
+
+                    route.Steps.Add(step);
                 }
                 else
                 {
                     var s = route.Steps.Find(r => r.Id == c.Id);
                     if (s != null)
                     {
+                        s.IsDeleted = false;
                         s.StageNumber = c.StageNumber;
                         s.Number = c.Number;
 
                         s.ActType = c.ActType;
                         s.OrgType = c.OrgType;
-                        s.OnlyHead = c.OnlyHead;
+                        s.AutoSearch = c.AutoSearch;
+                        //s.Members = c.Members.Select(m => NewMember(s, m)).ToList();
 
+                        s.OnlyHead = c.OnlyHead;
                         s.Requred = c.Requred;
                         s.SomeParticipants = c.SomeParticipants;
-                        s.AllRequred = c.AllRequred;
 
+                        s.AllRequred = c.AllRequred;
                         s.HasAgreement = c.HasAgreement;
                         s.HasReview = c.HasReview;
                     }
@@ -266,6 +325,17 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
             await _unitOfWork.Commit(cancellationToken);
 
             return await Result<int>.SuccessAsync(route.Id, _localizer["Route Updated"]);
+        }
+
+        private static RouteStepMember NewMember(RouteStep s, RouteStepMemberCommand m)
+        {
+            return new()
+            {
+                Step = s,
+                Act = m.Act,
+                IsAdditional = m.IsAdditional,
+                UserId = m.UserId
+            };
         }
     }
 }

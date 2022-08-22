@@ -132,8 +132,17 @@
   <data name="Chief of Fund Contact Required" xml:space="preserve">
     <value>Руководитель фонда не указан</value>
   </data>
+  <data name="Contact Required" xml:space="preserve">
+    <value>Не указан контакт</value>
+  </data>
   <data name="Description" xml:space="preserve">
     <value>Примечание</value>
+  </data>
+  <data name="Doc File Required" xml:space="preserve">
+    <value>Требуется файл документа</value>
+  </data>
+  <data name="Doc Title Required" xml:space="preserve">
+    <value>Наименование документа не указано</value>
   </data>
   <data name="Document" xml:space="preserve">
     <value>Документ</value>
@@ -189,14 +198,23 @@
   <data name="No file" xml:space="preserve">
     <value>Нет файла</value>
   </data>
+  <data name="Not necessary" xml:space="preserve">
+    <value>Не обязательно</value>
+  </data>
   <data name="Number" xml:space="preserve">
     <value>Номер</value>
+  </data>
+  <data name="of a" xml:space="preserve">
+    <value>‌</value>
   </data>
   <data name="of the" xml:space="preserve">
     <value>‌</value>
   </data>
   <data name="Rejected" xml:space="preserve">
     <value>Отклонен</value>
+  </data>
+  <data name="Required to fill" xml:space="preserve">
+    <value>Требуется заполнить</value>
   </data>
   <data name="Responsible (FOND)" xml:space="preserve">
     <value>Ответсвенный (ФОНД)</value>
@@ -227,6 +245,9 @@
   </data>
   <data name="Title" xml:space="preserve">
     <value>Наименование</value>
+  </data>
+  <data name="Undefined" xml:space="preserve">
+    <value>‌</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>Обновить</value>

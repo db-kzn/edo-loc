@@ -13,6 +13,10 @@ using System.Linq.Expressions;
 using System;
 using EDO_FOMS.Application.Models.Dir;
 using static MudBlazor.Colors;
+using EDO_FOMS.Application.Interfaces.Services.Identity;
+using EDO_FOMS.Domain.Entities.Doc;
+using EDO_FOMS.Domain.Entities.Org;
+using EDO_FOMS.Application.Responses.Docums;
 
 namespace EDO_FOMS.Application.Features.Directories.Queries;
 
@@ -25,20 +29,31 @@ public class GetRouteCardQuery : IRequest<Result<RouteCardResponse>>
 
 internal class GetRouteCardQueryHandler : IRequestHandler<GetRouteCardQuery, Result<RouteCardResponse>>
 {
+    private readonly IUserService _userService;
     private readonly IUnitOfWork<int> _unitOfWork;
-    public GetRouteCardQueryHandler(IUnitOfWork<int> unitOfWork) { _unitOfWork = unitOfWork; }
+
+    public GetRouteCardQueryHandler(
+        IUserService userService,
+        IUnitOfWork<int> unitOfWork
+        )
+    {
+        _userService = userService;
+        _unitOfWork = unitOfWork;
+    }
 
     public async Task<Result<RouteCardResponse>> Handle(GetRouteCardQuery request, CancellationToken cancellationToken)
     {
-        var routes = _unitOfWork.Repository<Route>().Entities.Include(r => r.Stages).Include(r => r.Steps).Include(r => r.RouteDocTypes).Include(r => r.ForOrgTypes);
+        var routes = _unitOfWork.Repository<Route>().Entities.Include(r => r.RouteDocTypes).Include(r => r.ForOrgTypes)
+                                                    .Include(r => r.Stages).Include(r => r.Steps).ThenInclude(s => s.Members);
+
         var route = await routes.FirstOrDefaultAsync(r => r.Id == request.Id, cancellationToken: cancellationToken);
 
         var card = new RouteCardResponse
         {
-            DocTypeIds = route.RouteDocTypes.Select(dt => (int)dt.DocumentTypeId).ToList(),
+            DocTypeIds = route.RouteDocTypes.Select(dt => dt.DocumentTypeId).ToList(),
             ForOrgTypes = route.ForOrgTypes.Select(ot => ot.OrgType).ToList(),
             Stages = route.Stages.Select(s => new RouteStageModel(s)).ToList(),
-            Steps = route.Steps.Select(s => new RouteStageStepModel(s)).ToList(),
+            Steps = route.Steps.Where(s => !s.IsDeleted).Select(s => new RouteStepModel(s)).ToList(),
 
             Id = route.Id,
             Number = route.Number,
@@ -58,6 +73,11 @@ internal class GetRouteCardQueryHandler : IRequestHandler<GetRouteCardQuery, Res
             UseVersioning = route.UseVersioning,
             HasDetails = route.HasDetails
         };
+
+        card.Steps.ForEach(s =>
+        {
+            s.Members.ForEach(async m => m.Contact = await _userService.GetContactAsync(m.UserId));
+        });
 
         return await Result<RouteCardResponse>.SuccessAsync(card);
     }

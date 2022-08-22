@@ -1,6 +1,7 @@
 ﻿using Blazored.FluentValidation;
 using EDO_FOMS.Application.Features.Documents.Commands.AddEdit;
 using EDO_FOMS.Application.Features.DocumentTypes.Queries;
+using EDO_FOMS.Application.Models.Chat;
 using EDO_FOMS.Application.Requests;
 using EDO_FOMS.Application.Requests.Documents;
 using EDO_FOMS.Application.Responses.Docums;
@@ -122,11 +123,7 @@ namespace EDO_FOMS.Client.Pages.Docs
 
             if (!response.Succeeded)
             {
-                foreach (var message in response.Messages)
-                {
-                    _snackBar.Add(message, Severity.Error);
-                }
-
+                response.Messages.ForEach(m => _snackBar.Add(m, Severity.Error));
                 return;
             }
 
@@ -279,15 +276,13 @@ namespace EDO_FOMS.Client.Pages.Docs
         }
 
         public void AddFund() => AddContact(FundContacts, ref fundContact);
-        public void DelFund(MudChip chip) => FundContacts.Remove(chip.Text);
-
         public void AddSmo() => AddContact(SmoContacts, ref smoContact);
-        public void DelSmo(MudChip chip) => SmoContacts.Remove(chip.Text);
-
         public void AddMo() => AddContact(MoContacts, ref moContact);
-        public void DelMo(MudChip chip) => MoContacts.Remove(chip.Text);
-
         public void AddHead() => AddContact(HeadContacts, ref headContact);
+
+        public void DelFund(MudChip chip) => FundContacts.Remove(chip.Text);
+        public void DelSmo(MudChip chip) => SmoContacts.Remove(chip.Text);
+        public void DelMo(MudChip chip) => MoContacts.Remove(chip.Text);
         public void DelHead(MudChip chip) => HeadContacts.Remove(chip.Text);
 
         public async Task<IEnumerable<ContactResponse>> SearchFundContactsAsync(string search)
@@ -295,19 +290,16 @@ namespace EDO_FOMS.Client.Pages.Docs
             var request = NewSearchContactsRequest((int)UserBaseRoles.Undefined, OrgTypes.Fund, search);
             return await SearchContactsAsync(request);
         }
-
         public async Task<IEnumerable<ContactResponse>> SearchSmoContactsAsync(string search)
         {
             var request = NewSearchContactsRequest(UserBaseRoles.Chief, OrgTypes.SMO, search);
             return await SearchContactsAsync(request);
         }
-
         public async Task<IEnumerable<ContactResponse>> SearchMoContactsAsync(string search)
         {
             var request = NewSearchContactsRequest(UserBaseRoles.Chief, OrgTypes.MO, search);
             return await SearchContactsAsync(request);
         }
-
         public async Task<IEnumerable<ContactResponse>> SearchHeadContactsAsync(string search)
         {
             var request = NewSearchContactsRequest(UserBaseRoles.Chief, OrgTypes.Fund, search);
@@ -323,7 +315,6 @@ namespace EDO_FOMS.Client.Pages.Docs
                 SearchString = searchString
             };
         }
-
         private async Task<IEnumerable<ContactResponse>> SearchContactsAsync(SearchContactsRequest request)
         {
             var response = await DocManager.GetFoundContacts(request);
@@ -334,7 +325,6 @@ namespace EDO_FOMS.Client.Pages.Docs
         {
             return $"[{(string.IsNullOrWhiteSpace(c.OrgShortName) ? c.InnLe : c.OrgShortName)}] {c.Surname} {c.GivenName}";
         }
-
         private static void AddContacts(Dictionary<string, ContactResponse> dic, List<ContactResponse> list)
         {
             foreach (var h in list)
@@ -343,7 +333,6 @@ namespace EDO_FOMS.Client.Pages.Docs
                 AddContact(dic, ref head);
             }
         }
-
         private static void AddContact(Dictionary<string, ContactResponse> dic, ref ContactResponse c)
         {
             if (!HasContact(dic, c))
@@ -352,7 +341,6 @@ namespace EDO_FOMS.Client.Pages.Docs
             }
             c = null;
         }
-
         private static ContactResponse CloneContact(ContactResponse c)
         {
             return new()
@@ -365,7 +353,6 @@ namespace EDO_FOMS.Client.Pages.Docs
                 GivenName = c.GivenName
             };
         }
-
         private static bool HasContact(Dictionary<string, ContactResponse> dic, ContactResponse c)
         {
             return dic.ContainsKey(ContactName(c));

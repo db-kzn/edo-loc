@@ -12,6 +12,7 @@ using EDO_FOMS.Application.Responses.Docums;
 using EDO_FOMS.Application.Requests.Agreements;
 using EDO_FOMS.Application.Features.Orgs.Queries;
 using EDO_FOMS.Application.Models.Dir;
+using EDO_FOMS.Application.Features.Documents.Commands;
 
 namespace EDO_FOMS.Client.Infrastructure.Managers.Doc.Document
 {
@@ -34,6 +35,8 @@ namespace EDO_FOMS.Client.Infrastructure.Managers.Doc.Document
         Task<IResult<List<RouteTitleModel>>> GetRouteTitlesAsync();
 
         Task<IResult<int>> PostAsync(AddEditDocumentCommand command);
+        Task<IResult<int>> PostDocAsync(AddEditDocCommand command);
+
         Task<IResult<int>> PostMembersAsync(AddAgreementMembersCommand request);
         Task<IResult<int>> PostAgreementAnswerAsync(AgreementAnswerCommand command);
         Task<IResult<int>> PostAgreementSignedAsync(AgreementSignedCommand command);

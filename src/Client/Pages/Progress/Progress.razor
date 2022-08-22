@@ -103,7 +103,7 @@
                     { <MudIcon Icon="@Icons.Material.Outlined.Draw" Color="@(context.ActionBlocked ? Color.Default : Color.Success)" Class="mr-2"/> }
                     else if(context.Action == AgreementActions.ToApprove)
                     { <MudIcon Icon="@Icons.Material.Outlined.Rule" Color="@(context.ActionBlocked ? Color.Default : Color.Error)" Class="mr-2"/> }
-                    else if(context.Action == AgreementActions.ToVerify)
+                    else if(context.Action == AgreementActions.ToReview)
                     { <MudIcon Icon="@Icons.Material.Outlined.AddTask" Color="@(context.ActionBlocked ? Color.Default : Color.Warning)" Class="mr-2"/> }
                     else if(context.Action == AgreementActions.ToRun)
                     { <MudIcon Icon="@Icons.Material.Outlined.PlayCircle" Color="@(context.ActionBlocked ? Color.Default : Color.Tertiary)" Class="mr-2"/> }
@@ -163,7 +163,7 @@
                                 </MudIconButton>
                             </MudTooltip>
                         }
-                        else if (context.Action == AgreementActions.ToVerify)
+                        else if (context.Action == AgreementActions.ToReview)
                         {
                             <MudTooltip Delay="@delay" Duration="@duration" Placement="Placement.Left" Color="Color.Tertiary" Arrow="true" Text="@_localizer["Verify"]">
                                 <MudIconButton Class="mx-1" Variant="Variant.Outlined" Size="Size.Small" aria-label="Run"
@@ -173,7 +173,7 @@
                             </MudTooltip>
                         }
 
-                        if (!(context.Action == AgreementActions.ToVerify))
+                        if (!(context.Action == AgreementActions.ToReview))
                         {
                             <MudTooltip Delay="@delay" Duration="@duration" Placement="Placement.Left" Color="Color.Tertiary" Arrow="true" Text="@_localizer["Members"]">
                                 <MudIconButton Class="mx-1" Variant="Variant.Outlined" Size="Size.Small" aria-label="Run"

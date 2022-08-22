@@ -16,56 +16,41 @@ namespace EDO_FOMS.Application.Interfaces.Services.Identity
 {
     public interface IUserService : IService
     {
+        Task<int> GetCountAsync();
         Task<Result<List<UserResponse>>> GetAllAsync();
         Task<PaginatedResult<UserResponse>> GetPagedUsersAsync(GetPagedUsersRequest request);
         Task<PaginatedResult<UserResponse>> SearchUsersAsync(SearchUsersRequest request);
 
-        Task<Result<List<UserResponse>>> GetAllByOrgIdAsync(int orgId);
-
+        Task<IResult<UserResponse>> GetAsync(string userId);
+        Task<Employee> GetEmployeeAsync(string userId);
+        Task<ContactResponse> GetContactAsync(string userId);
         Task<Result<List<ContactResponse>>> GetFoundContacts(OrgTypes orgType, UserBaseRoles baseRole, string searchString);
-
         Task<Result<List<ContactResponse>>> GetAgreementMembersAsync(int orgId, string search);
 
         Task<Result<int>> UpdateUsersOrgType(UpdateUsersOrgTypeRequest request, string origin);
-
-        Task<int> GetCountAsync();
-
+        Task<Result<List<UserResponse>>> GetAllByOrgIdAsync(int orgId);
         Task<IResult<bool>> GetUserOrgExists(string inn);
-
-        Task<Employee> GetEmployeeAsync(string userId);
-
         Task<IResult<Organization>> GerUserOrgAsync(string inn);
 
-        Task<IResult<UserResponse>> GetAsync(string userId);
-
         //Task<IResult> RegisterAsync(RegisterRequest request, string origin);
-
         Task<IResult> RegisterByCertAsync(RegisterByCertRequest request, string origin, IMediator mediator);
-
         Task<IResult> NewUserAsync(NewUserRequest request, string origin);
-
         Task<IResult> EditUserAsync(EditUserRequest request, string origin);
-
         Task<IResult> AddEditEmployeeAsync(AddEditEmployeeRequest request, string origin);
 
         Task<IResult> ToggleUserStatusAsync(ToggleUserStatusRequest request);
 
         Task<IResult<UserRolesResponse>> GetRolesAsync(string id);
-
         Task<IResult> UpdateRolesAsync(UpdateUserRolesRequest request);
 
         Task<IResult<string>> ConfirmEmailAsync(string userId, string code);
-
         Task<IResult> ForgotPasswordAsync(ForgotPasswordRequest request, string origin);
-
         Task<IResult> ResetPasswordAsync(ResetPasswordRequest request);
 
-        Task<string> ExportToExcelAsync(string searchString = "");
-
         Task<IResult> SendMailAsync(MailModel mail);
-
         Task MailToUserAsync(MailToUser mail);
-
         Task MailsToUsersAsync(List<MailToUser> mails);
+
+        Task<string> ExportToExcelAsync(string searchString = "");
     }
 }

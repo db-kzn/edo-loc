@@ -17,6 +17,7 @@ using System;
 using EDO_FOMS.Application.Requests.Agreements;
 using EDO_FOMS.Application.Features.Orgs.Queries;
 using EDO_FOMS.Application.Models.Dir;
+using EDO_FOMS.Application.Features.Documents.Commands;
 
 namespace EDO_FOMS.Client.Infrastructure.Managers.Doc.Document
 {
@@ -80,6 +81,12 @@ namespace EDO_FOMS.Client.Infrastructure.Managers.Doc.Document
         public async Task<IResult<int>> PostAsync(AddEditDocumentCommand command)
         {
             var response = await _httpClient.PostAsJsonAsync(Routes.DocumentsEndpoints.AddEdit, command);
+            return await response.ToResult<int>();
+        }
+
+        public async Task<IResult<int>> PostDocAsync(AddEditDocCommand command)
+        {
+            var response = await _httpClient.PostAsJsonAsync(Routes.DocumentsEndpoints.AddEditDoc, command);
             return await response.ToResult<int>();
         }
 

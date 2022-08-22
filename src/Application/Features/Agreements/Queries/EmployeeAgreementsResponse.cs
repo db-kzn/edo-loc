@@ -7,7 +7,7 @@ namespace EDO_FOMS.Application.Features.Agreements.Queries
 {
     public class EmployeeAgreementsResponse
     {
-        public int EmplOrgId { get; set; }
+        public int? EmplOrgId { get; set; }
         public string EmplId { get; set; }
         public int AgreementId { get; set; }
         public int? ParentAgreementId { get; set; }

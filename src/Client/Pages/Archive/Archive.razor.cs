@@ -181,13 +181,13 @@ namespace EDO_FOMS.Client.Pages.Archive
                 if (!Filter.ActionToRun && !Filter.ActionToApprove && !Filter.ActionToVerify && !Filter.ActionToSign)
                 {
                     actions.AddRange(new List<AgreementActions> { AgreementActions.ToRun,
-                        AgreementActions.ToApprove, AgreementActions.ToVerify, AgreementActions.ToSign });
+                        AgreementActions.ToApprove, AgreementActions.ToReview, AgreementActions.ToSign });
                 }
                 else
                 {
                     if (Filter.ActionToRun) { actions.Add(AgreementActions.ToRun); }
                     if (Filter.ActionToApprove) { actions.Add(AgreementActions.ToApprove); }
-                    if (Filter.ActionToVerify) { actions.Add(AgreementActions.ToVerify); }
+                    if (Filter.ActionToVerify) { actions.Add(AgreementActions.ToReview); }
                     if (Filter.ActionToSign) { actions.Add(AgreementActions.ToSign); }
                 }
 
@@ -360,7 +360,7 @@ namespace EDO_FOMS.Client.Pages.Archive
         {
             return new()
             {
-                EmplOrgId = a.EmplOrgId,  // Организация получателя
+                EmplOrgId = (int)a.EmplOrgId,  // Организация получателя
                 EmplId = a.EmplId,
                 AgreementId = a.AgreementId,
 

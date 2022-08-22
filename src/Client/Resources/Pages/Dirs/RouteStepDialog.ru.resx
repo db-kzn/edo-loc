@@ -123,14 +123,29 @@
   <data name="Agreement" xml:space="preserve">
     <value>Согласование</value>
   </data>
+  <data name="Agreementers" xml:space="preserve">
+    <value>Доп.согласованты</value>
+  </data>
   <data name="All Requred" xml:space="preserve">
     <value>Требуются все</value>
   </data>
   <data name="Any Type" xml:space="preserve">
     <value>Любая орг-я</value>
   </data>
+  <data name="Auto Search" xml:space="preserve">
+    <value>Автоматический поиск</value>
+  </data>
+  <data name="Chief" xml:space="preserve">
+    <value>Руководитель</value>
+  </data>
   <data name="Delete" xml:space="preserve">
     <value>Удалить</value>
+  </data>
+  <data name="Employee" xml:space="preserve">
+    <value>Сотрудник</value>
+  </data>
+  <data name="Employees not found" xml:space="preserve">
+    <value>Сотрудники не найдены</value>
   </data>
   <data name="FOMS" xml:space="preserve">
     <value>ФОМС</value>
@@ -144,6 +159,12 @@
   <data name="Has Review" xml:space="preserve">
     <value>Рецензирование</value>
   </data>
+  <data name="Main member" xml:space="preserve">
+    <value>Основной участник</value>
+  </data>
+  <data name="Members" xml:space="preserve">
+    <value>Участники</value>
+  </data>
   <data name="MEO" xml:space="preserve">
     <value>Военкомат</value>
   </data>
@@ -152,6 +173,9 @@
   </data>
   <data name="New step" xml:space="preserve">
     <value>Новый процесс</value>
+  </data>
+  <data name="of the" xml:space="preserve">
+    <value>‌</value>
   </data>
   <data name="Ok" xml:space="preserve">
     <value>Сохранить</value>
@@ -168,6 +192,9 @@
   <data name="Review" xml:space="preserve">
     <value>Рецензирование</value>
   </data>
+  <data name="Reviewers" xml:space="preserve">
+    <value>Рецензенты</value>
+  </data>
   <data name="Signing" xml:space="preserve">
     <value>Подписание</value>
   </data>
@@ -182,6 +209,9 @@
   </data>
   <data name="Treasury" xml:space="preserve">
     <value>Казначейство</value>
+  </data>
+  <data name="Undefined" xml:space="preserve">
+    <value>‌</value>
   </data>
   <data name="Update step" xml:space="preserve">
     <value>Изменить процесс</value>

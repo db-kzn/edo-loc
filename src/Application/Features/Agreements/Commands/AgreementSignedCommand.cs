@@ -17,7 +17,7 @@ namespace EDO_FOMS.Application.Features.Agreements.Commands
     {
         public int AgreementId { get; set; }
         public string EmplId { get; set; }
-        public int EmplOrgId { get; set; }
+        public int? EmplOrgId { get; set; }
         public int DocId { get; set; }
         //public string Thumbprint { get; set; }
 
@@ -56,7 +56,8 @@ namespace EDO_FOMS.Application.Features.Agreements.Commands
             var doc = await _unitOfWork.Repository<Document>().GetByIdAsync(agreement.DocumentId);
             if (doc == null) { return await Result<int>.FailAsync(_localizer["Document not found"]); }
 
-            var org = await _unitOfWork.Repository<Organization>().GetByIdAsync(agreement.OrgId);
+            var orgs = _unitOfWork.Repository<Organization>();
+            var org = (agreement.OrgId != null) ? await orgs.GetByIdAsync((int)agreement.OrgId) : null;
             if (org == null) { return await Result<int>.FailAsync(_localizer["Organization not found"]); }
 
             var employee = _userService.GetEmployeeAsync(agreement.EmplId).Result;

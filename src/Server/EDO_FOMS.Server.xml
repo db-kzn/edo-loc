@@ -224,6 +224,13 @@
             <param name="command"></param>
             <returns>Status 200 OK</returns>
         </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Docums.DocumentsController.PostDoc(EDO_FOMS.Application.Features.Documents.Commands.AddEditDocCommand)">
+            <summary>
+            Add/Edit Doc
+            </summary>
+            <param name="command"></param>
+            <returns>Status 200 OK</returns>
+        </member>
         <member name="M:EDO_FOMS.Server.Controllers.Docums.DocumentsController.Post(EDO_FOMS.Application.Features.Documents.Commands.AddEdit.ChangeDocStageCommand)">
             <summary>
             Change Document Stage

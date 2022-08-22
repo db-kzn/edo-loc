@@ -61,7 +61,7 @@ namespace EDO_FOMS.Application.Features.Agreements.Commands
 
                     Step = agreement.Step,
                     State = AgreementStates.Incoming,
-                    Action = AgreementActions.ToVerify,
+                    Action = AgreementActions.ToReview,
                     IsCanceled = agreement.IsCanceled
 
                     // Remark // Time // URL
@@ -86,7 +86,6 @@ namespace EDO_FOMS.Application.Features.Agreements.Commands
             });
 
             await _unitOfWork.Commit(cancellationToken);
-
             await _userService.MailsToUsersAsync(mails);
 
             return await Result<int>.SuccessAsync(command.Id, _localizer["Members added"]);

@@ -9,7 +9,7 @@ namespace EDO_FOMS.Application.Features.Directories.Queries
         public virtual List<int> DocTypeIds { get; set; } = new();               // + Типы документов для которых предназначен маршрут
         public virtual List<OrgTypes> ForOrgTypes { get; set; } = new();         // + Типы организаций которые могут использовать маршрут
         public virtual List<RouteStageModel> Stages { get; set; } = new();       // + Стадии текущего маршрута
-        public virtual List<RouteStageStepModel> Steps { get; set; } = new();    // + Процессы этапы
+        public virtual List<RouteStepModel> Steps { get; set; } = new();         // + Процессы (шаги) с Участниками
 
         public int Id { get; set; }
         public int Number { get; set; }                                          // - Порядковый номер маршрута, для сортировки

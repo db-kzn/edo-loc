@@ -7,16 +7,20 @@ using EDO_FOMS.Client.Extensions;
 using EDO_FOMS.Client.Infrastructure.Managers.Dir;
 using EDO_FOMS.Client.Infrastructure.Managers.Doc.DocumentType;
 using EDO_FOMS.Client.Infrastructure.Mappings;
+using EDO_FOMS.Client.Models;
+using EDO_FOMS.Domain.Entities.Dir;
 using EDO_FOMS.Domain.Enums;
 using EDO_FOMS.Shared.Constants.Permission;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.JSInterop;
 using MudBlazor;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using static MudBlazor.CategoryTypes;
 
 namespace EDO_FOMS.Client.Pages.Dirs
 {
@@ -40,12 +44,12 @@ namespace EDO_FOMS.Client.Pages.Dirs
 
         private const bool openFilter = false;
 
-        MudTabs _tabs;
-        private MudDropContainer<RouteStageStepModel> _dropContainer;
+        private MudTabs _tabs;
+        private MudDropContainer<RouteStepModel> _dropContainer;
 
-        public AddEditRouteCommand Route { get; set; } = new();
+        private RouteCardModel Route { get; set; } = new();
         private IEnumerable<DocTypeResponse> SelectedDocTypes { get; set; } = new HashSet<DocTypeResponse>() { };
-        private IEnumerable<OrgTypes> SelectedOrgTypes { get; set; } = new HashSet<OrgTypes>() {};
+        private IEnumerable<OrgTypes> SelectedOrgTypes { get; set; } = new HashSet<OrgTypes>() { };
 
         protected override async Task OnInitializedAsync()
         {
@@ -91,33 +95,35 @@ namespace EDO_FOMS.Client.Pages.Dirs
         }
         private void SetRouteCard(RouteCardResponse card)
         {
+            // RouteCardResponse => RouteCardModel
+
             SelectedDocTypes = card.DocTypeIds.Select(id => _docTypes.Find(t => t.Id == id)).ToHashSet();
             SelectedOrgTypes = card.ForOrgTypes.ToHashSet();
 
-            Route = _mapper.Map<AddEditRouteCommand>(card);
+            //Route = _mapper.Map<RouteCardModel>(card);
 
-            //Route.DocTypeIds = card.DocTypeIds;
-            //Route.ForOrgTypes = card.ForOrgTypes;
-            //Route.Stages = card.Stages;
-            //Route.Steps = card.Steps;
+            Route.DocTypeIds = card.DocTypeIds;
+            Route.ForOrgTypes = card.ForOrgTypes;
+            Route.Stages = card.Stages;
+            Route.Steps = card.Steps;
 
-            //Route.Id = card.Id;
-            //Route.Number = card.Number;
-            //Route.Name = card.Name;
-            //Route.Description = card.Description;
+            Route.Id = card.Id;
+            Route.Number = card.Number;
+            Route.Name = card.Name;
+            Route.Description = card.Description;
 
-            //Route.ForUserRole = card.ForUserRole;
-            //Route.EndAction = card.EndAction;
+            Route.ForUserRole = card.ForUserRole;
+            Route.EndAction = card.EndAction;
 
-            //Route.IsPackage = card.IsPackage;
-            //Route.CalcHash = card.CalcHash;
-            //Route.AttachedSign = card.AttachedSign;
-            //Route.DisplayedSign = card.DisplayedSign;
+            Route.IsPackage = card.IsPackage;
+            Route.CalcHash = card.CalcHash;
+            Route.AttachedSign = card.AttachedSign;
+            Route.DisplayedSign = card.DisplayedSign;
 
-            //Route.IsActive = card.IsActive;
-            //Route.AllowRevocation = card.AllowRevocation;
-            //Route.UseVersioning = card.UseVersioning;
-            //Route.HasDetails = card.HasDetails;
+            Route.IsActive = card.IsActive;
+            Route.AllowRevocation = card.AllowRevocation;
+            Route.UseVersioning = card.UseVersioning;
+            Route.HasDetails = card.HasDetails;
         }
 
         private string GetMultiDocTypesText(List<string> selectedDocTypes)
@@ -152,12 +158,37 @@ namespace EDO_FOMS.Client.Pages.Dirs
         private void Close() => _navigationManager.NavigateTo("/dirs/routes");
         private async Task SaveAsync()
         {
-            Route.DocTypeIds = SelectedDocTypes.Select(t => t.Id).ToList();
-            Route.ForOrgTypes = SelectedOrgTypes.ToList();
+            // RouteCardModel => AddEditRouteCardCommand
 
-            await _jsRuntime.InvokeVoidAsync("azino.Console", Route, "Save Route");
+            var command = new AddEditRouteCommand
+            {
+                DocTypeIds = SelectedDocTypes.Select(t => t.Id).ToList(),
+                ForOrgTypes = SelectedOrgTypes.ToList(),
+                Stages = Route.Stages.Select(s => NewRouteStage(s)).ToList(),
+                Steps = Route.Steps.Select(s => NewRouteStep(s)).ToList(),
 
-            var response = await DirManager.RoutePostAsync(Route);
+                Id = Route.Id,
+                Number = Route.Number,
+                Name = Route.Name,
+                Description = Route.Description,
+
+                ForUserRole = Route.ForUserRole,
+                EndAction = Route.EndAction,
+
+                IsPackage = Route.IsPackage,
+                CalcHash = Route.CalcHash,
+                AttachedSign = Route.AttachedSign,
+                DisplayedSign = Route.DisplayedSign,
+
+                IsActive = Route.IsActive,
+                AllowRevocation = Route.AllowRevocation,
+                UseVersioning = Route.UseVersioning,
+                HasDetails = Route.HasDetails
+            };
+
+            await _jsRuntime.InvokeVoidAsync("azino.Console", command, "Save Route");
+
+            var response = await DirManager.RoutePostAsync(command);
 
             if (response.Succeeded)
             {
@@ -183,18 +214,7 @@ namespace EDO_FOMS.Client.Pages.Dirs
             steps.ForEach(s => Route.Steps.Add(s));
         }
 
-        private async Task AddStepAsync(int stageNumber)
-        {
-            var step = new RouteStageStepModel() { StageNumber = stageNumber };
-            Route.Steps.Add(step);
-
-            await AddEditStepAsync(step);
-        }
-        private async Task EditStepAsync(RouteStageStepModel step)
-        {
-            await AddEditStepAsync(step);
-        }
-        private async Task AddEditStepAsync(RouteStageStepModel step)
+        private async Task AddEditStepAsync(RouteStepModel step)
         {
             var parameters = new DialogParameters() { { nameof(RouteStepDialog.Step), step } };
 
@@ -203,17 +223,82 @@ namespace EDO_FOMS.Client.Pages.Dirs
 
             if (!result.Cancelled)
             {
-                var s = (RouteStageStepModel)result.Data;
+                var s = (RouteStepModel)result.Data;
                 if (s is null) { Route.Steps.Remove(step); }
                 _dropContainer.Refresh();
             }
         }
-        private static void StepUpdated(MudItemDropInfo<RouteStageStepModel> info)
+        private async Task AddStepAsync(int stageNumber)
+        {
+            var step = new RouteStepModel() { StageNumber = stageNumber };
+            Route.Steps.Add(step);
+
+            await AddEditStepAsync(step);
+        }
+        private async Task EditStepAsync(RouteStepModel step)
+        {
+            await AddEditStepAsync(step);
+        }
+        private static void StepUpdated(MudItemDropInfo<RouteStepModel> info)
         {
             if (int.TryParse(info.DropzoneIdentifier, out int stageNumber))
             {
                 info.Item.StageNumber = stageNumber;
             }
+        }
+
+        private static RouteStageCommand NewRouteStage(RouteStageModel s)
+        {
+            return new RouteStageCommand()
+            {
+                Id = s.Id,
+                RouteId = s.RouteId,
+                Number = s.Number,
+
+                Color = s.Color,
+                Name = s.Name,
+                Description = s.Description,
+
+                ActType = s.ActType,
+                InSeries = s.InSeries,
+                AllRequred = s.AllRequred,
+
+                DenyRevocation = s.DenyRevocation,
+                Validity = s.Validity
+            };
+        }
+        private static RouteStepCommand NewRouteStep(RouteStepModel s)
+        {
+            return new RouteStepCommand()
+            {
+                Id = s.Id,
+                RouteId = s.RouteId,
+                StageNumber = s.StageNumber,
+                Number = s.Number,
+
+                ActType = s.ActType,
+                OrgType = s.OrgType,
+                AutoSearch = s.AutoSearch,
+                Members = s.Members.Select(m => NewRouteStepMember(s, m)).ToList(),
+
+                OnlyHead = s.OnlyHead,
+                Requred = s.Requred,
+                SomeParticipants = s.SomeParticipants,
+
+                AllRequred = s.AllRequred,
+                HasAgreement = s.HasAgreement,
+                HasReview = s.HasReview
+            };
+        }
+        private static RouteStepMemberCommand NewRouteStepMember(RouteStepModel s, RouteStepMemberModel m)
+        {
+            return new RouteStepMemberCommand()
+            {
+                RouteStepId = s.Id,
+                Act = m.Act,
+                IsAdditional = m.IsAdditional,
+                UserId = m.Contact.Id
+            };
         }
 
         private static string StepClass(bool required)
