@@ -94,7 +94,7 @@ namespace EDO_FOMS.Infrastructure.Contexts
             builder.Entity<RouteStepMember>(entity =>
             {
                 entity.ToTable(name: "RouteStepMembers", schema: "dir");
-                entity.HasKey(m => new { m.RouteStepId, m.UserId });
+                entity.HasKey(m => new { m.RouteStepId, m.UserId, m.Act, m.IsAdditional });
             });
 
             builder.Entity<DocumentType>(entity =>

@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EDO_FOMS.Infrastructure.Migrations
 {
     [DbContext(typeof(EdoFomsContext))]
-    [Migration("20220822014024_Dirs")]
+    [Migration("20220823021442_Dirs")]
     partial class Dirs
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -458,7 +458,7 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.Property<bool>("IsAdditional")
                         .HasColumnType("boolean");
 
-                    b.HasKey("RouteStepId", "UserId");
+                    b.HasKey("RouteStepId", "UserId", "Act", "IsAdditional");
 
                     b.ToTable("RouteStepMembers", "dir");
                 });

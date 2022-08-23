@@ -36,8 +36,8 @@ namespace EDO_FOMS.Client.Pages.Docs
 
         RouteCardResponse Route { get; set; } = new();
         private IEnumerable<DocTypeResponse> RouteDocTypes { get; set; } = new HashSet<DocTypeResponse>() { };
-        private IEnumerable<ContactResponse> ChiefsOfFund { get; set; } = new List<ContactResponse>();
-        private IEnumerable<ContactResponse> ChiefsOfSMO { get; set; } = new List<ContactResponse>();
+        //private IEnumerable<ContactResponse> ChiefsOfFund { get; set; } = new List<ContactResponse>();
+        //private IEnumerable<ContactResponse> ChiefsOfSMO { get; set; } = new List<ContactResponse>();
 
         private List<DocTypeResponse> _allDocTypes = new();
         public AddEditDocCommand Doc { get; set; } = new();
@@ -78,8 +78,8 @@ namespace EDO_FOMS.Client.Pages.Docs
 
             await RouteInitAsync(RouteId);
 
-            ChiefsOfFund = await LoadChiefsAsync(OrgTypes.Fund);
-            ChiefsOfSMO = await LoadChiefsAsync(OrgTypes.SMO);
+            //ChiefsOfFund = await LoadChiefsAsync(OrgTypes.Fund);
+            //ChiefsOfSMO = await LoadChiefsAsync(OrgTypes.SMO);
 
             if (DocId is not null && DocId != 0)
             {
@@ -136,11 +136,11 @@ namespace EDO_FOMS.Client.Pages.Docs
             {
                 var act = new DocActModel() { Step = step, Contact = null };
 
-                if (step.OnlyHead)
-                {
-                    if (step.OrgType == OrgTypes.Fund) { AddContacts(act, ChiefsOfFund); }
-                    else if (step.OrgType == OrgTypes.SMO) { AddContacts(act, ChiefsOfSMO); }
-                }
+                //if (step.OnlyHead)
+                //{
+                //    if (step.OrgType == OrgTypes.Fund) { AddContacts(act, ChiefsOfFund); }
+                //    else if (step.OrgType == OrgTypes.SMO) { AddContacts(act, ChiefsOfSMO); }
+                //}
 
                 Acts.Add(act);
             });
@@ -159,14 +159,35 @@ namespace EDO_FOMS.Client.Pages.Docs
         {
             var name = ContactName(act.Contact);
 
-            if (!act.Contacts.ContainsKey(name))
+            if (!act.Members.Exists(m => m.Label == name))
             {
-                act.Contacts.Add(name, CloneContact(act.Contact));
+                act.Members.Add(NewMember(act));
             }
 
             act.Contact = null;
         }
-        private static void DelContact(DocActModel act, MudChip chip) => act.Contacts.Remove(chip.Text);
+        private static MemberModel NewMember(DocActModel act)
+        {
+            var member = new MemberModel()
+            {
+                Label = ContactName(act.Contact),
+
+                Act = act.Step.ActType,
+                IsAdditional = false,
+                UserId = act.Contact.Id,
+
+                Contact = act.Contact
+            };
+
+            act.Contact = null;
+
+            return member;
+        }
+        private static void DelContact(DocActModel act, MudChip chip)
+        {
+            var member = act.Members.Find(m => m.Label == chip.Text);
+            act.Members.Remove(member);
+        }
 
         private static ContactResponse CloneContact(ContactResponse c) => new()
         {
@@ -213,7 +234,7 @@ namespace EDO_FOMS.Client.Pages.Docs
 
             Acts.ForEach(a =>
             {
-                if (a.Step.Requred && a.Contact == null && a.Contacts.Count == 0)
+                if (a.Step.Requred && a.Contact == null && a.Members.Count == 0)
                 {
                     errors++;
                     _snackBar.Add($"{_localizer["Contact Required"]} {_localizer[a.Step.OrgType.ToString()]}", Severity.Warning);
@@ -239,12 +260,15 @@ namespace EDO_FOMS.Client.Pages.Docs
 
             Acts.ForEach(a =>
             {
-                if (a.Contact != null && !a.Contacts.ContainsKey(ContactName(a.Contact)))
+                if (a.Contact != null && !a.Members.Any(m => m.Label == ContactName(a.Contact)))
                 {
                     Doc.Members.Add(NewActMember(a, a.Contact));
                 }
 
-                foreach (var c in a.Contacts.Values) { Doc.Members.Add(NewActMember(a, c)); }
+                foreach (var c in a.Members)
+                {
+                    Doc.Members.Add(NewActMember(a, c.Contact));
+                }
             });
 
             onUpload = true;

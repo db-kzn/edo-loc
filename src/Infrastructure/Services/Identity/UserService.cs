@@ -182,7 +182,7 @@ namespace EDO_FOMS.Infrastructure.Services.Identity
             //if (orgType == OrgTypes.Undefined && baseRole == UserBaseRoles.Undefined && string.IsNullOrWhiteSpace(searchString))
 
             var list = await users.Take(10)
-                .Select(u => new {u.Id, u.Surname, u.GivenName, u.OrgId, u.InnLe})
+                .Select(u => new { u.Id, u.Surname, u.GivenName, u.OrgId, u.InnLe })
                 .ToListAsync();
 
             var orgIds = list.Select(u => u.OrgId).Distinct().ToArray();
@@ -191,7 +191,8 @@ namespace EDO_FOMS.Infrastructure.Services.Identity
 
             var contacts = new List<ContactResponse>();// _mapper.Map<List<ContactResponse>>(list);
 
-            list.ForEach(u => {
+            list.ForEach(u =>
+            {
                 ContactResponse contact = new()
                 {
                     Id = u.Id,
@@ -690,18 +691,22 @@ namespace EDO_FOMS.Infrastructure.Services.Identity
         }
         public async Task<ContactResponse> GetContactAsync(string userId)
         {
+            if (string.IsNullOrWhiteSpace(userId)) { return null; }
+
             var user = await _userManager.FindByIdAsync(userId);
+            if (user is null) { return null; }
+
             var org = await _db.Organizations.FirstOrDefaultAsync(o => o.Id == user.OrgId);
 
-            return new ContactResponse()
+            return new()
             {
                 Id = userId,
                 Surname = user.Surname,
                 GivenName = user.GivenName,
 
                 OrgId = user.OrgId,
-                OrgShortName = org.ShortName,
-                InnLe = user.InnLe
+                InnLe = user.InnLe,
+                OrgShortName = org is not null ? org.ShortName : ""
             };
         }
 

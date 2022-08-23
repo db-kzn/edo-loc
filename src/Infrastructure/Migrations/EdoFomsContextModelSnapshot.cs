@@ -456,7 +456,7 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.Property<bool>("IsAdditional")
                         .HasColumnType("boolean");
 
-                    b.HasKey("RouteStepId", "UserId");
+                    b.HasKey("RouteStepId", "UserId", "Act", "IsAdditional");
 
                     b.ToTable("RouteStepMembers", "dir");
                 });

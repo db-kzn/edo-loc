@@ -25,7 +25,11 @@ namespace EDO_FOMS.Client.Models
         public bool AttachedSign { get; set; } = false;                 // + Прикрепленная подпись руководителя
         public bool DisplayedSign { get; set; } = false;                // + Отображаемая подпись руководителя
 
-        public bool IsActive { get; set; } = true;                      // - Используемый маршрут
+        public bool IsActive { get; set; } = true;                      // + Используемый маршрут
+        public bool ReadOnly { get; set; } = false;                     // + Карточка документа не редактируется
+        public bool NameOfFile { get; set; } = true;                    // + Наименование документа из имени файла
+        public bool DateIsToday { get; set; } = true;                   // + Дата документа - устанивить сегодня
+
         public bool AllowRevocation { get; set; } = true;               // - Возможность отзывать документ с маршрута
         public bool UseVersioning { get; set; } = false;                // - Используется версионность
         public bool HasDetails { get; set; } = false;                   // - Отображать параметры этапов

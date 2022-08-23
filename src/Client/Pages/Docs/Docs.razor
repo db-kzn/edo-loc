@@ -344,9 +344,8 @@
                 <MudFab Color="Color.Secondary" Icon="@Icons.Material.Rounded.Add" aria-label="upload" OnClick="() => AddDocAsync(_routeTitles[0].Id)" />
             </MudTooltip>
         </MudItem>
-
     }
-    else if (_routeTitles.Count > 0)
+    else if (_routeTitles.Count > 0) @* <= 10, > 10 -> диалоговое окно*@
     {
         <MudItem Class="fab-btn-add">
             <MudMenu AnchorOrigin="Origin.TopCenter" TransformOrigin="Origin.BottomRight" Dense="@(_routeTitles.Count > 10)">

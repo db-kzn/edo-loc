@@ -124,6 +124,20 @@
                                              CheckedIcon="@Icons.Material.Outlined.PlayCircle" UnCheckedColor="Color.Default" />
                             </MudItem>
                             <MudItem xs="3">
+                                <MudCheckBox @bind-Checked="@Route.ReadOnly" Label="@_localizer["Read Only"]" Color="Color.Primary"
+                                             CheckedIcon="@Icons.Material.Outlined.EditOff" UnCheckedColor="Color.Default" />
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudCheckBox @bind-Checked="@Route.NameOfFile" Label="@_localizer["Name Of File"]" Color="Color.Primary"
+                                             CheckedIcon="@Icons.Material.Outlined.TextSnippet" UnCheckedColor="Color.Default" />
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudCheckBox @bind-Checked="@Route.DateIsToday" Label="@_localizer["Date Is Today"]" Color="Color.Primary"
+                                             CheckedIcon="@Icons.Material.Outlined.CalendarToday" UnCheckedColor="Color.Default" />
+                            </MudItem>
+
+
+                            <MudItem xs="3">
                                 <MudCheckBox @bind-Checked="@Route.AllowRevocation" Label="@_localizer["Allow Revocation"]" Color="Color.Primary"
                                              CheckedIcon="@Icons.Material.Outlined.SettingsBackupRestore" UnCheckedColor="Color.Default" />
                             </MudItem>

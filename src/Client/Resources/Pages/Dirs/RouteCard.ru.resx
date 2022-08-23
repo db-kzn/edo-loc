@@ -141,6 +141,9 @@
   <data name="Card" xml:space="preserve">
     <value>Маршрут</value>
   </data>
+  <data name="Date Is Today" xml:space="preserve">
+    <value>Дата от сегодня</value>
+  </data>
   <data name="Description" xml:space="preserve">
     <value>Описание</value>
   </data>
@@ -174,6 +177,9 @@
   <data name="Name" xml:space="preserve">
     <value>Наименование</value>
   </data>
+  <data name="Name Of File" xml:space="preserve">
+    <value>Наименование из файла</value>
+  </data>
   <data name="New card" xml:space="preserve">
     <value>Новый маршрут</value>
   </data>
@@ -182,6 +188,9 @@
   </data>
   <data name="Package" xml:space="preserve">
     <value>Несколько файлов</value>
+  </data>
+  <data name="Read Only" xml:space="preserve">
+    <value>Запрет редактирования</value>
   </data>
   <data name="Review" xml:space="preserve">
     <value>Рецензирование</value>

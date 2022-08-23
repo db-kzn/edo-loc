@@ -309,7 +309,7 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RouteStepMembers", x => new { x.RouteStepId, x.UserId });
+                    table.PrimaryKey("PK_RouteStepMembers", x => new { x.RouteStepId, x.UserId, x.Act, x.IsAdditional });
                     table.ForeignKey(
                         name: "FK_RouteStepMembers_RouteSteps_RouteStepId",
                         column: x => x.RouteStepId,

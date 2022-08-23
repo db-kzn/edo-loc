@@ -141,6 +141,9 @@
   <data name="Card" xml:space="preserve">
     <value>Card</value>
   </data>
+  <data name="Date Is Today" xml:space="preserve">
+    <value>Date Is Today</value>
+  </data>
   <data name="Description" xml:space="preserve">
     <value>Description</value>
   </data>
@@ -174,6 +177,9 @@
   <data name="Name" xml:space="preserve">
     <value>Name</value>
   </data>
+  <data name="Name Of File" xml:space="preserve">
+    <value>Name Of File</value>
+  </data>
   <data name="New card" xml:space="preserve">
     <value>New card</value>
   </data>
@@ -182,6 +188,9 @@
   </data>
   <data name="Package" xml:space="preserve">
     <value>Package</value>
+  </data>
+  <data name="Read Only" xml:space="preserve">
+    <value>Read Only</value>
   </data>
   <data name="Review" xml:space="preserve">
     <value>Review</value>

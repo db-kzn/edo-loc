@@ -148,7 +148,7 @@
                                                  ResetValueOnEmptyText="@resetValueOnEmptyText" CoerceText="@coerceText" CoerceValue="@coerceValue" Clearable="false"
                                                  Adornment="Adornment.Start" AdornmentColor="Color.Default" AdornmentIcon="@IconByOrgType(act.Step.OrgType)"
                                                  Label="@LabelByStep(act.Step)" Required="act.Step.Requred"
-                                                 Placeholder="@(act.Contacts.Count > 0 ? "" : act.Step.Requred ? _localizer["Required to fill"] : _localizer["Not necessary"])"
+                                                 Placeholder="@(act.Members.Count > 0 ? "" : act.Step.Requred ? _localizer["Required to fill"] : _localizer["Not necessary"])"
                                                  ToStringFunc="@(e => (e == null) ? null : ContactName(e))" Disabled="@onUpload">
 
                                             <NoItemsTemplate>
@@ -162,9 +162,9 @@
                                     </div>
 
                                     <MudChipSet AllClosable="true" OnClose="@((chip) => DelContact(act, chip))">
-                                        @foreach (var c in act.Contacts)
+                                        @foreach (var c in act.Members)
                                         {
-                                            <MudChip Text="@c.Key" Variant="Variant.Outlined" Color="Color.Default" Disabled="@onUpload"></MudChip>
+                                            <MudChip Text="@c.Label" Variant="Variant.Outlined" Color="Color.Default" Disabled="@onUpload"></MudChip>
                                         }
                                     </MudChipSet>
                                 }

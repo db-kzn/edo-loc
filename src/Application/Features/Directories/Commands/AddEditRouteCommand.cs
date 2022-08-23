@@ -175,12 +175,14 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
             await _unitOfWork.Repository<Route>().AddAsync(route);
             await _unitOfWork.Commit(cancellationToken);
 
-            return await Result<int>.SuccessAsync(route.Id, _localizer["Route Saved"]);
+            return await Result<int>.SuccessAsync(route?.Id ?? 0, _localizer["Route Saved"]);
         }
 
         private async Task<Result<int>> EditRouteAsync(AddEditRouteCommand command, CancellationToken cancellationToken)
         {
-            var routes = _unitOfWork.Repository<Route>().Entities.Include(r => r.Stages).Include(r => r.Steps).Include(r => r.RouteDocTypes).Include(r => r.ForOrgTypes);
+            var routes = _unitOfWork.Repository<Route>().Entities
+                .Include(r => r.RouteDocTypes).Include(r => r.ForOrgTypes)
+                .Include(r => r.Stages).Include(r => r.Steps).ThenInclude(s => s.Members);
             var route = await routes.FirstOrDefaultAsync(r => r.Id == command.Id, cancellationToken: cancellationToken);
             if (route is null) { return await Result<int>.FailAsync(_localizer["Route Not Found!"]); }
 
@@ -266,7 +268,6 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
             {
                 if (!command.Steps.Exists(c => c.Id == r.Id)) { r.IsDeleted = true; }
             });
-
             command.Steps.ForEach(c =>
             {
                 if (c.Id == 0)
@@ -298,33 +299,45 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
                 }
                 else
                 {
-                    var s = route.Steps.Find(r => r.Id == c.Id);
-                    if (s != null)
+                    var r = route.Steps.Find(f => f.Id == c.Id);
+                    if (r != null)
                     {
-                        s.IsDeleted = false;
-                        s.StageNumber = c.StageNumber;
-                        s.Number = c.Number;
+                        r.IsDeleted = false;
+                        r.StageNumber = c.StageNumber;
+                        r.Number = c.Number;
 
-                        s.ActType = c.ActType;
-                        s.OrgType = c.OrgType;
-                        s.AutoSearch = c.AutoSearch;
-                        //s.Members = c.Members.Select(m => NewMember(s, m)).ToList();
+                        r.ActType = c.ActType;
+                        r.OrgType = c.OrgType;
+                        r.AutoSearch = c.AutoSearch;
 
-                        s.OnlyHead = c.OnlyHead;
-                        s.Requred = c.Requred;
-                        s.SomeParticipants = c.SomeParticipants;
+                        r.OnlyHead = c.OnlyHead;
+                        r.Requred = c.Requred;
+                        r.SomeParticipants = c.SomeParticipants;
 
-                        s.AllRequred = c.AllRequred;
-                        s.HasAgreement = c.HasAgreement;
-                        s.HasReview = c.HasReview;
+                        r.AllRequred = c.AllRequred;
+                        r.HasAgreement = c.HasAgreement;
+                        r.HasReview = c.HasReview;
                     }
+
+                    r.Members.RemoveAll(mr =>
+                        !c.Members.Exists(mc =>
+                            (mc.UserId == mr.UserId && mc.IsAdditional == mr.IsAdditional && mc.Act == mr.Act)
+                        ));
+
+                    c.Members.ForEach(mc =>
+                    {
+                        if (!r.Members.Exists(mr => (mc.UserId == mr.UserId && mc.IsAdditional == mr.IsAdditional && mc.Act == mr.Act)))
+                        {
+                            r.Members.Add(NewMember(r, mc));
+                        }
+                    });
                 }
             });
 
             await _unitOfWork.Repository<Route>().UpdateAsync(route);
             await _unitOfWork.Commit(cancellationToken);
 
-            return await Result<int>.SuccessAsync(route.Id, _localizer["Route Updated"]);
+            return await Result<int>.SuccessAsync(route?.Id ?? 0, _localizer["Route Updated"]);
         }
 
         private static RouteStepMember NewMember(RouteStep s, RouteStepMemberCommand m)

@@ -124,7 +124,7 @@
     <value>Справочник типов документов</value>
   </data>
   <data name="Doc.Types" xml:space="preserve">
-    <value>Типы документов</value>
+    <value>Виды документов</value>
   </data>
   <data name="Icon" xml:space="preserve">
     <value>Иконка</value>

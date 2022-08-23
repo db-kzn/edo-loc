@@ -8,6 +8,6 @@ namespace EDO_FOMS.Client.Models
     {
         public RouteStepModel Step { get; set; }
         public ContactResponse Contact { get; set; }
-        public Dictionary<string, ContactResponse> Contacts { get; set; } = new();
+        public List<MemberModel> Members { get; set; } = new();
     }
 }

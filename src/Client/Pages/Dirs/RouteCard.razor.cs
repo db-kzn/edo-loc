@@ -76,7 +76,7 @@ namespace EDO_FOMS.Client.Pages.Dirs
                 if (response.Succeeded)
                 {
                     var card = response.Data;
-                    await _jsRuntime.InvokeVoidAsync("azino.Console", card, "Route Card");
+                    await _jsRuntime.InvokeVoidAsync("azino.Console", card, "Route Card Response");
                     SetRouteCard(card);
                 }
                 else

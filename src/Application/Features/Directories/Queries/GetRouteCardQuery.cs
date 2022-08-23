@@ -1,22 +1,13 @@
 ﻿using EDO_FOMS.Application.Interfaces.Repositories;
+using EDO_FOMS.Application.Interfaces.Services.Identity;
+using EDO_FOMS.Application.Models.Dir;
+using EDO_FOMS.Domain.Entities.Dir;
 using EDO_FOMS.Shared.Wrapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
-using System.Threading;
-using EDO_FOMS.Domain.Entities.Dir;
-using EDO_FOMS.Application.Features.Agreements.Queries;
-using System.Collections.Generic;
-using static MudBlazor.FilterOperator;
 using System.Linq;
-using System.Linq.Expressions;
-using System;
-using EDO_FOMS.Application.Models.Dir;
-using static MudBlazor.Colors;
-using EDO_FOMS.Application.Interfaces.Services.Identity;
-using EDO_FOMS.Domain.Entities.Doc;
-using EDO_FOMS.Domain.Entities.Org;
-using EDO_FOMS.Application.Responses.Docums;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace EDO_FOMS.Application.Features.Directories.Queries;
 
@@ -43,8 +34,9 @@ internal class GetRouteCardQueryHandler : IRequestHandler<GetRouteCardQuery, Res
 
     public async Task<Result<RouteCardResponse>> Handle(GetRouteCardQuery request, CancellationToken cancellationToken)
     {
-        var routes = _unitOfWork.Repository<Route>().Entities.Include(r => r.RouteDocTypes).Include(r => r.ForOrgTypes)
-                                                    .Include(r => r.Stages).Include(r => r.Steps).ThenInclude(s => s.Members);
+        var routes = _unitOfWork.Repository<Route>().Entities
+            .Include(r => r.RouteDocTypes).Include(r => r.ForOrgTypes)
+            .Include(r => r.Stages).Include(r => r.Steps).ThenInclude(s => s.Members);
 
         var route = await routes.FirstOrDefaultAsync(r => r.Id == request.Id, cancellationToken: cancellationToken);
 
@@ -74,10 +66,11 @@ internal class GetRouteCardQueryHandler : IRequestHandler<GetRouteCardQuery, Res
             HasDetails = route.HasDetails
         };
 
-        card.Steps.ForEach(s =>
-        {
-            s.Members.ForEach(async m => m.Contact = await _userService.GetContactAsync(m.UserId));
-        });
+        // Вариант .ForEach(async - не работает
+        //card.Steps.ForEach(s => s.Members.ForEach(async m => m.Contact = await _userService.GetContactAsync(m.UserId)));
+        foreach(var s in card.Steps)
+            foreach(var m in s.Members)
+                m.Contact = await _userService.GetContactAsync(m.UserId);
 
         return await Result<RouteCardResponse>.SuccessAsync(card);
     }
