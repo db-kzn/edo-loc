@@ -129,17 +129,20 @@
                             </MudItem>
                             <MudItem xs="3">
                                 <MudCheckBox @bind-Checked="@Route.NameOfFile" Label="@_localizer["Name Of File"]" Color="Color.Primary"
-                                             CheckedIcon="@Icons.Material.Outlined.TextSnippet" UnCheckedColor="Color.Default" />
+                                             CheckedIcon="@Icons.Material.Outlined.TextRotationNone" UnCheckedColor="Color.Default" />
                             </MudItem>
                             <MudItem xs="3">
                                 <MudCheckBox @bind-Checked="@Route.DateIsToday" Label="@_localizer["Date Is Today"]" Color="Color.Primary"
                                              CheckedIcon="@Icons.Material.Outlined.CalendarToday" UnCheckedColor="Color.Default" />
                             </MudItem>
 
-
                             <MudItem xs="3">
                                 <MudCheckBox @bind-Checked="@Route.AllowRevocation" Label="@_localizer["Allow Revocation"]" Color="Color.Primary"
                                              CheckedIcon="@Icons.Material.Outlined.SettingsBackupRestore" UnCheckedColor="Color.Default" />
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudCheckBox @bind-Checked="@Route.ParseFileName" Label="@_localizer["Parse File Name"]" Color="Color.Primary"
+                                             CheckedIcon="@Icons.Material.Outlined.SettingsEthernet" UnCheckedColor="Color.Default" Disabled />
                             </MudItem>
                             <MudItem xs="3">
                                 <MudCheckBox @bind-Checked="@Route.UseVersioning" Label="@_localizer["Use Versioning"]" Color="Color.Primary"
@@ -164,7 +167,7 @@
                 </MudCard>
             </MudTabPanel>
 
-            <MudTabPanel Text="@_localizer["Stages"]" Disabled="false">
+            <MudTabPanel Text="@_localizer["Stages"]">
                 <MudCard>
                     <MudCardContent>
                         <MudGrid Style="max-height: 70vh; overflow-y: scroll;">
@@ -351,13 +354,15 @@
                                    OnClick="() => _tabs.ActivatePanel(0)">
                             @_localizer["Title"]
                         </MudButton>
-                        <MudButton Class="ml-1" Size="Size.Large" FullWidth Variant="Variant.Filled" StartIcon="@Icons.Material.Rounded.DoneOutline" Color="Color.Primary"
+                        <MudButton Class="ml-1" Size="Size.Large" FullWidth Variant="Variant.Filled" EndIcon="@Icons.Material.Rounded.DoneOutline" Color="Color.Primary"
                                    OnClick="() => SaveAsync()">
                             @_localizer["Save"]
                         </MudButton>
                     </MudCardActions>
                 </MudCard>
             </MudTabPanel>
+
+            <MudTabPanel Text="@_localizer["File"]" Disabled="true"></MudTabPanel>
         </ChildContent>
 
         <Header>

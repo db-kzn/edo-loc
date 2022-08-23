@@ -162,6 +162,9 @@
   <data name="End Action" xml:space="preserve">
     <value>End Action</value>
   </data>
+  <data name="File" xml:space="preserve">
+    <value>File</value>
+  </data>
   <data name="Fund" xml:space="preserve">
     <value>Fund</value>
   </data>
@@ -188,6 +191,9 @@
   </data>
   <data name="Package" xml:space="preserve">
     <value>Package</value>
+  </data>
+  <data name="Parse File Name" xml:space="preserve">
+    <value>Parse File Name</value>
   </data>
   <data name="Read Only" xml:space="preserve">
     <value>Read Only</value>

@@ -162,6 +162,9 @@
   <data name="End Action" xml:space="preserve">
     <value>Завершить действием</value>
   </data>
+  <data name="File" xml:space="preserve">
+    <value>Файл</value>
+  </data>
   <data name="Fund" xml:space="preserve">
     <value>ФОМС</value>
   </data>
@@ -188,6 +191,9 @@
   </data>
   <data name="Package" xml:space="preserve">
     <value>Несколько файлов</value>
+  </data>
+  <data name="Parse File Name" xml:space="preserve">
+    <value>Разбор имени файла</value>
   </data>
   <data name="Read Only" xml:space="preserve">
     <value>Запрет редактирования</value>

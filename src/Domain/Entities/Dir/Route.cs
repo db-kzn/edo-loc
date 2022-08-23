@@ -6,12 +6,15 @@ namespace EDO_FOMS.Domain.Entities.Dir;
 
 public class Route : AuditableEntity<int>
 {
-    public virtual List<DocumentType> DocTypes { get; set; } = new();        // + Типы документов для которых предназначен маршрут
-    public virtual List<RouteDocType> RouteDocTypes { get; set; } = new();   // + Промежуточная таблица * <=> *
-    public virtual List<RouteOrgType> ForOrgTypes { get; set; } = new();     // + Типы организаций которые могут использовать маршрут
+    public List<DocumentType> DocTypes { get; set; } = new();                // + Типы документов для которых предназначен маршрут
+    public List<RouteDocType> RouteDocTypes { get; set; } = new();           // + Промежуточная таблица * <=> *
+    public List<RouteOrgType> ForOrgTypes { get; set; } = new();             // + Типы организаций которые могут использовать маршрут
 
-    public virtual List<RouteStage> Stages { get; set; } = new();            // + Стадии текущего маршрута
-    public virtual List<RouteStep> Steps { get; set; } = new();              // + Процессы этапы
+    public List<RouteStage> Stages { get; set; } = new();                    // + Стадии текущего маршрута
+    public List<RouteStep> Steps { get; set; } = new();                      // + Процессы этапы
+
+    public List<RouteFileParse> Parses { get; set; } = new();                // - Правила разбора имени файла
+
 
     // Id
     public int Number { get; set; }                                          // - Порядковый номер маршрута, для сортировки
@@ -27,7 +30,12 @@ public class Route : AuditableEntity<int>
     public bool DisplayedSign { get; set; } = false;                         // + Отображаемая подпись руководителя
 
     public bool IsActive { get; set; } = true;                               // - Используемый маршрут
+    public bool ReadOnly { get; set; } = false;                              // + Карточка документа не редактируется
+    public bool NameOfFile { get; set; } = true;                             // + Наименование документа из имени файла
+    public bool DateIsToday { get; set; } = true;                            // + Дата документа - устанивить сегодня
+
     public bool AllowRevocation { get; set; } = true;                        // - Возможность отзывать документ с маршрута
+    public bool ParseFileName { get; set; } = false;                         // + Разбор имени файла
     public bool UseVersioning { get; set; } = false;                         // - Используется версионность
     public bool HasDetails { get; set; } = false;                            // - Отображать параметры этапов
 }

@@ -230,6 +230,9 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<bool>("DateIsToday")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
@@ -260,8 +263,17 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
+                    b.Property<bool>("NameOfFile")
+                        .HasColumnType("boolean");
+
                     b.Property<int>("Number")
                         .HasColumnType("integer");
+
+                    b.Property<bool>("ParseFileName")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("ReadOnly")
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("UseVersioning")
                         .HasColumnType("boolean");
@@ -284,6 +296,39 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.HasIndex("DocumentTypeId");
 
                     b.ToTable("RouteDocTypes", "dir");
+                });
+
+            modelBuilder.Entity("EDO_FOMS.Domain.Entities.Dir.RouteFileParse", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<int>("RouteId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RouteId");
+
+                    b.ToTable("RouteFileParse");
                 });
 
             modelBuilder.Entity("EDO_FOMS.Domain.Entities.Dir.RouteOrgType", b =>
@@ -1240,6 +1285,17 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.Navigation("Route");
                 });
 
+            modelBuilder.Entity("EDO_FOMS.Domain.Entities.Dir.RouteFileParse", b =>
+                {
+                    b.HasOne("EDO_FOMS.Domain.Entities.Dir.Route", "Route")
+                        .WithMany("Parses")
+                        .HasForeignKey("RouteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Route");
+                });
+
             modelBuilder.Entity("EDO_FOMS.Domain.Entities.Dir.RouteOrgType", b =>
                 {
                     b.HasOne("EDO_FOMS.Domain.Entities.Dir.Route", "Route")
@@ -1567,6 +1623,8 @@ namespace EDO_FOMS.Infrastructure.Migrations
             modelBuilder.Entity("EDO_FOMS.Domain.Entities.Dir.Route", b =>
                 {
                     b.Navigation("ForOrgTypes");
+
+                    b.Navigation("Parses");
 
                     b.Navigation("RouteDocTypes");
 

@@ -47,6 +47,8 @@ internal class GetRouteCardQueryHandler : IRequestHandler<GetRouteCardQuery, Res
             Stages = route.Stages.Select(s => new RouteStageModel(s)).ToList(),
             Steps = route.Steps.Where(s => !s.IsDeleted).Select(s => new RouteStepModel(s)).ToList(),
 
+            Parses = new(),
+
             Id = route.Id,
             Number = route.Number,
             Name = route.Name,
@@ -61,7 +63,12 @@ internal class GetRouteCardQueryHandler : IRequestHandler<GetRouteCardQuery, Res
             DisplayedSign = route.DisplayedSign,
 
             IsActive = route.IsActive,
+            ReadOnly = route.ReadOnly,
+            NameOfFile = route.NameOfFile,
+            DateIsToday = route.DateIsToday,
+
             AllowRevocation = route.AllowRevocation,
+            ParseFileName = route.ParseFileName,
             UseVersioning = route.UseVersioning,
             HasDetails = route.HasDetails
         };

@@ -161,7 +161,11 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     AttachedSign = table.Column<bool>(type: "boolean", nullable: false),
                     DisplayedSign = table.Column<bool>(type: "boolean", nullable: false),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false),
+                    ReadOnly = table.Column<bool>(type: "boolean", nullable: false),
+                    NameOfFile = table.Column<bool>(type: "boolean", nullable: false),
+                    DateIsToday = table.Column<bool>(type: "boolean", nullable: false),
                     AllowRevocation = table.Column<bool>(type: "boolean", nullable: false),
+                    ParseFileName = table.Column<bool>(type: "boolean", nullable: false),
                     UseVersioning = table.Column<bool>(type: "boolean", nullable: false),
                     HasDetails = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
@@ -194,6 +198,31 @@ namespace EDO_FOMS.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_RouteDocTypes_Routes_RouteId",
+                        column: x => x.RouteId,
+                        principalSchema: "dir",
+                        principalTable: "Routes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RouteFileParse",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    RouteId = table.Column<int>(type: "integer", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "text", nullable: true),
+                    LastModifiedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RouteFileParse", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RouteFileParse_Routes_RouteId",
                         column: x => x.RouteId,
                         principalSchema: "dir",
                         principalTable: "Routes",
@@ -350,6 +379,11 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 column: "DocumentTypeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_RouteFileParse_RouteId",
+                table: "RouteFileParse",
+                column: "RouteId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RouteOrgTypes_RouteId",
                 schema: "dir",
                 table: "RouteOrgTypes",
@@ -406,6 +440,9 @@ namespace EDO_FOMS.Infrastructure.Migrations
             migrationBuilder.DropTable(
                 name: "RouteDocTypes",
                 schema: "dir");
+
+            migrationBuilder.DropTable(
+                name: "RouteFileParse");
 
             migrationBuilder.DropTable(
                 name: "RouteOrgTypes",

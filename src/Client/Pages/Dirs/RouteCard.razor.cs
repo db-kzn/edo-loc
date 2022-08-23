@@ -107,6 +107,8 @@ namespace EDO_FOMS.Client.Pages.Dirs
             Route.Stages = card.Stages;
             Route.Steps = card.Steps;
 
+            //Parses
+
             Route.Id = card.Id;
             Route.Number = card.Number;
             Route.Name = card.Name;
@@ -121,7 +123,12 @@ namespace EDO_FOMS.Client.Pages.Dirs
             Route.DisplayedSign = card.DisplayedSign;
 
             Route.IsActive = card.IsActive;
+            Route.ReadOnly = card.ReadOnly;
+            Route.NameOfFile = card.NameOfFile;
+            Route.DateIsToday = card.DateIsToday;
+
             Route.AllowRevocation = card.AllowRevocation;
+            Route.ParseFileName = card.ParseFileName;
             Route.UseVersioning = card.UseVersioning;
             Route.HasDetails = card.HasDetails;
         }
@@ -167,6 +174,8 @@ namespace EDO_FOMS.Client.Pages.Dirs
                 Stages = Route.Stages.Select(s => NewRouteStage(s)).ToList(),
                 Steps = Route.Steps.Select(s => NewRouteStep(s)).ToList(),
 
+                // Parses
+
                 Id = Route.Id,
                 Number = Route.Number,
                 Name = Route.Name,
@@ -181,7 +190,12 @@ namespace EDO_FOMS.Client.Pages.Dirs
                 DisplayedSign = Route.DisplayedSign,
 
                 IsActive = Route.IsActive,
+                ReadOnly = Route.ReadOnly,
+                NameOfFile = Route.NameOfFile,
+                DateIsToday = Route.DateIsToday,
+
                 AllowRevocation = Route.AllowRevocation,
+                ParseFileName = Route.ParseFileName,
                 UseVersioning = Route.UseVersioning,
                 HasDetails = Route.HasDetails
             };
