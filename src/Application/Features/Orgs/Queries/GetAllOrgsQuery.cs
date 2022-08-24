@@ -36,7 +36,7 @@ namespace EDO_FOMS.Application.Features.Orgs.Queries
 
         public async Task<Result<List<OrgsResponse>>> Handle(GetAllOrgsQuery request, CancellationToken cancellationToken)
         {
-            Func<Task<List<Organization>>> getAllOrgs = () => _unitOfWork.Repository<Organization>().GetAllAsync();
+            Task<List<Organization>> getAllOrgs() => _unitOfWork.Repository<Organization>().GetAllAsync();
             var orgList = await _cache.GetOrAddAsync(AppConstants.Cache.GetAllOrgsCacheKey, getAllOrgs);
             var mappedOrgs = _mapper.Map<List<OrgsResponse>>(orgList);
             return await Result<List<OrgsResponse>>.SuccessAsync(mappedOrgs);

@@ -135,6 +135,20 @@ namespace EDO_FOMS.Server.Controllers.Docums
         }
 
         /// <summary>
+        /// Search Organizations By String With Org Type
+        /// </summary>
+        /// <param name="orgType"></param> 
+        /// <param name="search"></param>
+        /// <returns>Status 200 Ok</returns>
+        [Authorize(Policy = Permissions.Documents.View)]
+        [HttpGet("orgs-find")]
+        public async Task<IActionResult> FindOrgsWithType(OrgTypes orgType, string search)
+        {
+            var orgs = await _mediator.Send(new SearchOrgsWithTypeQuery(orgType, search));
+            return Ok(orgs);
+        }
+
+        /// <summary>
         /// Get Found Users
         /// </summary>
         /// <param name="orgType"></param>

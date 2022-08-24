@@ -1,13 +1,19 @@
-﻿using EDO_FOMS.Application.Interfaces.Repositories;
+﻿using AutoMapper;
+using EDO_FOMS.Application.Features.Orgs.Queries;
+using EDO_FOMS.Application.Interfaces.Repositories;
 using EDO_FOMS.Application.Interfaces.Services.Identity;
 using EDO_FOMS.Application.Models.Dir;
 using EDO_FOMS.Domain.Entities.Dir;
+using EDO_FOMS.Domain.Entities.Org;
 using EDO_FOMS.Shared.Wrapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using static MudBlazor.CategoryTypes;
 
 namespace EDO_FOMS.Application.Features.Directories.Queries;
 
@@ -22,14 +28,17 @@ internal class GetRouteCardQueryHandler : IRequestHandler<GetRouteCardQuery, Res
 {
     private readonly IUserService _userService;
     private readonly IUnitOfWork<int> _unitOfWork;
+    private readonly IMapper _mapper;
 
     public GetRouteCardQueryHandler(
         IUserService userService,
-        IUnitOfWork<int> unitOfWork
+        IUnitOfWork<int> unitOfWork,
+        IMapper mapper
         )
     {
         _userService = userService;
         _unitOfWork = unitOfWork;
+        _mapper = mapper;
     }
 
     public async Task<Result<RouteCardResponse>> Handle(GetRouteCardQuery request, CancellationToken cancellationToken)
@@ -76,8 +85,15 @@ internal class GetRouteCardQueryHandler : IRequestHandler<GetRouteCardQuery, Res
         // Вариант .ForEach(async - не работает
         //card.Steps.ForEach(s => s.Members.ForEach(async m => m.Contact = await _userService.GetContactAsync(m.UserId)));
         foreach(var s in card.Steps)
-            foreach(var m in s.Members)
-                m.Contact = await _userService.GetContactAsync(m.UserId);
+        {
+            if (s.OrgId is not null)
+            {
+                var org = await _unitOfWork.Repository<Organization>().GetByIdAsync((int)s.OrgId);
+                s.OrgMember = _mapper.Map<OrgsResponse>(org);// new OrgsResponse();
+            }
+
+            foreach(var m in s.Members) m.Contact = await _userService.GetContactAsync(m.UserId);
+        }
 
         return await Result<RouteCardResponse>.SuccessAsync(card);
     }

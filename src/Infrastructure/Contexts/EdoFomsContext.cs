@@ -37,6 +37,8 @@ namespace EDO_FOMS.Infrastructure.Contexts
         public DbSet<RouteStage> RouteStages { get; set; }
         public DbSet<RouteStep> RouteSteps { get; set; }
         public DbSet<RouteStepMember> RouteStepMembers { get; set; }
+        public DbSet<RouteFileParse> RouteFileParses { get; set; }
+
 
         public DbSet<Organization> Organizations { get; set; }
         public DbSet<Certificate> Certificates { get; set; }
@@ -91,6 +93,8 @@ namespace EDO_FOMS.Infrastructure.Contexts
             builder.Entity<RouteOrgType>(entity => entity.ToTable(name: "RouteOrgTypes", schema: "dir"));
             builder.Entity<RouteStage>(entity => entity.ToTable(name: "RouteStages", schema: "dir"));
             builder.Entity<RouteStep>(entity => entity.ToTable(name: "RouteSteps", schema: "dir"));
+            builder.Entity<RouteFileParse>(entity => entity.ToTable(name: "RouteFileParses", schema: "dir"));
+
             builder.Entity<RouteStepMember>(entity =>
             {
                 entity.ToTable(name: "RouteStepMembers", schema: "dir");

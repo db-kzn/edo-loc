@@ -171,6 +171,14 @@
             <param name="search"></param>
             <returns>Status 200 Ok</returns>
         </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Docums.DocumentsController.FindOrgsWithType(EDO_FOMS.Domain.Enums.OrgTypes,System.String)">
+            <summary>
+            Search Organizations By String With Org Type
+            </summary>
+            <param name="orgType"></param> 
+            <param name="search"></param>
+            <returns>Status 200 Ok</returns>
+        </member>
         <member name="M:EDO_FOMS.Server.Controllers.Docums.DocumentsController.GetFoundContacts(EDO_FOMS.Domain.Enums.OrgTypes,EDO_FOMS.Domain.Enums.UserBaseRoles,System.String)">
             <summary>
             Get Found Users

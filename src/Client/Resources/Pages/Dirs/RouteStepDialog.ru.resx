@@ -133,13 +133,16 @@
     <value>Любая орг-я</value>
   </data>
   <data name="Auto Search" xml:space="preserve">
-    <value>Автоматический поиск</value>
+    <value>Автоматический поиск участников</value>
   </data>
   <data name="Chief" xml:space="preserve">
     <value>Руководитель</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Удалить</value>
+  </data>
+  <data name="Disabled" xml:space="preserve">
+    <value>Отключен</value>
   </data>
   <data name="Employee" xml:space="preserve">
     <value>Сотрудник</value>
@@ -161,6 +164,9 @@
   </data>
   <data name="Main member" xml:space="preserve">
     <value>Основной участник</value>
+  </data>
+  <data name="Member Org" xml:space="preserve">
+    <value>Организация участник</value>
   </data>
   <data name="Members" xml:space="preserve">
     <value>Участники</value>
@@ -184,7 +190,10 @@
     <value>Требуется руководитель</value>
   </data>
   <data name="Org Type" xml:space="preserve">
-    <value>Организация участник</value>
+    <value>Организация</value>
+  </data>
+  <data name="Organization not found" xml:space="preserve">
+    <value>Организации не найдены</value>
   </data>
   <data name="Requred" xml:space="preserve">
     <value>Обязательный</value>

@@ -108,6 +108,12 @@ namespace EDO_FOMS.Client.Infrastructure.Managers.Doc.Document
             return await response.ToResult<List<OrgsResponse>>();
         }
 
+        public async Task<IResult<List<OrgsResponse>>> FindOrgsWithType(OrgTypes orgType, string search)
+        {
+            var response = await _httpClient.GetAsync(Routes.DocumentsEndpoints.FindOrgsWithType(orgType, search));
+            return await response.ToResult<List<OrgsResponse>>();
+        }
+
         public async Task<IResult<List<ContactResponse>>> GetFoundContacts(SearchContactsRequest request)
         {
             var response = await _httpClient.GetAsync(

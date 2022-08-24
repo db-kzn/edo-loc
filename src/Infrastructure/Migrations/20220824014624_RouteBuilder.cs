@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace EDO_FOMS.Infrastructure.Migrations
 {
-    public partial class Dirs : Migration
+    public partial class RouteBuilder : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -206,7 +206,8 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RouteFileParse",
+                name: "RouteFileParses",
+                schema: "dir",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -220,9 +221,9 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RouteFileParse", x => x.Id);
+                    table.PrimaryKey("PK_RouteFileParses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RouteFileParse_Routes_RouteId",
+                        name: "FK_RouteFileParses_Routes_RouteId",
                         column: x => x.RouteId,
                         principalSchema: "dir",
                         principalTable: "Routes",
@@ -301,10 +302,11 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     StageNumber = table.Column<int>(type: "integer", nullable: false),
                     Number = table.Column<int>(type: "integer", nullable: false),
                     ActType = table.Column<int>(type: "integer", nullable: false),
-                    OrgType = table.Column<int>(type: "integer", nullable: false),
                     AutoSearch = table.Column<int>(type: "integer", nullable: false),
-                    OnlyHead = table.Column<bool>(type: "boolean", nullable: false),
+                    OrgType = table.Column<int>(type: "integer", nullable: false),
+                    OrgId = table.Column<int>(type: "integer", nullable: true),
                     Requred = table.Column<bool>(type: "boolean", nullable: false),
+                    OnlyHead = table.Column<bool>(type: "boolean", nullable: false),
                     SomeParticipants = table.Column<bool>(type: "boolean", nullable: false),
                     AllRequred = table.Column<bool>(type: "boolean", nullable: false),
                     HasAgreement = table.Column<bool>(type: "boolean", nullable: false),
@@ -379,8 +381,9 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 column: "DocumentTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RouteFileParse_RouteId",
-                table: "RouteFileParse",
+                name: "IX_RouteFileParses_RouteId",
+                schema: "dir",
+                table: "RouteFileParses",
                 column: "RouteId");
 
             migrationBuilder.CreateIndex(
@@ -442,7 +445,8 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 schema: "dir");
 
             migrationBuilder.DropTable(
-                name: "RouteFileParse");
+                name: "RouteFileParses",
+                schema: "dir");
 
             migrationBuilder.DropTable(
                 name: "RouteOrgTypes",

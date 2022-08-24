@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EDO_FOMS.Infrastructure.Migrations
 {
     [DbContext(typeof(EdoFomsContext))]
-    [Migration("20220823093857_Dirs")]
-    partial class Dirs
+    [Migration("20220824014624_RouteBuilder")]
+    partial class RouteBuilder
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -330,7 +330,7 @@ namespace EDO_FOMS.Infrastructure.Migrations
 
                     b.HasIndex("RouteId");
 
-                    b.ToTable("RouteFileParse");
+                    b.ToTable("RouteFileParses", "dir");
                 });
 
             modelBuilder.Entity("EDO_FOMS.Domain.Entities.Dir.RouteOrgType", b =>
@@ -466,6 +466,9 @@ namespace EDO_FOMS.Infrastructure.Migrations
 
                     b.Property<bool>("OnlyHead")
                         .HasColumnType("boolean");
+
+                    b.Property<int?>("OrgId")
+                        .HasColumnType("integer");
 
                     b.Property<int>("OrgType")
                         .HasColumnType("integer");

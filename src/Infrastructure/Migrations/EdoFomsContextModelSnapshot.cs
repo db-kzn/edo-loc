@@ -328,7 +328,7 @@ namespace EDO_FOMS.Infrastructure.Migrations
 
                     b.HasIndex("RouteId");
 
-                    b.ToTable("RouteFileParse");
+                    b.ToTable("RouteFileParses", "dir");
                 });
 
             modelBuilder.Entity("EDO_FOMS.Domain.Entities.Dir.RouteOrgType", b =>
@@ -464,6 +464,9 @@ namespace EDO_FOMS.Infrastructure.Migrations
 
                     b.Property<bool>("OnlyHead")
                         .HasColumnType("boolean");
+
+                    b.Property<int?>("OrgId")
+                        .HasColumnType("integer");
 
                     b.Property<int>("OrgType")
                         .HasColumnType("integer");

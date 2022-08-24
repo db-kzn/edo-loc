@@ -14,14 +14,12 @@ using EDO_FOMS.Domain.Enums;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace EDO_FOMS.Client.Pages.Docs
 {

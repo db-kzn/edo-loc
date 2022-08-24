@@ -70,21 +70,26 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
         public int Id { get; set; }                                 // - RouteStepId
         public int RouteId { get; set; }                            // - Внешний индекс
         // IsDeleted - на клиенте не используется, только на сервере
+
         public int StageNumber { get; set; }                        // + Номер этапа
         public int Number { get; set; }                             // - Номер процесса в этапе, для сортировки последовательности
 
         public ActTypes ActType { get; set; } = ActTypes.Signing;   // + Тип шага: подписание, согласование или рецензирование
+        public bool Requred { get; set; } = true;                   // + Обязательный шаг
+
         public OrgTypes OrgType { get; set; } = OrgTypes.Undefined; // + Тип организации, может быть не определен
-        public int AutoSearch { get; set; } = 0;                    // + Автопоиск - количество записей
-        public List<RouteStepMemberCommand> Members { get; set; } = new(); // + Список участников
+        public int? OrgId { get; set; } = null;                     // + Организация участник
 
         public bool OnlyHead { get; set; }                          // + Требуется руководитель
-        public bool Requred { get; set; } = true;                   // + Обязательный шаг
-        public bool SomeParticipants { get; set; } = true;          // - Несколько участников
+        public int AutoSearch { get; set; } = 0;                    // + Автопоиск - количество записей
 
+        public bool SomeParticipants { get; set; } = true;          // - Несколько участников
         public bool AllRequred { get; set; } = true;                // + Если несколько, то условие завершения: все или любой
+
         public bool HasAgreement { get; set; } = false;             // + Содержит согласование
         public bool HasReview { get; set; } = false;                // + Содержит рецензирование
+
+        public List<RouteStepMemberCommand> Members { get; set; } = new(); // + Список участников
     }
     public class RouteStepMemberCommand
     {
@@ -159,21 +164,26 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
                 {
                     Route = route,
                     IsDeleted = false,
+
                     StageNumber = s.StageNumber,
                     Number = s.Number,
 
                     ActType = s.ActType,
-                    OrgType = s.OrgType,
                     AutoSearch = s.AutoSearch,
-                    Members = new(),
 
-                    OnlyHead = s.OnlyHead,
+                    OrgType = s.OrgType,
+                    OrgId = s.OrgId,
+
                     Requred = s.Requred,
-                    SomeParticipants = s.SomeParticipants,
+                    OnlyHead = s.OnlyHead,
 
+                    SomeParticipants = s.SomeParticipants,
                     AllRequred = s.AllRequred,
+
                     HasAgreement = s.HasAgreement,
-                    HasReview = s.HasReview
+                    HasReview = s.HasReview,
+
+                    Members = new()
                 };
 
                 step.Members = s.Members.Select(m => NewMember(step, m)).ToList();
@@ -290,21 +300,26 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
                     {
                         Route = route,
                         IsDeleted = false,
+
                         StageNumber = c.StageNumber,
                         Number = c.Number,
 
                         ActType = c.ActType,
-                        OrgType = c.OrgType,
                         AutoSearch = c.AutoSearch,
-                        Members = new(),
 
-                        OnlyHead = c.OnlyHead,
+                        OrgType = c.OrgType,
+                        OrgId = c.OrgId,
+
                         Requred = c.Requred,
-                        SomeParticipants = c.SomeParticipants,
+                        OnlyHead = c.OnlyHead,
 
+                        SomeParticipants = c.SomeParticipants,
                         AllRequred = c.AllRequred,
+
                         HasAgreement = c.HasAgreement,
-                        HasReview = c.HasReview
+                        HasReview = c.HasReview,
+
+                        Members = new(),
                     };
 
                     step.Members = c.Members.Select(m => NewMember(step, m)).ToList();
@@ -321,14 +336,17 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
                         r.Number = c.Number;
 
                         r.ActType = c.ActType;
-                        r.OrgType = c.OrgType;
                         r.AutoSearch = c.AutoSearch;
 
-                        r.OnlyHead = c.OnlyHead;
-                        r.Requred = c.Requred;
-                        r.SomeParticipants = c.SomeParticipants;
+                        r.OrgType = c.OrgType;
+                        r.OrgId = c.OrgId;
 
+                        r.Requred = c.Requred;
+                        r.OnlyHead = c.OnlyHead;
+
+                        r.SomeParticipants = c.SomeParticipants;
                         r.AllRequred = c.AllRequred;
+
                         r.HasAgreement = c.HasAgreement;
                         r.HasReview = c.HasReview;
                     }

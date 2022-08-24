@@ -141,6 +141,9 @@
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
   </data>
+  <data name="Disabled" xml:space="preserve">
+    <value>Disabled</value>
+  </data>
   <data name="Employee" xml:space="preserve">
     <value>Employee</value>
   </data>
@@ -161,6 +164,9 @@
   </data>
   <data name="Main member" xml:space="preserve">
     <value>Main member</value>
+  </data>
+  <data name="Member Org" xml:space="preserve">
+    <value>Member Org</value>
   </data>
   <data name="Members" xml:space="preserve">
     <value>Members</value>
@@ -185,6 +191,9 @@
   </data>
   <data name="Org Type" xml:space="preserve">
     <value>Org Type</value>
+  </data>
+  <data name="Organization not found" xml:space="preserve">
+    <value>Organization not found</value>
   </data>
   <data name="Requred" xml:space="preserve">
     <value>Requred</value>

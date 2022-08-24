@@ -231,8 +231,8 @@ namespace EDO_FOMS.Client.Pages.Dirs
         private async Task AddEditStepAsync(RouteStepModel step)
         {
             var parameters = new DialogParameters() { { nameof(RouteStepDialog.Step), step } };
-
-            var dialog = _dialogService.Show<RouteStepDialog>("", parameters);
+            var options = new DialogOptions() { DisableBackdropClick = true };
+            var dialog = _dialogService.Show<RouteStepDialog>("", parameters, options);
             var result = await dialog.Result;
 
             if (!result.Cancelled)
@@ -287,21 +287,26 @@ namespace EDO_FOMS.Client.Pages.Dirs
             {
                 Id = s.Id,
                 RouteId = s.RouteId,
+
                 StageNumber = s.StageNumber,
                 Number = s.Number,
 
                 ActType = s.ActType,
-                OrgType = s.OrgType,
                 AutoSearch = s.AutoSearch,
-                Members = s.Members.Select(m => NewRouteStepMember(s, m)).ToList(),
 
-                OnlyHead = s.OnlyHead,
+                OrgType = s.OrgType,
+                OrgId = s.OrgId,
+
                 Requred = s.Requred,
-                SomeParticipants = s.SomeParticipants,
+                OnlyHead = s.OnlyHead,
 
+                SomeParticipants = s.SomeParticipants,
                 AllRequred = s.AllRequred,
+
                 HasAgreement = s.HasAgreement,
-                HasReview = s.HasReview
+                HasReview = s.HasReview,
+
+                Members = s.Members.Select(m => NewRouteStepMember(s, m)).ToList(),
             };
         }
         private static RouteStepMemberCommand NewRouteStepMember(RouteStepModel s, RouteStepMemberModel m)

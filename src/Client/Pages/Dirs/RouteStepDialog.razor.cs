@@ -1,4 +1,5 @@
 ﻿using AutoMapper.Execution;
+using EDO_FOMS.Application.Features.Orgs.Queries;
 using EDO_FOMS.Application.Models.Dir;
 using EDO_FOMS.Application.Requests.Documents;
 using EDO_FOMS.Application.Responses.Docums;
@@ -29,6 +30,8 @@ namespace EDO_FOMS.Client.Pages.Dirs
         private readonly bool resetValueOnEmptyText = true;
         private readonly bool coerceText = true;
         private readonly bool coerceValue = true;
+
+        public static OrgsResponse OrgMember { get; set; } = null;
 
         public static Act Members { get; set; } = new();
         public static Act Agreementers { get; set; } = new();
@@ -66,6 +69,28 @@ namespace EDO_FOMS.Client.Pages.Dirs
             //base.OnInitialized();
         }
 
+        private async Task<IEnumerable<OrgsResponse>> SearchOrgAsync(string search)
+        {
+            var response = await DocManager.FindOrgsWithType(Step.OrgType, search);
+            return response.Succeeded ? response.Data : new();
+        }
+        private static string OrgName(OrgsResponse c)
+        {
+            if (c == null) { return null; }
+
+            var info = string.IsNullOrWhiteSpace(c.ShortName) ? c.Inn : $"{c.Inn}, {c.ShortName}";
+
+            var name = c.Name; //.ToLower();
+            //name = name.Length > 32 ? name[..32] : name;
+
+            return $"[{info}] {name}";
+        }
+        private void OrgChanged(OrgsResponse o)
+        {
+            Step.OrgMember = o;
+            Step.OrgId = o?.Id;
+        }
+
         private async Task<IEnumerable<ContactResponse>> SearchContactsAsync(UserBaseRoles role, string search)
         {
             var request = new SearchContactsRequest()
@@ -93,16 +118,17 @@ namespace EDO_FOMS.Client.Pages.Dirs
             $"{_localizer["of the"]} {_localizer[step.OrgType.ToString()]}";
         private static string ContactName(ContactResponse c) =>
             $"[{(string.IsNullOrWhiteSpace(c.OrgShortName) ? c.InnLe : c.OrgShortName)}] {c.Surname} {c.GivenName}";
-        private static ContactResponse CloneContact(ContactResponse c) => new()
-        {
-            Id = c.Id,
-            Surname = c.Surname,
-            GivenName = c.GivenName,
 
-            OrgId = c.OrgId,
-            InnLe = c.InnLe,
-            OrgShortName = c.OrgShortName
-        };
+        //private static ContactResponse CloneContact(ContactResponse c) => new()
+        //{
+        //    Id = c.Id,
+        //    Surname = c.Surname,
+        //    GivenName = c.GivenName,
+
+        //    OrgId = c.OrgId,
+        //    InnLe = c.InnLe,
+        //    OrgShortName = c.OrgShortName
+        //};
 
         private static void AddContact(Act act)
         {
