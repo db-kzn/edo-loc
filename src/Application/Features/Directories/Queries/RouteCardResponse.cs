@@ -1,4 +1,5 @@
 ﻿using EDO_FOMS.Application.Models.Dir;
+using EDO_FOMS.Domain.Entities.Dir;
 using EDO_FOMS.Domain.Enums;
 using System.Collections.Generic;
 
@@ -8,9 +9,9 @@ namespace EDO_FOMS.Application.Features.Directories.Queries
     {
         public List<int> DocTypeIds { get; set; } = new();                       // + Типы документов для которых предназначен маршрут
         public List<OrgTypes> ForOrgTypes { get; set; } = new();                 // + Типы организаций которые могут использовать маршрут
+
         public List<RouteStageModel> Stages { get; set; } = new();               // + Стадии текущего маршрута
         public List<RouteStepModel> Steps { get; set; } = new();                 // + Процессы (шаги) с Участниками
-
         public List<RouteFileParse> Parses { get; set; } = new();                // - Правила разбора имени файла
 
         public int Id { get; set; }
@@ -21,19 +22,21 @@ namespace EDO_FOMS.Application.Features.Directories.Queries
         public UserBaseRoles ForUserRole { get; set; } = UserBaseRoles.Employee; // + Минимальная роль пользователя имеющая доступ к маршруту
         public EndActions EndAction { get; set; } = EndActions.ToArchive;        // + Действие по завершению маршрута
 
-        public bool IsPackage { get; set; } = false;                             // + Является пакетом документов, а не единичным файлом
-        public bool CalcHash { get; set; } = false;                              // + Рассчитывать хэш документа
-        public bool AttachedSign { get; set; } = false;                          // + Прикрепленная подпись руководителя
-        public bool DisplayedSign { get; set; } = false;                         // + Отображаемая подпись руководителя
-
-        public bool IsActive { get; set; } = true;                               // - Используемый маршрут
-        public bool ReadOnly { get; set; } = false;                              // + Карточка документа не редактируется
-        public bool NameOfFile { get; set; } = true;                             // + Наименование документа из имени файла
+        public bool IsActive { get; set; } = true;                               // + Используемый маршрут
         public bool DateIsToday { get; set; } = true;                            // + Дата документа - устанивить сегодня
-
-        public bool AllowRevocation { get; set; } = true;                        // - Возможность отзывать документ с маршрута
+        public bool NameOfFile { get; set; } = true;                             // + Наименование документа из имени файла
         public bool ParseFileName { get; set; } = false;                         // + Разбор имени файла
+
+        public bool AllowRevocation { get; set; } = true;                        // + Возможность отзывать документ с маршрута
+        public bool ReadOnly { get; set; } = false;                              // + Карточка документа не редактируется
+        public bool ShowNotes { get; set; } = false;                             // + Отобразить примечание/заметки
         public bool UseVersioning { get; set; } = false;                         // - Используется версионность
-        public bool HasDetails { get; set; } = false;                            // - Отображать параметры этапов
+
+        public bool IsPackage { get; set; } = false;                             // - Является пакетом документов, а не единичным файлом
+        public bool CalcHash { get; set; } = false;                              // - Рассчитывать хэш документа
+        public bool AttachedSign { get; set; } = false;                          // - Прикрепленная подпись руководителя
+        public bool DisplayedSign { get; set; } = false;                         // - Отображаемая подпись руководителя
+
+        public bool HasDetails { get; set; } = true;                             // - Отображать параметры этапов
     }
 }

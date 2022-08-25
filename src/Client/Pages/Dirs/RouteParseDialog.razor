@@ -1,0 +1,98 @@
+﻿@inject Microsoft.Extensions.Localization.IStringLocalizer<RouteParseDialog> _localizer
+
+@namespace EDO_FOMS.Client.Pages.Dirs
+
+<MudDialog DefaultFocus="DefaultFocus.LastChild">
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Outlined.Verified" Class="mr-3 mb-n1" />
+            @_localizer["Check Result"]
+        </MudText>
+    </TitleContent>
+
+    <DialogContent>
+        <MudGrid Style="min-width: 550px; max-height: 70vh; overflow-y: scroll;">
+            @if (Result.HasFileName)
+            {
+                @if (Result.DocTitle.HasPattern)
+                {
+                    <MudItem xs="12">
+                        <MudField Label="@_localizer["Doc Title"]" Variant="Variant.Text">
+                            @(Result.DocTitle.Result.Success ? Result.DocTitle.Result.Value : @_localizer["Error"])
+                        </MudField>
+                    </MudItem>
+                }
+
+                @if (Result.DocNumber.HasPattern)
+                {
+                    <MudItem xs="12">
+                        <MudField Label="@_localizer["Doc Number"]" Variant="Variant.Text">
+                            @(Result.DocNumber.Result.Success ? Result.DocNumber.Result.Value : @_localizer["Error"])
+                        </MudField>
+                    </MudItem>
+                }
+
+                @if (Result.DocDate.HasPattern)
+                {
+                    <MudItem xs="12">
+                        <MudField Label="@_localizer["Doc Date"]" Variant="Variant.Text">
+                            @(Result.DocDate.Result.Success ? Result.DocDate.Result.Value : @_localizer["Error"])
+                        </MudField>
+                    </MudItem>
+                }
+
+                @if (Result.DocNotes.HasPattern)
+                {
+                    <MudItem xs="12">
+                        <MudField Label="@_localizer["Doc Notes"]" Variant="Variant.Text">
+                            @(Result.DocNotes.Result.Success ? Result.DocNotes.Result.Value : @_localizer["Error"])
+                        </MudField>
+                    </MudItem>
+                }
+
+                @if (Result.CodeMo.HasPattern)
+                {
+                    <MudItem xs="12">
+                        <MudField Label="@_localizer["Code Mo"]" Variant="Variant.Text">
+                            @(Result.CodeMo.Result.Success ? Result.CodeMo.Result.Value : @_localizer["Error"])
+                        </MudField>
+                    </MudItem>
+                }
+
+                @if (Result.CodeSmo.HasPattern)
+                {
+                    <MudItem xs="12">
+                        <MudField Label="@_localizer["Code Smo"]" Variant="Variant.Text">
+                            @(Result.CodeSmo.Result.Success ? Result.CodeSmo.Result.Value : @_localizer["Error"])
+                        </MudField>
+                    </MudItem>
+                }
+
+                @if (Result.CodeFund.HasPattern)
+                {
+                    <MudItem xs="12">
+                        <MudField Label="@_localizer["Code Fund"]" Variant="Variant.Text">
+                            @(Result.CodeFund.Result.Success ? Result.CodeFund.Result.Value : @_localizer["Error"])
+                        </MudField>
+                    </MudItem>
+                }
+            }
+            else
+            {
+                <MudItem xs="12">
+                    <MudField Label="@_localizer["Error"]" Variant="Variant.Text">
+                        <MudIcon Icon="@Icons.Material.Outlined.Report" Color="@Color.Warning" />
+                        @_localizer["No File Name Example"]
+                    </MudField>
+                </MudItem>
+            }
+        </MudGrid>
+    </DialogContent>
+
+    <DialogActions>
+        <MudButton Class="mx-2" ButtonType="ButtonType.Submit" Variant="Variant.Outlined" FullWidth="true" Color="Color.Default" EndIcon="@Icons.Material.Outlined.Done"
+                   OnClick="() => Ok()">
+            @_localizer["Ok"]
+        </MudButton>
+    </DialogActions>
+</MudDialog>

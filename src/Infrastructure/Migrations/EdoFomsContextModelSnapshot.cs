@@ -275,6 +275,9 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.Property<bool>("ReadOnly")
                         .HasColumnType("boolean");
 
+                    b.Property<bool>("ShowNotes")
+                        .HasColumnType("boolean");
+
                     b.Property<bool>("UseVersioning")
                         .HasColumnType("boolean");
 
@@ -318,10 +321,13 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Pattern")
                         .HasColumnType("text");
 
                     b.Property<int>("RouteId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Type")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");

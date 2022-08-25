@@ -154,12 +154,14 @@ namespace EDO_FOMS.Server.Controllers.Docums
         /// <param name="orgType"></param>
         /// <param name="baseRole"></param>
         /// <param name="search"></param>
+        /// <param name="take"></param>
         /// <returns>Status 200 OK</returns>
         [Authorize(Policy = Permissions.Documents.View)]
         [HttpGet("contacts")]
-        public async Task<IActionResult> GetFoundContacts(OrgTypes orgType, UserBaseRoles baseRole, string search)
+        public async Task<IActionResult> GetFoundContacts(OrgTypes orgType, UserBaseRoles baseRole, string search, int take)
         {
-            var contacts = await _userService.GetFoundContacts(orgType, baseRole, search);
+            if (take > 10) { take = 10; }
+            var contacts = await _userService.GetFoundContacts(orgType, baseRole, search, take);
             return Ok(contacts);
         }
 

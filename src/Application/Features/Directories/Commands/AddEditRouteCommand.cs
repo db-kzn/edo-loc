@@ -33,20 +33,22 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
         public UserBaseRoles ForUserRole { get; set; } = UserBaseRoles.Employee; // + Минимальная роль пользователя имеющая доступ к маршруту
         public EndActions EndAction { get; set; } = EndActions.ToArchive;        // + Действие по завершению маршрута
 
-        public bool IsPackage { get; set; } = false;                             // + Является пакетом документов, а не единичным файлом
-        public bool CalcHash { get; set; } = false;                              // + Рассчитывать хэш документа
-        public bool AttachedSign { get; set; } = false;                          // + Прикрепленная подпись руководителя
-        public bool DisplayedSign { get; set; } = false;                         // + Отображаемая подпись руководителя
-
-        public bool IsActive { get; set; } = true;                               // - Используемый маршрут
-        public bool ReadOnly { get; set; } = false;                              // + Карточка документа не редактируется
-        public bool NameOfFile { get; set; } = true;                             // + Наименование документа из имени файла
+        public bool IsActive { get; set; } = true;                               // + Используемый маршрут
         public bool DateIsToday { get; set; } = true;                            // + Дата документа - устанивить сегодня
-
-        public bool AllowRevocation { get; set; } = true;                        // - Возможность отзывать документ с маршрута
+        public bool NameOfFile { get; set; } = true;                             // + Наименование документа из имени файла
         public bool ParseFileName { get; set; } = false;                         // + Разбор имени файла
+
+        public bool AllowRevocation { get; set; } = true;                        // + Возможность отзывать документ с маршрута
+        public bool ReadOnly { get; set; } = false;                              // + Карточка документа не редактируется
+        public bool ShowNotes { get; set; } = false;                             // + Отобразить примечание/заметки
         public bool UseVersioning { get; set; } = false;                         // - Используется версионность
-        public bool HasDetails { get; set; } = false;                            // - Отображать параметры этапов
+
+        public bool IsPackage { get; set; } = false;                             // - Является пакетом документов, а не единичным файлом
+        public bool CalcHash { get; set; } = false;                              // - Рассчитывать хэш документа
+        public bool AttachedSign { get; set; } = false;                          // - Прикрепленная подпись руководителя
+        public bool DisplayedSign { get; set; } = false;                         // - Отображаемая подпись руководителя
+
+        public bool HasDetails { get; set; } = true;                             // - Отображать параметры этапов
     }
     public class RouteStageCommand
     {
@@ -212,19 +214,21 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
             route.ForUserRole = command.ForUserRole;
             route.EndAction = command.EndAction;
 
+            route.IsActive = command.IsActive;
+            route.DateIsToday = command.DateIsToday;
+            route.NameOfFile = command.NameOfFile;
+            route.ParseFileName = command.ParseFileName;
+
+            route.AllowRevocation = command.AllowRevocation;
+            route.ReadOnly = command.ReadOnly;
+            route.ShowNotes = command.ShowNotes;
+            route.UseVersioning = command.UseVersioning;
+
             route.IsPackage = command.IsPackage;
             route.CalcHash = command.CalcHash;
             route.AttachedSign = command.AttachedSign;
             route.DisplayedSign = command.DisplayedSign;
 
-            route.IsActive = command.IsActive;
-            route.ReadOnly = command.ReadOnly;
-            route.NameOfFile = command.NameOfFile;
-            route.DateIsToday = command.DateIsToday;
-
-            route.AllowRevocation = command.AllowRevocation;
-            route.ParseFileName = command.ParseFileName;
-            route.UseVersioning = command.UseVersioning;
             route.HasDetails = command.HasDetails;
 
             route.RouteDocTypes.RemoveAll(r => !command.DocTypeIds.Exists(id => id == r.DocumentTypeId));

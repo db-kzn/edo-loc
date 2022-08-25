@@ -47,14 +47,21 @@ internal class GetRoutesQueryHandler : IRequestHandler<GetRoutesQuery, Paginated
 
             ForUserRole = e.ForUserRole,
 
+            IsActive = e.IsActive,
+            DateIsToday = e.DateIsToday,
+            NameOfFile = e.NameOfFile,
+            ParseFileName = e.ParseFileName,
+
+            AllowRevocation = e.AllowRevocation,
+            ReadOnly = e.ReadOnly,
+            ShowNotes = e.ShowNotes,
+            UseVersioning = e.UseVersioning,
+
             IsPackage = e.IsPackage,
             CalcHash = e.CalcHash,
             AttachedSign = e.AttachedSign,
             DisplayedSign = e.DisplayedSign,
 
-            IsActive = e.IsActive,
-            AllowRevocation = e.AllowRevocation,
-            UseVersioning = e.UseVersioning,
             HasDetails = e.HasDetails
         };
 

@@ -13,6 +13,7 @@ using EDO_FOMS.Client.Models;
 using EDO_FOMS.Domain.Enums;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.JSInterop;
 using MudBlazor;
 using System;
 using System.Collections.Generic;
@@ -32,7 +33,7 @@ namespace EDO_FOMS.Client.Pages.Docs
         [Inject] private IDocumentTypeManager DocTypeManager { get; set; }
         [Inject] private IDirectoryManager DirManager { get; set; }
 
-        RouteCardResponse Route { get; set; } = new();
+        private RouteCardResponse Route { get; set; } = new();
         private IEnumerable<DocTypeResponse> RouteDocTypes { get; set; } = new HashSet<DocTypeResponse>() { };
         //private IEnumerable<ContactResponse> ChiefsOfFund { get; set; } = new List<ContactResponse>();
         //private IEnumerable<ContactResponse> ChiefsOfSMO { get; set; } = new List<ContactResponse>();
@@ -76,20 +77,17 @@ namespace EDO_FOMS.Client.Pages.Docs
 
             await RouteInitAsync(RouteId);
 
-            //ChiefsOfFund = await LoadChiefsAsync(OrgTypes.Fund);
-            //ChiefsOfSMO = await LoadChiefsAsync(OrgTypes.SMO);
-
             if (DocId is not null && DocId != 0)
             {
                 await LoadDocAsync(DocId);
             }
             else
             {
-                
                 var emplId = _authUser.GetUserId();
+
                 if (int.TryParse(_authUser.GetOrgId(), out int emplOrgId))
                 {
-                    NewDocInit(emplId, emplOrgId);
+                    await NewDocInitAsync(emplId, emplOrgId);
                 }
             }
         }
@@ -99,18 +97,7 @@ namespace EDO_FOMS.Client.Pages.Docs
             Route = response.Data;
             RouteDocTypes = Route.DocTypeIds.Select(id => _allDocTypes.Find(t => t.Id == id)).ToHashSet();
         }
-        private async Task<IEnumerable<ContactResponse>> LoadChiefsAsync(OrgTypes orgType)
-        {
-            var request = new SearchContactsRequest()
-            {
-                BaseRole = UserBaseRoles.Chief,
-                OrgType = orgType,
-                SearchString = ""
-            };
 
-            var response = await DocManager.GetFoundContacts(request);
-            return (response.Succeeded) ? response.Data : new();
-        }
         private async Task<IEnumerable<ContactResponse>> SearchContactsAsync(DocActModel act, string search)
         {
             var request = new SearchContactsRequest()
@@ -124,13 +111,20 @@ namespace EDO_FOMS.Client.Pages.Docs
             return (response.Succeeded) ? response.Data : new();
         }
 
-        private void NewDocInit(string emplId, int emplOrgId)
+        private async Task NewDocInitAsync(string emplId, int emplOrgId)
         {
-            Doc.TypeId = (Route.DocTypeIds.Count > 0) ? Route.DocTypeIds[0] : 1;
             Doc.EmplId = emplId;
             Doc.EmplOrgId = emplOrgId;
 
-            Route.Steps.ForEach(step =>
+            Doc.TypeId = (Route.DocTypeIds.Count > 0) ? Route.DocTypeIds[0] : 1;
+            // Number ???
+            Doc.Date = Route.DateIsToday ? DateTime.Today : null;
+
+            Doc.RouteId = Route.Id;
+            Doc.TotalSteps = Route.Stages.Count; // TotalSteps - первоначальное название этапов
+
+            //Route.Steps.ForEach(step =>
+            foreach (var step in Route.Steps)
             {
                 var act = new DocActModel() { Step = step, Contact = null };
 
@@ -140,16 +134,43 @@ namespace EDO_FOMS.Client.Pages.Docs
                 //    else if (step.OrgType == OrgTypes.SMO) { AddContacts(act, ChiefsOfSMO); }
                 //}
 
+                if (step.Members.Count > 0)
+                {
+                    AddContacts(act, step.Members.Select(m => m.Contact).ToList());
+                }
+
+                if (step.AutoSearch > 0)
+                {
+                    //var take = step.SomeParticipants ? step.AutoSearch : 1;
+                    var members = await LoadMembersAsync(step.OrgType, step.AutoSearch, step.OnlyHead);
+                    //await _jsRuntime.InvokeVoidAsync("azino.Console", members, $"Search Members {step.Id}");
+                    AddContacts(act, members);
+                }
+
                 Acts.Add(act);
-            });
+            };
         }
+        private async Task<List<ContactResponse>> LoadMembersAsync(OrgTypes orgType, int take, bool isChief)
+        {
+            var request = new SearchContactsRequest()
+            {
+                Take = take,
+                BaseRole = isChief ? UserBaseRoles.Chief : UserBaseRoles.Undefined,
+                OrgType = orgType,
+                SearchString = ""
+            };
+
+            var response = await DocManager.GetFoundContacts(request);
+            return (response.Succeeded) ? response.Data : new();
+        }
+
         private async Task LoadDocAsync(int? docId) { }
 
         private static void AddContacts(DocActModel act, IEnumerable<ContactResponse> contacts)
         {
             foreach (var c in contacts)
             {
-                act.Contact = CloneContact(c);
+                act.Contact = c;// CloneContact(c);
                 AddContact(act);
             }
         }
@@ -187,15 +208,15 @@ namespace EDO_FOMS.Client.Pages.Docs
             act.Members.Remove(member);
         }
 
-        private static ContactResponse CloneContact(ContactResponse c) => new()
-        {
-            Id = c.Id,
-            OrgId = c.OrgId,
-            InnLe = c.InnLe,
+        //private static ContactResponse CloneContact(ContactResponse c) => new()
+        //{
+        //    Id = c.Id,
+        //    OrgId = c.OrgId,
+        //    InnLe = c.InnLe,
 
-            Surname = c.Surname,
-            GivenName = c.GivenName
-        };
+        //    Surname = c.Surname,
+        //    GivenName = c.GivenName
+        //};
         private static string ContactName(ContactResponse c) =>
             $"[{(string.IsNullOrWhiteSpace(c.OrgShortName) ? c.InnLe : c.OrgShortName)}] {c.Surname} {c.GivenName}";
 
@@ -293,9 +314,9 @@ namespace EDO_FOMS.Client.Pages.Docs
                 StepId = a.Step.Id,
                 IsAdditional = false,
                 Act = a.Step.ActType,
-                   //(a.Step.ActType == ActTypes.Signing) ? AgreementActions.ToSign :
-                   //(a.Step.ActType == ActTypes.Agreement) ? AgreementActions.ToApprove :
-                   //(a.Step.ActType == ActTypes.Review) ? AgreementActions.ToReview : AgreementActions.Undefined,
+                //(a.Step.ActType == ActTypes.Signing) ? AgreementActions.ToSign :
+                //(a.Step.ActType == ActTypes.Agreement) ? AgreementActions.ToApprove :
+                //(a.Step.ActType == ActTypes.Review) ? AgreementActions.ToReview : AgreementActions.Undefined,
 
                 OrgInn = c.InnLe,
                 OrgId = c.OrgId,
@@ -313,8 +334,10 @@ namespace EDO_FOMS.Client.Pages.Docs
                 var extension = Path.GetExtension(_file.Name);
                 var fileName = Path.GetFileName(_file.Name);
 
-                Doc.Title = Path.GetFileNameWithoutExtension(_file.Name);
-                //if (string.IsNullOrWhiteSpace(_doc.Title)) {}
+                if (Route.NameOfFile)
+                {
+                    Doc.Title = Path.GetFileNameWithoutExtension(_file.Name);
+                }
 
                 const string format = "application/octet-stream";
 

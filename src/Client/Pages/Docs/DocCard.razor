@@ -58,7 +58,7 @@
                                    for="fileInput" HtmlTag="label">
                                 @if (_file == null || string.IsNullOrEmpty(_file.Name))
                                 {
-                                    <MudText Typo="Typo.button" Color="Color.Error">
+                                    <MudText Typo="Typo.button" Color="Color.Warning">
                                         @_localizer["Upload file"]
                                     </MudText>
                                 }

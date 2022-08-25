@@ -32,8 +32,8 @@ namespace EDO_FOMS.Client.Infrastructure.Routes
         public static string GetEmployeeAgreements(AgreementStates state) => $"{Ctrl}/user-agreements?state={state}";
         public static string GetAgreementMembers(int orgId, string search) => $"{Ctrl}/members?orgId={orgId}&search={search}";
 
-        public static string GetFoundContacts(OrgTypes orgType, UserBaseRoles baseRole, string search) =>
-            $"{Ctrl}/contacts?orgType={orgType}&baseRole={baseRole}&search={search}";
+        public static string GetFoundContacts(SearchContactsRequest r) =>
+            $"{Ctrl}/contacts?orgType={r.OrgType}&baseRole={r.BaseRole}&search={r.SearchString}&take={r.Take}";
 
         public static string GetDocsPaged(GetPagedDocumentsRequest r)
         {

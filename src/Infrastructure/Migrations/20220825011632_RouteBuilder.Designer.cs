@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EDO_FOMS.Infrastructure.Migrations
 {
     [DbContext(typeof(EdoFomsContext))]
-    [Migration("20220824014624_RouteBuilder")]
+    [Migration("20220825011632_RouteBuilder")]
     partial class RouteBuilder
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -277,6 +277,9 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.Property<bool>("ReadOnly")
                         .HasColumnType("boolean");
 
+                    b.Property<bool>("ShowNotes")
+                        .HasColumnType("boolean");
+
                     b.Property<bool>("UseVersioning")
                         .HasColumnType("boolean");
 
@@ -320,10 +323,13 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Pattern")
                         .HasColumnType("text");
 
                     b.Property<int>("RouteId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Type")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");

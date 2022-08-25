@@ -44,7 +44,7 @@ internal class GetRouteCardQueryHandler : IRequestHandler<GetRouteCardQuery, Res
     public async Task<Result<RouteCardResponse>> Handle(GetRouteCardQuery request, CancellationToken cancellationToken)
     {
         var routes = _unitOfWork.Repository<Route>().Entities
-            .Include(r => r.RouteDocTypes).Include(r => r.ForOrgTypes)
+            .Include(r => r.RouteDocTypes).Include(r => r.ForOrgTypes).Include(r => r.Parses)
             .Include(r => r.Stages).Include(r => r.Steps).ThenInclude(s => s.Members);
 
         var route = await routes.FirstOrDefaultAsync(r => r.Id == request.Id, cancellationToken: cancellationToken);
@@ -53,10 +53,10 @@ internal class GetRouteCardQueryHandler : IRequestHandler<GetRouteCardQuery, Res
         {
             DocTypeIds = route.RouteDocTypes.Select(dt => dt.DocumentTypeId).ToList(),
             ForOrgTypes = route.ForOrgTypes.Select(ot => ot.OrgType).ToList(),
+
             Stages = route.Stages.Select(s => new RouteStageModel(s)).ToList(),
             Steps = route.Steps.Where(s => !s.IsDeleted).Select(s => new RouteStepModel(s)).ToList(),
-
-            Parses = new(),
+            Parses = route.Parses,
 
             Id = route.Id,
             Number = route.Number,
@@ -66,19 +66,21 @@ internal class GetRouteCardQueryHandler : IRequestHandler<GetRouteCardQuery, Res
             ForUserRole = route.ForUserRole,
             EndAction = route.EndAction,
 
+            IsActive = route.IsActive,
+            DateIsToday = route.DateIsToday,
+            NameOfFile = route.NameOfFile,
+            ParseFileName = route.ParseFileName,
+
+            AllowRevocation = route.AllowRevocation,
+            ReadOnly = route.ReadOnly,
+            ShowNotes = route.ShowNotes,
+            UseVersioning = route.UseVersioning,
+
             IsPackage = route.IsPackage,
             CalcHash = route.CalcHash,
             AttachedSign = route.AttachedSign,
             DisplayedSign = route.DisplayedSign,
 
-            IsActive = route.IsActive,
-            ReadOnly = route.ReadOnly,
-            NameOfFile = route.NameOfFile,
-            DateIsToday = route.DateIsToday,
-
-            AllowRevocation = route.AllowRevocation,
-            ParseFileName = route.ParseFileName,
-            UseVersioning = route.UseVersioning,
             HasDetails = route.HasDetails
         };
 

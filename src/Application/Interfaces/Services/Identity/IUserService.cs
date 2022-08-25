@@ -24,7 +24,7 @@ namespace EDO_FOMS.Application.Interfaces.Services.Identity
         Task<IResult<UserResponse>> GetAsync(string userId);
         Task<Employee> GetEmployeeAsync(string userId);
         Task<ContactResponse> GetContactAsync(string userId);
-        Task<Result<List<ContactResponse>>> GetFoundContacts(OrgTypes orgType, UserBaseRoles baseRole, string searchString);
+        Task<Result<List<ContactResponse>>> GetFoundContacts(OrgTypes orgType, UserBaseRoles baseRole, string searchString, int take);
         Task<Result<List<ContactResponse>>> GetAgreementMembersAsync(int orgId, string search);
 
         Task<Result<int>> UpdateUsersOrgType(UpdateUsersOrgTypeRequest request, string origin);

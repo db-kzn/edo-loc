@@ -40,7 +40,10 @@ internal class GetRouteTitlesQueryHandler : IRequestHandler<GetRouteTitlesQuery,
             Description = e.Description
         };
 
-        var routeTitles = _unitOfWork.Repository<Route>().Entities.Select(expression).ToList();
+        var routeTitles = _unitOfWork.Repository<Route>().Entities
+            .Where(r => r.IsActive)
+            .Select(expression)
+            .ToList();
 
         return await Result<List<RouteTitleModel>>.SuccessAsync(routeTitles);
     }

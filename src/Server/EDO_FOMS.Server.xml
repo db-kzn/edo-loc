@@ -179,13 +179,14 @@
             <param name="search"></param>
             <returns>Status 200 Ok</returns>
         </member>
-        <member name="M:EDO_FOMS.Server.Controllers.Docums.DocumentsController.GetFoundContacts(EDO_FOMS.Domain.Enums.OrgTypes,EDO_FOMS.Domain.Enums.UserBaseRoles,System.String)">
+        <member name="M:EDO_FOMS.Server.Controllers.Docums.DocumentsController.GetFoundContacts(EDO_FOMS.Domain.Enums.OrgTypes,EDO_FOMS.Domain.Enums.UserBaseRoles,System.String,System.Int32)">
             <summary>
             Get Found Users
             </summary>
             <param name="orgType"></param>
             <param name="baseRole"></param>
             <param name="search"></param>
+            <param name="take"></param>
             <returns>Status 200 OK</returns>
         </member>
         <member name="M:EDO_FOMS.Server.Controllers.Docums.DocumentsController.GetAgreementMembers(System.Int32,System.String)">

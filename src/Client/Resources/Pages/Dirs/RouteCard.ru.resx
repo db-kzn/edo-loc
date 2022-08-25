@@ -141,6 +141,15 @@
   <data name="Card" xml:space="preserve">
     <value>Маршрут</value>
   </data>
+  <data name="Check" xml:space="preserve">
+    <value>Проверка</value>
+  </data>
+  <data name="Code MO" xml:space="preserve">
+    <value>Паттерн кода МО</value>
+  </data>
+  <data name="Code SMO" xml:space="preserve">
+    <value>Паттерн кода СМО</value>
+  </data>
   <data name="Date Is Today" xml:space="preserve">
     <value>Дата от сегодня</value>
   </data>
@@ -149,6 +158,18 @@
   </data>
   <data name="Displayed Sign" xml:space="preserve">
     <value>Отобразить подпись</value>
+  </data>
+  <data name="Doc Date" xml:space="preserve">
+    <value>Паттерн даты документа</value>
+  </data>
+  <data name="Doc Notes" xml:space="preserve">
+    <value>Паттерн заметки к документу</value>
+  </data>
+  <data name="Doc Number" xml:space="preserve">
+    <value>Паттерн номера документа</value>
+  </data>
+  <data name="Doc Title" xml:space="preserve">
+    <value>Паттерн наименования документа</value>
   </data>
   <data name="Document signing routes" xml:space="preserve">
     <value>Маршруты подписания документов</value>
@@ -164,6 +185,12 @@
   </data>
   <data name="File" xml:space="preserve">
     <value>Файл</value>
+  </data>
+  <data name="File mask" xml:space="preserve">
+    <value>Маска файла</value>
+  </data>
+  <data name="File name example" xml:space="preserve">
+    <value>Образец имени файла</value>
   </data>
   <data name="Fund" xml:space="preserve">
     <value>ФОМС</value>
@@ -209,6 +236,9 @@
   </data>
   <data name="Select all" xml:space="preserve">
     <value>Выбрать все</value>
+  </data>
+  <data name="Show Sticky Notes" xml:space="preserve">
+    <value>Отобразить заметки</value>
   </data>
   <data name="Signed by all" xml:space="preserve">
     <value>Подписано всеми</value>

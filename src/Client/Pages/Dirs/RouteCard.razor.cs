@@ -41,11 +41,11 @@ namespace EDO_FOMS.Client.Pages.Dirs
         private int tz;
         private int delay;
         private int duration;
-
         private const bool openFilter = false;
 
         private MudTabs _tabs;
         private MudDropContainer<RouteStepModel> _dropContainer;
+        private FileParseModel Parse { get; set; } = new();
 
         private RouteCardModel Route { get; set; } = new();
         private IEnumerable<DocTypeResponse> SelectedDocTypes { get; set; } = new HashSet<DocTypeResponse>() { };
@@ -117,19 +117,21 @@ namespace EDO_FOMS.Client.Pages.Dirs
             Route.ForUserRole = card.ForUserRole;
             Route.EndAction = card.EndAction;
 
+            Route.IsActive = card.IsActive;
+            Route.DateIsToday = card.DateIsToday;
+            Route.NameOfFile = card.NameOfFile;
+            Route.ParseFileName = card.ParseFileName;
+
+            Route.AllowRevocation = card.AllowRevocation;
+            Route.ReadOnly = card.ReadOnly;
+            Route.ShowNotes = card.ShowNotes;
+            Route.UseVersioning = card.UseVersioning;
+
             Route.IsPackage = card.IsPackage;
             Route.CalcHash = card.CalcHash;
             Route.AttachedSign = card.AttachedSign;
             Route.DisplayedSign = card.DisplayedSign;
 
-            Route.IsActive = card.IsActive;
-            Route.ReadOnly = card.ReadOnly;
-            Route.NameOfFile = card.NameOfFile;
-            Route.DateIsToday = card.DateIsToday;
-
-            Route.AllowRevocation = card.AllowRevocation;
-            Route.ParseFileName = card.ParseFileName;
-            Route.UseVersioning = card.UseVersioning;
             Route.HasDetails = card.HasDetails;
         }
 
@@ -184,19 +186,21 @@ namespace EDO_FOMS.Client.Pages.Dirs
                 ForUserRole = Route.ForUserRole,
                 EndAction = Route.EndAction,
 
+                IsActive = Route.IsActive,
+                DateIsToday = Route.DateIsToday,
+                NameOfFile = Route.NameOfFile,
+                ParseFileName = Route.ParseFileName,
+
+                AllowRevocation = Route.AllowRevocation,
+                ReadOnly = Route.ReadOnly,
+                ShowNotes = Route.ShowNotes,
+                UseVersioning = Route.UseVersioning,
+
                 IsPackage = Route.IsPackage,
                 CalcHash = Route.CalcHash,
                 AttachedSign = Route.AttachedSign,
                 DisplayedSign = Route.DisplayedSign,
 
-                IsActive = Route.IsActive,
-                ReadOnly = Route.ReadOnly,
-                NameOfFile = Route.NameOfFile,
-                DateIsToday = Route.DateIsToday,
-
-                AllowRevocation = Route.AllowRevocation,
-                ParseFileName = Route.ParseFileName,
-                UseVersioning = Route.UseVersioning,
                 HasDetails = Route.HasDetails
             };
 
@@ -325,6 +329,14 @@ namespace EDO_FOMS.Client.Pages.Dirs
             var border = required ? "border-solid" : "border-dotted";
             var css = $"{border} px-0 py-0 my-4 rounded-lg border-2 mud-border-lines-default";
             return css;
+        }
+        private async Task ParseCheckAsync()
+        {
+            var parameters = new DialogParameters() { { nameof(RouteParseDialog.Parse), Parse } };
+            var options = new DialogOptions() { DisableBackdropClick = true };
+            var dialog = _dialogService.Show<RouteParseDialog>("", parameters, options);
+
+            _ = await dialog.Result;
         }
     }
 }

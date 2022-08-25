@@ -28,7 +28,7 @@ public partial class AddEditDocCommand : IRequest<Result<int>>
     public int TypeId { get; set; } = 1;                                       // Тип документа: 1 - Договор, 2 - Приложение 
     [JsonConverter(typeof(TrimmingJsonConverter))]
     public string Number { get; set; } = string.Empty;                         // Номер
-    public DateTime? Date { get; set; } = DateTime.Today;                      // Дата
+    public DateTime? Date { get; set; } = null;                                // Дата
 
     [JsonConverter(typeof(TrimmingJsonConverter))]
     public string Title { get; set; } = string.Empty;                          // Наименование

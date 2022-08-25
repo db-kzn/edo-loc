@@ -165,7 +165,7 @@ namespace EDO_FOMS.Infrastructure.Services.Identity
             var result = _mapper.Map<List<UserResponse>>(users);
             return await Result<List<UserResponse>>.SuccessAsync(result);
         }
-        public async Task<Result<List<ContactResponse>>> GetFoundContacts(OrgTypes orgType, UserBaseRoles baseRole, string searchString)
+        public async Task<Result<List<ContactResponse>>> GetFoundContacts(OrgTypes orgType, UserBaseRoles baseRole, string searchString, int take = 10)
         {
             var users = _userManager.Users;
 
@@ -183,6 +183,7 @@ namespace EDO_FOMS.Infrastructure.Services.Identity
 
             var list = await users.Take(10)
                 .Select(u => new { u.Id, u.Surname, u.GivenName, u.OrgId, u.InnLe })
+                //.Take(take)
                 .ToListAsync();
 
             var orgIds = list.Select(u => u.OrgId).Distinct().ToArray();

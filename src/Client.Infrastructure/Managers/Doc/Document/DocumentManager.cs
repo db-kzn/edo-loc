@@ -116,8 +116,7 @@ namespace EDO_FOMS.Client.Infrastructure.Managers.Doc.Document
 
         public async Task<IResult<List<ContactResponse>>> GetFoundContacts(SearchContactsRequest request)
         {
-            var response = await _httpClient.GetAsync(
-                Routes.DocumentsEndpoints.GetFoundContacts(request.OrgType, request.BaseRole, request.SearchString));
+            var response = await _httpClient.GetAsync(Routes.DocumentsEndpoints.GetFoundContacts(request));
 
             return await response.ToResult<List<ContactResponse>>();
         }
