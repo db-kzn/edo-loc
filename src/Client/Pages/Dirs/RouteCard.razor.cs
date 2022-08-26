@@ -372,28 +372,28 @@ namespace EDO_FOMS.Client.Pages.Dirs
             }
             if (!string.IsNullOrWhiteSpace(Pattern.DocNumber))
             {
-                parses.Add(new RouteFileParseCommand(ParsePatterns.Sample, Pattern.DocNumber, ValueTypes.String));
+                parses.Add(new RouteFileParseCommand(ParsePatterns.DocNumber, Pattern.DocNumber, ValueTypes.String));
             }
             if (!string.IsNullOrWhiteSpace(Pattern.DocDate))
             {
-                parses.Add(new RouteFileParseCommand(ParsePatterns.Sample, Pattern.DocDate, ValueTypes.Date));
+                parses.Add(new RouteFileParseCommand(ParsePatterns.DocDate, Pattern.DocDate, ValueTypes.Date));
             }
             if (!string.IsNullOrWhiteSpace(Pattern.DocNotes))
             {
-                parses.Add(new RouteFileParseCommand(ParsePatterns.Sample, Pattern.DocNotes, ValueTypes.String));
+                parses.Add(new RouteFileParseCommand(ParsePatterns.DocNotes, Pattern.DocNotes, ValueTypes.String));
             }
 
             if (!string.IsNullOrWhiteSpace(Pattern.CodeMo))
             {
-                parses.Add(new RouteFileParseCommand(ParsePatterns.Sample, Pattern.CodeMo, ValueTypes.String));
+                parses.Add(new RouteFileParseCommand(ParsePatterns.CodeMO, Pattern.CodeMo, ValueTypes.String));
             }
             if (!string.IsNullOrWhiteSpace(Pattern.CodeSmo))
             {
-                parses.Add(new RouteFileParseCommand(ParsePatterns.Sample, Pattern.CodeSmo, ValueTypes.String));
+                parses.Add(new RouteFileParseCommand(ParsePatterns.CodeSMO, Pattern.CodeSmo, ValueTypes.String));
             }
             if (!string.IsNullOrWhiteSpace(Pattern.CodeFund))
             {
-                parses.Add(new RouteFileParseCommand(ParsePatterns.Sample, Pattern.CodeFund, ValueTypes.String));
+                parses.Add(new RouteFileParseCommand(ParsePatterns.CodeFund, Pattern.CodeFund, ValueTypes.String));
             }
 
             return parses;
