@@ -1,8 +1,11 @@
 ﻿using EDO_FOMS.Application.Models.Dir;
 using EDO_FOMS.Client.Models;
+using EDO_FOMS.Shared.Wrapper;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using System;
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
 
 namespace EDO_FOMS.Client.Pages.Dirs
 {
@@ -11,52 +14,81 @@ namespace EDO_FOMS.Client.Pages.Dirs
         [CascadingParameter]
         private MudDialogInstance MudDialog { get; set; }
         [Parameter]
-        public FileParseModel Parse { get; set; } = new();
+        public FileParseModel Pattern { get; set; } = new();
 
         private FileParseResult Result { get; set; } = new();
 
+        private string fileName = string.Empty;
+        private readonly int timeOutSec = 1;
+
         protected override void OnInitialized()
         {
-            var i = Parse.FileName ?? string.Empty;
+            fileName = Pattern.FileName ?? string.Empty;
 
-            Result.HasFileName = !string.IsNullOrWhiteSpace(i);
+            Result.HasFileName = !string.IsNullOrWhiteSpace(fileName);
 
             if (!Result.HasFileName) { return; }
 
-            Result.DocTitle.HasPattern = !string.IsNullOrWhiteSpace(Parse.DocTitle);
-            if (Result.DocTitle.HasPattern) { Result.DocTitle.Result = Regex.Match(i, Parse.DocTitle); }
+            Result.HasFileMask = !string.IsNullOrWhiteSpace(Pattern.FileMask);
 
-            Result.DocNumber.HasPattern = !string.IsNullOrWhiteSpace(Parse.DocNumber);
-            if (Result.DocNumber.HasPattern) { Result.DocNumber.Result = Regex.Match(i, Parse.DocNumber); }
+            if (Result.HasFileMask) {
+                try
+                {
+                    Regex mask = new(Pattern.FileMask.Replace(".", "[.]").Replace("*", ".*").Replace("?", "."));
+                    Result.FileMaskIsCorrect = mask.IsMatch(fileName);
+                }
+                catch (Exception)
+                {
+                    Result.FileMaskIsCorrect = false;
+                }
+            }
 
-            Result.DocDate.HasPattern = !string.IsNullOrWhiteSpace(Parse.DocDate);
-            if (Result.DocDate.HasPattern) { Result.DocDate.Result = Regex.Match(i, Parse.DocDate); }
+            Result.DocTitle = TryParse(Pattern.DocTitle);
+            Result.DocNumber = TryParse(Pattern.DocNumber);
+            Result.DocDate = TryParse(Pattern.DocDate);
+            Result.DocNotes = TryParse(Pattern.DocNotes);
 
-            Result.DocNotes.HasPattern = !string.IsNullOrWhiteSpace(Parse.DocNotes);
-            if (Result.DocNotes.HasPattern) { Result.DocNotes.Result = Regex.Match(i, Parse.DocNotes); }
-
-            Result.CodeMo.HasPattern = !string.IsNullOrWhiteSpace(Parse.CodeMo);
-            if (Result.CodeMo.HasPattern) { Result.CodeMo.Result = Regex.Match(i, Parse.CodeMo); }
-
-            Result.CodeSmo.HasPattern = !string.IsNullOrWhiteSpace(Parse.CodeSmo);
-            if (Result.CodeSmo.HasPattern) { Result.CodeSmo.Result = Regex.Match(i, Parse.CodeSmo); }
-
-            Result.CodeFund.HasPattern = !string.IsNullOrWhiteSpace(Parse.CodeFund);
-            if (Result.CodeFund.HasPattern) { Result.CodeFund.Result = Regex.Match(i, Parse.CodeFund); }
+            Result.CodeMo = TryParse(Pattern.CodeMo);
+            Result.CodeSmo = TryParse(Pattern.CodeSmo);
+            Result.CodeFund = TryParse(Pattern.CodeFund);
         }
+
         private void Ok() => MudDialog.Close();
+
+        private ParseResult TryParse(string pattern)
+        {
+            ParseResult result = new() { HasPattern = !string.IsNullOrWhiteSpace(pattern) };
+
+            if (!result.HasPattern) { return result; }
+
+            try
+            {
+                result.Match = Regex.Match(fileName, pattern, RegexOptions.None, TimeSpan.FromSeconds(timeOutSec));
+                result.HasError = false;
+            }
+            catch (RegexMatchTimeoutException ex)
+            {
+                result.Message = ex.Message;
+                result.HasError = true;
+            }
+
+            return result;
+        }
     }
 
     public class ParseResult
     {
         public bool HasPattern { get; set; } = false;
-        public Match Result { get; set; }
+        public bool HasError { get; set; } = false;
+        public string Message { get; set; }
+        public Match Match { get; set; }
     }
 
     public class FileParseResult
     {
         public bool HasFileName { get; set; } = false;
-        public bool HasFileMask { get; set; } = false;
+        public bool HasFileMask { get; set; } = new();
+        public bool FileMaskIsCorrect { get; set; } = new();
 
         public ParseResult DocTitle { get; set; } = new();
         public ParseResult DocNumber { get; set; } = new();

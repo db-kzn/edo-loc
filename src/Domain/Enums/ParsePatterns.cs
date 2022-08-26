@@ -1,6 +1,6 @@
 ﻿namespace EDO_FOMS.Domain.Enums
 {
-    public enum ParseTypes : int
+    public enum ParsePatterns : int
     {
         Undefined = 0, // Роль не определена
         Sample = 1,    // Исходный образец

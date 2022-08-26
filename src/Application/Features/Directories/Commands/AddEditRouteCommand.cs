@@ -22,11 +22,10 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
 
         public List<RouteStageCommand> Stages { get; set; } = new();             // + Стадии текущего маршрута
         public List<RouteStepCommand> Steps { get; set; } = new();               // + Процессы в этапе + Участники процесса
-
-        public List<RouteFileParseCommand> Parses { get; set; } = new();         // - Правила разбора имени файла
+        public List<RouteFileParseCommand> Parses { get; set; } = new();         // + Правила разбора имени файла
 
         public int Id { get; set; }                                              // - Идентификатор маршрута
-        public int Number { get; set; }                                          // - Ценность маршрута, для сортировки
+        public int Number { get; set; }                                          // - "Ценность" маршрута, для сортировки
         public string Name { get; set; } = string.Empty;                         // + Наименование маршрута
         public string Description { get; set; } = string.Empty;                  // + Описание маршрута
 
@@ -102,7 +101,21 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
     }
     public class RouteFileParseCommand
     {
-        public string Name { get; set; }                                         // + Наименование правила
+        public ParsePatterns PatternType { get; set; } = ParsePatterns.Undefined; // Тип шаблона разбора
+        public string Pattern { get; set; } = string.Empty;                       // Значение паттерна для Regex
+        public ValueTypes ValueType { get; set; } = ValueTypes.String;            // Тип значения результата
+
+        public RouteFileParseCommand() { }
+        public RouteFileParseCommand(
+            ParsePatterns patternType,
+            string pattern,
+            ValueTypes valueType
+            )
+        {
+            PatternType = patternType;
+            Pattern = pattern;
+            ValueType = valueType;
+        }
     }
 
     internal class AddEditRouteCommandHandler : IRequestHandler<AddEditRouteCommand, Result<int>>
@@ -193,6 +206,15 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
                 route.Steps.Add(step);
             });
 
+            command.Parses.ForEach(p =>
+                route.Parses.Add(new RouteFileParse() // route, p.PatternType, p.Pattern, p.ValueType
+                {
+                    Route = route,
+                    PatternType = p.PatternType,
+                    Pattern = p.Pattern,
+                    ValueType = p.ValueType
+                }));
+
             await _unitOfWork.Repository<Route>().AddAsync(route);
             await _unitOfWork.Commit(cancellationToken);
 
@@ -202,8 +224,9 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
         private async Task<Result<int>> EditRouteAsync(AddEditRouteCommand command, CancellationToken cancellationToken)
         {
             var routes = _unitOfWork.Repository<Route>().Entities
-                .Include(r => r.RouteDocTypes).Include(r => r.ForOrgTypes)
+                .Include(r => r.RouteDocTypes).Include(r => r.ForOrgTypes).Include(r => r.Parses)
                 .Include(r => r.Stages).Include(r => r.Steps).ThenInclude(s => s.Members);
+
             var route = await routes.FirstOrDefaultAsync(r => r.Id == command.Id, cancellationToken: cancellationToken);
             if (route is null) { return await Result<int>.FailAsync(_localizer["Route Not Found!"]); }
 
@@ -273,7 +296,7 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
                 }
                 else
                 {
-                    var s = route.Stages.Find(r => r.Id == c.Id);
+                    var s = route.Stages.FirstOrDefault(r => r.Id == c.Id);
                     if (s != null)
                     {
                         s.Number = c.Number;
@@ -332,7 +355,7 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
                 }
                 else
                 {
-                    var r = route.Steps.Find(f => f.Id == c.Id);
+                    var r = route.Steps.FirstOrDefault(f => f.Id == c.Id);
                     if (r != null)
                     {
                         r.IsDeleted = false;
@@ -367,6 +390,23 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
                             r.Members.Add(NewMember(r, mc));
                         }
                     });
+                }
+            });
+
+            route.Parses.RemoveAll(r => !command.Parses.Exists(c => c.PatternType == r.PatternType));
+            command.Parses.ForEach(c =>
+            {
+                var parse = route.Parses.FirstOrDefault(r => r.PatternType == c.PatternType);
+
+                if (parse is null)
+                {
+                    route.Parses.Add(new(route, c.PatternType, c.Pattern, c.ValueType));
+                }
+                else
+                {
+                    parse.PatternType = c.PatternType;
+                    parse.Pattern = c.Pattern;
+                    parse.ValueType = c.ValueType;
                 }
             });
 

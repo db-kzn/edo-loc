@@ -45,7 +45,7 @@ namespace EDO_FOMS.Client.Pages.Dirs
 
         private MudTabs _tabs;
         private MudDropContainer<RouteStepModel> _dropContainer;
-        private FileParseModel Parse { get; set; } = new();
+        private FileParseModel Pattern { get; set; } = new();
 
         private RouteCardModel Route { get; set; } = new();
         private IEnumerable<DocTypeResponse> SelectedDocTypes { get; set; } = new HashSet<DocTypeResponse>() { };
@@ -107,8 +107,6 @@ namespace EDO_FOMS.Client.Pages.Dirs
             Route.Stages = card.Stages;
             Route.Steps = card.Steps;
 
-            //Parses
-
             Route.Id = card.Id;
             Route.Number = card.Number;
             Route.Name = card.Name;
@@ -133,6 +131,23 @@ namespace EDO_FOMS.Client.Pages.Dirs
             Route.DisplayedSign = card.DisplayedSign;
 
             Route.HasDetails = card.HasDetails;
+
+            card.Parses.ForEach(c => _ = c.PatternType switch
+            {
+                ParsePatterns.Sample => Pattern.FileName = c.Pattern,
+                ParsePatterns.Mask => Pattern.FileMask = c.Pattern,
+
+                ParsePatterns.DocTitle => Pattern.DocTitle = c.Pattern,
+                ParsePatterns.DocNumber => Pattern.DocNumber = c.Pattern,
+                ParsePatterns.DocDate => Pattern.DocDate = c.Pattern,
+                ParsePatterns.DocNotes => Pattern.DocNotes = c.Pattern,
+
+                ParsePatterns.CodeMO => Pattern.CodeMo = c.Pattern,
+                ParsePatterns.CodeSMO => Pattern.CodeSmo = c.Pattern,
+                ParsePatterns.CodeFund => Pattern.CodeFund = c.Pattern,
+
+                _ => null
+            });
         }
 
         private string GetMultiDocTypesText(List<string> selectedDocTypes)
@@ -176,7 +191,7 @@ namespace EDO_FOMS.Client.Pages.Dirs
                 Stages = Route.Stages.Select(s => NewRouteStage(s)).ToList(),
                 Steps = Route.Steps.Select(s => NewRouteStep(s)).ToList(),
 
-                // Parses
+                Parses = SelectFileParses(),
 
                 Id = Route.Id,
                 Number = Route.Number,
@@ -332,11 +347,56 @@ namespace EDO_FOMS.Client.Pages.Dirs
         }
         private async Task ParseCheckAsync()
         {
-            var parameters = new DialogParameters() { { nameof(RouteParseDialog.Parse), Parse } };
+            var parameters = new DialogParameters() { { nameof(RouteParseDialog.Pattern), Pattern } };
             var options = new DialogOptions() { DisableBackdropClick = true };
             var dialog = _dialogService.Show<RouteParseDialog>("", parameters, options);
 
             _ = await dialog.Result;
+        }
+        private List<RouteFileParseCommand> SelectFileParses()
+        {
+            var parses = new List<RouteFileParseCommand>();
+
+            if (!string.IsNullOrWhiteSpace(Pattern.FileName))
+            {
+                parses.Add(new RouteFileParseCommand(ParsePatterns.Sample, Pattern.FileName, ValueTypes.String));
+            }
+            if (!string.IsNullOrWhiteSpace(Pattern.FileMask))
+            {
+                parses.Add(new RouteFileParseCommand(ParsePatterns.Mask, Pattern.FileMask, ValueTypes.String));
+            }
+
+            if (!string.IsNullOrWhiteSpace(Pattern.DocTitle))
+            {
+                parses.Add(new RouteFileParseCommand(ParsePatterns.DocTitle, Pattern.DocTitle, ValueTypes.String));
+            }
+            if (!string.IsNullOrWhiteSpace(Pattern.DocNumber))
+            {
+                parses.Add(new RouteFileParseCommand(ParsePatterns.Sample, Pattern.DocNumber, ValueTypes.String));
+            }
+            if (!string.IsNullOrWhiteSpace(Pattern.DocDate))
+            {
+                parses.Add(new RouteFileParseCommand(ParsePatterns.Sample, Pattern.DocDate, ValueTypes.Date));
+            }
+            if (!string.IsNullOrWhiteSpace(Pattern.DocNotes))
+            {
+                parses.Add(new RouteFileParseCommand(ParsePatterns.Sample, Pattern.DocNotes, ValueTypes.String));
+            }
+
+            if (!string.IsNullOrWhiteSpace(Pattern.CodeMo))
+            {
+                parses.Add(new RouteFileParseCommand(ParsePatterns.Sample, Pattern.CodeMo, ValueTypes.String));
+            }
+            if (!string.IsNullOrWhiteSpace(Pattern.CodeSmo))
+            {
+                parses.Add(new RouteFileParseCommand(ParsePatterns.Sample, Pattern.CodeSmo, ValueTypes.String));
+            }
+            if (!string.IsNullOrWhiteSpace(Pattern.CodeFund))
+            {
+                parses.Add(new RouteFileParseCommand(ParsePatterns.Sample, Pattern.CodeFund, ValueTypes.String));
+            }
+
+            return parses;
         }
     }
 }

@@ -14,11 +14,21 @@
         <MudGrid Style="min-width: 550px; max-height: 70vh; overflow-y: scroll;">
             @if (Result.HasFileName)
             {
+                @if (Result.HasFileMask)
+                {
+                    <MudItem xs="12">
+                        <MudField Label="@_localizer["File Mask"]" Variant="Variant.Text">
+                            @(Result.FileMaskIsCorrect ? @_localizer["Is Correct"] : @_localizer["Is Wrong"])
+                        </MudField>
+                    </MudItem>
+                }
+
                 @if (Result.DocTitle.HasPattern)
                 {
                     <MudItem xs="12">
                         <MudField Label="@_localizer["Doc Title"]" Variant="Variant.Text">
-                            @(Result.DocTitle.Result.Success ? Result.DocTitle.Result.Value : @_localizer["Error"])
+                            @(Result.DocTitle.HasError ? Result.DocTitle.Message :
+                            Result.DocTitle.Match.Success ? Result.DocTitle.Match.Value : @_localizer["Error"])
                         </MudField>
                     </MudItem>
                 }
@@ -27,7 +37,8 @@
                 {
                     <MudItem xs="12">
                         <MudField Label="@_localizer["Doc Number"]" Variant="Variant.Text">
-                            @(Result.DocNumber.Result.Success ? Result.DocNumber.Result.Value : @_localizer["Error"])
+                            @(Result.DocNumber.HasError ? Result.DocNumber.Message :
+                            Result.DocNumber.Match.Success ? Result.DocNumber.Match.Value : @_localizer["Error"])
                         </MudField>
                     </MudItem>
                 }
@@ -36,7 +47,8 @@
                 {
                     <MudItem xs="12">
                         <MudField Label="@_localizer["Doc Date"]" Variant="Variant.Text">
-                            @(Result.DocDate.Result.Success ? Result.DocDate.Result.Value : @_localizer["Error"])
+                            @(Result.DocDate.HasError ? Result.DocDate.Message :
+                            Result.DocDate.Match.Success ? Result.DocDate.Match.Value : @_localizer["Error"])
                         </MudField>
                     </MudItem>
                 }
@@ -45,7 +57,8 @@
                 {
                     <MudItem xs="12">
                         <MudField Label="@_localizer["Doc Notes"]" Variant="Variant.Text">
-                            @(Result.DocNotes.Result.Success ? Result.DocNotes.Result.Value : @_localizer["Error"])
+                            @(Result.DocNotes.HasError ? Result.DocNotes.Message :
+                            Result.DocNotes.Match.Success ? Result.DocNotes.Match.Value : @_localizer["Error"])
                         </MudField>
                     </MudItem>
                 }
@@ -54,7 +67,8 @@
                 {
                     <MudItem xs="12">
                         <MudField Label="@_localizer["Code Mo"]" Variant="Variant.Text">
-                            @(Result.CodeMo.Result.Success ? Result.CodeMo.Result.Value : @_localizer["Error"])
+                            @(Result.CodeMo.HasError ? Result.CodeMo.Message :
+                            Result.CodeMo.Match.Success ? Result.CodeMo.Match.Value : @_localizer["Error"])
                         </MudField>
                     </MudItem>
                 }
@@ -63,7 +77,8 @@
                 {
                     <MudItem xs="12">
                         <MudField Label="@_localizer["Code Smo"]" Variant="Variant.Text">
-                            @(Result.CodeSmo.Result.Success ? Result.CodeSmo.Result.Value : @_localizer["Error"])
+                            @(Result.CodeSmo.HasError ? Result.CodeSmo.Message :
+                            Result.CodeSmo.Match.Success ? Result.CodeSmo.Match.Value : @_localizer["Error"])
                         </MudField>
                     </MudItem>
                 }
@@ -72,7 +87,8 @@
                 {
                     <MudItem xs="12">
                         <MudField Label="@_localizer["Code Fund"]" Variant="Variant.Text">
-                            @(Result.CodeFund.Result.Success ? Result.CodeFund.Result.Value : @_localizer["Error"])
+                            @(Result.CodeFund.HasError ? Result.CodeFund.Message :
+                            Result.CodeFund.Match.Success ? Result.CodeFund.Match.Value : @_localizer["Error"])
                         </MudField>
                     </MudItem>
                 }
@@ -80,8 +96,8 @@
             else
             {
                 <MudItem xs="12">
-                    <MudField Label="@_localizer["Error"]" Variant="Variant.Text">
-                        <MudIcon Icon="@Icons.Material.Outlined.Report" Color="@Color.Warning" />
+                    <MudField Label="@_localizer["Error"]" Variant="Variant.Text"
+                          Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Outlined.Report" AdornmentColor="Color.Warning">
                         @_localizer["No File Name Example"]
                     </MudField>
                 </MudItem>

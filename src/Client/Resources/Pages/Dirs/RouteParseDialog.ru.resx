@@ -144,6 +144,15 @@
   <data name="Error" xml:space="preserve">
     <value>Ошибка</value>
   </data>
+  <data name="File Mask" xml:space="preserve">
+    <value>Маска файла</value>
+  </data>
+  <data name="Is Correct" xml:space="preserve">
+    <value>Корректна</value>
+  </data>
+  <data name="Is Wrong" xml:space="preserve">
+    <value>Ошибочна</value>
+  </data>
   <data name="No File Name Example" xml:space="preserve">
     <value>Нет примера имени файла</value>
   </data>

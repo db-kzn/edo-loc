@@ -56,7 +56,7 @@ internal class GetRouteCardQueryHandler : IRequestHandler<GetRouteCardQuery, Res
 
             Stages = route.Stages.Select(s => new RouteStageModel(s)).ToList(),
             Steps = route.Steps.Where(s => !s.IsDeleted).Select(s => new RouteStepModel(s)).ToList(),
-            Parses = route.Parses,
+            Parses = route.Parses.Select(s => new RouteFileParseModel(s)).ToList(),
 
             Id = route.Id,
             Number = route.Number,

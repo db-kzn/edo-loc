@@ -303,36 +303,19 @@ namespace EDO_FOMS.Infrastructure.Migrations
 
             modelBuilder.Entity("EDO_FOMS.Domain.Entities.Dir.RouteFileParse", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("RouteId")
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<int>("PatternType")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Pattern")
                         .HasColumnType("text");
 
-                    b.Property<int>("RouteId")
+                    b.Property<int>("ValueType")
                         .HasColumnType("integer");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RouteId");
+                    b.HasKey("RouteId", "PatternType");
 
                     b.ToTable("RouteFileParses", "dir");
                 });

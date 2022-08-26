@@ -144,6 +144,15 @@
   <data name="Error" xml:space="preserve">
     <value>Error</value>
   </data>
+  <data name="File Mask" xml:space="preserve">
+    <value>File Mask</value>
+  </data>
+  <data name="Is Correct" xml:space="preserve">
+    <value>Is Correct</value>
+  </data>
+  <data name="Is Wrong" xml:space="preserve">
+    <value>Is Wrong</value>
+  </data>
   <data name="No File Name Example" xml:space="preserve">
     <value>No File Name Example</value>
   </data>

@@ -12,7 +12,7 @@ public class Route : AuditableEntity<int>
 
     public List<RouteStage> Stages { get; set; } = new();                    // + Стадии текущего маршрута
     public List<RouteStep> Steps { get; set; } = new();                      // + Процессы этапы
-    public List<RouteFileParse> Parses { get; set; } = new();                // - Правила разбора имени файла
+    public List<RouteFileParse> Parses { get; set; } = new();                // + Правила разбора имени файла
 
     // Id
     public int Number { get; set; }                                          // - Порядковый номер маршрута, для сортировки

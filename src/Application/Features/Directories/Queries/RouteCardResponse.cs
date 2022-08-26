@@ -12,7 +12,7 @@ namespace EDO_FOMS.Application.Features.Directories.Queries
 
         public List<RouteStageModel> Stages { get; set; } = new();               // + Стадии текущего маршрута
         public List<RouteStepModel> Steps { get; set; } = new();                 // + Процессы (шаги) с Участниками
-        public List<RouteFileParse> Parses { get; set; } = new();                // - Правила разбора имени файла
+        public List<RouteFileParseModel> Parses { get; set; } = new();                // - Правила разбора имени файла
 
         public int Id { get; set; }
         public int Number { get; set; }                                          // - Порядковый номер маршрута, для сортировки

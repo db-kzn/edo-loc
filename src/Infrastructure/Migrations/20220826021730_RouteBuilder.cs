@@ -211,19 +211,14 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 schema: "dir",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     RouteId = table.Column<int>(type: "integer", nullable: false),
-                    Type = table.Column<int>(type: "integer", nullable: false),
+                    PatternType = table.Column<int>(type: "integer", nullable: false),
                     Pattern = table.Column<string>(type: "text", nullable: true),
-                    CreatedBy = table.Column<string>(type: "text", nullable: true),
-                    CreatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "text", nullable: true),
-                    LastModifiedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    ValueType = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RouteFileParses", x => x.Id);
+                    table.PrimaryKey("PK_RouteFileParses", x => new { x.RouteId, x.PatternType });
                     table.ForeignKey(
                         name: "FK_RouteFileParses_Routes_RouteId",
                         column: x => x.RouteId,
@@ -381,12 +376,6 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 schema: "dir",
                 table: "RouteDocTypes",
                 column: "DocumentTypeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RouteFileParses_RouteId",
-                schema: "dir",
-                table: "RouteFileParses",
-                column: "RouteId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RouteOrgTypes_RouteId",

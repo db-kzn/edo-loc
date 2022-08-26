@@ -93,7 +93,10 @@ namespace EDO_FOMS.Infrastructure.Contexts
             builder.Entity<RouteOrgType>(entity => entity.ToTable(name: "RouteOrgTypes", schema: "dir"));
             builder.Entity<RouteStage>(entity => entity.ToTable(name: "RouteStages", schema: "dir"));
             builder.Entity<RouteStep>(entity => entity.ToTable(name: "RouteSteps", schema: "dir"));
-            builder.Entity<RouteFileParse>(entity => entity.ToTable(name: "RouteFileParses", schema: "dir"));
+            builder.Entity<RouteFileParse>(entity => {
+                entity.ToTable(name: "RouteFileParses", schema: "dir");
+                entity.HasKey(p => new { p.RouteId, p.PatternType });
+            });
 
             builder.Entity<RouteStepMember>(entity =>
             {

@@ -14,6 +14,7 @@ namespace EDO_FOMS.Application.Mappings
                 .ForMember(nameof(Route.ForOrgTypes), opt => opt.Ignore())
                 .ForMember(nameof(Route.Stages), opt => opt.Ignore())
                 .ForMember(nameof(Route.Steps), opt => opt.Ignore())
+                .ForMember(nameof(Route.Parses), opt => opt.Ignore())
                 .ReverseMap();
         }
     }
