@@ -66,7 +66,7 @@ namespace EDO_FOMS.Client.Pages.Dirs
                 result.Match = Regex.Match(fileName, pattern, RegexOptions.None, TimeSpan.FromSeconds(timeOutSec));
                 result.HasError = false;
             }
-            catch (RegexMatchTimeoutException ex)
+            catch (Exception ex)
             {
                 result.Message = ex.Message;
                 result.HasError = true;
