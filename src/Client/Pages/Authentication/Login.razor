@@ -1,5 +1,7 @@
 ﻿@page "/login"
+
 @using EDO_FOMS.Application.Models
+
 @layout MainLayout
 @attribute [AllowAnonymous]
 @inject Microsoft.Extensions.Localization.IStringLocalizer<Login> _localizer
@@ -27,7 +29,7 @@
             <div class="d-flex justify-center">
                 <MudText>@_localizer["Don't have an account?"] <MudLink Href="/register">@_localizer["Register here"]</MudLink></MudText>
             </div>
-        </MudItem>*@
+        </MudItem>
 
         @*<DataAnnotationsValidator />*@
 
@@ -137,11 +139,29 @@
                 <MudPaper Width="100%">
                     <MudText Typo="Typo.h6" Align="Align.Center"  Class="my-4">@_localizer["Certificate"]</MudText>
                     <MudDivider />
-                    <MudText Typo="Typo.body1" Align="Align.Left" Class="ml-4 my-4"><b>@_localizer["Owner"]:</b> @cert?.Subject?.Name</MudText>
-                    <MudText Typo="Typo.body1" Align="Align.Left" Class="ml-4 my-4"><b>@_localizer["Algorithm"]:</b> @cert?.Algorithm</MudText>
-                    <MudText Typo="Typo.body1" Align="Align.Left" Class="ml-4 my-4"><b>@_localizer["Issuer"]:</b> @cert?.Issuer?.Name</MudText>
-                    <MudText Typo="Typo.body1" Align="Align.Left" Class="ml-4 my-4"><b>@_localizer["Valid"]:</b> @cert?.FromDate - @cert?.TillDate</MudText>
-                    <MudText Typo="Typo.body1" Align="Align.Left" Class="ml-4 my-4"><b>@_localizer["Thumbprint"]:</b> @cert?.Thumbprint</MudText>
+                    <table style="margin: auto; padding: 8px;">
+                        <tr>
+                            <td><MudText Typo="Typo.body2" Align="Align.Right" Class="mx-2 my-1">@_localizer["Owner"]</MudText></td>
+                            <td><MudText Typo="Typo.body1" Align="Align.Left" Class="mx-2 my-1">@cert?.Subject?.Name</MudText></td>
+                        </tr>
+                        <tr>
+                            <td><MudText Typo="Typo.body2" Align="Align.Right" Class="mx-2 my-1">@_localizer["Algorithm"]</MudText></td>
+                            <td><MudText Typo="Typo.body1" Align="Align.Left" Class="mx-2 my-1">@cert?.Algorithm</MudText></td>
+                        </tr>
+                        <tr>
+                            <td><MudText Typo="Typo.body2" Align="Align.Right" Class="mx-2 my-1">@_localizer["Issuer"]</MudText></td>
+                            <td><MudText Typo="Typo.body1" Align="Align.Left" Class="mx-2 my-1">@cert?.Issuer?.Name</MudText></td>
+                        
+                        </tr>
+                        <tr>
+                            <td><MudText Typo="Typo.body2" Align="Align.Right" Class="mx-2 my-1">@_localizer["Valid"]</MudText></td>
+                            <td><MudText Typo="Typo.body1" Align="Align.Left" Class="mx-2 my-1">@cert?.FromDate - @cert?.TillDate</MudText></td>
+                        </tr>
+                        <tr>
+                            <td><MudText Typo="Typo.body2" Align="Align.Right" Class="mx-2 my-1">@_localizer["Thumbprint"]</MudText></td>
+                            <td><MudText Typo="Typo.body1" Align="Align.Left" Class="mx-2 my-1"> @cert?.Thumbprint</MudText></td>
+                        </tr>
+                    </table>
                 </MudPaper>
             </MudItem>
 
