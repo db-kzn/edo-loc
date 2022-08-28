@@ -20,22 +20,26 @@
             <MudTabs Elevation="1" Rounded="true" Outlined="true"  @bind-ActivePanelIndex="tabIndex" PanelClass="pt-4" >
                 <MudTabPanel Text="@_localizer["Profile"]">
                     <MudGrid>
-                        <MudItem xs="12" Class="d-flex justify-center pb-4">
+                        @*<MudItem xs="12" Class="d-flex justify-center pb-4">
                             <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Outlined.Memory" Size="Size.Large"
                                 Style="height: 56px;" FullWidth="true"  Color="Color.Default" OnClick="CertSelect">
                                 @_localizer["Fill out from certificate"]
                                     </MudButton>
-                        </MudItem>
+                        </MudItem>*@
+
+                        @*<MudItem xs="6" Class="input-field">
+                            <MudTextField For="@(() => EditUser.Id)" @bind-Value="EditUser.Id" Label="@_localizer["User ID"]" Variant="Variant.Filled" ReadOnly="true"/>
+                        </MudItem>*@
 
                         <MudItem xs="6" Class="input-field">
-                            <MudTextField For="@(() => EditUser.Id)" @bind-Value="EditUser.Id" Label="@_localizer["User ID"]" Variant="Variant.Filled" ReadOnly="true"/>
+                            <MudTextField For="@(() => EditUser.InnLe)" @bind-Value="EditUser.InnLe" Label="@_localizer["Org INN"]" Variant="Variant.Filled" ReadOnly="true" />
                         </MudItem>
                         <MudItem xs="6" Class="input-field">
                             <MudTextField For="@(() => EditUser.Snils)" @bind-Value="EditUser.Snils" Label="@_localizer["SNILS"]" Variant="Variant.Filled" ReadOnly="true" />
                         </MudItem>
 
                         <MudItem xs="6" Class="input-field">
-                            <MudTextField For="@(() => EditUser.InnLe)" @bind-Value="EditUser.InnLe" Label="@_localizer["Org INN"]" />
+                            <MudTextField For="@(() => EditUser.Inn)" @bind-Value="EditUser.Inn" Label="@_localizer["User INN"]" />
                         </MudItem>
                         <MudItem xs="6" Class="input-field">
                             <MudTextField For="@(() => EditUser.Title)" @bind-Value="EditUser.Title" Label="@_localizer["Title"]" />

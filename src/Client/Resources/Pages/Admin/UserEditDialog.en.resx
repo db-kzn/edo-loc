@@ -240,4 +240,7 @@
   <data name="User ID" xml:space="preserve">
     <value>User ID</value>
   </data>
+  <data name="User INN" xml:space="preserve">
+    <value>User INN</value>
+  </data>
 </root>
