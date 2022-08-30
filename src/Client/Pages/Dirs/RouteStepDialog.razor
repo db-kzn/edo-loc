@@ -90,9 +90,10 @@
             </MudItem>
             <MudItem xs="12">
                 @*<MudNumericField @bind-Value="@Step.OrgId" Label="@_localizer["Member Org"]" Variant="Variant.Text" />*@
-                <MudAutocomplete Class="mx-2" Label="@_localizer["Member Org"]" ToStringFunc="@(e => OrgName(e))"
+                <MudAutocomplete Label="@_localizer["Member Org"]" ToStringFunc="@(e => OrgName(e))"
                                  T="OrgsResponse" Value="Step.OrgMember" SearchFunc="@SearchOrgAsync" ValueChanged="@(o => OrgChanged(o))"
-                                 ResetValueOnEmptyText="@resetValueOnEmptyText" CoerceText="@coerceText" CoerceValue="@coerceValue" Dense="true">
+                                 ResetValueOnEmptyText="@resetValueOnEmptyText" CoerceText="@coerceText" CoerceValue="@coerceValue" Clearable="@clearable"
+                                 Dense="true">
                     <NoItemsTemplate>
                         <MudText Align="Align.Start" Class="px-4 py-1" Color="Color.Warning">
                             @_localizer["Organization not found"]
@@ -102,12 +103,25 @@
             </MudItem>
 
             <MudItem xs="6">
-                <MudCheckBox @bind-Checked="@Step.Requred" Label="@_localizer["Requred"]" Color="Color.Primary"
-                             CheckedIcon="@Icons.Material.Outlined.NewReleases" UnCheckedColor="Color.Default" />
+                @*<MudCheckBox @bind-Checked="@Step.OnlyHead" Label="@_localizer["Only Chief"]" Color="Color.Primary"
+                CheckedIcon="@Icons.Material.Outlined.WorkspacePremium" UnCheckedColor="Color.Default" />*@
+
+                @*<div class="d-flex flex-row" style="height: 24px;">
+                <MudIcon Icon="@Icons.Material.Outlined.AssignmentTurnedIn" Color="Color.Default" Size="Size.Small" Class="mr-2" />
+                </div>*@
+
+                <MudSelect T="MemberGroups" @bind-Value="@Step.MemberGroup" Label="@_localizer["Member Group"]">
+                    <MudSelectItem T="MemberGroups" Value="@MemberGroups.Undefined">@_localizer["Group not defined"]</MudSelectItem>
+                    <MudSelectItem T="MemberGroups" Value="@MemberGroups.OnlyHead">@_localizer["Only Head"]</MudSelectItem>
+                    <MudSelectItem T="MemberGroups" Value="@MemberGroups.HeadAndAccountant">@_localizer["Head And Accountant"]</MudSelectItem>
+                    <MudSelectItem T="MemberGroups" Value="@MemberGroups.OrgAdmin">@_localizer["Org Admin"]</MudSelectItem>
+                    <MudSelectItem T="MemberGroups" Value="@MemberGroups.OnlyEmployees">@_localizer["Only Employees"]</MudSelectItem>
+                    <MudSelectItem T="MemberGroups" Value="@MemberGroups.ExtExpert">@_localizer["External Expert"]</MudSelectItem>
+                </MudSelect>
             </MudItem>
             <MudItem xs="6">
-                <MudCheckBox @bind-Checked="@Step.OnlyHead" Label="@_localizer["Only Chief"]" Color="Color.Primary"
-                             CheckedIcon="@Icons.Material.Outlined.WorkspacePremium" UnCheckedColor="Color.Default" />
+                <MudCheckBox @bind-Checked="@Step.Requred" Label="@_localizer["Requred"]" Color="Color.Primary"
+                             CheckedIcon="@Icons.Material.Rounded.WarningAmber" UnCheckedColor="Color.Default" />
             </MudItem>
 
             <MudItem xs="6">
@@ -133,7 +147,7 @@
             <MudItem xs="6">
                 <div class="d-flex">
                     <MudAutocomplete T="ContactResponse" @bind-Value="Members.Contact"
-                                     SearchFunc="@((text) => SearchContactsAsync(Step.OnlyHead ? UserBaseRoles.Chief : UserBaseRoles.Undefined, text))"
+                                     SearchFunc="@((text) => SearchContactsAsync(Step.MemberGroup == MemberGroups.OnlyHead ? UserBaseRoles.Chief : UserBaseRoles.Undefined, text))"
                                      ResetValueOnEmptyText="@resetValueOnEmptyText" CoerceText="@coerceText" CoerceValue="@coerceValue" Clearable="false"
                                      Adornment="Adornment.Start" AdornmentColor="Color.Default" AdornmentIcon="@Icons.Material.Outlined.GroupAdd"
                                      Label="@_localizer["Members"]" ToStringFunc="@(e => (e == null) ? null : ContactName(e))">
@@ -151,15 +165,17 @@
                 <MudChipSet AllClosable="true" OnClose="@((chip) => DelContact(Members, chip))">
                     @foreach (var c in Members.Contacts)
                     {
-                        <MudChip Text="@c.Key" Variant="Variant.Outlined" Color="Color.Default"></MudChip>
+                        <MudChip Text="@c.Key" Variant="Variant.Outlined"
+                             Color="@(c.Value.IsActive ? Color.Default : Color.Error)">
+                        </MudChip>
                     }
                 </MudChipSet>
             </MudItem>
             <MudItem xs="6">
-                <MudNumericField @bind-Value="Step.AutoSearch" Label="@_localizer["Auto Search"]" Variant="Variant.Text" Min="0" Max="10"
-                                 Text="@(Step.AutoSearch > 0 ? Step.AutoSearch.ToString() : _localizer["Disabled"])" />
+                <MudNumericField @bind-Value="@Step.AutoSearch" Label="@_localizer["Auto Search"]" Variant="Variant.Text" Min="0" Max="10"
+                                 Text="@(Step.AutoSearch > 0 ? Step.AutoSearch.ToString() : "")"
+                                 Placeholder="@_localizer["Disabled"]"/>
             </MudItem>
-
 
             <MudItem xs="6">
                 <div class="d-flex">
@@ -181,7 +197,9 @@
                 <MudChipSet AllClosable="true" OnClose="@((chip) => DelContact(Agreementers, chip))">
                     @foreach (var c in Agreementers.Contacts)
                     {
-                        <MudChip Text="@c.Key" Variant="Variant.Outlined" Color="Color.Default"></MudChip>
+                        <MudChip Text="@c.Key" Variant="Variant.Outlined"
+                             Color="@(c.Value.IsActive ? Color.Default : Color.Error)">
+                        </MudChip>
                     }
                 </MudChipSet>
             </MudItem>
@@ -206,9 +224,15 @@
                 <MudChipSet AllClosable="true" OnClose="@((chip) => DelContact(Reviewers, chip))">
                     @foreach (var c in Reviewers.Contacts)
                     {
-                        <MudChip Text="@c.Key" Variant="Variant.Outlined" Color="Color.Default"></MudChip>
+                        <MudChip Text="@c.Key" Variant="Variant.Outlined"
+                             Color="@(c.Value.IsActive ? Color.Default : Color.Error)">
+                        </MudChip>
                     }
                 </MudChipSet>
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudTextField Lines="1" Variant="Variant.Text" @bind-Value="@Step.Description" Label="@_localizer["Description"]" />
             </MudItem>
 
         </MudGrid>

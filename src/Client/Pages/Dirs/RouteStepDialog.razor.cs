@@ -29,7 +29,8 @@ namespace EDO_FOMS.Client.Pages.Dirs
 
         private readonly bool resetValueOnEmptyText = true;
         private readonly bool coerceText = true;
-        private readonly bool coerceValue = true;
+        private readonly bool coerceValue = false;
+        private readonly bool clearable = true;
 
         public static OrgsResponse OrgMember { get; set; } = null;
 
@@ -114,7 +115,7 @@ namespace EDO_FOMS.Client.Pages.Dirs
             _ => Icons.Material.Outlined.Business
         };
         private string LabelByStep(RouteStepModel step) =>
-            $"{_localizer[(step.OnlyHead) ? "Chief" : "Employee"]} " +
+            $"{_localizer[(step.MemberGroup == MemberGroups.OnlyHead) ? "Chief" : "Employee"]} " +
             $"{_localizer["of the"]} {_localizer[step.OrgType.ToString()]}";
         private static string ContactName(ContactResponse c) =>
             $"[{(string.IsNullOrWhiteSpace(c.OrgShortName) ? c.InnLe : c.OrgShortName)}] {c.Surname} {c.GivenName}";

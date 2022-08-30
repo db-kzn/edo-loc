@@ -1,11 +1,8 @@
-﻿using EDO_FOMS.Application.Models.Dir;
-using EDO_FOMS.Client.Models;
-using EDO_FOMS.Shared.Wrapper;
+﻿using EDO_FOMS.Client.Models;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using System;
 using System.Text.RegularExpressions;
-using System.Xml.Linq;
 
 namespace EDO_FOMS.Client.Pages.Dirs
 {

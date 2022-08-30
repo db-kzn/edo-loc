@@ -120,6 +120,9 @@
   <data name="Add route" xml:space="preserve">
     <value>Добавить маршрут</value>
   </data>
+  <data name="Code" xml:space="preserve">
+    <value>Код</value>
+  </data>
   <data name="Description" xml:space="preserve">
     <value>Описание</value>
   </data>
@@ -152,5 +155,8 @@
   </data>
   <data name="Rows density" xml:space="preserve">
     <value>Плотность строк</value>
+  </data>
+  <data name="Short" xml:space="preserve">
+    <value>Кратко</value>
   </data>
 </root>

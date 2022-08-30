@@ -36,7 +36,11 @@ internal class GetRouteTitlesQueryHandler : IRequestHandler<GetRouteTitlesQuery,
         {
             Id = e.Id,
             Number = e.Number,
+
+            Code = e.Code,
+            Short = e.Short,
             Name = e.Name,
+
             Description = e.Description
         };
 

@@ -8,30 +8,31 @@ namespace EDO_FOMS.Application.Models.Dir
 {
     public class RouteStepModel
     {
-        public int Id { get; set; }                                 // - RouteStepId
-        public int RouteId { get; set; }                            // - Внешний индекс
+        public int Id { get; set; }                                            // - RouteStepId
+        public int RouteId { get; set; }                                       // - Внешний индекс
         // IsDeleted - на клиенте не используется, только на сервере
 
-        public int StageNumber { get; set; } = 0;                   // + Номер этапа
-        public int Number { get; set; } = 0;                        // - Номер процесса в этапе, для сортировки последовательности
+        public int StageNumber { get; set; } = 0;                               // + Номер этапа
+        public int Number { get; set; } = 0;                                    // - Номер процесса в этапе, для сортировки последовательности
 
-        public ActTypes ActType { get; set; } = ActTypes.Signing;   // + Тип шага: подписание, согласование или рецензирование
-        public bool Requred { get; set; } = true;                   // + Обязательный шаг
+        public ActTypes ActType { get; set; } = ActTypes.Signing;               // + Тип шага: подписание, согласование или рецензирование
+        public int AutoSearch { get; set; } = 0;                                // + Автопоиск - количество записей
 
-        public OrgTypes OrgType { get; set; } = OrgTypes.Undefined; // + Тип организации, может быть не определен
-        public int? OrgId { get; set; } = null;                     // + Индекс организации участника
-        public OrgsResponse OrgMember { get; set; } = null;         // + Организация участник
+        public OrgTypes OrgType { get; set; } = OrgTypes.Undefined;             // + Тип организации, может быть не определен
+        public int? OrgId { get; set; } = null;                                 // + Индекс организации участника
+        public OrgsResponse OrgMember { get; set; } = null;                     // + Организация участник
 
-        public bool OnlyHead { get; set; }                          // + Требуется руководитель
-        public int AutoSearch { get; set; } = 0;                    // + Автопоиск - количество записей
+        public bool Requred { get; set; } = true;                               // + Обязательный шаг
+        public MemberGroups MemberGroup { get; set; } = MemberGroups.Undefined; // + Группа участников
 
-        public bool SomeParticipants { get; set; } = true;          // - Несколько участников
-        public bool AllRequred { get; set; } = true;                // + Если несколько, то условие завершения: все или любой
+        public bool SomeParticipants { get; set; } = true;                      // - Несколько участников
+        public bool AllRequred { get; set; } = true;                            // + Если несколько, то условие завершения: все или любой
 
-        public bool HasAgreement { get; set; } = false;             // + Содержит согласование
-        public bool HasReview { get; set; } = false;                // + Содержит рецензирование
+        public bool HasAgreement { get; set; } = false;                         // + Содержит согласование
+        public bool HasReview { get; set; } = false;                            // + Содержит рецензирование
 
-        public List<RouteStepMemberModel> Members { get; set; } = new(); // + Список участников
+        public string Description { get; set; }                                 // - Описание процесса
+        public List<RouteStepMemberModel> Members { get; set; } = new();        // + Список участников
 
         public RouteStepModel() { }
         public RouteStepModel(RouteStep s)
@@ -50,13 +51,15 @@ namespace EDO_FOMS.Application.Models.Dir
             OrgMember = null; // RouteStep has no Organization Object
 
             Requred = s.Requred;
-            OnlyHead = s.OnlyHead;
+            MemberGroup = s.MemberGroup;
 
             SomeParticipants = s.SomeParticipants;
             AllRequred = s.AllRequred;
 
             HasAgreement = s.HasAgreement;
             HasReview = s.HasReview;
+
+            Description = s.Description;
 
             Members = s.Members.Select(m => new RouteStepMemberModel()
             {

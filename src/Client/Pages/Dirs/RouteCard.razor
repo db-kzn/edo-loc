@@ -3,6 +3,7 @@
 @using EDO_FOMS.Application.Features.Directories.Commands
 @using EDO_FOMS.Application.Features.DocumentTypes.Queries
 @using EDO_FOMS.Application.Models.Dir
+@using EDO_FOMS.Application.Responses.Docums
 @using EDO_FOMS.Domain.Enums
 @using EDO_FOMS.Domain.Entities.Dir
 @using Microsoft.AspNetCore.Components
@@ -34,25 +35,17 @@
                 <MudCard>
                     <MudCardContent>
                         <MudGrid Style="max-height: 70vh; overflow-y: scroll;">
+                            <MudItem xs="3">
+                                <MudTextField @bind-Value="Route.Code" Label="@_localizer["Code"]" />
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudTextField @bind-Value="Route.Short" Label="@_localizer["Short Name"]" />
+                            </MudItem>
                             <MudItem xs="6">
                                 <MudTextField @bind-Value="Route.Name" Label="@_localizer["Name"]" />
                             </MudItem>
-                            <MudItem xs="6">
-                                <MudTextField @bind-Value="Route.Description" Label="@_localizer["Description"]" />
-                            </MudItem>
 
-                            <MudItem xs="6">
-                                <MudSelect MultiSelection="true" SelectAll="true" SelectAllText="@_localizer["Select all"]" Label="@_localizer["Document Types"]"
-                                           AdornmentIcon="@Icons.Material.Outlined.Ballot" AnchorOrigin="Origin.BottomCenter"
-                                           @bind-SelectedValues="SelectedDocTypes" T="DocTypeResponse" MultiSelectionTextFunc="@(new Func<List<string>, string>(GetMultiDocTypesText))">
-                                    @foreach (var type in _docTypes)
-                                    {
-                                        <MudSelectItem T="DocTypeResponse" Value="@type">@type.Label</MudSelectItem>
-                                    }
-                                </MudSelect>
-                            </MudItem>
-
-                            <MudItem xs="6">
+                            <MudItem xs="3">
                                 <MudSelect MultiSelection="true" SelectAll="true" SelectAllText="@_localizer["Select all"]" Label="@_localizer["Org Types"]"
                                            AdornmentIcon="@Icons.Material.Outlined.Ballot" AnchorOrigin="Origin.BottomCenter"
                                            @bind-SelectedValues="SelectedOrgTypes" T="OrgTypes" MultiSelectionTextFunc="@(new Func<List<string>, string>(GetMultiOrgTypesText))">
@@ -66,11 +59,11 @@
                                 </MudSelect>
                             </MudItem>
 
-                            <MudItem xs="6">
+                            <MudItem xs="3">
                                 <MudSelect T="UserBaseRoles" @bind-Value="Route.ForUserRole" Label="@_localizer["User Role"]">
                                     <MudSelectItem T="UserBaseRoles" Value="UserBaseRoles.Employee">
                                         <div class="d-flex flex-row" style="height: 24px;">
-                                            <MudIcon Icon="@Icons.Material.Outlined.HistoryEdu" Color="Color.Success" Size="Size.Small" Class="mr-2" />
+                                            <MudIcon Icon="@Icons.Material.Outlined.HistoryEdu" Color="Color.Default" Size="Size.Small" Class="mr-2" />
                                             @_localizer["Employee"]
                                         </div>
                                     </MudSelectItem>
@@ -85,17 +78,45 @@
                             </MudItem>
 
                             <MudItem xs="6">
+                                @*<MudTextField @bind-Value="Route.Name" Label="@_localizer["Executor"]" />*@
+                                @*Label="@LabelByStep(act.Step)" Required="act.Step.Requred"*@
+
+                                <MudAutocomplete T="ContactResponse" @bind-Value="@Route.Executor" SearchFunc="SearchContactsAsync"
+                                                 ResetValueOnEmptyText="@resetValueOnEmptyText" CoerceText="@coerceText" CoerceValue="@coerceValue" Clearable="@clearable"
+                                                 Adornment="Adornment.Start" AdornmentColor="Color.Default" AdornmentIcon="@Icons.Material.Outlined.SlowMotionVideo"
+                                                 Placeholder="@_localizer["Executor"]" ToStringFunc="@(e => (e == null) ? null : ContactName(e))">
+
+                                    <NoItemsTemplate>
+                                        <MudText Align="Align.Start" Class="px-4 py-1" Color="Color.Warning">
+                                            @_localizer["Employees not found"]
+                                        </MudText>
+                                    </NoItemsTemplate>
+                                </MudAutocomplete>
+                            </MudItem>
+
+                            <MudItem xs="6">
+                                <MudSelect MultiSelection="true" SelectAll="true" SelectAllText="@_localizer["Select all"]" Label="@_localizer["Document Types"]"
+                                           AdornmentIcon="@Icons.Material.Outlined.Ballot" AnchorOrigin="Origin.BottomCenter"
+                                           @bind-SelectedValues="SelectedDocTypes" T="DocTypeResponse" MultiSelectionTextFunc="@(new Func<List<string>, string>(GetMultiDocTypesText))">
+                                    @foreach (var type in _docTypes)
+                                    {
+                                        <MudSelectItem T="DocTypeResponse" Value="@type">@type.Label</MudSelectItem>
+                                    }
+                                </MudSelect>
+                            </MudItem>
+
+                            <MudItem xs="6">
                                 <MudSelect T="EndActions" @bind-Value="Route.EndAction" Label="@_localizer["End Action"]">
                                     <MudSelectItem T="EndActions" Value="@EndActions.SignedByAll">
                                         <div class="d-flex flex-row" style="height: 24px;">
-                                            <MudIcon Icon="@Icons.Material.Outlined.AssignmentTurnedIn" Color="Color.Success" Size="Size.Small" Class="mr-2" />
+                                            <MudIcon Icon="@Icons.Material.Outlined.AssignmentTurnedIn" Color="Color.Default" Size="Size.Small" Class="mr-2" />
                                             @_localizer["Signed by all"]
                                         </div>
                                     </MudSelectItem>
 
                                     <MudSelectItem T="EndActions" Value="@EndActions.ToArchive">
                                         <div class="d-flex flex-row" style="height: 24px;">
-                                            <MudIcon Icon="@Icons.Material.Outlined.Archive" Color="Color.Tertiary" Size="Size.Small" Class="mr-2" />
+                                            <MudIcon Icon="@Icons.Material.Outlined.Archive" Color="Color.Default" Size="Size.Small" Class="mr-2" />
                                             @_localizer["To archive"]
                                         </div>
                                     </MudSelectItem>
@@ -124,22 +145,18 @@
                                              CheckedIcon="@Icons.Material.Outlined.SettingsBackupRestore" UnCheckedColor="Color.Default" />
                             </MudItem>
                             <MudItem xs="3">
-                                <MudCheckBox @bind-Checked="@Route.ReadOnly" Label="@_localizer["Read Only"]" Color="Color.Primary"
-                                             CheckedIcon="@Icons.Material.Outlined.EditOff" UnCheckedColor="Color.Default" />
+                                <MudCheckBox @bind-Checked="@Route.ProtectedMode" Label="@_localizer["Protected Mode"]" Color="Color.Primary"
+                                             CheckedIcon="@Icons.Material.Outlined.Lock" UnCheckedColor="Color.Default" />
                             </MudItem>
                             <MudItem xs="3">
                                 <MudCheckBox @bind-Checked="@Route.ShowNotes" Label="@_localizer["Show Sticky Notes"]" Color="Color.Primary"
                                              CheckedIcon="@Icons.Material.Outlined.StickyNote2" UnCheckedColor="Color.Default" />
                             </MudItem>
                             <MudItem xs="3">
-                                <MudCheckBox @bind-Checked="@Route.UseVersioning" Label="@_localizer["Use Versioning"]" Color="Color.Primary"
-                                             CheckedIcon="@Icons.Material.Outlined.Pin" UnCheckedColor="Color.Default" Disabled />
-                            </MudItem>
-
-                            <MudItem xs="3">
-                                <MudCheckBox @bind-Checked="@Route.IsPackage" Label="@_localizer["Package"]" Color="Color.Primary"
+                                <MudCheckBox @bind-Checked="@Route.IsPackage" Label="@_localizer["Is Package"]" Color="Color.Primary"
                                              CheckedIcon="@Icons.Material.Outlined.ListAlt" UnCheckedColor="Color.Default" Disabled />
                             </MudItem>
+
                             <MudItem xs="3">
                                 <MudCheckBox @bind-Checked="@Route.CalcHash" Label="@_localizer["Calculate hash"]" Color="Color.Primary"
                                              CheckedIcon="@Icons.Material.Outlined.Calculate" UnCheckedColor="Color.Default" Disabled />
@@ -152,6 +169,14 @@
                                 <MudCheckBox @bind-Checked="@Route.DisplayedSign" Label="@_localizer["Displayed Sign"]" Color="Color.Primary"
                                              CheckedIcon="@Icons.Material.Outlined.FormatShapes" UnCheckedColor="Color.Default" Disabled="@(!Route.AttachedSign)" />
                             </MudItem>
+                            <MudItem xs="3">
+                                <MudCheckBox @bind-Checked="@Route.UseVersioning" Label="@_localizer["Use Versioning"]" Color="Color.Primary"
+                                             CheckedIcon="@Icons.Material.Outlined.Pin" UnCheckedColor="Color.Default" Disabled />
+                            </MudItem>
+
+                            <MudItem xs="12">
+                                <MudTextField Lines="3" Variant="Variant.Outlined" @bind-Value="Route.Description" Label="@_localizer["Description"]" />
+                            </MudItem>
 
                             @*<MudItem xs="3">
                             <MudCheckBox @bind-Checked="@Route.HasDetails" Label="@_localizer["Stage Details"]" Color="Color.Primary"
@@ -160,9 +185,14 @@
                         </MudGrid>
                     </MudCardContent>
                     <MudCardActions>
-                        <MudButton Size="Size.Large" Class="mx-2" FullWidth Variant="Variant.Outlined" StartIcon="@Icons.Material.Rounded.Close" Color="Color.Primary"
+                        <MudButton Size="Size.Large" Class="mx-2" FullWidth Variant="Variant.Outlined" StartIcon="@Icons.Material.Rounded.Close" Color="Color.Default"
                                    OnClick="Close">
                             @_localizer["Cancel"]
+                        </MudButton>
+                        @*EndIcon="@Icons.Material.Rounded.DoneOutline"*@
+                        <MudButton Class="mx-2" Size="Size.Large" FullWidth Variant="Variant.Outlined" Color="Color.Primary"
+                                   OnClick="() => SaveAsync()">
+                            @_localizer["Save"]
                         </MudButton>
                         <MudButton Size="Size.Large" Class="mx-2" FullWidth Variant="Variant.Outlined" EndIcon="@Icons.Material.Rounded.KeyboardDoubleArrowRight" Color="Color.Default"
                                    OnClick="() => _tabs.ActivatePanel(1)">
@@ -239,7 +269,7 @@
 
                                         <MudDivider />
 
-                                        @if (context.OnlyHead)
+                                        @if (context.MemberGroup == MemberGroups.OnlyHead)
                                         {
                                             <div class="d-flex flex-row" style="padding: 4px 16px; height: 32px;">
                                                 <MudIcon Icon="@Icons.Material.Outlined.WorkspacePremium" Color="Color.Warning" Class="mr-2" />
@@ -358,18 +388,16 @@
                                    OnClick="() => _tabs.ActivatePanel(0)">
                             @_localizer["Title"]
                         </MudButton>
+                        @*EndIcon="@Icons.Material.Rounded.DoneOutline"*@
+                        <MudButton Class="mx-2" Size="Size.Large" FullWidth Variant="Variant.Outlined" Color="Color.Primary"
+                                   OnClick="() => SaveAsync()">
+                            @_localizer["Save"]
+                        </MudButton>
                         @if (Route.ParseFileName)
                         {
                             <MudButton Class="mx-2" Size="Size.Large" FullWidth Variant="Variant.Outlined" EndIcon="@Icons.Material.Rounded.KeyboardDoubleArrowRight" Color="Color.Default"
                                    OnClick="() => _tabs.ActivatePanel(2)">
                                 @_localizer["File"]
-                            </MudButton>
-                        }
-                        else
-                        {
-                            <MudButton Class="mx-2" Size="Size.Large" FullWidth Variant="Variant.Filled" EndIcon="@Icons.Material.Rounded.DoneOutline" Color="Color.Primary"
-                                   OnClick="() => SaveAsync()">
-                                @_localizer["Save"]
                             </MudButton>
                         }
                     </MudCardActions>
@@ -384,9 +412,13 @@
                                 <MudTextField @bind-Value="Pattern.FileName" Label="@_localizer["File name example"]"
                                               Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Outlined.SettingsEthernet" />
                             </MudItem>
-                            <MudItem xs="6">
+                            <MudItem xs="3">
                                 <MudTextField @bind-Value="Pattern.FileMask" Label="@_localizer["File mask"]"
                                               Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Outlined.FilterList" />
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudTextField @bind-Value="Pattern.FileAccept" Label="@_localizer["File accept"]" ReadOnly
+                                              Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Outlined.FilterCenterFocus" />
                             </MudItem>
 
                             <MudItem xs="6">
@@ -415,7 +447,6 @@
                                 <MudTextField @bind-Value="Pattern.CodeSmo" Label="@_localizer["Code SMO"]" AdornmentColor="Color.Default"
                                               Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Outlined.Museum" />
                             </MudItem>
-
                         </MudGrid>
                     </MudCardContent>
                     <MudCardActions>
@@ -423,17 +454,20 @@
                                    OnClick="() => _tabs.ActivatePanel(1)">
                             @_localizer["Stages"]
                         </MudButton>
-                        <MudButton Size="Size.Large" Class="mx-2" FullWidth Variant="Variant.Outlined" Color="Color.Primary"
-                                   OnClick="() => ParseCheckAsync()">
-                            @_localizer["Check"]
-                        </MudButton>
-                        <MudButton Class="mx-2" Size="Size.Large" FullWidth Variant="Variant.Filled" EndIcon="@Icons.Material.Rounded.DoneOutline" Color="Color.Primary"
+                        @*EndIcon="@Icons.Material.Rounded.DoneOutline"*@
+                        <MudButton Class="mx-2" Size="Size.Large" FullWidth Variant="Variant.Outlined" Color="Color.Primary"
                                    OnClick="() => SaveAsync()">
                             @_localizer["Save"]
+                        </MudButton>
+                        <MudButton Size="Size.Large" Class="mx-2" FullWidth Variant="Variant.Outlined" EndIcon="@Icons.Material.Rounded.PlaylistAddCheck" Color="Color.Default"
+                                   OnClick="() => ParseCheckAsync()">
+                            @_localizer["Check"]
                         </MudButton>
                     </MudCardActions>
                 </MudCard>
             </MudTabPanel>
+
+            <MudTabPanel Text="@_localizer["Package"]" Disabled></MudTabPanel>
         </ChildContent>
 
         <Header>

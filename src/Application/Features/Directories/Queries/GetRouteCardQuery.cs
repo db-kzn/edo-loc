@@ -57,12 +57,18 @@ internal class GetRouteCardQueryHandler : IRequestHandler<GetRouteCardQuery, Res
             Stages = route.Stages.Select(s => new RouteStageModel(s)).ToList(),
             Steps = route.Steps.Where(s => !s.IsDeleted).Select(s => new RouteStepModel(s)).ToList(),
             Parses = route.Parses.Select(s => new RouteFileParseModel(s)).ToList(),
+            Files = null, // Нужно реализовать
 
             Id = route.Id,
             Number = route.Number,
+            Code = route.Code,
+
+            Short = route.Short,
             Name = route.Name,
             Description = route.Description,
 
+            ExecutorId = route.ExecutorId,
+            Executor = await _userService.GetContactAsync(route.ExecutorId),
             ForUserRole = route.ForUserRole,
             EndAction = route.EndAction,
 
@@ -72,7 +78,7 @@ internal class GetRouteCardQueryHandler : IRequestHandler<GetRouteCardQuery, Res
             ParseFileName = route.ParseFileName,
 
             AllowRevocation = route.AllowRevocation,
-            ReadOnly = route.ReadOnly,
+            ProtectedMode = route.ProtectedMode,
             ShowNotes = route.ShowNotes,
             UseVersioning = route.UseVersioning,
 
@@ -94,7 +100,7 @@ internal class GetRouteCardQueryHandler : IRequestHandler<GetRouteCardQuery, Res
                 s.OrgMember = _mapper.Map<OrgsResponse>(org);// new OrgsResponse();
             }
 
-            foreach(var m in s.Members) m.Contact = await _userService.GetContactAsync(m.UserId);
+            foreach (var m in s.Members) { m.Contact = await _userService.GetContactAsync(m.UserId); }
         }
 
         return await Result<RouteCardResponse>.SuccessAsync(card);

@@ -141,6 +141,9 @@
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
   </data>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
   <data name="Disabled" xml:space="preserve">
     <value>Disabled</value>
   </data>
@@ -150,11 +153,17 @@
   <data name="Employees not found" xml:space="preserve">
     <value>Employees not found</value>
   </data>
+  <data name="External Expert" xml:space="preserve">
+    <value>External Expert</value>
+  </data>
   <data name="FOMS" xml:space="preserve">
     <value>FOMS</value>
   </data>
   <data name="Fund" xml:space="preserve">
     <value>Fund</value>
+  </data>
+  <data name="Group not defined" xml:space="preserve">
+    <value>Group not defined</value>
   </data>
   <data name="Has Agreement" xml:space="preserve">
     <value>Has Agreement</value>
@@ -162,8 +171,14 @@
   <data name="Has Review" xml:space="preserve">
     <value>Has Review</value>
   </data>
+  <data name="Head And Accountant" xml:space="preserve">
+    <value>Head And Accountant</value>
+  </data>
   <data name="Main member" xml:space="preserve">
     <value>Main member</value>
+  </data>
+  <data name="Member Group" xml:space="preserve">
+    <value>Member Group</value>
   </data>
   <data name="Member Org" xml:space="preserve">
     <value>Member Org</value>
@@ -188,6 +203,15 @@
   </data>
   <data name="Only Chief" xml:space="preserve">
     <value>Only Chief</value>
+  </data>
+  <data name="Only Employees" xml:space="preserve">
+    <value>Only Employees</value>
+  </data>
+  <data name="Only Head" xml:space="preserve">
+    <value>Only Head</value>
+  </data>
+  <data name="Org Admin" xml:space="preserve">
+    <value>Org Admin</value>
   </data>
   <data name="Org Type" xml:space="preserve">
     <value>Org Type</value>

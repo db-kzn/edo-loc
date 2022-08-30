@@ -13,6 +13,7 @@ namespace EDO_FOMS.Domain.Entities.Dir
         public int Number { get; set; }                    // + Номер этапа в цепочке маршрута
 
         public Color Color { get; set; }                   // + Цвет формы
+        public bool IsExpanded { get; set; }               // + Развернутая форма этапа
         public string Name { get; set; }                   // + Наименование этапа
         public string Description { get; set; }            // - Описание этапа
 
@@ -20,6 +21,7 @@ namespace EDO_FOMS.Domain.Entities.Dir
         public bool InSeries { get; set; } = false;        // - Последовательное прохождение
         public bool AllRequred { get; set; } = true;       // - Если параллельно, то требуются все
 
+        public bool IgnoreProtected { get; set; }          // - Возможность редактирования в защищенном режиме
         public bool DenyRevocation { get; set; }           // - Возможность отзывать документ с маршрута
         public TimeSpan Validity { get; set; }             // - Срок на прохождение этапа
     }

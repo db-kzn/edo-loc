@@ -11,13 +11,16 @@ namespace EDO_FOMS.Domain.Entities.Doc
 {
     public class Document : AuditableEntityWithExtendedAttributes<int, int, Document, DocumentExtendedAttribute>
     {
-        public virtual List<Agreement> Agreements { get; set; } = new();
+        public List<Agreement> Agreements { get; set; } = new();
+        public List<DocPacketFile> PacketFiles { get; set; } = null;
 
         public string EmplId { get; set; }                                // Инициатор документа -> Заменить на EmployeeId
         public int EmplOrgId { get; set; }                                // Отправитель - организация инициатора
         [ForeignKey("EmplOrgId")]
         public virtual Organization Issuer { get; set; }
-        
+
+        public string ExecutorId { get; set; }                            // Исполнитель
+
         public int? ParentId { get; set; }                                // Родительский документ
         [ForeignKey("ParentId")]
         public virtual Document Parent { get; set; }

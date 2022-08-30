@@ -1,4 +1,5 @@
 ﻿using EDO_FOMS.Application.Models.Dir;
+using EDO_FOMS.Application.Responses.Docums;
 using EDO_FOMS.Domain.Entities.Dir;
 using EDO_FOMS.Domain.Enums;
 using System.Collections.Generic;
@@ -16,9 +17,14 @@ namespace EDO_FOMS.Client.Models
 
         public int Id { get; set; }                                              // - Идентификатор маршрута
         public int Number { get; set; }                                          // - Ценность маршрута, для сортировки
+        public string Code { get; set; }                                         //   Уникальное текстовое поле
+
+        public string Short { get; set; } = string.Empty;                        // + Краткое наименование маршрута
         public string Name { get; set; } = string.Empty;                         // + Наименование маршрута
         public string Description { get; set; } = string.Empty;                  // + Описание маршрута
 
+        public string ExecutorId { get; set; } = string.Empty;
+        public ContactResponse Executor { get; set; } = null;
         public UserBaseRoles ForUserRole { get; set; } = UserBaseRoles.Employee; // + Минимальная роль пользователя имеющая доступ к маршруту
         public EndActions EndAction { get; set; } = EndActions.ToArchive;        // + Действие по завершению маршрута
 
@@ -28,7 +34,7 @@ namespace EDO_FOMS.Client.Models
         public bool ParseFileName { get; set; } = false;                         // + Разбор имени файла
 
         public bool AllowRevocation { get; set; } = false;                       // + Возможность отзывать документ с маршрута
-        public bool ReadOnly { get; set; } = false;                              // + Карточка документа не редактируется
+        public bool ProtectedMode { get; set; } = false;                         // + Карточка документа не редактируется
         public bool ShowNotes { get; set; } = false;                             // + Отобразить примечание/заметки
         public bool UseVersioning { get; set; } = false;                         // - Используется версионность
 

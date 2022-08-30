@@ -3,24 +3,24 @@ using EDO_FOMS.Application.Features.Directories.Commands;
 using EDO_FOMS.Application.Features.Directories.Queries;
 using EDO_FOMS.Application.Features.DocumentTypes.Queries;
 using EDO_FOMS.Application.Models.Dir;
+using EDO_FOMS.Application.Requests.Documents;
+using EDO_FOMS.Application.Responses.Docums;
 using EDO_FOMS.Client.Extensions;
 using EDO_FOMS.Client.Infrastructure.Managers.Dir;
+using EDO_FOMS.Client.Infrastructure.Managers.Doc.Document;
 using EDO_FOMS.Client.Infrastructure.Managers.Doc.DocumentType;
 using EDO_FOMS.Client.Infrastructure.Mappings;
 using EDO_FOMS.Client.Models;
-using EDO_FOMS.Domain.Entities.Dir;
 using EDO_FOMS.Domain.Enums;
 using EDO_FOMS.Shared.Constants.Permission;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.JSInterop;
 using MudBlazor;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using static MudBlazor.CategoryTypes;
 
 namespace EDO_FOMS.Client.Pages.Dirs
 {
@@ -29,6 +29,7 @@ namespace EDO_FOMS.Client.Pages.Dirs
         [Parameter]
         public int? Id { get; set; }
         [Inject] private IDirectoryManager DirManager { get; set; }
+        [Inject] private IDocumentManager DocManager { get; set; }
         [Inject] private IDocumentTypeManager DocTypeManager { get; set; }
         private List<DocTypeResponse> _docTypes = new();
 
@@ -50,6 +51,12 @@ namespace EDO_FOMS.Client.Pages.Dirs
         private RouteCardModel Route { get; set; } = new();
         private IEnumerable<DocTypeResponse> SelectedDocTypes { get; set; } = new HashSet<DocTypeResponse>() { };
         private IEnumerable<OrgTypes> SelectedOrgTypes { get; set; } = new HashSet<OrgTypes>() { };
+
+        //private ContactResponse Executor { get; set; } = null;
+        private readonly bool resetValueOnEmptyText = true;
+        private readonly bool coerceText = true;
+        private readonly bool coerceValue = false;
+        private readonly bool clearable = true;
 
         protected override async Task OnInitializedAsync()
         {
@@ -109,9 +116,14 @@ namespace EDO_FOMS.Client.Pages.Dirs
 
             Route.Id = card.Id;
             Route.Number = card.Number;
+            Route.Code = card.Code;
+
+            Route.Short = card.Short;
             Route.Name = card.Name;
             Route.Description = card.Description;
 
+            Route.ExecutorId = card.ExecutorId;
+            Route.Executor = card.Executor;
             Route.ForUserRole = card.ForUserRole;
             Route.EndAction = card.EndAction;
 
@@ -121,7 +133,7 @@ namespace EDO_FOMS.Client.Pages.Dirs
             Route.ParseFileName = card.ParseFileName;
 
             Route.AllowRevocation = card.AllowRevocation;
-            Route.ReadOnly = card.ReadOnly;
+            Route.ProtectedMode = card.ProtectedMode;
             Route.ShowNotes = card.ShowNotes;
             Route.UseVersioning = card.UseVersioning;
 
@@ -136,6 +148,7 @@ namespace EDO_FOMS.Client.Pages.Dirs
             {
                 ParsePatterns.Sample => Pattern.FileName = c.Pattern,
                 ParsePatterns.Mask => Pattern.FileMask = c.Pattern,
+                ParsePatterns.Accept => Pattern.FileAccept = c.Pattern,
 
                 ParsePatterns.DocTitle => Pattern.DocTitle = c.Pattern,
                 ParsePatterns.DocNumber => Pattern.DocNumber = c.Pattern,
@@ -195,9 +208,13 @@ namespace EDO_FOMS.Client.Pages.Dirs
 
                 Id = Route.Id,
                 Number = Route.Number,
+                Code = Route.Code,
+
+                Short = Route.Short,
                 Name = Route.Name,
                 Description = Route.Description,
 
+                ExecutorId = Route.Executor?.Id ?? string.Empty,
                 ForUserRole = Route.ForUserRole,
                 EndAction = Route.EndAction,
 
@@ -207,7 +224,7 @@ namespace EDO_FOMS.Client.Pages.Dirs
                 ParseFileName = Route.ParseFileName,
 
                 AllowRevocation = Route.AllowRevocation,
-                ReadOnly = Route.ReadOnly,
+                ProtectedMode = Route.ProtectedMode,
                 ShowNotes = Route.ShowNotes,
                 UseVersioning = Route.UseVersioning,
 
@@ -233,6 +250,21 @@ namespace EDO_FOMS.Client.Pages.Dirs
                 response.Messages.ForEach(m => _snackBar.Add(m, Severity.Error));
             }
         }
+
+        private async Task<IEnumerable<ContactResponse>> SearchContactsAsync(string search)
+        {
+            var request = new SearchContactsRequest()
+            {
+                BaseRole = UserBaseRoles.Undefined,
+                OrgType = OrgTypes.Undefined,
+                SearchString = search
+            };
+
+            var response = await DocManager.GetFoundContacts(request);
+            return (response.Succeeded) ? response.Data : new();
+        }
+        private static string ContactName(ContactResponse c) =>
+            $"[{(string.IsNullOrWhiteSpace(c.OrgShortName) ? c.InnLe : c.OrgShortName)}] {c.Surname} {c.GivenName}";
 
         private void AddNewStage() => Route.Stages.Add(new RouteStageModel() { Number = Route.Stages.Count + 1 });
         private void DeleteStage()
@@ -317,7 +349,7 @@ namespace EDO_FOMS.Client.Pages.Dirs
                 OrgId = s.OrgId,
 
                 Requred = s.Requred,
-                OnlyHead = s.OnlyHead,
+                MemberGroup = s.MemberGroup,
 
                 SomeParticipants = s.SomeParticipants,
                 AllRequred = s.AllRequred,
@@ -325,6 +357,7 @@ namespace EDO_FOMS.Client.Pages.Dirs
                 HasAgreement = s.HasAgreement,
                 HasReview = s.HasReview,
 
+                Description = s.Description,
                 Members = s.Members.Select(m => NewRouteStepMember(s, m)).ToList(),
             };
         }
@@ -364,6 +397,13 @@ namespace EDO_FOMS.Client.Pages.Dirs
             if (!string.IsNullOrWhiteSpace(Pattern.FileMask))
             {
                 parses.Add(new RouteFileParseCommand(ParsePatterns.Mask, Pattern.FileMask, ValueTypes.String));
+
+                var dotId = Pattern.FileMask.LastIndexOf('.');
+                if (dotId != -1)
+                {
+                    var accept = Pattern.FileMask[dotId..];
+                    parses.Add(new RouteFileParseCommand(ParsePatterns.Accept, accept, ValueTypes.String));
+                }
             }
 
             if (!string.IsNullOrWhiteSpace(Pattern.DocTitle))

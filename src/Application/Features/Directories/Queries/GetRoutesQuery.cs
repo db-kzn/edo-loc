@@ -42,6 +42,9 @@ internal class GetRoutesQueryHandler : IRequestHandler<GetRoutesQuery, Paginated
         {
             Id = e.Id,
             Number = e.Number,
+            Code = e.Code,
+
+            Short = e.Short,
             Name = e.Name,
             Description = e.Description,
 
@@ -53,7 +56,7 @@ internal class GetRoutesQueryHandler : IRequestHandler<GetRoutesQuery, Paginated
             ParseFileName = e.ParseFileName,
 
             AllowRevocation = e.AllowRevocation,
-            ReadOnly = e.ReadOnly,
+            ProtectedMode = e.ProtectedMode,
             ShowNotes = e.ShowNotes,
             UseVersioning = e.UseVersioning,
 

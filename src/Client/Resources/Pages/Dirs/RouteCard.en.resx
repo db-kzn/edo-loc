@@ -180,11 +180,20 @@
   <data name="Employee" xml:space="preserve">
     <value>Employee</value>
   </data>
+  <data name="Employees not found" xml:space="preserve">
+    <value>Employees not found</value>
+  </data>
   <data name="End Action" xml:space="preserve">
     <value>End Action</value>
   </data>
+  <data name="Executor" xml:space="preserve">
+    <value>Executor</value>
+  </data>
   <data name="File" xml:space="preserve">
     <value>File</value>
+  </data>
+  <data name="File accept" xml:space="preserve">
+    <value>File accept</value>
   </data>
   <data name="File mask" xml:space="preserve">
     <value>File mask</value>
@@ -197,6 +206,9 @@
   </data>
   <data name="Is Active" xml:space="preserve">
     <value>Is Active</value>
+  </data>
+  <data name="Is Package" xml:space="preserve">
+    <value>Is Package</value>
   </data>
   <data name="MEO" xml:space="preserve">
     <value>MEO</value>
@@ -222,8 +234,8 @@
   <data name="Parse File Name" xml:space="preserve">
     <value>Parse File Name</value>
   </data>
-  <data name="Read Only" xml:space="preserve">
-    <value>Read Only</value>
+  <data name="Protected Mode" xml:space="preserve">
+    <value>Protected Mode</value>
   </data>
   <data name="Review" xml:space="preserve">
     <value>Review</value>
@@ -236,6 +248,9 @@
   </data>
   <data name="Select all" xml:space="preserve">
     <value>Select all</value>
+  </data>
+  <data name="Short Name" xml:space="preserve">
+    <value>Short Name</value>
   </data>
   <data name="Show Sticky Notes" xml:space="preserve">
     <value>Show Sticky Notes</value>

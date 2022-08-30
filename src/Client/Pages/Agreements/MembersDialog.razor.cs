@@ -19,7 +19,7 @@ namespace EDO_FOMS.Client.Pages.Agreements
 
         private readonly bool resetValueOnEmptyText = true;
         private readonly bool coerceText = true;
-        private readonly bool coerceValue = true;
+        private readonly bool coerceValue = false;
 
         public Dictionary<string, ContactResponse> contacts = new();
         public ContactResponse contact = null;

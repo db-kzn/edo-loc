@@ -165,17 +165,29 @@ namespace EDO_FOMS.Client.Pages.Dirs
             {
                 Id = r.Id,
                 Number = r.Number,
+                Code = r.Code,
+
+                Short = r.Short,
                 Name = r.Name,
                 Description = r.Description,
 
                 ForUserRole = r.ForUserRole,
+
+                IsActive = r.IsActive,
+                DateIsToday = r.DateIsToday,
+                NameOfFile = r.NameOfFile,
+                ParseFileName = r.ParseFileName,
+
+                AllowRevocation = r.AllowRevocation,
+                ProtectedMode = r.ProtectedMode,
+                ShowNotes = r.ShowNotes,
+                UseVersioning = r.UseVersioning,
+
                 IsPackage = r.IsPackage,
                 CalcHash = r.CalcHash,
                 AttachedSign = r.AttachedSign,
+                DisplayedSign = r.DisplayedSign,
 
-                IsActive = r.IsActive,
-                AllowRevocation = r.AllowRevocation,
-                UseVersioning = r.UseVersioning,
                 HasDetails = r.HasDetails
             };
         }

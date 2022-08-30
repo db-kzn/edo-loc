@@ -144,6 +144,9 @@
   <data name="Check" xml:space="preserve">
     <value>Проверка</value>
   </data>
+  <data name="Code" xml:space="preserve">
+    <value>Код</value>
+  </data>
   <data name="Code MO" xml:space="preserve">
     <value>Паттерн кода МО</value>
   </data>
@@ -180,11 +183,20 @@
   <data name="Employee" xml:space="preserve">
     <value>Сотрудник организации</value>
   </data>
+  <data name="Employees not found" xml:space="preserve">
+    <value>Сотрудники не найдены</value>
+  </data>
   <data name="End Action" xml:space="preserve">
     <value>Завершить действием</value>
   </data>
+  <data name="Executor" xml:space="preserve">
+    <value>Исполнитель</value>
+  </data>
   <data name="File" xml:space="preserve">
     <value>Файл</value>
+  </data>
+  <data name="File accept" xml:space="preserve">
+    <value>Типы файлов</value>
   </data>
   <data name="File mask" xml:space="preserve">
     <value>Маска файла</value>
@@ -197,6 +209,9 @@
   </data>
   <data name="Is Active" xml:space="preserve">
     <value>Активный</value>
+  </data>
+  <data name="Is Package" xml:space="preserve">
+    <value>Пакет документов</value>
   </data>
   <data name="MEO" xml:space="preserve">
     <value>Военкомат</value>
@@ -217,13 +232,13 @@
     <value>Организация инициатор</value>
   </data>
   <data name="Package" xml:space="preserve">
-    <value>Несколько файлов</value>
+    <value>Пакет</value>
   </data>
   <data name="Parse File Name" xml:space="preserve">
     <value>Разбор имени файла</value>
   </data>
-  <data name="Read Only" xml:space="preserve">
-    <value>Запрет редактирования</value>
+  <data name="Protected Mode" xml:space="preserve">
+    <value>Защищенный режим</value>
   </data>
   <data name="Review" xml:space="preserve">
     <value>Рецензирование</value>
@@ -236,6 +251,9 @@
   </data>
   <data name="Select all" xml:space="preserve">
     <value>Выбрать все</value>
+  </data>
+  <data name="Short Name" xml:space="preserve">
+    <value>Краткое наименование</value>
   </data>
   <data name="Show Sticky Notes" xml:space="preserve">
     <value>Отобразить заметки</value>

@@ -120,6 +120,9 @@
   <data name="Add route" xml:space="preserve">
     <value>Add route</value>
   </data>
+  <data name="Code" xml:space="preserve">
+    <value>Code</value>
+  </data>
   <data name="Description" xml:space="preserve">
     <value>Description</value>
   </data>
@@ -152,5 +155,8 @@
   </data>
   <data name="Rows density" xml:space="preserve">
     <value>Rows density</value>
+  </data>
+  <data name="Short" xml:space="preserve">
+    <value>Short</value>
   </data>
 </root>

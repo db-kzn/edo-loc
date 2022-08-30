@@ -40,16 +40,21 @@ namespace EDO_FOMS.Domain.Entities.Org
 		public string Inn { get; set; } = "";
 		[MaxLength(13)]
 		public string Ogrn { get; set; } = "";
-		[Required]
+        [MaxLength(6)]
+        public string OmsCode { get; set; } = "";
+        [Required]
 		[MaxLength(500)]
 		public string Name { get; set; } = "";
 		[MaxLength(32)]
 		public string ShortName { get; set; } = "";
 
-		//public string UserId { get; set; } // Owner - User ID
-		//public string UserSnils { get; set; } // User SNISL
+		public string HeadId { get; set; } = string.Empty; // Head - User ID
+        public string BuhgId { get; set; } = string.Empty; // Buhg - User ID
 
-		public bool IsPublic { get; set; } = true; // CA no public - hide
+        //public string UserId { get; set; } // Owner - User ID
+        //public string UserSnils { get; set; } // User SNISL
+
+        public bool IsPublic { get; set; } = true; // CA no public - hide
 		public OrgTypes Type { get; set; } = OrgTypes.Undefined; // N/D, FOND, SMO, MO, CA
 		public OrgStates State { get; set; } = OrgStates.Undefined; // N/D, OnSubmit, Active, Inactive, Blocked, Closed, Deleted
 

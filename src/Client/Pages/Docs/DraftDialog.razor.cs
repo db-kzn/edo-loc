@@ -35,7 +35,7 @@ namespace EDO_FOMS.Client.Pages.Docs
 
         private readonly bool resetValueOnEmptyText = true;
         private readonly bool coerceText = true;
-        private readonly bool coerceValue = true;
+        private readonly bool coerceValue = false;
 
         private IBrowserFile _file;
         private bool onUpload = false;

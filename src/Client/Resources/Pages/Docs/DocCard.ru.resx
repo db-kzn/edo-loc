@@ -136,7 +136,7 @@
     <value>Не указан контакт</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Примечание</value>
+    <value>Заметки</value>
   </data>
   <data name="Doc File Required" xml:space="preserve">
     <value>Требуется файл документа</value>

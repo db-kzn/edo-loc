@@ -141,6 +141,9 @@
   <data name="Delete" xml:space="preserve">
     <value>Удалить</value>
   </data>
+  <data name="Description" xml:space="preserve">
+    <value>Описание</value>
+  </data>
   <data name="Disabled" xml:space="preserve">
     <value>Отключен</value>
   </data>
@@ -150,11 +153,17 @@
   <data name="Employees not found" xml:space="preserve">
     <value>Сотрудники не найдены</value>
   </data>
+  <data name="External Expert" xml:space="preserve">
+    <value>Внешние специалисты</value>
+  </data>
   <data name="FOMS" xml:space="preserve">
     <value>ФОМС</value>
   </data>
   <data name="Fund" xml:space="preserve">
     <value>ФОМС</value>
+  </data>
+  <data name="Group not defined" xml:space="preserve">
+    <value>Группа не определена</value>
   </data>
   <data name="Has Agreement" xml:space="preserve">
     <value>Доп.согласование</value>
@@ -162,8 +171,14 @@
   <data name="Has Review" xml:space="preserve">
     <value>Рецензирование</value>
   </data>
+  <data name="Head And Accountant" xml:space="preserve">
+    <value>Руководитель и Главбух</value>
+  </data>
   <data name="Main member" xml:space="preserve">
     <value>Основной участник</value>
+  </data>
+  <data name="Member Group" xml:space="preserve">
+    <value>Группа участников</value>
   </data>
   <data name="Member Org" xml:space="preserve">
     <value>Организация участник</value>
@@ -188,6 +203,15 @@
   </data>
   <data name="Only Chief" xml:space="preserve">
     <value>Требуется руководитель</value>
+  </data>
+  <data name="Only Employees" xml:space="preserve">
+    <value>Только сотрудники</value>
+  </data>
+  <data name="Only Head" xml:space="preserve">
+    <value>Только руководитель</value>
+  </data>
+  <data name="Org Admin" xml:space="preserve">
+    <value>Администратор организации</value>
   </data>
   <data name="Org Type" xml:space="preserve">
     <value>Организация</value>

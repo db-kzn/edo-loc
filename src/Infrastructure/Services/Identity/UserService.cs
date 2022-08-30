@@ -182,7 +182,7 @@ namespace EDO_FOMS.Infrastructure.Services.Identity
             //if (orgType == OrgTypes.Undefined && baseRole == UserBaseRoles.Undefined && string.IsNullOrWhiteSpace(searchString))
 
             var list = await users.Take(10)
-                .Select(u => new { u.Id, u.Surname, u.GivenName, u.OrgId, u.InnLe })
+                .Select(u => new { u.Id, u.Surname, u.GivenName, u.OrgId, u.InnLe, u.IsActive })
                 //.Take(take)
                 .ToListAsync();
 
@@ -197,6 +197,8 @@ namespace EDO_FOMS.Infrastructure.Services.Identity
                 ContactResponse contact = new()
                 {
                     Id = u.Id,
+
+                    IsActive = u.IsActive,
                     Surname = u.Surname,
                     GivenName = u.GivenName,
 
@@ -702,6 +704,8 @@ namespace EDO_FOMS.Infrastructure.Services.Identity
             return new()
             {
                 Id = userId,
+
+                IsActive = user.IsActive,
                 Surname = user.Surname,
                 GivenName = user.GivenName,
 

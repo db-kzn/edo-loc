@@ -11,6 +11,7 @@ using EDO_FOMS.Client.Infrastructure.Managers.Doc.Document;
 using EDO_FOMS.Client.Infrastructure.Managers.Doc.DocumentType;
 using EDO_FOMS.Client.Models;
 using EDO_FOMS.Domain.Enums;
+using EDO_FOMS.Shared.Wrapper;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.JSInterop;
@@ -20,6 +21,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace EDO_FOMS.Client.Pages.Docs
@@ -34,6 +36,8 @@ namespace EDO_FOMS.Client.Pages.Docs
         [Inject] private IDirectoryManager DirManager { get; set; }
 
         private RouteCardResponse Route { get; set; } = new();
+        private FileParseModel Pattern { get; set; } = new();
+
         private IEnumerable<DocTypeResponse> RouteDocTypes { get; set; } = new HashSet<DocTypeResponse>() { };
         //private IEnumerable<ContactResponse> ChiefsOfFund { get; set; } = new List<ContactResponse>();
         //private IEnumerable<ContactResponse> ChiefsOfSMO { get; set; } = new List<ContactResponse>();
@@ -44,7 +48,7 @@ namespace EDO_FOMS.Client.Pages.Docs
 
         private readonly bool resetValueOnEmptyText = true;
         private readonly bool coerceText = true;
-        private readonly bool coerceValue = true;
+        private readonly bool coerceValue = false;
 
         private ClaimsPrincipal _authUser;
         private IBrowserFile _file;
@@ -95,6 +99,30 @@ namespace EDO_FOMS.Client.Pages.Docs
         {
             var response = await DirManager.GetRouteCardAsync((int)id);
             Route = response.Data;
+
+            Route.Parses.ForEach(c => _ = c.PatternType switch
+            {
+                ParsePatterns.Sample => Pattern.FileName = c.Pattern,
+                ParsePatterns.Mask => Pattern.FileMask = c.Pattern,
+                ParsePatterns.Accept => Pattern.FileAccept = c.Pattern,
+
+                ParsePatterns.DocTitle => Pattern.DocTitle = c.Pattern,
+                ParsePatterns.DocNumber => Pattern.DocNumber = c.Pattern,
+                ParsePatterns.DocDate => Pattern.DocDate = c.Pattern,
+                ParsePatterns.DocNotes => Pattern.DocNotes = c.Pattern,
+
+                ParsePatterns.CodeMO => Pattern.CodeMo = c.Pattern,
+                ParsePatterns.CodeSMO => Pattern.CodeSmo = c.Pattern,
+                ParsePatterns.CodeFund => Pattern.CodeFund = c.Pattern,
+
+                _ => null
+            });
+
+            var mask = (Route.ParseFileName && !string.IsNullOrWhiteSpace(Pattern.FileMask)) ? Pattern.FileMask : "*";
+
+            await _jsRuntime.InvokeVoidAsync("azino.Console", mask, $"File Mask");
+
+
             RouteDocTypes = Route.DocTypeIds.Select(id => _allDocTypes.Find(t => t.Id == id)).ToHashSet();
         }
 
@@ -102,7 +130,7 @@ namespace EDO_FOMS.Client.Pages.Docs
         {
             var request = new SearchContactsRequest()
             {
-                BaseRole = act.Step.OnlyHead ? UserBaseRoles.Chief : UserBaseRoles.Undefined,
+                BaseRole = act.Step.MemberGroup == MemberGroups.OnlyHead ? UserBaseRoles.Chief : UserBaseRoles.Undefined,
                 OrgType = act.Step.OrgType,
                 SearchString = search
             };
@@ -117,7 +145,6 @@ namespace EDO_FOMS.Client.Pages.Docs
             Doc.EmplOrgId = emplOrgId;
 
             Doc.TypeId = (Route.DocTypeIds.Count > 0) ? Route.DocTypeIds[0] : 1;
-            // Number ???
             Doc.Date = Route.DateIsToday ? DateTime.Today : null;
 
             Doc.RouteId = Route.Id;
@@ -142,13 +169,16 @@ namespace EDO_FOMS.Client.Pages.Docs
                 if (step.AutoSearch > 0)
                 {
                     //var take = step.SomeParticipants ? step.AutoSearch : 1;
-                    var members = await LoadMembersAsync(step.OrgType, step.AutoSearch, step.OnlyHead);
-                    //await _jsRuntime.InvokeVoidAsync("azino.Console", members, $"Search Members {step.Id}");
+                    var members = await LoadMembersAsync(step.OrgType, step.AutoSearch, step.MemberGroup == MemberGroups.OnlyHead);
                     AddContacts(act, members);
                 }
 
                 Acts.Add(act);
             };
+
+            await _jsRuntime.InvokeVoidAsync("azino.Console", Doc, "New Doc");
+            await _jsRuntime.InvokeVoidAsync("azino.Console", Route, "Route");
+            await _jsRuntime.InvokeVoidAsync("azino.Console", Acts, "Acts");
         }
         private async Task<List<ContactResponse>> LoadMembersAsync(OrgTypes orgType, int take, bool isChief)
         {
@@ -230,7 +260,7 @@ namespace EDO_FOMS.Client.Pages.Docs
             _ => Icons.Material.Outlined.Business
         };
         private string LabelByStep(RouteStepModel step) =>
-            $"{_localizer[(step.OnlyHead) ? "Chief" : "Employee"]} " +
+            $"{_localizer[(step.MemberGroup == MemberGroups.OnlyHead) ? "Chief" : "Employee"]} " +
             $"{_localizer["of the"]} {_localizer[step.OrgType.ToString()]}";
         private List<DocActModel> ActsByStage(int stageNumber) => Acts.Where(a => a.Step.StageNumber == stageNumber).ToList();
 
@@ -326,33 +356,42 @@ namespace EDO_FOMS.Client.Pages.Docs
 
         private async Task UploadFiles(InputFileChangeEventArgs e)
         {
+            if (e.File is null) { return; }
+
             _file = e.File;
 
-            if (_file != null)
+            if (Route.NameOfFile) { Doc.Title = Path.GetFileNameWithoutExtension(_file.Name); }
+
+            if (Route.ParseFileName && !string.IsNullOrWhiteSpace(Pattern.FileMask))
             {
-                var buffer = new byte[_file.Size];
-                var extension = Path.GetExtension(_file.Name);
-                var fileName = Path.GetFileName(_file.Name);
+                var maskIsCorrect = false;
 
-                if (Route.NameOfFile)
+                try
                 {
-                    Doc.Title = Path.GetFileNameWithoutExtension(_file.Name);
+                    Regex mask = new(Pattern.FileMask.Replace(".", "[.]").Replace("*", ".*").Replace("?", "."));
+                    maskIsCorrect = mask.IsMatch(_file.Name);
                 }
+                catch (Exception) {}
 
-                const string format = "application/octet-stream";
-
-                await _file.OpenReadStream(_file.Size).ReadAsync(buffer);
-
-                Doc.URL = $"data:{format};base64,{Convert.ToBase64String(buffer)}";
-
-                Doc.UploadRequest = new UploadRequest
+                if (!maskIsCorrect)
                 {
-                    Data = buffer,
-                    UploadType = UploadType.Document,
-                    FileName = fileName,
-                    Extension = extension
-                };
+                    // Route.ProtectedMode;
+                    // Dialog - Accept || Decline
+                }
             }
+
+            var buffer = new byte[_file.Size];
+            await _file.OpenReadStream(_file.Size).ReadAsync(buffer);
+
+            Doc.URL = $"data:application/octet-stream;base64,{Convert.ToBase64String(buffer)}";
+
+            Doc.UploadRequest = new UploadRequest
+            {
+                Data = buffer,
+                UploadType = UploadType.Document,
+                FileName = Path.GetFileName(_file.Name),
+                Extension = Path.GetExtension(_file.Name)
+            };
         }
     }
 }

@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace EDO_FOMS.Infrastructure.Migrations
 {
-    public partial class RouteBuilder : Migration
+    public partial class RouterBuilder : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -67,6 +67,35 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 oldClrType: typeof(string),
                 oldType: "character varying(10)",
                 oldMaxLength: 10);
+
+            migrationBuilder.AddColumn<string>(
+                name: "BuhgId",
+                schema: "org",
+                table: "Organizations",
+                type: "text",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "HeadId",
+                schema: "org",
+                table: "Organizations",
+                type: "text",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "OmsCode",
+                schema: "org",
+                table: "Organizations",
+                type: "character varying(6)",
+                maxLength: 6,
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "ExecutorId",
+                schema: "doc",
+                table: "Documents",
+                type: "text",
+                nullable: true);
 
             migrationBuilder.AlterColumn<int>(
                 name: "OrgId",
@@ -152,8 +181,11 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Number = table.Column<int>(type: "integer", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: true),
-                    Description = table.Column<string>(type: "text", nullable: true),
+                    Code = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: true),
+                    Short = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    Name = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: true),
+                    Description = table.Column<string>(type: "character varying(4000)", maxLength: 4000, nullable: true),
+                    ExecutorId = table.Column<string>(type: "text", nullable: true),
                     ForUserRole = table.Column<int>(type: "integer", nullable: false),
                     EndAction = table.Column<int>(type: "integer", nullable: false),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false),
@@ -161,7 +193,7 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     NameOfFile = table.Column<bool>(type: "boolean", nullable: false),
                     ParseFileName = table.Column<bool>(type: "boolean", nullable: false),
                     AllowRevocation = table.Column<bool>(type: "boolean", nullable: false),
-                    ReadOnly = table.Column<bool>(type: "boolean", nullable: false),
+                    ProtectedMode = table.Column<bool>(type: "boolean", nullable: false),
                     ShowNotes = table.Column<bool>(type: "boolean", nullable: false),
                     UseVersioning = table.Column<bool>(type: "boolean", nullable: false),
                     IsPackage = table.Column<bool>(type: "boolean", nullable: false),
@@ -254,6 +286,34 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "RoutePacketFiles",
+                schema: "dir",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    RouteId = table.Column<int>(type: "integer", nullable: false),
+                    FileType = table.Column<string>(type: "text", nullable: true),
+                    FileMask = table.Column<string>(type: "text", nullable: true),
+                    FileAccept = table.Column<string>(type: "text", nullable: true),
+                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "text", nullable: true),
+                    LastModifiedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RoutePacketFiles", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RoutePacketFiles_Routes_RouteId",
+                        column: x => x.RouteId,
+                        principalSchema: "dir",
+                        principalTable: "Routes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "RouteStages",
                 schema: "dir",
                 columns: table => new
@@ -263,11 +323,13 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     RouteId = table.Column<int>(type: "integer", nullable: false),
                     Number = table.Column<int>(type: "integer", nullable: false),
                     Color = table.Column<int>(type: "integer", nullable: false),
+                    IsExpanded = table.Column<bool>(type: "boolean", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
                     Description = table.Column<string>(type: "text", nullable: true),
                     ActType = table.Column<int>(type: "integer", nullable: false),
                     InSeries = table.Column<bool>(type: "boolean", nullable: false),
                     AllRequred = table.Column<bool>(type: "boolean", nullable: false),
+                    IgnoreProtected = table.Column<bool>(type: "boolean", nullable: false),
                     DenyRevocation = table.Column<bool>(type: "boolean", nullable: false),
                     Validity = table.Column<TimeSpan>(type: "interval", nullable: false),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
@@ -303,11 +365,12 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     OrgType = table.Column<int>(type: "integer", nullable: false),
                     OrgId = table.Column<int>(type: "integer", nullable: true),
                     Requred = table.Column<bool>(type: "boolean", nullable: false),
-                    OnlyHead = table.Column<bool>(type: "boolean", nullable: false),
+                    MemberGroup = table.Column<int>(type: "integer", nullable: false),
                     SomeParticipants = table.Column<bool>(type: "boolean", nullable: false),
                     AllRequred = table.Column<bool>(type: "boolean", nullable: false),
                     HasAgreement = table.Column<bool>(type: "boolean", nullable: false),
                     HasReview = table.Column<bool>(type: "boolean", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastModifiedBy = table.Column<string>(type: "text", nullable: true),
@@ -323,6 +386,41 @@ namespace EDO_FOMS.Infrastructure.Migrations
                         principalTable: "Routes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DocPacketFiles",
+                schema: "doc",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    DocumentId = table.Column<int>(type: "integer", nullable: false),
+                    RoutePacketFileId = table.Column<int>(type: "integer", nullable: true),
+                    URL = table.Column<string>(type: "text", nullable: true),
+                    StoragePath = table.Column<string>(type: "text", nullable: true),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "text", nullable: true),
+                    LastModifiedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DocPacketFiles", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DocPacketFiles_Documents_DocumentId",
+                        column: x => x.DocumentId,
+                        principalSchema: "doc",
+                        principalTable: "Documents",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DocPacketFiles_RoutePacketFiles_RoutePacketFileId",
+                        column: x => x.RoutePacketFileId,
+                        principalSchema: "dir",
+                        principalTable: "RoutePacketFiles",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -372,6 +470,18 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 column: "TfOkato");
 
             migrationBuilder.CreateIndex(
+                name: "IX_DocPacketFiles_DocumentId",
+                schema: "doc",
+                table: "DocPacketFiles",
+                column: "DocumentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DocPacketFiles_RoutePacketFileId",
+                schema: "doc",
+                table: "DocPacketFiles",
+                column: "RoutePacketFileId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RouteDocTypes_DocumentTypeId",
                 schema: "dir",
                 table: "RouteDocTypes",
@@ -381,6 +491,12 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 name: "IX_RouteOrgTypes_RouteId",
                 schema: "dir",
                 table: "RouteOrgTypes",
+                column: "RouteId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RoutePacketFiles_RouteId",
+                schema: "dir",
+                table: "RoutePacketFiles",
                 column: "RouteId");
 
             migrationBuilder.CreateIndex(
@@ -432,6 +548,10 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 schema: "dir");
 
             migrationBuilder.DropTable(
+                name: "DocPacketFiles",
+                schema: "doc");
+
+            migrationBuilder.DropTable(
                 name: "RouteDocTypes",
                 schema: "dir");
 
@@ -452,6 +572,10 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 schema: "dir");
 
             migrationBuilder.DropTable(
+                name: "RoutePacketFiles",
+                schema: "dir");
+
+            migrationBuilder.DropTable(
                 name: "RouteSteps",
                 schema: "dir");
 
@@ -461,6 +585,26 @@ namespace EDO_FOMS.Infrastructure.Migrations
 
             migrationBuilder.DropIndex(
                 name: "IX_Documents_EmplOrgId",
+                schema: "doc",
+                table: "Documents");
+
+            migrationBuilder.DropColumn(
+                name: "BuhgId",
+                schema: "org",
+                table: "Organizations");
+
+            migrationBuilder.DropColumn(
+                name: "HeadId",
+                schema: "org",
+                table: "Organizations");
+
+            migrationBuilder.DropColumn(
+                name: "OmsCode",
+                schema: "org",
+                table: "Organizations");
+
+            migrationBuilder.DropColumn(
+                name: "ExecutorId",
                 schema: "doc",
                 table: "Documents");
 

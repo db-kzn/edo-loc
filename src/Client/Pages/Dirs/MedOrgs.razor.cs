@@ -30,7 +30,7 @@ public partial class MedOrgs
 
     //private readonly bool resetValueOnEmptyText = true;
     //private readonly bool coerceText = true;
-    //private readonly bool coerceValue = true;
+    //private readonly bool coerceValue = false;
     //private readonly bool clearable = true;
 
     //private bool openFilter = true;

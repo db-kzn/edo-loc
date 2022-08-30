@@ -3,6 +3,8 @@
     public class ContactResponse
     {
         public string Id { get; set; }             // User to Employee
+
+        public bool IsActive { get; set; }
         public string Surname { get; set; }
         public string GivenName { get; set; }
 

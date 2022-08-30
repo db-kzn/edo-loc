@@ -48,7 +48,7 @@
         <MudCardContent Style="max-height: 70vh; overflow-y: scroll;">
             <MudGrid>
                 <MudItem xs="12">
-                    <InputFile id="fileInput" hidden OnChange="UploadFiles" accept=".pdf" />
+                    <InputFile id="fileInput" hidden OnChange="UploadFiles" accept="@(Route.ParseFileName ? Pattern.FileAccept : "*")" />
 
                     @if (Doc.Id == 0)
                     {
@@ -97,7 +97,6 @@
                             </MudTooltip>
                         </MudButtonGroup>
                     }
-
                 </MudItem>
 
                 @*<MudItem xs="6">
@@ -107,8 +106,10 @@
                 ToStringFunc="@(i => _documentTypes.FirstOrDefault(b => b.Id == i)?.Name ?? string.Empty)" OffsetY="true" />
                 </MudItem>*@
 
+                @*ReadOnly="@Route.ReadOnly"*@
+
                 <MudItem xs="4">
-                    <MudSelect T="int" Label="@_localizer["Document type"]" Disabled="@onUpload"
+                    <MudSelect T="int" Label="@_localizer["Document type"]" Disabled="@(onUpload || Route.ProtectedMode)"
                                AdornmentIcon="@Icons.Material.Outlined.DocumentScanner" Adornment="Adornment.Start"
                                For="@(() => Doc.TypeId)" @bind-Value="Doc.TypeId">
                         @foreach (var type in RouteDocTypes) //_allDocTypes
@@ -119,21 +120,24 @@
                 </MudItem>
 
                 <MudItem xs="4">
-                    <MudTextField For="@(() => Doc.Number)" @bind-Value="Doc.Number" Label="@_localizer["Number"]" Disabled="@onUpload" />
+                    <MudTextField For="@(() => Doc.Number)" @bind-Value="Doc.Number" Label="@_localizer["Number"]" Disabled="@(onUpload || Route.ProtectedMode)" />
                 </MudItem>
 
                 <MudItem xs="4">
-                    <MudDatePicker Label="@_localizer["Document Date"]" DisableToolbar="true" Elevation="2" Disabled="@onUpload"
+                    <MudDatePicker Label="@_localizer["Document Date"]" DisableToolbar="true" Elevation="2" Disabled="@(onUpload || Route.ProtectedMode)"
                                    For="@(() => Doc.Date)" @bind-Date="Doc.Date" />
                 </MudItem>
 
                 <MudItem xs="12">
-                    <MudTextField For="@(() => Doc.Title)" @bind-Value="Doc.Title" Label="@_localizer["Title"]" Disabled="@onUpload" />
+                    <MudTextField For="@(() => Doc.Title)" @bind-Value="Doc.Title" Label="@_localizer["Title"]" Disabled="@(onUpload || Route.ProtectedMode)" />
                 </MudItem>
 
-                <MudItem xs="12">
-                    <MudTextField For="@(() => Doc.Description)" @bind-Value="Doc.Description" Label="@_localizer["Description"]" Disabled="@onUpload" />
-                </MudItem>
+                @if (Route.ShowNotes)
+                {
+                    <MudItem xs="12">
+                        <MudTextField For="@(() => Doc.Description)" @bind-Value="Doc.Description" Label="@_localizer["Description"]" Disabled="@onUpload" />
+                    </MudItem>
+                }
 
                 <MudItem xs="12">
                     <MudExpansionPanels MultiExpansion="true" Style="width: 100%;" Class="mb-4">
@@ -149,7 +153,7 @@
                                                  Adornment="Adornment.Start" AdornmentColor="Color.Default" AdornmentIcon="@IconByOrgType(act.Step.OrgType)"
                                                  Label="@LabelByStep(act.Step)" Required="act.Step.Requred"
                                                  Placeholder="@(act.Members.Count > 0 ? "" : act.Step.Requred ? _localizer["Required to fill"] : _localizer["Not necessary"])"
-                                                 ToStringFunc="@(e => (e == null) ? null : ContactName(e))" Disabled="@onUpload">
+                                                 ToStringFunc="@(e => (e == null) ? null : ContactName(e))" Disabled="@(onUpload || Route.ProtectedMode)">
 
                                             <NoItemsTemplate>
                                                 <MudText Align="Align.Start" Class="px-4 py-1" Color="Color.Warning">
@@ -164,7 +168,11 @@
                                     <MudChipSet AllClosable="true" OnClose="@((chip) => DelContact(act, chip))">
                                         @foreach (var c in act.Members)
                                         {
-                                            <MudChip Text="@c.Label" Variant="Variant.Outlined" Color="Color.Default" Disabled="@onUpload"></MudChip>
+                                            @*Variant="@(c.Contact.IsActive ? Variant.Outlined : Variant.Filled)"*@
+                                            <MudChip Text="@c.Label" Variant="Variant.Outlined"
+                                                     Color="@(c.Contact.IsActive ? Color.Default : Color.Error)"
+                                                     Disabled="@(onUpload || Route.ProtectedMode)">
+                                            </MudChip>
                                         }
                                     </MudChipSet>
                                 }

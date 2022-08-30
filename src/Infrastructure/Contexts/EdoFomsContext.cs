@@ -38,13 +38,14 @@ namespace EDO_FOMS.Infrastructure.Contexts
         public DbSet<RouteStep> RouteSteps { get; set; }
         public DbSet<RouteStepMember> RouteStepMembers { get; set; }
         public DbSet<RouteFileParse> RouteFileParses { get; set; }
-
+        public DbSet<RoutePacketFile> RoutePacketFiles { get; set; }
 
         public DbSet<Organization> Organizations { get; set; }
         public DbSet<Certificate> Certificates { get; set; }
         public DbSet<Document> Documents { get; set; }
         public DbSet<Agreement> Agreements { get; set; }
         public DbSet<DocumentStatus> DocumentStatuses { get; set; }
+        public DbSet<DocPacketFile> DocPacketFiles { get; set; }
         public DbSet<DocumentExtendedAttribute> DocumentExtendedAttributes { get; set; }
         public DbSet<Subscribe> Subscribes { get; set; }
 
@@ -97,6 +98,7 @@ namespace EDO_FOMS.Infrastructure.Contexts
                 entity.ToTable(name: "RouteFileParses", schema: "dir");
                 entity.HasKey(p => new { p.RouteId, p.PatternType });
             });
+            builder.Entity<RoutePacketFile>(entity => entity.ToTable(name: "RoutePacketFiles", schema: "dir"));
 
             builder.Entity<RouteStepMember>(entity =>
             {
@@ -143,6 +145,7 @@ namespace EDO_FOMS.Infrastructure.Contexts
             builder.Entity<Document>(entity => entity.ToTable(name: "Documents", schema: "doc"));
             builder.Entity<Agreement>(entity => entity.ToTable(name: "Agreements", schema: "doc"));
             builder.Entity<DocumentStatus>(entity => entity.ToTable(name: "DocumentStatuses", schema: "doc"));
+            builder.Entity<DocPacketFile>(entity => entity.ToTable(name: "DocPacketFiles", schema: "doc"));
             builder.Entity<DocumentExtendedAttribute>(entity => entity.ToTable(name: "DocumentExtendedAttributes", schema: "doc"));
 
             builder.Entity<Subscribe>(entity => entity.ToTable(name: "Subscribes", schema: "sys"));

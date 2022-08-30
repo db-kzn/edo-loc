@@ -24,11 +24,17 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
         public List<RouteStepCommand> Steps { get; set; } = new();               // + Процессы в этапе + Участники процесса
         public List<RouteFileParseCommand> Parses { get; set; } = new();         // + Правила разбора имени файла
 
+        public List<RoutePacketFile> Files { get; set; } = null;                 // - Типы файлов из пакета
+
         public int Id { get; set; }                                              // - Идентификатор маршрута
         public int Number { get; set; }                                          // - "Ценность" маршрута, для сортировки
+        public string Code { get; set; } = string.Empty;                         // - Код маршрута
+
+        public string Short { get; set; } = string.Empty;                        // + Наименование маршрута
         public string Name { get; set; } = string.Empty;                         // + Наименование маршрута
         public string Description { get; set; } = string.Empty;                  // + Описание маршрута
 
+        public string ExecutorId { get; set; } = string.Empty;
         public UserBaseRoles ForUserRole { get; set; } = UserBaseRoles.Employee; // + Минимальная роль пользователя имеющая доступ к маршруту
         public EndActions EndAction { get; set; } = EndActions.ToArchive;        // + Действие по завершению маршрута
 
@@ -38,7 +44,7 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
         public bool ParseFileName { get; set; } = false;                         // + Разбор имени файла
 
         public bool AllowRevocation { get; set; } = true;                        // + Возможность отзывать документ с маршрута
-        public bool ReadOnly { get; set; } = false;                              // + Карточка документа не редактируется
+        public bool ProtectedMode { get; set; } = false;                         // + Карточка документа не редактируется
         public bool ShowNotes { get; set; } = false;                             // + Отобразить примечание/заметки
         public bool UseVersioning { get; set; } = false;                         // - Используется версионность
 
@@ -68,29 +74,30 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
     }
     public class RouteStepCommand
     {
-        public int Id { get; set; }                                 // - RouteStepId
-        public int RouteId { get; set; }                            // - Внешний индекс
+        public int RouteId { get; set; }                                         // - Внешний индекс
+        public int Id { get; set; }                                              // - RouteStepId
         // IsDeleted - на клиенте не используется, только на сервере
 
-        public int StageNumber { get; set; }                        // + Номер этапа
-        public int Number { get; set; }                             // - Номер процесса в этапе, для сортировки последовательности
+        public int StageNumber { get; set; }                                     // + Номер этапа
+        public int Number { get; set; }                                          // - Номер процесса в этапе, для сортировки последовательности
 
-        public ActTypes ActType { get; set; } = ActTypes.Signing;   // + Тип шага: подписание, согласование или рецензирование
-        public bool Requred { get; set; } = true;                   // + Обязательный шаг
+        public ActTypes ActType { get; set; } = ActTypes.Signing;                // + Тип шага: подписание, согласование или рецензирование
+        public bool Requred { get; set; } = true;                                // + Обязательный шаг
 
-        public OrgTypes OrgType { get; set; } = OrgTypes.Undefined; // + Тип организации, может быть не определен
-        public int? OrgId { get; set; } = null;                     // + Организация участник
+        public OrgTypes OrgType { get; set; } = OrgTypes.Undefined;              // + Тип организации, может быть не определен
+        public int? OrgId { get; set; } = null;                                  // + Организация участник
 
-        public bool OnlyHead { get; set; }                          // + Требуется руководитель
-        public int AutoSearch { get; set; } = 0;                    // + Автопоиск - количество записей
+        public MemberGroups MemberGroup { get; set; }                            // + Группа участников
+        public int AutoSearch { get; set; } = 0;                                 // + Автопоиск - количество записей
 
-        public bool SomeParticipants { get; set; } = true;          // - Несколько участников
-        public bool AllRequred { get; set; } = true;                // + Если несколько, то условие завершения: все или любой
+        public bool SomeParticipants { get; set; } = true;                       // - Несколько участников
+        public bool AllRequred { get; set; } = true;                             // + Если несколько, то условие завершения: все или любой
 
-        public bool HasAgreement { get; set; } = false;             // + Содержит согласование
-        public bool HasReview { get; set; } = false;                // + Содержит рецензирование
+        public bool HasAgreement { get; set; } = false;                          // + Содержит согласование
+        public bool HasReview { get; set; } = false;                             // + Содержит рецензирование
 
-        public List<RouteStepMemberCommand> Members { get; set; } = new(); // + Список участников
+        public string Description { get; set; } = string.Empty;                  //   Описание
+        public List<RouteStepMemberCommand> Members { get; set; } = new();       // + Список участников
     }
     public class RouteStepMemberCommand
     {
@@ -190,7 +197,7 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
                     OrgId = s.OrgId,
 
                     Requred = s.Requred,
-                    OnlyHead = s.OnlyHead,
+                    MemberGroup = s.MemberGroup,
 
                     SomeParticipants = s.SomeParticipants,
                     AllRequred = s.AllRequred,
@@ -198,6 +205,7 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
                     HasAgreement = s.HasAgreement,
                     HasReview = s.HasReview,
 
+                    Description = s.Description,
                     Members = new()
                 };
 
@@ -231,9 +239,13 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
             if (route is null) { return await Result<int>.FailAsync(_localizer["Route Not Found!"]); }
 
             route.Number = command.Number;
+            route.Code = command.Code;
+
+            route.Short = command.Short;
             route.Name = command.Name;
             route.Description = command.Description;
 
+            route.ExecutorId = command.ExecutorId;
             route.ForUserRole = command.ForUserRole;
             route.EndAction = command.EndAction;
 
@@ -243,7 +255,7 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
             route.ParseFileName = command.ParseFileName;
 
             route.AllowRevocation = command.AllowRevocation;
-            route.ReadOnly = command.ReadOnly;
+            route.ProtectedMode = command.ProtectedMode;
             route.ShowNotes = command.ShowNotes;
             route.UseVersioning = command.UseVersioning;
 
@@ -338,7 +350,7 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
                         OrgId = c.OrgId,
 
                         Requred = c.Requred,
-                        OnlyHead = c.OnlyHead,
+                        MemberGroup = c.MemberGroup,
 
                         SomeParticipants = c.SomeParticipants,
                         AllRequred = c.AllRequred,
@@ -346,6 +358,7 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
                         HasAgreement = c.HasAgreement,
                         HasReview = c.HasReview,
 
+                        Description = c.Description,
                         Members = new(),
                     };
 
@@ -369,19 +382,19 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
                         r.OrgId = c.OrgId;
 
                         r.Requred = c.Requred;
-                        r.OnlyHead = c.OnlyHead;
+                        r.MemberGroup = c.MemberGroup;
 
                         r.SomeParticipants = c.SomeParticipants;
                         r.AllRequred = c.AllRequred;
 
                         r.HasAgreement = c.HasAgreement;
                         r.HasReview = c.HasReview;
+
+                        r.Description = c.Description;
                     }
 
-                    r.Members.RemoveAll(mr =>
-                        !c.Members.Exists(mc =>
-                            (mc.UserId == mr.UserId && mc.IsAdditional == mr.IsAdditional && mc.Act == mr.Act)
-                        ));
+                    r.Members.RemoveAll(mr => !c.Members.Exists(mc =>
+                        (mc.UserId == mr.UserId && mc.IsAdditional == mr.IsAdditional && mc.Act == mr.Act)));
 
                     c.Members.ForEach(mc =>
                     {
