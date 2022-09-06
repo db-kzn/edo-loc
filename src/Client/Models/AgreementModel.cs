@@ -37,7 +37,7 @@ namespace EDO_FOMS.Client.Models
         public string DocTypeShort { get; set; }
 
         public string DocNumber { get; set; }
-        public DateTime DocDate { get; set; }
+        public DateTime? DocDate { get; set; }
         public string DocDateStr { get; set; }
         public string DocTitle { get; set; }
 

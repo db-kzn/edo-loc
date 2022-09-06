@@ -2,6 +2,7 @@
 using EDO_FOMS.Application.Interfaces.Services.Identity;
 using EDO_FOMS.Domain.Entities.Doc;
 using EDO_FOMS.Domain.Entities.Org;
+using EDO_FOMS.Domain.Enums;
 using EDO_FOMS.Shared.Wrapper;
 using MediatR;
 using Microsoft.Extensions.Localization;
@@ -99,9 +100,9 @@ namespace EDO_FOMS.Application.Features.Agreements.Queries
                     UserOrgShortName = org.ShortName,
                     UserOrgInn = employee.InnLe,
 
-                    Step = a.Step,
+                    Step = a.StageNumber,
                     State = a.State,
-                    Action = a.Action,
+                    Action = AgreementActions.Undefined,// a.Action,
                     IsCanceled = a.IsCanceled,
 
                     CreatedOn = a.CreatedOn,

@@ -35,7 +35,7 @@ namespace EDO_FOMS.Application.Features.Directories.Queries
         public bool ParseFileName { get; set; } = false;                         // + Разбор имени файла
 
         public bool AllowRevocation { get; set; } = true;                        // + Возможность отзывать документ с маршрута
-        public bool ProtectedMode { get; set; } = false;                              // + Карточка документа не редактируется
+        public bool ProtectedMode { get; set; } = false;                         // + Карточка документа не редактируется
         public bool ShowNotes { get; set; } = false;                             // + Отобразить примечание/заметки
         public bool UseVersioning { get; set; } = false;                         // - Используется версионность
 

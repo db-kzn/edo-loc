@@ -120,6 +120,9 @@
   <data name="Actions" xml:space="preserve">
     <value>Действия</value>
   </data>
+  <data name="Additional doc files" xml:space="preserve">
+    <value>Дополнительные файлы документов</value>
+  </data>
   <data name="Agreed" xml:space="preserve">
     <value>Подписан</value>
   </data>

@@ -18,7 +18,6 @@ namespace EDO_FOMS.Domain.Entities.Doc
         public int EmplOrgId { get; set; }                                // Отправитель - организация инициатора
         [ForeignKey("EmplOrgId")]
         public virtual Organization Issuer { get; set; }
-
         public string ExecutorId { get; set; }                            // Исполнитель
 
         public int? ParentId { get; set; }                                // Родительский документ
@@ -30,10 +29,10 @@ namespace EDO_FOMS.Domain.Entities.Doc
         public DocStages Stage { get; set; } = DocStages.Undefined;       // Статус документа:
         public bool HasChanges { get; set; } = true;                      // Аналог - не прочитан
 
-        public int TypeId { get; set; } = 0;                              // Вид документа: Договор, Приложение
+        public int TypeId { get; set; } = 0;                              // Вид документа: Договор, Приложение. 0 - не определен
         public virtual DocumentType Type { get; set; }
         public string Number { get; set; } = string.Empty;                // Номер документа
-        public DateTime Date { get; set; }                                // Дата документа
+        public DateTime? Date { get; set; }                               // Дата документа
 
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;           // Примечание

@@ -47,7 +47,7 @@
                 <MudHighlighter Text="@context.DocNumber" HighlightedText="@_searchString" />
             </MudTd>
             <MudTd DataLabel="@_localizer["Date"]">
-                <MudHighlighter Text="@context.DocDate.ToString("dd MMM yyyy")" HighlightedText="@_searchString" />
+                <MudHighlighter Text="@(context.DocDate?.ToString("dd MMM yyyy") ?? string.Empty)" HighlightedText="@_searchString" />
             </MudTd>
             <MudTd DataLabel="@_localizer["Title"]">
                 <MudHighlighter Text="@context.DocTitle" HighlightedText="@_searchString" />

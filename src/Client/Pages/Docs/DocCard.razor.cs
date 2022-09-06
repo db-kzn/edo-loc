@@ -10,8 +10,8 @@ using EDO_FOMS.Client.Infrastructure.Managers.Dir;
 using EDO_FOMS.Client.Infrastructure.Managers.Doc.Document;
 using EDO_FOMS.Client.Infrastructure.Managers.Doc.DocumentType;
 using EDO_FOMS.Client.Models;
+using EDO_FOMS.Client.Pages.Dirs;
 using EDO_FOMS.Domain.Enums;
-using EDO_FOMS.Shared.Wrapper;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.JSInterop;
@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -45,12 +46,16 @@ namespace EDO_FOMS.Client.Pages.Docs
         private List<DocTypeResponse> _allDocTypes = new();
         public AddEditDocCommand Doc { get; set; } = new();
         private List<DocActModel> Acts { get; set; } = new();
+        private ContactResponse Executor { get; set; } = null;
 
         private readonly bool resetValueOnEmptyText = true;
         private readonly bool coerceText = true;
         private readonly bool coerceValue = false;
+        private readonly bool clearable = true;
 
         private ClaimsPrincipal _authUser;
+        private string userId;
+
         private IBrowserFile _file;
         private bool onUpload = false;
 
@@ -63,42 +68,44 @@ namespace EDO_FOMS.Client.Pages.Docs
             if (RouteId is null || RouteId == 0) { NavigateToDocs(); }
 
             _authUser = await _authStateProvider.GetAuthenticationStateProviderUserAsync();
+            userId = _authUser.GetUserId();
 
             tz = _stateService.Timezone;
             delay = _stateService.TooltipDelay;
             duration = _stateService.TooltipDuration;
 
-            await LoadDataAsync();
+            var isSucceeded = await LoadDataAsync();
+
+            if (!isSucceeded)
+            {
+                // Show Error on Init
+            }
+
             StateHasChanged();
         }
 
         private void NavigateToDocs() => _navigationManager.NavigateTo($"/docs");
 
-        private async Task LoadDataAsync()
+        private async Task<bool> LoadDataAsync()
         {
             var data = await DocTypeManager.GetAllAsync();
-            if (data.Succeeded) { _allDocTypes = data.Data; }
+            var docTypesLoaded = data.Succeeded;
+            if (docTypesLoaded) { _allDocTypes = data.Data; }
 
-            await RouteInitAsync(RouteId);
+            var routeLoadSucceeded = await LoadRouteAsync(RouteId);
+            var docInitSucceeded = await NewDocInitAsync();
+            var docLoadSucceeded = (DocId is null || DocId == 0) || await LoadDocAsync((int)DocId);
 
-            if (DocId is not null && DocId != 0)
-            {
-                await LoadDocAsync(DocId);
-            }
-            else
-            {
-                var emplId = _authUser.GetUserId();
-
-                if (int.TryParse(_authUser.GetOrgId(), out int emplOrgId))
-                {
-                    await NewDocInitAsync(emplId, emplOrgId);
-                }
-            }
+            return docTypesLoaded && routeLoadSucceeded && docInitSucceeded && docLoadSucceeded;
         }
-        private async Task RouteInitAsync(int? id)
+        private async Task<bool> LoadRouteAsync(int? id)
         {
             var response = await DirManager.GetRouteCardAsync((int)id);
+
+            if (!response.Succeeded) { return false; }
             Route = response.Data;
+
+            await _jsRuntime.InvokeVoidAsync("azino.Console", Route, "Route");
 
             Route.Parses.ForEach(c => _ = c.PatternType switch
             {
@@ -118,14 +125,28 @@ namespace EDO_FOMS.Client.Pages.Docs
                 _ => null
             });
 
+            await _jsRuntime.InvokeVoidAsync("azino.Console", Route, "Route");
+
             var mask = (Route.ParseFileName && !string.IsNullOrWhiteSpace(Pattern.FileMask)) ? Pattern.FileMask : "*";
-
-            await _jsRuntime.InvokeVoidAsync("azino.Console", mask, $"File Mask");
-
+            //await _jsRuntime.InvokeVoidAsync("azino.Console", mask, $"File Mask");
 
             RouteDocTypes = Route.DocTypeIds.Select(id => _allDocTypes.Find(t => t.Id == id)).ToHashSet();
+
+            return true;
         }
 
+        private async Task<IEnumerable<ContactResponse>> SearchExecutorAsync(string search)
+        {
+            var request = new SearchContactsRequest()
+            {
+                BaseRole = UserBaseRoles.Undefined,
+                OrgType = OrgTypes.Undefined,
+                SearchString = search
+            };
+
+            var response = await DocManager.GetFoundContacts(request);
+            return (response.Succeeded) ? response.Data : new();
+        }
         private async Task<IEnumerable<ContactResponse>> SearchContactsAsync(DocActModel act, string search)
         {
             var request = new SearchContactsRequest()
@@ -139,46 +160,47 @@ namespace EDO_FOMS.Client.Pages.Docs
             return (response.Succeeded) ? response.Data : new();
         }
 
-        private async Task NewDocInitAsync(string emplId, int emplOrgId)
+        private async Task<bool> NewDocInitAsync()
         {
-            Doc.EmplId = emplId;
-            Doc.EmplOrgId = emplOrgId;
+            if (int.TryParse(_authUser.GetOrgId(), out int emplOrgId))
+            {
+                Doc.EmplOrgId = emplOrgId;
+            }
+            else
+            {
+                // Error 
+                return false;
+            }
+
+            Doc.EmplId = userId;
 
             Doc.TypeId = (Route.DocTypeIds.Count > 0) ? Route.DocTypeIds[0] : 1;
             Doc.Date = Route.DateIsToday ? DateTime.Today : null;
 
             Doc.RouteId = Route.Id;
-            Doc.TotalSteps = Route.Stages.Count; // TotalSteps - первоначальное название этапов
+            Doc.TotalSteps = Route.Stages.Count; // Steps - первоначальное название этапов
 
-            //Route.Steps.ForEach(step =>
+            Executor = Route.Executor;
+
             foreach (var step in Route.Steps)
             {
                 var act = new DocActModel() { Step = step, Contact = null };
-
-                //if (step.OnlyHead)
-                //{
-                //    if (step.OrgType == OrgTypes.Fund) { AddContacts(act, ChiefsOfFund); }
-                //    else if (step.OrgType == OrgTypes.SMO) { AddContacts(act, ChiefsOfSMO); }
-                //}
-
-                if (step.Members.Count > 0)
-                {
-                    AddContacts(act, step.Members.Select(m => m.Contact).ToList());
-                }
+                AddMembers(act, step.Members);
 
                 if (step.AutoSearch > 0)
                 {
                     //var take = step.SomeParticipants ? step.AutoSearch : 1;
-                    var members = await LoadMembersAsync(step.OrgType, step.AutoSearch, step.MemberGroup == MemberGroups.OnlyHead);
-                    AddContacts(act, members);
+                    var contacts = await LoadMembersAsync(step.OrgType, step.AutoSearch, step.MemberGroup == MemberGroups.OnlyHead);
+                    AddMainContacts(act, contacts);
                 }
 
                 Acts.Add(act);
             };
 
-            await _jsRuntime.InvokeVoidAsync("azino.Console", Doc, "New Doc");
-            await _jsRuntime.InvokeVoidAsync("azino.Console", Route, "Route");
-            await _jsRuntime.InvokeVoidAsync("azino.Console", Acts, "Acts");
+            await _jsRuntime.InvokeVoidAsync("azino.Console", Doc, "NEW Doc");
+            await _jsRuntime.InvokeVoidAsync("azino.Console", Acts, "Route Acts");
+
+            return true;
         }
         private async Task<List<ContactResponse>> LoadMembersAsync(OrgTypes orgType, int take, bool isChief)
         {
@@ -194,44 +216,115 @@ namespace EDO_FOMS.Client.Pages.Docs
             return (response.Succeeded) ? response.Data : new();
         }
 
-        private async Task LoadDocAsync(int? docId) { }
+        private async Task<bool> LoadDocAsync(int id)
+        {
+            var response = await DocManager.GetDocCardAsync(id);
+            if (!response.Succeeded) { return false; }
 
-        private static void AddContacts(DocActModel act, IEnumerable<ContactResponse> contacts)
+            var doc = response.Data;
+
+            // From System :                       EmplId, EmplOrgId
+            // From Route :                        RouteId, TotalSteps
+            // AddEditDocCommand |> DocCardModel : PreviousId
+
+            Doc.Id = doc.Id;
+            Doc.ParentId = doc.ParentId;
+
+            Doc.TypeId = doc.TypeId;
+            Doc.Date = doc.Date;
+
+            // May be from Route ?
+            Doc.ExecutorId = doc.ExecutorId;
+            Executor = doc.Executor;
+
+            Doc.Description = doc.Description;
+            Doc.IsPublic = doc.IsPublic;
+
+            //Doc.CurrentStep = 0;
+            Doc.URL = doc.URL;
+            Doc.UploadRequest = new() { FileName = doc.FileName };
+
+            // Agreements => Acts
+            foreach (var agr in doc.Agreements)
+            {
+                var act = Acts.FirstOrDefault(a => a.Step.Id == agr.RouteStepId);
+                if (act is null) { continue; }
+
+                if (!act.Members.Exists(a => a.UserId == agr.EmplId))
+                {
+                    act.Members.Add(new()
+                    {
+                        Contact = agr.Contact,
+                        Label = ContactName(agr.Contact),
+
+                        Act = agr.Action,
+                        IsAdditional = agr.IsAdditional,
+                        UserId = agr.EmplId
+                    });
+                }
+            }
+
+            await _jsRuntime.InvokeVoidAsync("azino.Console", doc, "LOAD Doc");
+            await _jsRuntime.InvokeVoidAsync("azino.Console", Acts, "Doc Acts");
+
+            return true;
+        }
+
+        private static void AddMainContacts(DocActModel act, IEnumerable<ContactResponse> contacts)
         {
             foreach (var c in contacts)
             {
                 act.Contact = c;// CloneContact(c);
-                AddContact(act);
+                AddMainContact(act);
             }
         }
-        private static void AddContact(DocActModel act)
+        private static void AddMainContact(DocActModel act)
         {
-            var name = ContactName(act.Contact);
+            if (act.Contact is null) { return; }
 
-            if (!act.Members.Exists(m => m.Label == name))
+            if (!act.Members.Exists(m => m.Contact.Id != act.Contact.Id))
             {
-                act.Members.Add(NewMember(act));
+                act.Members.Add(NewMainMember(act));
             }
 
             act.Contact = null;
         }
-        private static MemberModel NewMember(DocActModel act)
+        private static MemberModel NewMainMember(DocActModel act)
         {
             var member = new MemberModel()
             {
+                Contact = act.Contact,
                 Label = ContactName(act.Contact),
 
                 Act = act.Step.ActType,
                 IsAdditional = false,
-                UserId = act.Contact.Id,
-
-                Contact = act.Contact
+                UserId = act.Contact.Id
             };
 
             act.Contact = null;
 
             return member;
         }
+
+        private static void AddMembers(DocActModel act, List<RouteStepMemberModel> members)
+        {
+            foreach (var m in members)
+            {
+                var member = new MemberModel()
+                {
+                    Label = ContactName(m.Contact),
+
+                    Act = m.Act,
+                    IsAdditional = m.IsAdditional,
+                    UserId = m.UserId,
+
+                    Contact = m.Contact
+                };
+
+                act.Members.Add(member);
+            }
+        }
+
         private static void DelContact(DocActModel act, MudChip chip)
         {
             var member = act.Members.Find(m => m.Label == chip.Text);
@@ -247,6 +340,7 @@ namespace EDO_FOMS.Client.Pages.Docs
         //    Surname = c.Surname,
         //    GivenName = c.GivenName
         //};
+
         private static string ContactName(ContactResponse c) =>
             $"[{(string.IsNullOrWhiteSpace(c.OrgShortName) ? c.InnLe : c.OrgShortName)}] {c.Surname} {c.GivenName}";
 
@@ -283,7 +377,7 @@ namespace EDO_FOMS.Client.Pages.Docs
 
             Acts.ForEach(a =>
             {
-                if (a.Step.Requred && a.Contact == null && a.Members.Count == 0)
+                if (a.Step.Requred && a.Contact is null && a.Members.Count == 0)
                 {
                     errors++;
                     _snackBar.Add($"{_localizer["Contact Required"]} {_localizer[a.Step.OrgType.ToString()]}", Severity.Warning);
@@ -294,31 +388,31 @@ namespace EDO_FOMS.Client.Pages.Docs
 
             Doc.CurrentStep = stageNumber;
             Doc.TotalSteps = Route.Stages.Count;
+            Doc.ExecutorId = Executor?.Id ?? userId; // Исполнитель
 
-            Doc.Members.Clear();
-            Doc.Members.Add(new ActMember() // Инициатор подписания (исполнитель)
+            Doc.Members = new()
             {
-                StepId = null,
-                IsAdditional = false,
-                Act = ActTypes.Initiation,
+                new ActMember()
+                {
+                    RouteStepId = null,
+                    StageNumber = 0,
 
-                OrgInn = _authUser.GetInnLe(),
-                OrgId = Doc.EmplOrgId,
-                EmplId = Doc.EmplId
-            });
+                    Act = ActTypes.Initiation,
+                    IsAdditional = false,
+
+                    OrgInn = _authUser.GetInnLe(),
+                    OrgId = Doc.EmplOrgId,
+                    EmplId = Doc.EmplId
+                }
+            };
 
             Acts.ForEach(a =>
             {
-                if (a.Contact != null && !a.Members.Any(m => m.Label == ContactName(a.Contact)))
-                {
-                    Doc.Members.Add(NewActMember(a, a.Contact));
-                }
-
-                foreach (var c in a.Members)
-                {
-                    Doc.Members.Add(NewActMember(a, c.Contact));
-                }
+                AddMainContact(a);
+                a.Members.ForEach(m => Doc.Members.Add(NewDocActMember(a, m)));
             });
+
+            await _jsRuntime.InvokeVoidAsync("azino.Console", Doc, "Doc To Save");
 
             onUpload = true;
 
@@ -336,21 +430,32 @@ namespace EDO_FOMS.Client.Pages.Docs
 
             onUpload = false;
         }
-
-        private static ActMember NewActMember(DocActModel a, ContactResponse c)
+        private static ActMember NewDocActMember(DocActModel a, MemberModel m)
         {
             return new()
             {
-                StepId = a.Step.Id,
-                IsAdditional = false,
-                Act = a.Step.ActType,
-                //(a.Step.ActType == ActTypes.Signing) ? AgreementActions.ToSign :
-                //(a.Step.ActType == ActTypes.Agreement) ? AgreementActions.ToApprove :
-                //(a.Step.ActType == ActTypes.Review) ? AgreementActions.ToReview : AgreementActions.Undefined,
+                // Stage & Step
+                RouteStepId = a.Step.Id,
+                StageNumber = a.Step.StageNumber,
 
-                OrgInn = c.InnLe,
-                OrgId = c.OrgId,
-                EmplId = c.Id
+                // Member
+                Act = m.Act,
+                IsAdditional = false,
+
+                // Contact
+                OrgInn = m.Contact.InnLe,
+                OrgId = m.Contact.OrgId,
+                EmplId = m.Contact.Id
+            };
+        }
+        private static string ActTypesIcon(ActTypes act)
+        {
+            return act switch
+            {
+                ActTypes.Signing => Icons.Material.Outlined.Draw,
+                ActTypes.Agreement => Icons.Material.Outlined.OfflinePin,
+                ActTypes.Review => Icons.Material.Outlined.MapsUgc,
+                _ => Icons.Material.Outlined.Circle
             };
         }
 
@@ -371,7 +476,7 @@ namespace EDO_FOMS.Client.Pages.Docs
                     Regex mask = new(Pattern.FileMask.Replace(".", "[.]").Replace("*", ".*").Replace("?", "."));
                     maskIsCorrect = mask.IsMatch(_file.Name);
                 }
-                catch (Exception) {}
+                catch (Exception) { }
 
                 if (!maskIsCorrect)
                 {

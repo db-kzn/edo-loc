@@ -5,6 +5,8 @@
 @inject Microsoft.Extensions.Localization.IStringLocalizer<DocCard> _localizer
 
 @using EDO_FOMS.Application.Responses.Docums
+@using EDO_FOMS.Client.Models
+@using EDO_FOMS.Domain.Enums
 
 <MudPaper Square="true" Elevation="3" Style="z-index: 1;">
     <MudToolBar>
@@ -70,8 +72,8 @@
                                 }
                             </MudButton>
 
-                            <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["View document from server"]" Color="Color.Tertiary" Placement="Placement.Left" Arrow="true">
-                                <MudIconButton Icon="@Icons.Material.TwoTone.MenuBook" Style="height: 56px;" Disabled></MudIconButton>
+                            <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Additional doc files"]" Color="Color.Tertiary" Placement="Placement.Left" Arrow="true">
+                                <MudIconButton Icon="@Icons.Material.Outlined.LibraryAdd" Style="height: 56px;" Disabled></MudIconButton>
                             </MudTooltip>
                         </MudButtonGroup>
                     }
@@ -140,6 +142,21 @@
                 }
 
                 <MudItem xs="12">
+                    <MudAutocomplete T="ContactResponse" @bind-Value="@Executor" SearchFunc="SearchExecutorAsync" Disabled="@(onUpload || Route.ProtectedMode)"
+                                     ResetValueOnEmptyText="@resetValueOnEmptyText" CoerceText="@coerceText" CoerceValue="@coerceValue" Clearable="@clearable"
+                                     Adornment="Adornment.Start" AdornmentColor="Color.Default" AdornmentIcon="@Icons.Material.Outlined.SlowMotionVideo"
+                                     Placeholder="@_localizer["Executor"]" ToStringFunc="@(e => (e == null) ? null : ContactName(e))">
+
+                        <NoItemsTemplate>
+                            <MudText Align="Align.Start" Class="px-4 py-1" Color="Color.Warning">
+                                @_localizer["Employees not found"]
+                            </MudText>
+                        </NoItemsTemplate>
+                    </MudAutocomplete>
+                </MudItem>
+
+
+                <MudItem xs="12">
                     <MudExpansionPanels MultiExpansion="true" Style="width: 100%;" Class="mb-4">
                         @foreach (var stage in Route.Stages)
                         {
@@ -162,16 +179,16 @@
                                             </NoItemsTemplate>
                                         </MudAutocomplete>
 
-                                        <MudIconButton Icon="@Icons.Material.Filled.Add" Style="height:48px;" Color="Color.Primary" OnClick="@(() => AddContact(act))" Disabled="@(act.Contact == null)"></MudIconButton>
+                                        <MudIconButton Icon="@Icons.Material.Filled.Add" Style="height:48px;" Color="Color.Primary" OnClick="@(() => AddMainContact(act))" Disabled="@(act.Contact == null)"></MudIconButton>
                                     </div>
 
                                     <MudChipSet AllClosable="true" OnClose="@((chip) => DelContact(act, chip))">
                                         @foreach (var c in act.Members)
                                         {
                                             @*Variant="@(c.Contact.IsActive ? Variant.Outlined : Variant.Filled)"*@
-                                            <MudChip Text="@c.Label" Variant="Variant.Outlined"
-                                                     Color="@(c.Contact.IsActive ? Color.Default : Color.Error)"
-                                                     Disabled="@(onUpload || Route.ProtectedMode)">
+                                            <MudChip Text="@c.Label" Variant="Variant.Outlined" Disabled="@(onUpload || Route.ProtectedMode)"
+                                         Icon="@ActTypesIcon(c.Act)" IconColor="@(c.IsAdditional ? Color.Default : Color.Primary)"
+                                         Color="@(c.Contact.IsActive ? Color.Default : Color.Error)" >
                                             </MudChip>
                                         }
                                     </MudChipSet>

@@ -22,6 +22,8 @@ namespace EDO_FOMS.Client.Infrastructure.Managers.Doc.Document
         Task<PaginatedResult<GetDocumentsResponse>> GetDocsAsync(GetPagedDocumentsRequest request);
         Task<PaginatedResult<GetDocumentsResponse>> SearchDocsAsync(SearchDocsRequest request);
 
+        Task<IResult<DocCardResponse>> GetDocCardAsync(int id);
+
         Task<PaginatedResult<EmployeeAgreementsResponse>> GetEmployeeAgreementsAsync(GetPagedAgreementsRequest request);
         Task<PaginatedResult<EmployeeAgreementsResponse>> SearchAgrsAsync(SearchAgrsRequest request);
 

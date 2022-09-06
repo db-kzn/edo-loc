@@ -9,7 +9,7 @@ namespace EDO_FOMS.Client.Infrastructure.Routes
     {
         public const string Ctrl = "api/documents";
         public const string AddEdit = Ctrl;
-        public const string AddEditDoc = $"{Ctrl}/doc";
+        public const string AddEditDoc = $"{Ctrl}"; // /doc
         public const string Delete = Ctrl;
 
         public const string ChangeStage = $"{Ctrl}/stage";
@@ -56,5 +56,7 @@ namespace EDO_FOMS.Client.Infrastructure.Routes
             var sort = (r.OrderBy?.Any() == true) ? string.Join(",", r.OrderBy) : ""; // Id Descending
             return $"{Ctrl}/agrs?pageNumber={r.PageNumber}&pageSize={r.PageSize}&searchString={r.SearchString}&agrState={r.AgrState}&matchCase={r.MatchCase}&orderBy={sort}";
         }
+
+        public static string GetDocCard(int id) => $"{Ctrl}/card?id={id}";
     }
 }

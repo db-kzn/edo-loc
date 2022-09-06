@@ -2,24 +2,23 @@
   "profiles": {
     "Dev": {
       "commandName": "Project",
-      "dotnetRunMessages": true,
-      //"workingDirectory": "D:\\Repositories\\edo\\src\\Server",
+      "workingDirectory": "D:\\Repositories\\edo\\src\\Server",
       "launchBrowser": true,
-      "applicationUrl": "http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "ASPNETCORE_URLS": "http://0.0.0.0:5000"
       },
+      "dotnetRunMessages": true,
+      "applicationUrl": "http://localhost:5000",
       "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
       "nativeDebugging": true
     },
     "Prod": {
       "commandName": "Project",
-      "launchBrowser": false,
-      "dotnetRunMessages": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Production"
       },
+      "dotnetRunMessages": true,
       "applicationUrl": "http://0.0.0.0:80"
     },
     "Docker": {
@@ -41,11 +40,10 @@
     },
     "FOMS RT": {
       "commandName": "Project",
-      "launchBrowser": false,
-      "dotnetRunMessages": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "FOMS_RT"
       },
+      "dotnetRunMessages": true,
       "applicationUrl": "http://0.0.0.0:80"
     }
   }

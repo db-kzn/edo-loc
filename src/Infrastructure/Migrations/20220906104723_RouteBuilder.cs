@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace EDO_FOMS.Infrastructure.Migrations
 {
-    public partial class RouterBuilder : Migration
+    public partial class RouteBuilder : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -57,6 +57,12 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 newName: "AuditTrails",
                 newSchema: "sys");
 
+            migrationBuilder.RenameColumn(
+                name: "Step",
+                schema: "doc",
+                table: "Agreements",
+                newName: "StageNumber");
+
             migrationBuilder.AlterColumn<string>(
                 name: "Inn",
                 schema: "org",
@@ -90,6 +96,15 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 maxLength: 6,
                 nullable: true);
 
+            migrationBuilder.AlterColumn<DateTime>(
+                name: "Date",
+                schema: "doc",
+                table: "Documents",
+                type: "timestamp with time zone",
+                nullable: true,
+                oldClrType: typeof(DateTime),
+                oldType: "timestamp with time zone");
+
             migrationBuilder.AddColumn<string>(
                 name: "ExecutorId",
                 schema: "doc",
@@ -106,11 +121,41 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 oldClrType: typeof(int),
                 oldType: "integer");
 
+            migrationBuilder.AddColumn<bool>(
+                name: "IsAdditional",
+                schema: "doc",
+                table: "Agreements",
+                type: "boolean",
+                nullable: false,
+                defaultValue: false);
+
+            migrationBuilder.AddColumn<bool>(
+                name: "IsRequired",
+                schema: "doc",
+                table: "Agreements",
+                type: "boolean",
+                nullable: false,
+                defaultValue: false);
+
+            migrationBuilder.AddColumn<string>(
+                name: "OmsCode",
+                schema: "doc",
+                table: "Agreements",
+                type: "text",
+                nullable: true);
+
             migrationBuilder.AddColumn<string>(
                 name: "OrgInn",
                 schema: "doc",
                 table: "Agreements",
                 type: "text",
+                nullable: true);
+
+            migrationBuilder.AddColumn<int>(
+                name: "RouteStepId",
+                schema: "doc",
+                table: "Agreements",
+                type: "integer",
                 nullable: true);
 
             migrationBuilder.AddColumn<int>(
@@ -429,9 +474,9 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 columns: table => new
                 {
                     RouteStepId = table.Column<int>(type: "integer", nullable: false),
-                    UserId = table.Column<string>(type: "text", nullable: false),
                     Act = table.Column<int>(type: "integer", nullable: false),
-                    IsAdditional = table.Column<bool>(type: "boolean", nullable: false)
+                    IsAdditional = table.Column<bool>(type: "boolean", nullable: false),
+                    UserId = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -609,7 +654,27 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 table: "Documents");
 
             migrationBuilder.DropColumn(
+                name: "IsAdditional",
+                schema: "doc",
+                table: "Agreements");
+
+            migrationBuilder.DropColumn(
+                name: "IsRequired",
+                schema: "doc",
+                table: "Agreements");
+
+            migrationBuilder.DropColumn(
+                name: "OmsCode",
+                schema: "doc",
+                table: "Agreements");
+
+            migrationBuilder.DropColumn(
                 name: "OrgInn",
+                schema: "doc",
+                table: "Agreements");
+
+            migrationBuilder.DropColumn(
+                name: "RouteStepId",
                 schema: "doc",
                 table: "Agreements");
 
@@ -649,6 +714,12 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 schema: "sys",
                 newName: "AuditTrails");
 
+            migrationBuilder.RenameColumn(
+                name: "StageNumber",
+                schema: "doc",
+                table: "Agreements",
+                newName: "Step");
+
             migrationBuilder.AlterColumn<string>(
                 name: "Inn",
                 schema: "org",
@@ -659,6 +730,17 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 oldClrType: typeof(string),
                 oldType: "character varying(12)",
                 oldMaxLength: 12);
+
+            migrationBuilder.AlterColumn<DateTime>(
+                name: "Date",
+                schema: "doc",
+                table: "Documents",
+                type: "timestamp with time zone",
+                nullable: false,
+                defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                oldClrType: typeof(DateTime),
+                oldType: "timestamp with time zone",
+                oldNullable: true);
 
             migrationBuilder.AddColumn<int>(
                 name: "IssuerId",

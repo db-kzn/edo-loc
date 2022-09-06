@@ -8,12 +8,9 @@ using EDO_FOMS.Domain.Entities.Org;
 using EDO_FOMS.Shared.Wrapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using static MudBlazor.CategoryTypes;
 
 namespace EDO_FOMS.Application.Features.Directories.Queries;
 
@@ -49,6 +46,8 @@ internal class GetRouteCardQueryHandler : IRequestHandler<GetRouteCardQuery, Res
 
         var route = await routes.FirstOrDefaultAsync(r => r.Id == request.Id, cancellationToken: cancellationToken);
 
+        if (route is null) { return await Result<RouteCardResponse>.FailAsync(); }
+
         var card = new RouteCardResponse
         {
             DocTypeIds = route.RouteDocTypes.Select(dt => dt.DocumentTypeId).ToList(),
@@ -57,7 +56,7 @@ internal class GetRouteCardQueryHandler : IRequestHandler<GetRouteCardQuery, Res
             Stages = route.Stages.Select(s => new RouteStageModel(s)).ToList(),
             Steps = route.Steps.Where(s => !s.IsDeleted).Select(s => new RouteStepModel(s)).ToList(),
             Parses = route.Parses.Select(s => new RouteFileParseModel(s)).ToList(),
-            Files = null, // Нужно реализовать
+            Files = null, // Нужно реализовать, пока нет пакетов файлов
 
             Id = route.Id,
             Number = route.Number,

@@ -8,6 +8,7 @@
         public string Surname { get; set; }
         public string GivenName { get; set; }
 
+        public string OmsCode { get; set; }
         public int OrgId { get; set; }
         public string InnLe { get; set; }
         public string OrgShortName { get; set; }

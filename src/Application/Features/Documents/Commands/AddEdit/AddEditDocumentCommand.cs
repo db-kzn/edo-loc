@@ -22,11 +22,11 @@ namespace EDO_FOMS.Application.Features.Documents.Commands.AddEdit;
 
 public partial class AddEditDocumentCommand : IRequest<Result<int>>
 {
-    public int Id { get; set; } = 0; // 0 - Новый документ
+    public int Id { get; set; } = 0;      // 0 - Новый документ
     public int? DocParentId { get; set; } // Родительский документ
 
-    public string EmplId { get; set; } // Инициатор подписания
-    public int EmplOrgId { get; set; } // Организация инициатора
+    public string EmplId { get; set; }    // Инициатор подписания
+    public int EmplOrgId { get; set; }    // Организация инициатора
 
     public int TypeId { get; set; } = 0; // Тип документа: 1 - Договор, 2 - Приложение ...
     [JsonConverter(typeof(TrimmingJsonConverter))]
@@ -133,8 +133,6 @@ internal class AddEditDocumentCommandHandler : IRequestHandler<AddEditDocumentCo
 
         contacts.ForEach(c =>
         {
-            var emplId = c.EmplId;
-
             var state = (doc.Stage == DocStages.Draft) ? AgreementStates.Undefined :
                 (c.Action == AgreementActions.ToRun) ? AgreementStates.Control :
                 (doc.CurrentStep == c.Step) ? AgreementStates.Incoming : AgreementStates.Expecting;
@@ -144,26 +142,26 @@ internal class AddEditDocumentCommandHandler : IRequestHandler<AddEditDocumentCo
                 Document = doc,
                 //Attempt = doc.Attempt,
 
-                EmplId = emplId,
+                EmplId = c.EmplId,
                 OrgId = c.OrgId, //employee.OrgId,
 
-                Step = c.Step,
+                StageNumber = c.Step,
                 State = state,
 
-                Action = c.Action
+                Action = ActTypes.Undefined,// c.Action,
                 // Remark // Time // URL
             });
 
             if (state == AgreementStates.Incoming)
             {
                 var subscribe = _unitOfWork.Repository<Subscribe>().Entities
-                    .FirstOrDefault(s => s.UserId == emplId && s.Email.AgreementIncoming); // 1
+                    .FirstOrDefault(s => s.UserId == c.EmplId && s.Email.AgreementIncoming); // 1
 
                 if (subscribe is not null)
                 {
                     var mail = new MailToUser()
                     {
-                        UserId = emplId,
+                        UserId = c.EmplId,
                         Theme = _localizer["New document received"],
                         Text = $"Уважаемый пользователь! <br/><br/>{_localizer["You have received a new document for signing (approval) {0} of {1:d} {2}", doc.Number, doc.Date, doc.Title]}"
                     };
@@ -187,7 +185,7 @@ internal class AddEditDocumentCommandHandler : IRequestHandler<AddEditDocumentCo
 
         doc.TypeId = command.TypeId;
         doc.Number = command.Number;
-        doc.Date = command.Date ?? DateTime.Today;
+        doc.Date = command.Date;
 
         doc.Title = command.Title;
         doc.Description = command.Description;
@@ -216,15 +214,15 @@ internal class AddEditDocumentCommandHandler : IRequestHandler<AddEditDocumentCo
         {
             var emplId = a.EmplId;
 
-            if (!command.Contacts.Exists(c => c.EmplId == emplId && c.Step == a.Step))
+            if (!command.Contacts.Exists(c => c.EmplId == emplId && c.Step == a.StageNumber))
             {
                 await _unitOfWork.Repository<Agreement>().DeleteAsync(a);
             }
             else
             {
                 a.State = (doc.Stage == DocStages.Draft) ? AgreementStates.Undefined :
-                          (a.Action == AgreementActions.ToRun) ? AgreementStates.Control :
-                          (doc.CurrentStep == a.Step) ? AgreementStates.Incoming : AgreementStates.Expecting;
+                          //(a.Action == AgreementActions.ToRun) ? AgreementStates.Control :
+                          (doc.CurrentStep == a.StageNumber) ? AgreementStates.Incoming : AgreementStates.Expecting;
 
                 await _unitOfWork.Repository<Agreement>().UpdateAsync(a);
 
@@ -251,7 +249,7 @@ internal class AddEditDocumentCommandHandler : IRequestHandler<AddEditDocumentCo
         // добавление новых контактов
         command.Contacts.ForEach(async c =>
         {
-            var isPresent = agreements.Exists(a => c.EmplId == a.EmplId && c.Step == a.Step);
+            var isPresent = agreements.Exists(a => c.EmplId == a.EmplId && c.Step == a.StageNumber);
 
             if (!isPresent)
             {
@@ -265,12 +263,12 @@ internal class AddEditDocumentCommandHandler : IRequestHandler<AddEditDocumentCo
                     EmplId = c.EmplId,
                     OrgId = employee.OrgId,
 
-                    Step = c.Step,
+                    StageNumber = c.Step,
                     State = (doc.Stage == DocStages.Draft) ? AgreementStates.Undefined :
                             (c.Action == AgreementActions.ToRun) ? AgreementStates.Control :
                             (doc.CurrentStep == c.Step) ? AgreementStates.Incoming : AgreementStates.Expecting,
 
-                    Action = c.Action
+                    Action = ActTypes.Undefined,//c.Action
                     // Remark // Time // URL
                 });
             }

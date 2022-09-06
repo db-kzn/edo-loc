@@ -154,9 +154,9 @@ namespace EDO_FOMS.Application.Features.Agreements.Queries
                             DocCreatedBy = doc.CreatedBy,
                             DocCreatedOn = doc.CreatedOn,
 
-                            Step = a.Step,
+                            Step = a.StageNumber,
                             State = a.State,
-                            Action = a.Action,
+                            Action = AgreementActions.Undefined,// a.Action,
                             IsCanceled = a.IsCanceled,
 
                             CreatedOn = a.CreatedOn,

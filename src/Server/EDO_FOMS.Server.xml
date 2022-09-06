@@ -226,12 +226,12 @@
             <param name="id"></param>
             <returns>Status 200 Ok</returns>
         </member>
-        <member name="M:EDO_FOMS.Server.Controllers.Docums.DocumentsController.Post(EDO_FOMS.Application.Features.Documents.Commands.AddEdit.AddEditDocumentCommand)">
+        <member name="M:EDO_FOMS.Server.Controllers.Docums.DocumentsController.GetDocCard(System.Int32)">
             <summary>
-            Add/Edit Document
+            Get Document Card By Id
             </summary>
-            <param name="command"></param>
-            <returns>Status 200 OK</returns>
+            <param name="id"></param>
+            <returns>Status 200 Ok</returns>
         </member>
         <member name="M:EDO_FOMS.Server.Controllers.Docums.DocumentsController.PostDoc(EDO_FOMS.Application.Features.Documents.Commands.AddEditDocCommand)">
             <summary>

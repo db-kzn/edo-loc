@@ -323,7 +323,7 @@ namespace EDO_FOMS.Client.Pages.Archive
 
                 DocNumber = a.DocNumber,
                 DocDate = a.DocDate,
-                DocDateStr = a.DocDate.ToString("d"),
+                DocDateStr = a.DocDate?.ToString("d") ?? string.Empty,
                 DocTitle = a.DocTitle,
 
                 DocDescription = a.DocDescription,
@@ -382,7 +382,7 @@ namespace EDO_FOMS.Client.Pages.Archive
 
                 Number = a.DocNumber,
                 Date = a.DocDate,
-                DateStr = a.DocDate.ToString("d"),
+                DateStr = a.DocDate?.ToString("d") ?? string.Empty,
                 Title = a.DocTitle,
 
                 Description = a.DocDescription,

@@ -37,7 +37,7 @@ public class GetAgreementsResponse
     public string DocTypeShort { get; set; }
 
     public string DocNumber { get; set; }
-    public DateTime DocDate { get; set; }
+    public DateTime? DocDate { get; set; }
     public string DocTitle { get; set; }
 
     public string DocDescription { get; set; }

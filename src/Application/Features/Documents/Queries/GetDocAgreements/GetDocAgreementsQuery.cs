@@ -63,7 +63,7 @@ namespace EDO_FOMS.Application.Features.Documents.Queries.GetDocAgreements
 
                 docAgreements.Add(new()
                 {
-                    Step = a.Step,
+                    Step = a.StageNumber,
                     EmplId = a.EmplId,
 
                     Surname = employee.Surname,

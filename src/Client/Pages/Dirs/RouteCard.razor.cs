@@ -282,7 +282,7 @@ namespace EDO_FOMS.Client.Pages.Dirs
         private async Task AddEditStepAsync(RouteStepModel step)
         {
             var parameters = new DialogParameters() { { nameof(RouteStepDialog.Step), step } };
-            var options = new DialogOptions() { DisableBackdropClick = true };
+            var options = new DialogOptions() { DisableBackdropClick = true, CloseButton = false, CloseOnEscapeKey = false };
             var dialog = _dialogService.Show<RouteStepDialog>("", parameters, options);
             var result = await dialog.Result;
 

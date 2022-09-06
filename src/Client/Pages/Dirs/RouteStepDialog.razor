@@ -23,21 +23,21 @@
                 <MudSelect T="ActTypes" @bind-Value="@Step.ActType" Label="@_localizer["Action"]" Variant="Variant.Text" AnchorOrigin="Origin.BottomCenter">
                     <MudSelectItem T="ActTypes" Value="@ActTypes.Signing">
                         <div class="d-flex flex-row" style="height: 24px; vertical-align: middle;">
-                            <MudIcon Icon="@Icons.Material.Outlined.QrCode2" Color="Color.Error" Title="Signing" Size="Size.Small" Class="mr-2" />
+                            <MudIcon Icon="@Icons.Material.Outlined.Draw" Color="Color.Error" Title="Signing" Size="Size.Small" Class="mr-2" />
                             @_localizer[nameof(ActTypes.Signing)]
                         </div>
                     </MudSelectItem>
 
                     <MudSelectItem T="ActTypes" Value="@ActTypes.Agreement">
                         <div class="d-flex flex-row" style="height: 24px; vertical-align: middle;">
-                            <MudIcon Icon="@Icons.Material.Outlined.FactCheck" Color="Color.Success" Title="Agreement" Size="Size.Small" Class="mr-2" />
+                            <MudIcon Icon="@Icons.Material.Outlined.OfflinePin" Color="Color.Warning" Title="Agreement" Size="Size.Small" Class="mr-2" />
                             @_localizer[nameof(ActTypes.Agreement)]
                         </div>
                     </MudSelectItem>
 
                     <MudSelectItem T="ActTypes" Value="@ActTypes.Review">
                         <div class="d-flex flex-row" style="height: 24px; vertical-align: middle;">
-                            <MudIcon Icon="@Icons.Material.Outlined.MapsUgc" Color="Color.Warning" Title="Review" Size="Size.Small" Class="mr-2" />
+                            <MudIcon Icon="@Icons.Material.Outlined.MapsUgc" Color="Color.Success" Title="Review" Size="Size.Small" Class="mr-2" />
                             @_localizer[nameof(ActTypes.Review)]
                         </div>
                     </MudSelectItem>
@@ -103,6 +103,10 @@
             </MudItem>
 
             <MudItem xs="6">
+                <MudCheckBox @bind-Checked="@Step.Requred" Label="@_localizer["Requred"]" Color="Color.Primary"
+                             CheckedIcon="@Icons.Material.Rounded.WarningAmber" UnCheckedColor="Color.Default" />
+            </MudItem>
+            <MudItem xs="6">
                 @*<MudCheckBox @bind-Checked="@Step.OnlyHead" Label="@_localizer["Only Chief"]" Color="Color.Primary"
                 CheckedIcon="@Icons.Material.Outlined.WorkspacePremium" UnCheckedColor="Color.Default" />*@
 
@@ -118,10 +122,6 @@
                     <MudSelectItem T="MemberGroups" Value="@MemberGroups.OnlyEmployees">@_localizer["Only Employees"]</MudSelectItem>
                     <MudSelectItem T="MemberGroups" Value="@MemberGroups.ExtExpert">@_localizer["External Expert"]</MudSelectItem>
                 </MudSelect>
-            </MudItem>
-            <MudItem xs="6">
-                <MudCheckBox @bind-Checked="@Step.Requred" Label="@_localizer["Requred"]" Color="Color.Primary"
-                             CheckedIcon="@Icons.Material.Rounded.WarningAmber" UnCheckedColor="Color.Default" />
             </MudItem>
 
             <MudItem xs="6">
@@ -203,7 +203,6 @@
                     }
                 </MudChipSet>
             </MudItem>
-
             <MudItem xs="6">
                 <div class="d-flex">
                     <MudAutocomplete T="ContactResponse" @bind-Value="Reviewers.Contact" SearchFunc="@((text) => SearchContactsAsync(UserBaseRoles.Undefined, text))"
@@ -234,7 +233,6 @@
             <MudItem xs="12">
                 <MudTextField Lines="1" Variant="Variant.Text" @bind-Value="@Step.Description" Label="@_localizer["Description"]" />
             </MudItem>
-
         </MudGrid>
     </DialogContent>
 

@@ -233,16 +233,29 @@ namespace EDO_FOMS.Server.Controllers.Docums
         }
 
         /// <summary>
-        /// Add/Edit Document
+        /// Get Document Card By Id
         /// </summary>
-        /// <param name="command"></param>
-        /// <returns>Status 200 OK</returns>
-        [Authorize(Policy = Permissions.Documents.Create)]
-        [HttpPost]
-        public async Task<IActionResult> Post(AddEditDocumentCommand command)
+        /// <param name="id"></param>
+        /// <returns>Status 200 Ok</returns>
+        [Authorize(Policy = Permissions.Documents.View)]
+        [HttpGet("card")]
+        public async Task<IActionResult> GetDocCard(int id)
         {
-            return Ok(await _mediator.Send(command));
+            var docCard = await _mediator.Send(new GetDocCardQuery(id));
+            return Ok(docCard);
         }
+
+        ///// <summary>
+        ///// Add/Edit Document
+        ///// </summary>
+        ///// <param name="command"></param>
+        ///// <returns>Status 200 OK</returns>
+        //[Authorize(Policy = Permissions.Documents.Create)]
+        //[HttpPost]
+        //public async Task<IActionResult> Post(AddEditDocumentCommand command)
+        //{
+        //    return Ok(await _mediator.Send(command));
+        //}
 
         /// <summary>
         /// Add/Edit Doc

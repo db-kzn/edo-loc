@@ -46,9 +46,6 @@ namespace EDO_FOMS.Client.Infrastructure.Routes
             var sort = (r.OrderBy?.Any() == true) ? string.Join(",", r.OrderBy) : ""; // Id Descending
             return $"{Ctrl}/routes?pageNumber={r.PageNumber}&pageSize={r.PageSize}&searchString={r.SearchString}&matchCase={r.MatchCase}&orderBy={sort}";
         }
-        public static string GetRouteCard(int id)
-        {
-            return $"{Ctrl}/route-card?id={id}";
-        }
+        public static string GetRouteCard(int id) => $"{Ctrl}/route-card?id={id}";
     }
 }

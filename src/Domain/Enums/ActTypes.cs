@@ -2,11 +2,13 @@
 {
     public enum ActTypes : int // Тип процесса
     {
-        Initiation = -1, // Инициация исполнителем
         Undefined = 0,   // Не определено
+        Initiation = 1,  // Инициация исполнителем
 
-        Signing = 1,     // Подписание
-        Agreement = 2,   // Согласование
-        Review = 3       // Рецензирование
+        Review = 2,      // Рецензирование
+        Agreement = 3,   // Согласование
+        Signing = 4,     // Подписание
+
+        Executing = 5    // Исполнитель
     }
 }

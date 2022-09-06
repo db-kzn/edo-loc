@@ -7,26 +7,33 @@ namespace EDO_FOMS.Domain.Entities.Doc
 {
     public class Agreement : AuditableEntity<int>
     {
-        public int DocumentId { get; set; }
+        public int DocumentId { get; set; }                                        // Документ к которому относится согласование
         public virtual Document Document { get; set; }
-        public int? ParentId { get; set; }                 // Родительское согласование, для доп.согласований
+        public int? ParentId { get; set; } = null;                                 // Родительское согласование, для доп.согласований
+        public int? RouteStepId { get; set; } = null;                              // Ссылка на шаблон процесса из маршрута документа
+        public int StageNumber { get; set; } = 0;                                  // Prev.name |> Step // Порядковый номер этапа подписания документа
 
-        public string OrgInn { get; set; }                 // ИНН Организации, eсли организация не зарегистированна в системе
-        public int? OrgId { get; set; }                    // Организация подписанта / согласованта
-        public Organization Org { get; set; }              // OrgId, OrgType, OrgInn, OrgShortName
-        public string EmplId { get; set; }                 // Сотрудник - согласовант / подписант
+        public string OmsCode { get; set; } = string.Empty;                         // Код МО по НСИ
+        public string OrgInn { get; set; } = string.Empty;                         // ИНН Организации, eсли организация не зарегистированна в системе
+        public int? OrgId { get; set; } = null;                                    // Организация подписанта / согласованта
+        public Organization Org { get; set; }                                      // OrgId, OrgType, OrgInn, OrgShortName
+        public string EmplId { get; set; } = string.Empty;                         // Сотрудник - согласовант / подписант
 
-        public int Step { get; set; }                      // Порядковый номер этапа подписания документа
-        public AgreementStates State { get; set; } = AgreementStates.Undefined; // Обновляется после прохождения этапа
-        public AgreementActions Action { get; set; } = AgreementActions.Undefined;
-        public bool IsCanceled { get; set; } = false;      // Отмененное согласование
+        public bool IsRequired { get; set; } = false;                              // Обязательное согласование
+        public bool IsCanceled { get; set; } = false;                              // Отмененное согласование
+        public bool IsAdditional { get; set; } = false;                            // Дополнительный участник согласование
 
-        public string Remark { get; set; }                 // Замечания / предложения
-        public DateTime? Received { get; set; } = null;    // Время получения
-        public DateTime? Opened { get; set; } = null;      // Время открытия
-        public DateTime? Answered { get; set; } = null;    // Время действия
+        //public ActTypes Act { get; set; } = ActTypes.Undefined;                    // Тип процесса: подписание, согласование или рецензирование
+        //public AgreementActions Action { get; set; } = AgreementActions.Undefined; // Действие участника 
+        public ActTypes Action { get; set; } = ActTypes.Undefined;                 // Действия участников заменены на типы процессов
+        public AgreementStates State { get; set; } = AgreementStates.Undefined;    // Состояние текущего согласования
 
-        public string SignURL { get; set; }                // Ссылка на файл подписи
-        public int? CertId { get; set; }                   // Идентификатор сертификата используемого для подписания
+        public DateTime? Received { get; set; } = null;                            // Время получения
+        public DateTime? Opened { get; set; } = null;                              // Время открытия
+        public DateTime? Answered { get; set; } = null;                            // Время действия
+
+        public string Remark { get; set; } = string.Empty;                         // Замечания / предложения
+        public string SignURL { get; set; } = string.Empty;                        // Ссылка на файл подписи
+        public int? CertId { get; set; } = null;                                   // Идентификатор сертификата используемого для подписания
     }
 }

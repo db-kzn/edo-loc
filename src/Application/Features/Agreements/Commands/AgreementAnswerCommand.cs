@@ -134,8 +134,8 @@ namespace EDO_FOMS.Application.Features.Agreements.Commands
                 if (cert != null) { agreement.CertId = cert.Id; }
 
                 var members = _unitOfWork.Repository<Agreement>().Entities.Where(a =>
-                    a.DocumentId == agreement.DocumentId && a.Step == agreement.Step && // Документ, Шаг, Основные участники
-                    (a.Action == AgreementActions.ToApprove || a.Action == AgreementActions.ToSign) && // Основные согласованты и подписанты
+                    a.DocumentId == agreement.DocumentId && a.StageNumber == agreement.StageNumber && // Документ, Шаг, Основные участники
+                    (a.Action == ActTypes.Agreement || a.Action == ActTypes.Signing) && // Основные согласованты и подписанты
                     (a.State == AgreementStates.Incoming || a.State == AgreementStates.Received || a.State == AgreementStates.Opened) // Только для не ответивших участников
                     ).ToList();
 
@@ -146,7 +146,7 @@ namespace EDO_FOMS.Application.Features.Agreements.Commands
                     {
                         doc.CurrentStep++;
 
-                        var agreements = _unitOfWork.Repository<Agreement>().Entities.Where(a => a.DocumentId == doc.Id && a.Step == doc.CurrentStep).ToList();
+                        var agreements = _unitOfWork.Repository<Agreement>().Entities.Where(a => a.DocumentId == doc.Id && a.StageNumber == doc.CurrentStep).ToList();
 
                         agreements.ForEach(async a =>
                         {

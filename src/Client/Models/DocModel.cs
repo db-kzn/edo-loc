@@ -27,7 +27,7 @@ namespace EDO_FOMS.Client.Models
         public string TypeShort { get; set; }
 
         public string Number { get; set; }
-        public DateTime Date { get; set; }
+        public DateTime? Date { get; set; }
         public string DateStr { get; set; }
         public string Title { get; set; }
 

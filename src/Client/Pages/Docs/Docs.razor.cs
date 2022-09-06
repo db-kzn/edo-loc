@@ -290,14 +290,16 @@ namespace EDO_FOMS.Client.Pages.Docs
         private async Task OnRowClickAsync() => await ChooseAction(_doc);
         private async Task ChooseAction(DocModel doc)
         {
-            var result = (doc.Stage == DocStages.Draft)
-                ? await AddEditDocAsync(doc)
-                : await ShowInProcessAsync(doc);
-
-            if (!result.Cancelled)
+            if (doc.Stage == DocStages.Draft)
             {
-                await _mudTable.ReloadServerData();
+                AddEditDocAsync(doc);
             }
+            else
+            {
+                _ = await ShowInProcessAsync(doc);
+            }
+
+            //if (!result.Cancelled) { await _mudTable.ReloadServerData(); }
         }
 
         private void AddDocAsync(int id)
@@ -306,41 +308,43 @@ namespace EDO_FOMS.Client.Pages.Docs
             //if (!result.Cancelled) { await _mudTable.ReloadServerData(); }
             _navigationManager.NavigateTo($"/docs/doc-card/{id}/{0}");
         }
-        private async Task<DialogResult> AddEditDocAsync(DocModel doc)
+        private void AddEditDocAsync(DocModel doc)
         {
-            //var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true, DisableBackdropClick = true };
-            var parameters = new DialogParameters()
-            {
-                {
-                    nameof(DraftDialog._doc),
-                    new AddEditDocumentCommand
-                    {
-                        Id = doc.DocId,
-                        EmplId = doc.EmplId,
-                        EmplOrgId = doc.EmplOrgId,
-                        DocParentId = doc.ParentId,
+            _navigationManager.NavigateTo($"/docs/doc-card/{doc.RouteId}/{doc.DocId}");
 
-                        RouteId = doc.RouteId,
-                        Stage = doc.Stage,
+            ////var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true, DisableBackdropClick = true };
+            //var parameters = new DialogParameters()
+            //{
+            //    {
+            //        nameof(DraftDialog._doc),
+            //        new AddEditDocumentCommand
+            //        {
+            //            Id = doc.DocId,
+            //            EmplId = doc.EmplId,
+            //            EmplOrgId = doc.EmplOrgId,
+            //            DocParentId = doc.ParentId,
 
-                        TypeId = doc.TypeId ?? 0,
-                        Number = doc.Number,
-                        Date = doc.Date,
+            //            RouteId = doc.RouteId,
+            //            Stage = doc.Stage,
 
-                        Title = doc.Title,
-                        Description = doc.Description,
-                        IsPublic = doc.IsPublic,
+            //            TypeId = doc.TypeId ?? 0,
+            //            Number = doc.Number,
+            //            Date = doc.Date,
 
-                        CurrentStep = doc.CurrentStep,
-                        TotalSteps = doc.TotalSteps,
-                        UploadRequest = new() { FileName = doc.FileName },
-                        URL = doc.URL
-                    }
-                }
-            };
+            //            Title = doc.Title,
+            //            Description = doc.Description,
+            //            IsPublic = doc.IsPublic,
 
-            var dialog = _dialogService.Show<DraftDialog>("", parameters); //, options
-            return await dialog.Result;
+            //            CurrentStep = doc.CurrentStep,
+            //            TotalSteps = doc.TotalSteps,
+            //            UploadRequest = new() { FileName = doc.FileName },
+            //            URL = doc.URL
+            //        }
+            //    }
+            //};
+
+            //var dialog = _dialogService.Show<DraftDialog>("", parameters); //, options
+            //return await dialog.Result;
         }
         private async Task<DialogResult> ShowInProcessAsync(DocModel doc)
         {
@@ -547,7 +551,7 @@ namespace EDO_FOMS.Client.Pages.Docs
                 TypeShort = d.TypeShort,
                 Number = d.Number,
                 Date = d.Date,
-                DateStr = d.Date.ToString("d"),
+                DateStr = d.Date?.ToString("d") ?? string.Empty,
                 Title = d.Title,
                 Description = d.Description,
                 IsPublic = d.IsPublic,

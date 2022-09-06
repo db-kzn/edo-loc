@@ -93,9 +93,9 @@ internal class SearchAgrsQueryHandler : IRequestHandler<SearchAgrsQuery, Paginat
             DocCreatedOn = e.Document.CreatedOn,
 
             // Данные о согласовании
-            Step = e.Step,
+            Step = e.StageNumber,
             State = (e.Received == null) ? AgreementStates.Received : e.State,
-            Action = e.Action,
+            Action = AgreementActions.Undefined, // e.Action,
             IsCanceled = e.IsCanceled,
 
             CreatedOn = e.CreatedOn,

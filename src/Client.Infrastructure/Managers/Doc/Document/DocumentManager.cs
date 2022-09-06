@@ -18,6 +18,7 @@ using EDO_FOMS.Application.Requests.Agreements;
 using EDO_FOMS.Application.Features.Orgs.Queries;
 using EDO_FOMS.Application.Models.Dir;
 using EDO_FOMS.Application.Features.Documents.Commands;
+using EDO_FOMS.Application.Features.Directories.Queries;
 
 namespace EDO_FOMS.Client.Infrastructure.Managers.Doc.Document
 {
@@ -40,6 +41,12 @@ namespace EDO_FOMS.Client.Infrastructure.Managers.Doc.Document
         {
             var response = await _httpClient.GetAsync(Routes.DocumentsEndpoints.GetDocsPaged(request));
             return await response.ToPaginatedResult<GetDocumentsResponse>();
+        }
+
+        public async Task<IResult<DocCardResponse>> GetDocCardAsync(int id)
+        {
+            var response = await _httpClient.GetAsync(Routes.DocumentsEndpoints.GetDocCard(id));
+            return await response.ToResult<DocCardResponse>();
         }
 
         public async Task<PaginatedResult<GetDocumentsResponse>> SearchDocsAsync(SearchDocsRequest request)

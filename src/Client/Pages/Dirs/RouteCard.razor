@@ -248,15 +248,15 @@
                                         <div class="d-flex flex-row rounded-lg" style="padding: 4px 16px; height: 32px; background-color: var(--mud-palette-background-grey) !important;">
                                             @if (context.ActType == ActTypes.Signing)
                                             {
-                                                <MudIcon Class="mr-2" Color="Color.Error" Icon="@Icons.Material.Outlined.QrCode2" />
+                                                <MudIcon Class="mr-2" Color="Color.Error" Icon="@Icons.Material.Outlined.Draw" />
                                             }
                                             else if (context.ActType == ActTypes.Agreement)
                                             {
-                                                <MudIcon Class="mr-2" Color="Color.Success" Icon="@Icons.Material.Outlined.FactCheck" />
+                                                <MudIcon Class="mr-2" Color="Color.Warning" Icon="@Icons.Material.Outlined.OfflinePin" />
                                             }
                                             else
                                             {
-                                                <MudIcon Class="mr-2" Color="Color.Warning" Icon="@Icons.Material.Outlined.MapsUgc" />
+                                                <MudIcon Class="mr-2" Color="Color.Success" Icon="@Icons.Material.Outlined.MapsUgc" />
                                             }
 
                                             <MudText Style="vertical-align: middle;">

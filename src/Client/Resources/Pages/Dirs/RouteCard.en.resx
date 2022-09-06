@@ -144,6 +144,9 @@
   <data name="Check" xml:space="preserve">
     <value>Check</value>
   </data>
+  <data name="Code" xml:space="preserve">
+    <value>Code</value>
+  </data>
   <data name="Code MO" xml:space="preserve">
     <value>Code MO</value>
   </data>

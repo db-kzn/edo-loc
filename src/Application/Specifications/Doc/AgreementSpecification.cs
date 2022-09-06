@@ -53,11 +53,11 @@ public class AgreementSpecification : EdoFomsSpecification<Agreement>
             Criteria = Criteria.And(c);
         }
 
-        if (request.AgrActions?.Length > 0 && request.AgrActions?.Length < 4)
-        {
-            Expression<Func<Agreement, bool>> c = p => request.AgrActions.Contains(p.Action);
-            Criteria = Criteria.And(c);
-        }
+        //if (request.AgrActions?.Length > 0 && request.AgrActions?.Length < 4)
+        //{
+        //    Expression<Func<Agreement, bool>> c = p => request.AgrActions.Contains(p.Action);
+        //    Criteria = Criteria.And(c);
+        //}
 
         if (request.DocTypeIds.Length == 1)
         {

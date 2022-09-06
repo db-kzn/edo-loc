@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EDO_FOMS.Infrastructure.Migrations
 {
     [DbContext(typeof(EdoFomsContext))]
-    [Migration("20220830142511_RouterBuilder")]
-    partial class RouterBuilder
+    [Migration("20220906104723_RouteBuilder")]
+    partial class RouteBuilder
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -590,7 +590,13 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.Property<string>("EmplId")
                         .HasColumnType("text");
 
+                    b.Property<bool>("IsAdditional")
+                        .HasColumnType("boolean");
+
                     b.Property<bool>("IsCanceled")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsRequired")
                         .HasColumnType("boolean");
 
                     b.Property<string>("LastModifiedBy")
@@ -598,6 +604,9 @@ namespace EDO_FOMS.Infrastructure.Migrations
 
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("OmsCode")
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("Opened")
                         .HasColumnType("timestamp with time zone");
@@ -617,13 +626,16 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.Property<string>("Remark")
                         .HasColumnType("text");
 
+                    b.Property<int?>("RouteStepId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("SignURL")
                         .HasColumnType("text");
 
-                    b.Property<int>("State")
+                    b.Property<int>("StageNumber")
                         .HasColumnType("integer");
 
-                    b.Property<int>("Step")
+                    b.Property<int>("State")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -696,7 +708,7 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.Property<int>("CurrentStep")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTime?>("Date")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")

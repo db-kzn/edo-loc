@@ -59,9 +59,9 @@ namespace EDO_FOMS.Application.Features.Agreements.Commands
                     OrgId = agreement.OrgId,
                     ParentId = command.Id,
 
-                    Step = agreement.Step,
+                    StageNumber = agreement.StageNumber,
                     State = AgreementStates.Incoming,
-                    Action = AgreementActions.ToReview,
+                    Action = ActTypes.Review,//AgreementActions.ToReview,
                     IsCanceled = agreement.IsCanceled
 
                     // Remark // Time // URL

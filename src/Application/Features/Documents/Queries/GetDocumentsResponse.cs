@@ -14,7 +14,7 @@ namespace EDO_FOMS.Application.Features.Documents.Queries
         public string TypeName { get; set; }
         public string TypeShort { get; set; }
         public string Number { get; set; } = "";
-        public DateTime Date { get; set; } = DateTime.Today;
+        public DateTime? Date { get; set; } = DateTime.Today;
 
         public string Title { get; set; } = "";
         public string Description { get; set; } = "";

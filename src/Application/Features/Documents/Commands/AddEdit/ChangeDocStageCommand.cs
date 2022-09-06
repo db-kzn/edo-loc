@@ -117,7 +117,7 @@ namespace EDO_FOMS.Application.Features.Documents.Commands.AddEdit
                         EmplId = a.EmplId,
                         OrgId = a.OrgId,
 
-                        Step = a.Step,
+                        StageNumber = a.StageNumber,
                         State = AgreementStates.Undefined,
                         Action = a.Action
 
@@ -133,13 +133,13 @@ namespace EDO_FOMS.Application.Features.Documents.Commands.AddEdit
 
                 // Если на первом шаге нет согласовантов, то перейти ко второму
                 var count = 0;
-                agreements.ForEach((a) => { if (a.Step == 1) { count++; } });
+                agreements.ForEach((a) => { if (a.StageNumber == 1) { count++; } });
                 doc.CurrentStep = (count != 0) ? 1 : 2;
 
                 // Определить статус для контактов текущего шага - входящие, последующие - ожидание
                 agreements.ForEach(async a => {
-                    a.State = (a.Action == AgreementActions.ToRun) ? AgreementStates.Control :
-                              (a.Step == doc.CurrentStep) ? AgreementStates.Incoming : AgreementStates.Expecting;
+                    a.State = (a.Action == ActTypes.Executing) ? AgreementStates.Control :
+                              (a.StageNumber == doc.CurrentStep) ? AgreementStates.Incoming : AgreementStates.Expecting;
 
                     await _unitOfWork.Repository<Agreement>().UpdateAsync(a);
 
