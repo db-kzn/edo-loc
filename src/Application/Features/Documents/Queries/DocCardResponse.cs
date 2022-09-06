@@ -15,26 +15,26 @@ namespace EDO_FOMS.Application.Features.Documents.Queries
         public int Id { get; set; } = 0;                                           // 0 - Новый документ
         public int? PreviousId { get; set; }                                       // Предыдущая версия документа
         public int? ParentId { get; set; }                                         // Родительский документ
+        public int RouteId { get; set; } = 0;                                      // Маршрут документа. 0 - не определен
 
         public string EmplId { get; set; }                                         //  Инициатор подписания
         public int EmplOrgId { get; set; }                                         // Организация инициатора
         public string ExecutorId { get; set; }                                     // Исполнитель
         public ContactResponse Executor { get; set; }
 
+        public bool IsPublic { get; set; } = false;                                // Публичный документ - виден всем сотрудникам Организации
         public int TypeId { get; set; } = 0;                                       // Вид документа: 0 - не определен, 1 - Договор, 2 - Приложение  
-        public string TypeName { get; set; } = string.Empty;                       // Наименование вида документа
-        public string TypeShort { get; set; } = string.Empty;                      // Кратко вид документа
+        //public string TypeName { get; set; } = string.Empty;                       // Наименование вида документа
+        //public string TypeShort { get; set; } = string.Empty;                      // Кратко вид документа
+
         public string Number { get; set; } = string.Empty;                         // Номер документа
         public DateTime? Date { get; set; } = null;                                // Дата документа
-
         public string Title { get; set; } = string.Empty;                          // Наименование
         public string Description { get; set; } = string.Empty;                    // Описание
-        public bool IsPublic { get; set; } = false;                                // Публичный документ - виден всем сотрудникам Организации
 
-        public int RouteId { get; set; } = 0;                                      // Маршрут документа. 0 - не определен
-        public DocStages Stage { get; set; } = DocStages.Undefined;                // Статус документа:
-        public int CurrentStep { get; set; } = 0;                                  // Текущий этап подписания StageNumber
-        public int TotalSteps { get; set; } = 0;                                   // Всего этапов в маршруте
+        //public DocStages Stage { get; set; } = DocStages.Undefined;                // Статус документа:
+        //public int CurrentStep { get; set; } = 0;                                  // Текущий этап подписания StageNumber
+        //public int TotalSteps { get; set; } = 0;                                   // Всего этапов в маршруте
 
         public string URL { get; set; } = string.Empty;                            // Ссылка для загрузки
         public string FileName { get; set; } = string.Empty;                       // Наименование файла

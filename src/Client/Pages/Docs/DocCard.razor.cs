@@ -10,7 +10,6 @@ using EDO_FOMS.Client.Infrastructure.Managers.Dir;
 using EDO_FOMS.Client.Infrastructure.Managers.Doc.Document;
 using EDO_FOMS.Client.Infrastructure.Managers.Doc.DocumentType;
 using EDO_FOMS.Client.Models;
-using EDO_FOMS.Client.Pages.Dirs;
 using EDO_FOMS.Domain.Enums;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
@@ -20,7 +19,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection.Emit;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -56,7 +54,7 @@ namespace EDO_FOMS.Client.Pages.Docs
         private ClaimsPrincipal _authUser;
         private string userId;
 
-        private IBrowserFile _file;
+        private IBrowserFile _file = null;
         private bool onUpload = false;
 
         private int tz;
@@ -223,24 +221,26 @@ namespace EDO_FOMS.Client.Pages.Docs
 
             var doc = response.Data;
 
-            // From System :                       EmplId, EmplOrgId
-            // From Route :                        RouteId, TotalSteps
-            // AddEditDocCommand |> DocCardModel : PreviousId
-
             Doc.Id = doc.Id;
+            // AddEditDocCommand |> DocCardModel : PreviousId
             Doc.ParentId = doc.ParentId;
+            if (RouteId != doc.RouteId) { } // Error !!
 
-            Doc.TypeId = doc.TypeId;
-            Doc.Date = doc.Date;
-
-            // May be from Route ?
+            // From System :                       EmplId, EmplOrgId
             Doc.ExecutorId = doc.ExecutorId;
             Executor = doc.Executor;
 
-            Doc.Description = doc.Description;
             Doc.IsPublic = doc.IsPublic;
+            Doc.TypeId = doc.TypeId;
 
-            //Doc.CurrentStep = 0;
+            Doc.Number = doc.Number;
+            Doc.Date = doc.Date;
+            Doc.Title = doc.Title;
+            Doc.Description = doc.Description;
+
+            // Draft:                              Stage = Draft, CurrentStep = 0;
+            // From Route :                        TotalSteps
+
             Doc.URL = doc.URL;
             Doc.UploadRequest = new() { FileName = doc.FileName };
 
@@ -324,23 +324,11 @@ namespace EDO_FOMS.Client.Pages.Docs
                 act.Members.Add(member);
             }
         }
-
         private static void DelContact(DocActModel act, MudChip chip)
         {
             var member = act.Members.Find(m => m.Label == chip.Text);
             act.Members.Remove(member);
         }
-
-        //private static ContactResponse CloneContact(ContactResponse c) => new()
-        //{
-        //    Id = c.Id,
-        //    OrgId = c.OrgId,
-        //    InnLe = c.InnLe,
-
-        //    Surname = c.Surname,
-        //    GivenName = c.GivenName
-        //};
-
         private static string ContactName(ContactResponse c) =>
             $"[{(string.IsNullOrWhiteSpace(c.OrgShortName) ? c.InnLe : c.OrgShortName)}] {c.Surname} {c.GivenName}";
 
@@ -358,13 +346,12 @@ namespace EDO_FOMS.Client.Pages.Docs
             $"{_localizer["of the"]} {_localizer[step.OrgType.ToString()]}";
         private List<DocActModel> ActsByStage(int stageNumber) => Acts.Where(a => a.Step.StageNumber == stageNumber).ToList();
 
-        private void Close() => NavigateToDocs();
         private async Task SendAsync() => await SaveAsync(1);
         private async Task SaveAsync(int stageNumber = 0) // 0 - Draft, 1 - Send
         {
             var errors = 0;
 
-            if (stageNumber == 1 && (_file == null || string.IsNullOrEmpty(_file.Name)))
+            if (stageNumber == 1 && ((Doc.Id == 0 && _file == null) || (Doc.Id > 0 && _file == null && string.IsNullOrEmpty(Doc.URL))))
             {
                 errors++;
                 _snackBar.Add($"{_localizer["Doc File Required"]}", Severity.Warning);
@@ -448,16 +435,6 @@ namespace EDO_FOMS.Client.Pages.Docs
                 EmplId = m.Contact.Id
             };
         }
-        private static string ActTypesIcon(ActTypes act)
-        {
-            return act switch
-            {
-                ActTypes.Signing => Icons.Material.Outlined.Draw,
-                ActTypes.Agreement => Icons.Material.Outlined.OfflinePin,
-                ActTypes.Review => Icons.Material.Outlined.MapsUgc,
-                _ => Icons.Material.Outlined.Circle
-            };
-        }
 
         private async Task UploadFiles(InputFileChangeEventArgs e)
         {
@@ -498,5 +475,16 @@ namespace EDO_FOMS.Client.Pages.Docs
                 Extension = Path.GetExtension(_file.Name)
             };
         }
+        private static string ActTypesIcon(ActTypes act)
+        {
+            return act switch
+            {
+                ActTypes.Signing => Icons.Material.Outlined.Draw,
+                ActTypes.Agreement => Icons.Material.Outlined.OfflinePin,
+                ActTypes.Review => Icons.Material.Outlined.MapsUgc,
+                _ => Icons.Material.Outlined.Circle
+            };
+        }
+        private void Close() => NavigateToDocs();
     }
 }

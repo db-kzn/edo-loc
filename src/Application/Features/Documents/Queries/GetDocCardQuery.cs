@@ -38,7 +38,7 @@ internal class GetDocCardQueryHandler : IRequestHandler<GetDocCardQuery, Result<
 
     public async Task<Result<DocCardResponse>> Handle(GetDocCardQuery request, CancellationToken cancellationToken)
     {
-        var docs = _unitOfWork.Repository<Document>().Entities.Include(d => d.Agreements).Include(d => d.Type); //.Include(d => d.PacketFiles);
+        var docs = _unitOfWork.Repository<Document>().Entities.Include(d => d.Agreements); //.Include(d => d.PacketFiles);//.Include(d => d.Type);
 
         var doc = await docs.FirstOrDefaultAsync(d => d.Id == request.Id, cancellationToken: cancellationToken);
 
@@ -51,26 +51,26 @@ internal class GetDocCardQueryHandler : IRequestHandler<GetDocCardQuery, Result<
             Id = doc.Id,
             PreviousId = doc.PreviousId,
             ParentId = doc.ParentId,
+            RouteId = doc.RouteId,
 
             EmplId = doc.EmplId,
             EmplOrgId = doc.EmplOrgId,
             ExecutorId = doc.ExecutorId,
             Executor = await _userService.GetContactAsync(doc.ExecutorId),
 
+            IsPublic = doc.IsPublic,
             TypeId = doc.TypeId,
-            TypeName = doc.Type.Name,
-            TypeShort = doc.Type.Short,
+            //TypeName = doc.Type.Name,
+            //TypeShort = doc.Type.Short,
+
             Number = doc.Number,
             Date = doc.Date,
-
             Title = doc.Title,
             Description = doc.Description,
-            IsPublic = doc.IsPublic,
 
-            RouteId = doc.RouteId,
-            Stage = doc.Stage,
-            CurrentStep = doc.CurrentStep,
-            TotalSteps = doc.TotalSteps,
+            //Stage = doc.Stage,
+            //CurrentStep = doc.CurrentStep,
+            //TotalSteps = doc.TotalSteps,
 
             URL = doc.URL,
             FileName = doc.FileName

@@ -296,10 +296,9 @@ namespace EDO_FOMS.Client.Pages.Docs
             }
             else
             {
-                _ = await ShowInProcessAsync(doc);
+                var result = await ShowInProcessAsync(doc);
+                if (!result.Cancelled) { await _mudTable.ReloadServerData(); }
             }
-
-            //if (!result.Cancelled) { await _mudTable.ReloadServerData(); }
         }
 
         private void AddDocAsync(int id)
