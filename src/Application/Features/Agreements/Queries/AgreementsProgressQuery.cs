@@ -102,7 +102,7 @@ namespace EDO_FOMS.Application.Features.Agreements.Queries
 
                     Step = a.StageNumber,
                     State = a.State,
-                    Action = AgreementActions.Undefined,// a.Action,
+                    Action = a.Action,
                     IsCanceled = a.IsCanceled,
 
                     CreatedOn = a.CreatedOn,

@@ -132,6 +132,9 @@
   <data name="Agreed By All" xml:space="preserve">
     <value>Подписан всеми</value>
   </data>
+  <data name="Agreement" xml:space="preserve">
+    <value>Согласовать</value>
+  </data>
   <data name="Answered" xml:space="preserve">
     <value>Рассмотрен</value>
   </data>

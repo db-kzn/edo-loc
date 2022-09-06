@@ -56,7 +56,7 @@ public class GetAgreementsResponse
     // Данные о согласовании
     public int Step { get; set; } // Порядковый номер этапа подписания документа
     public AgreementStates State { get; set; } = AgreementStates.Undefined; // Обновляется после прохождения этапа
-    public AgreementActions Action { get; set; }
+    public ActTypes Action { get; set; }
     public bool IsCanceled { get; set; } = false;       // Отмененное согласование
 
     public DateTime CreatedOn { get; set; }             // Время создания

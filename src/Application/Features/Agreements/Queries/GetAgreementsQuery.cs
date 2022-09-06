@@ -85,7 +85,7 @@ internal class GetDocumentsQueryHandler : IRequestHandler<GetAgreementsQuery, Pa
             // Данные о согласовании
             Step = e.StageNumber,
             State = (e.Received == null) ? AgreementStates.Received : e.State,
-            Action = AgreementActions.Undefined, // e.Action,
+            Action = e.Action,
             IsCanceled = e.IsCanceled,
 
             CreatedOn = e.CreatedOn,

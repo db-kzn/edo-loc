@@ -463,7 +463,7 @@ namespace EDO_FOMS.Client.Pages.Progress
         private async Task SignSelectedItemsAsync()
         {
             //if (_selectedItems?.Where(i => i.Action == AgreementActions.ToSign && !i.ActionBlocked).Any() == false) return;
-            var agrs = _selectedItems.Where(i => i.Action == AgreementActions.ToSign && !i.ActionBlocked).ToArray();
+            var agrs = _selectedItems.Where(i => i.Action == ActTypes.Signing && !i.ActionBlocked).ToArray();
             await _jsRuntime.InvokeVoidAsync("azino.Console", agrs, "AGRS: ");
 
             var parameters = new DialogParameters() {{ nameof(ItemsToSignDialog.Agrs), agrs }};

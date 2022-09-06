@@ -130,7 +130,7 @@
     <value>Подписанный</value>
   </data>
   <data name="Agreement" xml:space="preserve">
-    <value>Доп.соглашение</value>
+    <value>Согласование</value>
   </data>
   <data name="Apply" xml:space="preserve">
     <value>Применить</value>
@@ -236,6 +236,9 @@
   </data>
   <data name="Reset" xml:space="preserve">
     <value>Сбросить</value>
+  </data>
+  <data name="Review" xml:space="preserve">
+    <value>Рецензирование</value>
   </data>
   <data name="Route" xml:space="preserve">
     <value>Маршрут</value>

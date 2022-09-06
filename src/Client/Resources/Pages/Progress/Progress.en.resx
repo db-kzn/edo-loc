@@ -237,6 +237,9 @@
   <data name="Reset" xml:space="preserve">
     <value>Reset</value>
   </data>
+  <data name="Review" xml:space="preserve">
+    <value>Review</value>
+  </data>
   <data name="Route" xml:space="preserve">
     <value>Route</value>
   </data>

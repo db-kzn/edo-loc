@@ -68,14 +68,14 @@
                                 @_localizer["Members"]
                         </MudListItem>
 
-                        @if (context.Action == AgreementActions.ToSign || context.Action == AgreementActions.ToApprove)
+                        @if (context.Action == ActTypes.Signing || context.Action == ActTypes.Agreement)
                         {
                             <MudListItem Icon="@Icons.Material.TwoTone.Draw" IconColor="Color.Success"
                                 OnClick="(() => SignAnAgreementAsync(context))">
                                 @_localizer["To Signed"]
                             </MudListItem>
                         }
-                        else if (context.Action == AgreementActions.ToReview)
+                        else if (context.Action == ActTypes.Review)
                         {
                             <MudListItem Icon="@Icons.Material.TwoTone.Done" IconColor="Color.Success"
                                 OnClick="(() => ApproveAnAgreementAsync(context))">

@@ -123,25 +123,25 @@
                             </MudTd>
                             
                             <MudTd DataLabel="@_localizer["Action"]">
-                                @if(context.Action == AgreementActions.ToSign)
+                                @if(context.Action == ActTypes.Signing)
                                 {
                                     <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["To Sign"]" Placement="Placement.Left" Color="Color.Tertiary">
                                         <MudIcon Icon="@Icons.Material.Outlined.Draw" Color="Color.Default" Class="mx-2"/>
                                     </MudTooltip>
                                 }
-                                else if(context.Action == AgreementActions.ToApprove)
+                                else if(context.Action == ActTypes.Agreement)
                                 {
                                     <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["To Approve"]" Placement="Placement.Left" Color="Color.Tertiary">
                                         <MudIcon Icon="@Icons.Material.Outlined.Rule" Color="Color.Default" Class="mx-2"/>
                                     </MudTooltip>
                                 }
-                                else if(context.Action == AgreementActions.ToReview)
+                                else if(context.Action == ActTypes.Review)
                                 {
                                     <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["To Check"]" Placement="Placement.Left" Color="Color.Tertiary">
                                             <MudIcon Icon="@Icons.Material.Outlined.AddTask" Color="Color.Default" Class="mx-2"/>
                                     </MudTooltip>
                                 }
-                                else if(context.Action == AgreementActions.ToRun)
+                            else if (context.Action == ActTypes.Executing || context.Action == ActTypes.Initiation)
                                 {
                                     <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["To Run"]" Placement="Placement.Left" Color="Color.Tertiary">
                                             <MudIcon Icon="@Icons.Material.Outlined.PlayCircle" Color="Color.Default" Class="mx-2"/>

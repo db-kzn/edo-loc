@@ -50,7 +50,7 @@ namespace EDO_FOMS.Client.Pages
                 {
                     _isAnswered = !(a.State == AgreementStates.Incoming || a.State == AgreementStates.Received
                         || a.State == AgreementStates.Opened) || Doc.Stage == DocStages.Archive;
-                    _isMain = (a.Action == AgreementActions.ToApprove || a.Action == AgreementActions.ToSign);
+                    _isMain = (a.Action == ActTypes.Agreement || a.Action == ActTypes.Signing);
                     _action = a.Action.ToString();
                 }
             }
@@ -82,11 +82,23 @@ namespace EDO_FOMS.Client.Pages
 
         private void ClickOk() => MudDialog.Close(DialogResult.Cancel());
 
-        private void ClickAgree() => MudDialog.Close(DialogResult.Ok(_action));
+        private void ClickAgree()
+        {
+            var state = (_action == nameof(ActTypes.Agreement)) ?
+                nameof(AgreementActions.ToApprove) :
+                (_action == nameof(ActTypes.Signing)) ?
+                nameof(AgreementActions.ToSign) :
+                nameof(AgreementActions.ToReview);
 
-        private void ClickReject() {
-            var state = (_action == nameof(AgreementActions.ToSign) || _action == nameof(AgreementActions.ToApprove))
-                ? nameof(AgreementActions.ToReject) : nameof(AgreementActions.ToRefuse);
+            MudDialog.Close(DialogResult.Ok(state));
+        }
+
+        private void ClickReject()
+        {
+            var state = (_action == nameof(ActTypes.Signing) || _action == nameof(ActTypes.Agreement))
+                ? nameof(AgreementActions.ToReject)
+                : nameof(AgreementActions.ToRefuse);
+
             MudDialog.Close(DialogResult.Ok(state));
         }
 

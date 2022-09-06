@@ -59,7 +59,7 @@ namespace EDO_FOMS.Client.Models
         // Данные о согласовании
         public int Step { get; set; } // Порядковый номер этапа подписания документа
         public AgreementStates State { get; set; } = AgreementStates.Undefined; // Обновляется после прохождения этапа
-        public AgreementActions Action { get; set; }
+        public ActTypes Action { get; set; }
         public bool ActionBlocked { get; set; }
         public string ActionName { get; set; }
         public bool IsCanceled { get; set; } = false;       // Отмененное согласование

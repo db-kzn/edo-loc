@@ -106,13 +106,13 @@
 
             <MudTd DataLabel="@_localizer["Action"]">
                 <div class="d-flex flex-row" style="height: 24px;">
-                    @if(context.Action == AgreementActions.ToSign)
+                    @if(context.Action == ActTypes.Signing)
                     { <MudIcon Icon="@Icons.Material.Outlined.Draw" Color="Color.Success" Class="mr-2"/> }
-                    else if(context.Action == AgreementActions.ToApprove)
+                    else if(context.Action == ActTypes.Agreement)
                     { <MudIcon Icon="@Icons.Material.Outlined.Rule" Color="Color.Error" Class="mr-2"/> }
-                    else if(context.Action == AgreementActions.ToReview)
+                    else if(context.Action == ActTypes.Review)
                     { <MudIcon Icon="@Icons.Material.Outlined.AddTask" Color="Color.Warning" Class="mr-2"/> }
-                    else if(context.Action == AgreementActions.ToRun)
+                    else if(context.Action == ActTypes.Executing || context.Action == ActTypes.Initiation)
                     { <MudIcon Icon="@Icons.Material.Outlined.PlayCircle" Color="Color.Tertiary" Class="mr-2"/> }
                     @context.ActionName
                 </div>
