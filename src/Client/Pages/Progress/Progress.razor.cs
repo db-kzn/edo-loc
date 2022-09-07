@@ -120,10 +120,7 @@ namespace EDO_FOMS.Client.Pages.Progress
             _stateService.FilterIsOpen = openFilter;
         }
 
-        private async Task ApplyFilter()
-        {
-            await _mudTable.ReloadServerData();
-        }
+        private async Task ApplyFilter() => await _mudTable.ReloadServerData();
         private async Task Renew()
         {
             FilterReset();
@@ -349,9 +346,13 @@ namespace EDO_FOMS.Client.Pages.Progress
             await _jsRuntime.InvokeVoidAsync("azino.Console", true, "Start To Sign: ");
 
             var thumbprint = await _localStorage.GetItemAsync<string>(StorageConstants.Local.UserThumbprint);
+            await _jsRuntime.InvokeVoidAsync("azino.Console", thumbprint, "User Thumbprint: ");
 
             var base64 = await DocManager.GetBase64Async(agreement.DocURL);
+            await _jsRuntime.InvokeVoidAsync("azino.Console", base64, "Doc Base64: ");
+
             var sign = await _jsRuntime.InvokeAsync<string>("azino.SignCadesBES", thumbprint, base64, agreement.DocTitle);
+            await _jsRuntime.InvokeVoidAsync("azino.Console", sign, "Sign: ");
 
             //await _jsRuntime.InvokeVoidAsync("azino.Console", sign, "SIGN :");
             //await _jsRuntime.InvokeVoidAsync("azino.Console", agreement, "Agreement :");

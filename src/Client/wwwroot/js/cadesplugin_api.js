@@ -1,6 +1,7 @@
 ;(function () {
     //already loaded
-    if (window.cadesplugin) { return; }
+    if(window.cadesplugin)
+        return;
 
     var pluginObject;
     var plugin_resolved = 0;
@@ -98,7 +99,9 @@
         cadesplugin.CADESCOM_CONTAINER_STORE = 100;
 
         cadesplugin.CAPICOM_MY_STORE = "My";
+
         cadesplugin.CAPICOM_STORE_OPEN_MAXIMUM_ALLOWED = 2;
+
         cadesplugin.CAPICOM_CERTIFICATE_FIND_SUBJECT_NAME = 1;
 
         cadesplugin.CADESCOM_XML_SIGNATURE_TYPE_ENVELOPED = 0;
@@ -467,7 +470,7 @@
             var ovr = document.createElement('div');
             ovr.id = "cadesplugin_ovr";
             ovr.style = "visibility: hidden; position: fixed; left: 0px; top: 0px; width:100%; height:100%; background-color: rgba(0,0,0,0.7)";
-            ovr.innerHTML = "<div id='cadesplugin_ovr_item' style='position:relative; width:400px; margin:100px auto; background-color:#fff; border:2px solid #000; padding:10px; text-align:center; opacity: 1; z-index: 1500'>" +
+            ovr.innerHTML = "<div id='cadesplugin_ovr_item' style='position:relative; max-width:400px; margin:100px auto; background-color:#fff; border:2px solid #000; padding:10px; text-align:center; opacity: 1; z-index: 1500'>" +
                 "<button id='cadesplugin_close_install' style='float: right; font-size: 10px; background: transparent; border: 1; margin: -5px'>X</button>" +
                 "<p>Для работы КриптоПро ЭЦП Browser plugin на данном сайте необходимо расширение для браузера. Убедитесь, что оно у Вас включено или установите его." +
                 "<p><a href='https://www.cryptopro.ru/sites/default/files/products/cades/extensions/firefox_cryptopro_extension_latest.xpi'>Скачать расширение</a></p>" +
@@ -509,8 +512,7 @@
             {
                 // Для Firefox, Сафари вместе с сообщением cadesplugin_loaded прилетает url для загрузки nmcades_plugin_api.js
                 var url = event.data.substring(event.data.indexOf("url:") + 4);
-                if (!url.match("^moz-extension://[a-zA-Z0-9-]+/nmcades_plugin_api.js$")
-                    && !url.match("^safari-extension://[a-zA-Z0-9-]+/[a-zA-Z0-9]+/nmcades_plugin_api.js$"))
+                if (!url.match("^(moz|safari)-extension://[a-zA-Z0-9/_-]+/nmcades_plugin_api.js$"))
                 {
                     cpcsp_console_log(cadesplugin.LOG_LEVEL_ERROR, "Bad url \"" + url + "\" for load CryptoPro Extension for CAdES Browser plug-in");
                     plugin_loaded_error();
@@ -706,7 +708,7 @@
     };
 
     //Export
-    cadesplugin.JSModuleVersion = "2.3.2";
+    cadesplugin.JSModuleVersion = "2.3.3";
     cadesplugin.async_spawn = async_spawn;
     cadesplugin.set = set_pluginObject;
     cadesplugin.set_log_level = set_log_level;

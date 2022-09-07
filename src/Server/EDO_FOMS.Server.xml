@@ -240,7 +240,7 @@
             <param name="command"></param>
             <returns>Status 200 OK</returns>
         </member>
-        <member name="M:EDO_FOMS.Server.Controllers.Docums.DocumentsController.Post(EDO_FOMS.Application.Features.Documents.Commands.AddEdit.ChangeDocStageCommand)">
+        <member name="M:EDO_FOMS.Server.Controllers.Docums.DocumentsController.Post(EDO_FOMS.Application.Features.Documents.Commands.ChangeDocStageCommand)">
             <summary>
             Change Document Stage
             </summary>

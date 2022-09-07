@@ -40,11 +40,11 @@ namespace EDO_FOMS.Domain.Entities.Doc
 
         public int CurrentStep { get; set; }                              // Текущий этап подписания
         public int TotalSteps { get; set; }                               // Всего этапов подписания
+        public int Version { get; set; }                                  // Номер попытки прохождения документа
 
         public string URL { get; set; }
         public string StoragePath { get; set; }
         public string FileName { get; set; }
-        public int Version { get; set; }                                  // Номер попытки прохождения документа
 
         //public bool IsPackage { get; set; } = false;                      // Является пакетом документов, а не единичным файлом
         //public bool CalcHash { get; set; } = false;                       // Рассчитывать хэш документа

@@ -17,6 +17,10 @@ namespace EDO_FOMS.Application.Features.Agreements.Commands
     public partial class AddAgreementMembersCommand : IRequest<Result<int>>
     {
         public int Id { get; set; }
+        public bool IsRequired { get; set; }
+        public bool IsAdditional { get; set; }
+        public ActTypes Action { get; set; }
+
         public List<string> Members { get; set; }
     }
 
@@ -55,14 +59,21 @@ namespace EDO_FOMS.Application.Features.Agreements.Commands
                 Agreement a = new()
                 {
                     DocumentId = agreement.DocumentId,
-                    EmplId = emplId,
-                    OrgId = agreement.OrgId,
                     ParentId = command.Id,
-
+                    RouteStepId = agreement.RouteStepId,
                     StageNumber = agreement.StageNumber,
+
+                    OmsCode = agreement.OmsCode,
+                    OrgInn = agreement.OrgInn,
+                    OrgId = agreement.OrgId,
+                    EmplId = emplId,
+
+                    IsRequired = command.IsRequired,
+                    IsCanceled = agreement.IsCanceled,
+                    IsAdditional = command.IsAdditional,
+
+                    Action = command.Action, // ActTypes.Review,//AgreementActions.ToReview,
                     State = AgreementStates.Incoming,
-                    Action = ActTypes.Review,//AgreementActions.ToReview,
-                    IsCanceled = agreement.IsCanceled
 
                     // Remark // Time // URL
                 };

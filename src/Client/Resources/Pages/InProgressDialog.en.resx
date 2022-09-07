@@ -222,6 +222,9 @@
   <data name="Signed" xml:space="preserve">
     <value>Signed</value>
   </data>
+  <data name="Signing" xml:space="preserve">
+    <value>Signing</value>
+  </data>
   <data name="SMO" xml:space="preserve">
     <value>SMO</value>
   </data>

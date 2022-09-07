@@ -113,10 +113,7 @@ internal class AddEditDocumentCommandHandler : IRequestHandler<AddEditDocumentCo
         doc.Version = 1;
         doc.StoragePath = "";
 
-        if (command.UploadRequest != null)
-        {
-            Upload(ref doc, command.UploadRequest);
-        }
+        if (command.UploadRequest != null) { Upload(ref doc, command.UploadRequest); }
 
         var contacts = command.Contacts;
 
@@ -283,15 +280,15 @@ internal class AddEditDocumentCommandHandler : IRequestHandler<AddEditDocumentCo
 
         return await Result<int>.SuccessAsync(doc.Id, _localizer["Document Updated"]);
     }
-    private void Upload(ref Document d, UploadRequest request)
+    private void Upload(ref Document doc, UploadRequest request)
     {
         if (request.Data != null)
         {
-            var uploadResult = _uploadService.UploadDoc(request, d.Version, d.StoragePath);
+            var uploadResult = _uploadService.UploadDoc(request, doc.Version, doc.StoragePath);
 
-            d.URL = uploadResult?.URL ?? "";
-            d.StoragePath = uploadResult?.StoragePath ?? "";
-            d.FileName = uploadResult?.FileName ?? "";
+            doc.URL = uploadResult?.URL ?? "";
+            doc.StoragePath = uploadResult?.StoragePath ?? "";
+            doc.FileName = uploadResult?.FileName ?? "";
         }
     }
 }

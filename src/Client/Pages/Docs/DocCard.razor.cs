@@ -227,8 +227,8 @@ namespace EDO_FOMS.Client.Pages.Docs
             if (RouteId != doc.RouteId) { } // Error !!
 
             // From System :                       EmplId, EmplOrgId
-            Doc.ExecutorId = doc.ExecutorId;
-            Executor = doc.Executor;
+            //Doc.ExecutorId = doc.ExecutorId;
+            if (Route.Executor is null) { Executor = doc.Executor; }
 
             Doc.IsPublic = doc.IsPublic;
             Doc.TypeId = doc.TypeId;

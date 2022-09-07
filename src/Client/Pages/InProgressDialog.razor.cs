@@ -50,7 +50,9 @@ namespace EDO_FOMS.Client.Pages
                 {
                     _isAnswered = !(a.State == AgreementStates.Incoming || a.State == AgreementStates.Received
                         || a.State == AgreementStates.Opened) || Doc.Stage == DocStages.Archive;
+
                     _isMain = (a.Action == ActTypes.Agreement || a.Action == ActTypes.Signing);
+
                     _action = a.Action.ToString();
                 }
             }

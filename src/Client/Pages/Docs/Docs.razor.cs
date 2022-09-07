@@ -1,4 +1,5 @@
-﻿using EDO_FOMS.Application.Features.Documents.Commands.AddEdit;
+﻿using EDO_FOMS.Application.Features.Documents.Commands;
+using EDO_FOMS.Application.Features.Documents.Commands.AddEdit;
 using EDO_FOMS.Application.Features.Documents.Queries;
 using EDO_FOMS.Application.Features.Orgs.Queries;
 using EDO_FOMS.Application.Models.Dir;
@@ -301,11 +302,11 @@ namespace EDO_FOMS.Client.Pages.Docs
             }
         }
 
-        private void AddDocAsync(int id)
+        private void AddDocAsync(int routeId)
         {
             //var result = await AddEditDocAsync(new(1, DateTime.Today));
             //if (!result.Cancelled) { await _mudTable.ReloadServerData(); }
-            _navigationManager.NavigateTo($"/docs/doc-card/{id}/{0}");
+            _navigationManager.NavigateTo($"/docs/doc-card/{routeId}/{0}");
         }
         private void AddEditDocAsync(DocModel doc)
         {

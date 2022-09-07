@@ -180,6 +180,9 @@
   <data name="Employee" xml:space="preserve">
     <value>Employee</value>
   </data>
+  <data name="Executing" xml:space="preserve">
+    <value>Executing</value>
+  </data>
   <data name="File Name" xml:space="preserve">
     <value>File Name</value>
   </data>
@@ -194,6 +197,9 @@
   </data>
   <data name="Inbox" xml:space="preserve">
     <value>Inbox</value>
+  </data>
+  <data name="Initiation" xml:space="preserve">
+    <value>Initiation</value>
   </data>
   <data name="InProgress" xml:space="preserve">
     <value>На подписании</value>
@@ -251,6 +257,9 @@
   </data>
   <data name="Search For Agreements" xml:space="preserve">
     <value>Search For Agreements</value>
+  </data>
+  <data name="Signing" xml:space="preserve">
+    <value>Signing</value>
   </data>
   <data name="Signing failed" xml:space="preserve">
     <value>Signing failed</value>

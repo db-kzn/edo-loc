@@ -2,6 +2,7 @@
 using EDO_FOMS.Application.Responses.Docums;
 using EDO_FOMS.Client.Infrastructure.Managers.Doc.Document;
 using EDO_FOMS.Client.Models;
+using EDO_FOMS.Domain.Enums;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using System.Collections.Generic;
@@ -31,6 +32,10 @@ namespace EDO_FOMS.Client.Pages.Progress
 
             AddAgreementMembersCommand command = new()
             {
+                IsRequired = false,
+                IsAdditional = true,
+                Action = ActTypes.Review,
+
                 Id = _agreement.AgreementId,
                 Members = members
             };

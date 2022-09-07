@@ -38,6 +38,8 @@ namespace EDO_FOMS.Application.Features.Agreements.Commands
         private readonly IUploadService _uploadService;
         private readonly IStringLocalizer<AgreementAnswerCommandHandler> _localizer;
 
+        private readonly List<MailToUser> _mails;
+
         public AgreementAnswerCommandHandler(
             IUserService userService,
             IUnitOfWork<int> unitOfWork,
@@ -49,13 +51,14 @@ namespace EDO_FOMS.Application.Features.Agreements.Commands
             _unitOfWork = unitOfWork;
             _uploadService = uploadService;
             _localizer = localizer;
+
+            _mails = new();
         }
 
         public async Task<Result<int>> Handle(AgreementAnswerCommand command, CancellationToken cancellationToken)
         {
             // Согласование для которого принимается ответ
             var agreement = await _unitOfWork.Repository<Agreement>().GetByIdAsync(command.Id);
-
             if (agreement == null) { return await Result<int>.FailAsync(_localizer["Agreement not found"]); }
             if (agreement.State != AgreementStates.Received) { return await Result<int>.FailAsync(_localizer["Сhange of agreement status is not allowed"]); }
 
@@ -64,8 +67,8 @@ namespace EDO_FOMS.Application.Features.Agreements.Commands
             agreement.Answered = DateTime.Now;
             if (agreement.Opened == null) { agreement.Opened = agreement.Answered; }
 
-            // If URL != null => Upload Sign
-            // If Members.Count > 0 => Add Members
+            // (URL != null) => Upload Sign
+            // (Members.Count > 0) => Add Members
 
             var doc = await _unitOfWork.Repository<Document>().GetByIdAsync(agreement.DocumentId);
             if (doc == null) { return await Result<int>.FailAsync(_localizer["Document not found"]); }
@@ -75,58 +78,25 @@ namespace EDO_FOMS.Application.Features.Agreements.Commands
             var memberOrg = await _unitOfWork.Repository<Organization>().GetByIdAsync(member.OrgId);
             var memberOrgName = string.IsNullOrWhiteSpace(memberOrg.ShortName) ? memberOrg.Name : memberOrg.ShortName;
 
-            List<MailToUser> mails = new();
-
             // Agreement.Step - Check
             if (command.State == AgreementStates.Approved || command.State == AgreementStates.Signed) // Для подписания или согласования
             {
                 if (command.State == AgreementStates.Signed)
                 {
-                    var subscribe = _unitOfWork.Repository<Subscribe>().Entities.FirstOrDefault(s => s.UserId == doc.EmplId && s.Email.DocumentSigned); // 3.2
-
-                    if (subscribe is not null)
-                    {
-                        var mail = new MailToUser()
-                        {
-                            UserId = doc.EmplId,
-                            Theme = _localizer["The document you sent for signing №. {0} from {1:d} {2} signed by one of the participants.", doc.Number, doc.Date, doc.Title],
-                            Text = $"{_localizer["Dear user!"]}<br/><br/>{_localizer["In the EDO system of the Ministry of Health, the document you sent for signing is № {0} from {1:d} {2} signed by one of the participants: {3}, {4}", doc.Number, doc.Date, doc.Title, memberOrgName, memberName]}"
-                        };
-
-                        mails.Add(mail);
-                        //await _userService.MailToUserAsync(mail);
-                    }
+                    AddMailAboutSigned(doc, memberOrgName, memberName);
                 }
-
-                if (command.State == AgreementStates.Approved)
+                else if (command.State == AgreementStates.Approved)
                 {
-                    var emplId = doc.EmplId;
-                    var subscribe = _unitOfWork.Repository<Subscribe>().Entities.FirstOrDefault(s => s.UserId == emplId && s.Email.DocumentApproved); // 3.1
-
-                    if (subscribe is not null)
-                    {
-                        var mail = new MailToUser()
-                        {
-                            UserId = doc.EmplId,
-                            Theme = _localizer["The document you sent for signing №. {0} from {1:d} {2} approved by one of the participants.", doc.Number, doc.Date, doc.Title],
-                            Text = $"{_localizer["Dear user!"]}<br/><br/>{_localizer["In the EDO system of the Ministry of Health, the document you sent for signing is № {0} from {1:d} {2} approved by one of the participants: {3}, {4}", doc.Number, doc.Date, doc.Title, memberOrgName, memberName]}"
-                        };
-
-                        mails.Add(mail);
-                        //await _userService.MailToUserAsync(mail);
-                    }
+                    AddMailAboutApproved(doc, memberOrgName, memberName);
                 }
 
+                // Отменить не ответивших доп.согласовантов |> Рецензентов
                 var myAgrs = _unitOfWork.Repository<Agreement>().Entities.Where(a => a.ParentId == agreement.Id && (a.State == AgreementStates.Incoming || a.State == AgreementStates.Received || a.State == AgreementStates.Opened)).ToList();
 
-                // Отменить не ответивших доп.согласовантов
                 myAgrs.ForEach(async a =>
                 {
-                    //if (a.State == AgreementStates.Incoming || a.State == AgreementStates.Received || a.State == AgreementStates.Opened)
-                    //{
-                        a.State = AgreementStates.Deleted;
-                        await _unitOfWork.Repository<Agreement>().UpdateAsync(a);
-                    //}
+                    a.State = AgreementStates.Deleted;
+                    await _unitOfWork.Repository<Agreement>().UpdateAsync(a);
                 });
 
                 var cert = _unitOfWork.Repository<Certificate>().Entities.FirstOrDefault(c => c.UserId == agreement.EmplId && c.Thumbprint == command.Thumbprint);
@@ -134,9 +104,9 @@ namespace EDO_FOMS.Application.Features.Agreements.Commands
                 if (cert != null) { agreement.CertId = cert.Id; }
 
                 var members = _unitOfWork.Repository<Agreement>().Entities.Where(a =>
-                    a.DocumentId == agreement.DocumentId && a.StageNumber == agreement.StageNumber && // Документ, Шаг, Основные участники
-                    (a.Action == ActTypes.Agreement || a.Action == ActTypes.Signing) && // Основные согласованты и подписанты
-                    (a.State == AgreementStates.Incoming || a.State == AgreementStates.Received || a.State == AgreementStates.Opened) // Только для не ответивших участников
+                    a.DocumentId == agreement.DocumentId && a.StageNumber == agreement.StageNumber &&                                   // Документ и Шаг
+                    (a.Action == ActTypes.Agreement || a.Action == ActTypes.Signing) &&                                                 // Основные согласованты и подписанты
+                    (a.State == AgreementStates.Incoming || a.State == AgreementStates.Received || a.State == AgreementStates.Opened)   // Только для не ответивших участников
                     ).ToList();
 
                 // If Approve || Signed => Last Sign => Next Step || Finish
@@ -145,7 +115,6 @@ namespace EDO_FOMS.Application.Features.Agreements.Commands
                     if (doc.CurrentStep < doc.TotalSteps)
                     {
                         doc.CurrentStep++;
-
                         var agreements = _unitOfWork.Repository<Agreement>().Entities.Where(a => a.DocumentId == doc.Id && a.StageNumber == doc.CurrentStep).ToList();
 
                         agreements.ForEach(async a =>
@@ -153,21 +122,7 @@ namespace EDO_FOMS.Application.Features.Agreements.Commands
                             a.State = AgreementStates.Incoming;
                             await _unitOfWork.Repository<Agreement>().UpdateAsync(a);
 
-                            var emplId = a.EmplId;
-                            var subscribe = _unitOfWork.Repository<Subscribe>().Entities.FirstOrDefault(s => s.UserId == emplId && s.Email.AgreementIncoming); // 1
-
-                            if (subscribe is not null)
-                            {
-                                var mail = new MailToUser()
-                                {
-                                    UserId = emplId,
-                                    Theme = _localizer["New document received"],
-                                    Text = $"{_localizer["Dear user!"]}<br/><br/>{_localizer["You have received a new document for signing (approval) {0} of {1:d} {2}", doc.Number, doc.Date, doc.Title]}"
-                                };
-
-                                mails.Add(mail);
-                                //await _userService.MailToUserAsync(mail);
-                            }
+                            AddMailAboutReceived(doc, a.EmplId);
                         });
                     }
                     else
@@ -175,21 +130,7 @@ namespace EDO_FOMS.Application.Features.Agreements.Commands
                         doc.Stage = DocStages.Agreed;
                         doc.HasChanges = true;
 
-                        var emplId = doc.EmplId;
-                        var subscribe = _unitOfWork.Repository<Subscribe>().Entities.FirstOrDefault(s => s.UserId == emplId && s.Email.DocumentAgreed); // 4
-
-                        if (subscribe is not null) // ?.Email.DocumentAgreed == true
-                        {
-                            var mail = new MailToUser()
-                            {
-                                UserId = doc.EmplId,
-                                Theme = _localizer["The document you sent for signing № {0} from {1:d} {2} signed by all parties.", doc.Number, doc.Date, doc.Title],
-                                Text = $"{_localizer["Dear user!"]}<br/><br/>{_localizer["In the EDO system of the Ministry of Health, the document you sent for signing is № {0} from {1:d} {2} signed by all parties.", doc.Number, doc.Date, doc.Title]}"
-                            };
-
-                            mails.Add(mail);
-                            //await _userService.MailToUserAsync(mail);
-                        }
+                        AddMailAboutSignedByAll(doc);
 
                         var result = _uploadService.ArchiveDoc(doc.StoragePath, doc.FileName);
                         if (result != null)
@@ -208,21 +149,7 @@ namespace EDO_FOMS.Application.Features.Agreements.Commands
                 doc.Stage = DocStages.Rejected;
                 doc.HasChanges = true;
 
-                var emplId = doc.EmplId;
-                var subscribe = _unitOfWork.Repository<Subscribe>().Entities.FirstOrDefault(s => s.UserId == emplId && s.Email.DocumentRejected); // 2
-
-                if (subscribe is not null)
-                {
-                    var mail = new MailToUser()
-                    {
-                        UserId = doc.EmplId,
-                        Theme = _localizer["The document you sent for signing № {0} from {1:d} {2} was refused to sign or approve.", doc.Number, doc.Date, doc.Title],
-                        Text = _localizer["In the EDO system of the Ministry of Health, the document you sent for signing is № {0} from {1:d} {2} was refused to sign or approve, indicating the following remark. {3}, {4}: {5}", doc.Number, doc.Date, doc.Title, memberOrgName, memberName, command.Remark]
-                    };
-
-                    mails.Add(mail);
-                    //await _userService.MailToUserAsync(mail);
-                }
+                AddMailAboutRefused(doc, memberOrgName, memberName, command.Remark);
 
                 // Clear Agreements State Incoming
                 var agreements = _unitOfWork.Repository<Agreement>().Entities.Where(a => a.DocumentId == doc.Id).ToList();
@@ -247,9 +174,90 @@ namespace EDO_FOMS.Application.Features.Agreements.Commands
             await _unitOfWork.Repository<Document>().UpdateAsync(doc);
             await _unitOfWork.Commit(cancellationToken);
 
-            await _userService.MailsToUsersAsync(mails);
+            await _userService.MailsToUsersAsync(_mails);
 
             return await Result<int>.SuccessAsync(agreement.Id, _localizer["Agreement Updated"]);
+        }
+
+        private void AddMailAboutSigned(Document doc, string memberOrgName, string memberName)
+        {
+            var subscribe = _unitOfWork.Repository<Subscribe>().Entities.FirstOrDefault(s => s.UserId == doc.EmplId && s.Email.DocumentSigned); // 3.2
+
+            if (subscribe is not null)
+            {
+                var mail = new MailToUser()
+                {
+                    UserId = doc.EmplId,
+                    Theme = _localizer["The document you sent for signing №. {0} from {1:d} {2} signed by one of the participants.", doc.Number, doc.Date, doc.Title],
+                    Text = $"{_localizer["Dear user!"]}<br/><br/>{_localizer["In the EDO system of the Ministry of Health, the document you sent for signing is № {0} from {1:d} {2} signed by one of the participants: {3}, {4}", doc.Number, doc.Date, doc.Title, memberOrgName, memberName]}"
+                };
+
+                _mails.Add(mail);
+            }
+        }
+        private void AddMailAboutApproved(Document doc, string memberOrgName, string memberName)
+        {
+            var subscribe = _unitOfWork.Repository<Subscribe>().Entities.FirstOrDefault(s => s.UserId == doc.EmplId && s.Email.DocumentApproved); // 3.1
+
+            if (subscribe is not null)
+            {
+                var mail = new MailToUser()
+                {
+                    UserId = doc.EmplId,
+                    Theme = _localizer["The document you sent for signing №. {0} from {1:d} {2} approved by one of the participants.", doc.Number, doc.Date, doc.Title],
+                    Text = $"{_localizer["Dear user!"]}<br/><br/>{_localizer["In the EDO system of the Ministry of Health, the document you sent for signing is № {0} from {1:d} {2} approved by one of the participants: {3}, {4}", doc.Number, doc.Date, doc.Title, memberOrgName, memberName]}"
+                };
+
+                _mails.Add(mail);
+            }
+        }
+        private void AddMailAboutReceived(Document doc, string emplId)
+        {
+            var subscribe = _unitOfWork.Repository<Subscribe>().Entities.FirstOrDefault(s => s.UserId == emplId && s.Email.AgreementIncoming); // 1
+
+            if (subscribe is not null)
+            {
+                var mail = new MailToUser()
+                {
+                    UserId = emplId,
+                    Theme = _localizer["New document received"],
+                    Text = $"{_localizer["Dear user!"]}<br/><br/>{_localizer["You have received a new document for signing (approval) {0} of {1:d} {2}", doc.Number, doc.Date, doc.Title]}"
+                };
+
+                _mails.Add(mail);
+            }
+        }
+        private void AddMailAboutSignedByAll(Document doc)
+        {
+            var subscribe = _unitOfWork.Repository<Subscribe>().Entities.FirstOrDefault(s => s.UserId == doc.EmplId && s.Email.DocumentAgreed); // 4
+
+            if (subscribe is not null) // ?.Email.DocumentAgreed == true
+            {
+                var mail = new MailToUser()
+                {
+                    UserId = doc.EmplId,
+                    Theme = _localizer["The document you sent for signing № {0} from {1:d} {2} signed by all parties.", doc.Number, doc.Date, doc.Title],
+                    Text = $"{_localizer["Dear user!"]}<br/><br/>{_localizer["In the EDO system of the Ministry of Health, the document you sent for signing is № {0} from {1:d} {2} signed by all parties.", doc.Number, doc.Date, doc.Title]}"
+                };
+
+                _mails.Add(mail);
+            }
+        }
+        private void AddMailAboutRefused(Document doc, string memberOrgName, string memberName, string remark)
+        {
+            var subscribe = _unitOfWork.Repository<Subscribe>().Entities.FirstOrDefault(s => s.UserId == doc.EmplId && s.Email.DocumentRejected); // 2
+
+            if (subscribe is not null)
+            {
+                var mail = new MailToUser()
+                {
+                    UserId = doc.EmplId,
+                    Theme = _localizer["The document you sent for signing № {0} from {1:d} {2} was refused to sign or approve.", doc.Number, doc.Date, doc.Title],
+                    Text = _localizer["In the EDO system of the Ministry of Health, the document you sent for signing is № {0} from {1:d} {2} was refused to sign or approve, indicating the following remark. {3}, {4}: {5}", doc.Number, doc.Date, doc.Title, memberOrgName, memberName, remark]
+                };
+
+                _mails.Add(mail);
+            }
         }
     }
 }
