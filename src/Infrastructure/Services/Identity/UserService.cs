@@ -275,8 +275,13 @@ namespace EDO_FOMS.Infrastructure.Services.Identity
 
             if (request.BaseRole == UserBaseRoles.Chief && org == null)
             {
+                var company = await _db.Companies.FirstOrDefaultAsync(c => c.Inn == request.InnLe);
+
                 org = new Organization()
                 {
+                    OmsCode = company?.Code ?? string.Empty,
+                    Type = company?.Type ?? OrgTypes.MO,
+
                     Inn = request.InnLe,
                     Ogrn = request.Ogrn,
                     Name = request.Org,
@@ -286,7 +291,6 @@ namespace EDO_FOMS.Infrastructure.Services.Identity
                     Email = request.Email,
 
                     IsPublic = true,
-                    Type = OrgTypes.MO,
                     State = OrgStates.OnSubmit,
 
                     CreatedOn = DateTime.Now
