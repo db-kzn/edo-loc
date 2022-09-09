@@ -10,19 +10,22 @@ namespace EDO_FOMS.Domain.Entities.Dir
 
         public string Pattern { get; set; } = string.Empty;                       // Значение паттерна для Regex
         public ValueTypes ValueType { get; set; } = ValueTypes.String;            // Тип значения результата
+        public int ValueFlag { get; set; } = 0;                                   // Sample: Flag = (int)MemberGroups.OnlyHead
 
         public RouteFileParse() { }
         public RouteFileParse(
             Route route,
             ParsePatterns patternType,
             string pattern,
-            ValueTypes valueType
+            ValueTypes valueType,
+            int valueFlag = 0
             )
         {
             Route = route;
             PatternType = patternType;
             Pattern = pattern;
             ValueType = valueType;
+            ValueFlag = valueFlag;
         }
     }
 }

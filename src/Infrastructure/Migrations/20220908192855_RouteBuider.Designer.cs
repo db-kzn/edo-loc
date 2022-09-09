@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EDO_FOMS.Infrastructure.Migrations
 {
     [DbContext(typeof(EdoFomsContext))]
-    [Migration("20220906104723_RouteBuilder")]
-    partial class RouteBuilder
+    [Migration("20220908192855_RouteBuider")]
+    partial class RouteBuider
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -326,6 +326,9 @@ namespace EDO_FOMS.Infrastructure.Migrations
 
                     b.Property<string>("Pattern")
                         .HasColumnType("text");
+
+                    b.Property<int>("ValueFlag")
+                        .HasColumnType("integer");
 
                     b.Property<int>("ValueType")
                         .HasColumnType("integer");

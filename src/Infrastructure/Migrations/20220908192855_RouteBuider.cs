@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace EDO_FOMS.Infrastructure.Migrations
 {
-    public partial class RouteBuilder : Migration
+    public partial class RouteBuider : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -291,7 +291,8 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     RouteId = table.Column<int>(type: "integer", nullable: false),
                     PatternType = table.Column<int>(type: "integer", nullable: false),
                     Pattern = table.Column<string>(type: "text", nullable: true),
-                    ValueType = table.Column<int>(type: "integer", nullable: false)
+                    ValueType = table.Column<int>(type: "integer", nullable: false),
+                    ValueFlag = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {

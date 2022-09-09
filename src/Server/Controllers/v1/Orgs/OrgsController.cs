@@ -35,6 +35,19 @@ namespace EDO_FOMS.Server.Controllers.v1.Orgs
         }
 
         /// <summary>
+        /// Get Org Id By Code
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns>Status 200 Ok</returns>
+        [Authorize(Policy = Permissions.Documents.Create)]
+        [HttpGet("id")]
+        public async Task<IActionResult> GetIdByCode(string code)
+        {
+            var orgId = await _mediator.Send(new GetOrgIdByCodeQuery() { Code = code });
+            return Ok(orgId);
+        }
+
+        /// <summary>
         /// Create/Update a Organization
         /// </summary>
         /// <param name="command"></param>

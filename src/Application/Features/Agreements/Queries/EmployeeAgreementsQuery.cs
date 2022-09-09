@@ -5,6 +5,7 @@ using EDO_FOMS.Domain.Entities.Org;
 using EDO_FOMS.Domain.Enums;
 using EDO_FOMS.Shared.Wrapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -109,7 +110,7 @@ namespace EDO_FOMS.Application.Features.Agreements.Queries
 
                 //var employee = _userService.GetEmployeeAsync(a.UserId).Result;
 
-                var doc = _unitOfWork.Repository<Document>().Entities.FirstOrDefault(d => d.Id == a.DocumentId);
+                var doc = _unitOfWork.Repository<Document>().Entities.Include(d => d.Type).FirstOrDefault(d => d.Id == a.DocumentId);
 
                 if (doc != null)
                 {
@@ -134,8 +135,8 @@ namespace EDO_FOMS.Application.Features.Agreements.Queries
                             DocRouteId = doc.RouteId,
 
                             DocTypeId = doc.TypeId,
-                            DocTypeName = "",  // Получить
-                            DocTypeShort = "", // Получить
+                            DocTypeName = doc.Type.Name,  // Получить
+                            DocTypeShort = doc.Type.Short, // Получить
 
                             DocNumber = doc.Number,
                             DocDate = doc.Date,

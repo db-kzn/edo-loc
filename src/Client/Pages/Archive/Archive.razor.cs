@@ -318,8 +318,8 @@ namespace EDO_FOMS.Client.Pages.Archive
                 DocIsPublic = a.DocIsPublic,
 
                 DocTypeId = a.DocTypeId,
-                DocTypeName = (a.DocTypeId == 1) ? "Договор" : "Доп.соглашение",  //a.DocTypeName,
-                DocTypeShort = (a.DocTypeId == 1) ? "Дог" : "Д/С", //a.DocTypeShort,
+                DocTypeName = a.DocTypeName, //(a.DocTypeId == 1) ? "Договор" : "Доп.соглашение",  //a.DocTypeName,
+                DocTypeShort = a.DocTypeShort, //(a.DocTypeId == 1) ? "Дог" : "Д/С", //a.DocTypeShort,
 
                 DocNumber = a.DocNumber,
                 DocDate = a.DocDate,

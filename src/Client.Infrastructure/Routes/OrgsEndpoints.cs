@@ -10,11 +10,12 @@
         //public static string Export = "api/v1/orgs/export";
 
         //public static string GetAll = "api/v1/orgs";
-        public static string Save = "api/v1/orgs";
-        public static string Delete = "api/v1/orgs";
-        public static string GetCount = "api/v1/orgs/count";
+        public const string Save = "api/v1/orgs";
+        public const string Delete = "api/v1/orgs";
+        public const string GetCount = "api/v1/orgs/count";
 
         public static string GetById(int id) { return $"api/v1/orgs/{id}"; }
+        public static string GetIdByCode(string code) { return $"api/v1/orgs/id?code={code}"; }
 
         public static string GetByInn(string inn)
         {

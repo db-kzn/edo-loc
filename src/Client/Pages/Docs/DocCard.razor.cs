@@ -9,6 +9,7 @@ using EDO_FOMS.Client.Extensions;
 using EDO_FOMS.Client.Infrastructure.Managers.Dir;
 using EDO_FOMS.Client.Infrastructure.Managers.Doc.Document;
 using EDO_FOMS.Client.Infrastructure.Managers.Doc.DocumentType;
+using EDO_FOMS.Client.Infrastructure.Managers.Orgs;
 using EDO_FOMS.Client.Models;
 using EDO_FOMS.Domain.Enums;
 using Microsoft.AspNetCore.Components;
@@ -17,6 +18,7 @@ using Microsoft.JSInterop;
 using MudBlazor;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
@@ -33,6 +35,7 @@ namespace EDO_FOMS.Client.Pages.Docs
         [Inject] private IDocumentManager DocManager { get; set; }
         [Inject] private IDocumentTypeManager DocTypeManager { get; set; }
         [Inject] private IDirectoryManager DirManager { get; set; }
+        [Inject] private IOrgManager OrgManager { get; set; }
 
         private RouteCardResponse Route { get; set; } = new();
         private FileParseModel Pattern { get; set; } = new();
@@ -188,7 +191,7 @@ namespace EDO_FOMS.Client.Pages.Docs
                 if (step.AutoSearch > 0)
                 {
                     //var take = step.SomeParticipants ? step.AutoSearch : 1;
-                    var contacts = await LoadMembersAsync(step.OrgType, step.AutoSearch, step.MemberGroup == MemberGroups.OnlyHead);
+                    var contacts = await LoadMembersAsync(step.OrgType, step.AutoSearch, step.MemberGroup == MemberGroups.OnlyHead, step.OrgId);
                     AddMainContacts(act, contacts);
                 }
 
@@ -200,14 +203,16 @@ namespace EDO_FOMS.Client.Pages.Docs
 
             return true;
         }
-        private async Task<List<ContactResponse>> LoadMembersAsync(OrgTypes orgType, int take, bool isChief)
+        private async Task<List<ContactResponse>> LoadMembersAsync(OrgTypes orgType, int take, bool isChief, int? orgId = null)
         {
             var request = new SearchContactsRequest()
             {
                 Take = take,
                 BaseRole = isChief ? UserBaseRoles.Chief : UserBaseRoles.Undefined,
                 OrgType = orgType,
-                SearchString = ""
+
+                SearchString = "",
+                OrgId = orgId
             };
 
             var response = await DocManager.GetFoundContacts(request);
@@ -441,24 +446,119 @@ namespace EDO_FOMS.Client.Pages.Docs
             if (e.File is null) { return; }
 
             _file = e.File;
+            var fileName = Path.GetFileName(_file.Name);
 
             if (Route.NameOfFile) { Doc.Title = Path.GetFileNameWithoutExtension(_file.Name); }
 
-            if (Route.ParseFileName && !string.IsNullOrWhiteSpace(Pattern.FileMask))
+            if (Route.ParseFileName)
             {
-                var maskIsCorrect = false;
-
-                try
+                if (!string.IsNullOrWhiteSpace(Pattern.FileMask))
                 {
-                    Regex mask = new(Pattern.FileMask.Replace(".", "[.]").Replace("*", ".*").Replace("?", "."));
-                    maskIsCorrect = mask.IsMatch(_file.Name);
+
+                    var maskIsCorrect = false;
+
+                    try
+                    {
+                        Regex mask = new(Pattern.FileMask.Replace(".", "[.]").Replace("*", ".*").Replace("?", "."));
+                        maskIsCorrect = mask.IsMatch(_file.Name);
+                    }
+                    catch (Exception) { }
+
+                    if (!maskIsCorrect)
+                    {
+                        // Route.ProtectedMode;
+                        // Dialog - Accept || Decline
+                    }
                 }
-                catch (Exception) { }
 
-                if (!maskIsCorrect)
+                if (!string.IsNullOrWhiteSpace(Pattern.DocTitle))
                 {
-                    // Route.ProtectedMode;
-                    // Dialog - Accept || Decline
+                    Doc.Title = TryParse(fileName, Pattern.DocTitle);
+                }
+                if (!string.IsNullOrWhiteSpace(Pattern.DocNumber))
+                {
+                    Doc.Number = TryParse(fileName, Pattern.DocNumber);
+                }
+                if (!string.IsNullOrWhiteSpace(Pattern.DocDate))
+                {
+                    var date = TryParse(fileName, Pattern.DocDate);
+                    if (date.Length == 6)
+                    {
+                        Doc.Date = DateTime.ParseExact(date, "ddMMyy", CultureInfo.InvariantCulture);
+                    }
+                }
+                if (!string.IsNullOrWhiteSpace(Pattern.DocNotes))
+                {
+                    Doc.Description = TryParse(fileName, Pattern.DocNotes);
+                }
+
+                if (!string.IsNullOrWhiteSpace(Pattern.CodeMo))
+                {
+                    var codeMo  = TryParse(fileName, Pattern.CodeMo);
+                    await _jsRuntime.InvokeVoidAsync("azino.Console", codeMo, "Code MO");
+
+                    var orgId = await OrgManager.GetIdByCodeAsync(codeMo);
+                    await _jsRuntime.InvokeVoidAsync("azino.Console", orgId, "MO ID");
+
+                    if (orgId.Succeeded && orgId.Data > 0)
+                    {
+                        var request = new SearchContactsRequest()
+                        {
+                            BaseRole = UserBaseRoles.Chief,
+                            OrgType = OrgTypes.MO,
+                            SearchString = string.Empty,
+
+                            OrgId = orgId.Data
+                        };
+
+                        var response = await DocManager.GetFoundContacts(request);
+                        await _jsRuntime.InvokeVoidAsync("azino.Console", response, "Chiefs of MO");
+
+                        if (response.Succeeded && response.Data.Count > 0)
+                        {
+                            var contacts = response.Data;
+                            Acts.ForEach(a => { 
+                                if (a.Step.OrgType == OrgTypes.MO && a.Step.MemberGroup == MemberGroups.OnlyHead)
+                                {
+                                    AddMainContacts(a, contacts);
+                                }
+                            });
+                        }
+                    }
+                }
+                if (!string.IsNullOrWhiteSpace(Pattern.CodeSmo))
+                {
+                    var codeSmo = TryParse(fileName, Pattern.CodeSmo);
+                    await _jsRuntime.InvokeVoidAsync("azino.Console", codeSmo, "Code SMO");
+
+                    var orgId = await OrgManager.GetIdByCodeAsync(codeSmo);
+                    await _jsRuntime.InvokeVoidAsync("azino.Console", orgId, "SMO ID");
+
+                    if (orgId.Succeeded && orgId.Data > 0)
+                    {
+                        var request = new SearchContactsRequest()
+                        {
+                            BaseRole = UserBaseRoles.Chief,
+                            OrgType = OrgTypes.SMO,
+                            SearchString = string.Empty,
+
+                            OrgId = orgId.Data
+                        };
+
+                        var response = await DocManager.GetFoundContacts(request);
+                        await _jsRuntime.InvokeVoidAsync("azino.Console", response, "Chiefs of SMO");
+
+                        if (response.Succeeded && response.Data.Count > 0)
+                        {
+                            var contacts = response.Data;
+                            Acts.ForEach(a => {
+                                if (a.Step.OrgType == OrgTypes.SMO && a.Step.MemberGroup == MemberGroups.OnlyHead)
+                                {
+                                    AddMainContacts(a, contacts);
+                                }
+                            });
+                        }
+                    }
                 }
             }
 
@@ -471,10 +571,25 @@ namespace EDO_FOMS.Client.Pages.Docs
             {
                 Data = buffer,
                 UploadType = UploadType.Document,
-                FileName = Path.GetFileName(_file.Name),
+                FileName = fileName,
                 Extension = Path.GetExtension(_file.Name)
             };
         }
+
+        private static string TryParse(string text, string pattern)
+        {
+            var result = string.Empty;
+
+            try
+            {
+                Match m = Regex.Match(text, pattern, RegexOptions.None, TimeSpan.FromSeconds(2));
+                if (m.Success) { result = m.Value; }
+            }
+            catch (Exception) { }
+
+            return result;
+        }
+
         private static string ActTypesIcon(ActTypes act)
         {
             return act switch

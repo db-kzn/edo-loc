@@ -343,16 +343,16 @@ namespace EDO_FOMS.Client.Pages.Progress
         {
             _loaded = false;
 
-            await _jsRuntime.InvokeVoidAsync("azino.Console", true, "Start To Sign: ");
+            //await _jsRuntime.InvokeVoidAsync("azino.Console", true, "Start To Sign: ");
 
             var thumbprint = await _localStorage.GetItemAsync<string>(StorageConstants.Local.UserThumbprint);
-            await _jsRuntime.InvokeVoidAsync("azino.Console", thumbprint, "User Thumbprint: ");
+            //await _jsRuntime.InvokeVoidAsync("azino.Console", thumbprint, "User Thumbprint: ");
 
             var base64 = await DocManager.GetBase64Async(agreement.DocURL);
-            await _jsRuntime.InvokeVoidAsync("azino.Console", base64, "Doc Base64: ");
+            //await _jsRuntime.InvokeVoidAsync("azino.Console", base64, "Doc Base64: ");
 
             var sign = await _jsRuntime.InvokeAsync<string>("azino.SignCadesBES", thumbprint, base64, agreement.DocTitle);
-            await _jsRuntime.InvokeVoidAsync("azino.Console", sign, "Sign: ");
+            //await _jsRuntime.InvokeVoidAsync("azino.Console", sign, "Sign: ");
 
             //await _jsRuntime.InvokeVoidAsync("azino.Console", sign, "SIGN :");
             //await _jsRuntime.InvokeVoidAsync("azino.Console", agreement, "Agreement :");
@@ -497,8 +497,8 @@ namespace EDO_FOMS.Client.Pages.Progress
                 DocIsPublic = a.DocIsPublic,
 
                 DocTypeId = a.DocTypeId,
-                DocTypeName = (a.DocTypeId == 1) ? "Договор" : "Доп.соглашение",  //a.DocTypeName,
-                DocTypeShort = (a.DocTypeId == 1) ? "Дог" : "Д/С", //a.DocTypeShort,
+                DocTypeName = a.DocTypeName,//(a.DocTypeId == 1) ? "Договор" : "Доп.соглашение",  //a.DocTypeName,
+                DocTypeShort = a.DocTypeShort, //(a.DocTypeId == 1) ? "Дог" : "Д/С", //a.DocTypeShort,
 
                 DocNumber = a.DocNumber,
                 DocDate = a.DocDate,

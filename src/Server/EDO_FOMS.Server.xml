@@ -179,7 +179,7 @@
             <param name="search"></param>
             <returns>Status 200 Ok</returns>
         </member>
-        <member name="M:EDO_FOMS.Server.Controllers.Docums.DocumentsController.GetFoundContacts(EDO_FOMS.Domain.Enums.OrgTypes,EDO_FOMS.Domain.Enums.UserBaseRoles,System.String,System.Int32)">
+        <member name="M:EDO_FOMS.Server.Controllers.Docums.DocumentsController.GetFoundContacts(EDO_FOMS.Domain.Enums.OrgTypes,EDO_FOMS.Domain.Enums.UserBaseRoles,System.String,System.Int32,System.Nullable{System.Int32})">
             <summary>
             Get Found Users
             </summary>
@@ -187,6 +187,7 @@
             <param name="baseRole"></param>
             <param name="search"></param>
             <param name="take"></param>
+            <param name="orgId"></param>
             <returns>Status 200 OK</returns>
         </member>
         <member name="M:EDO_FOMS.Server.Controllers.Docums.DocumentsController.GetAgreementMembers(System.Int32,System.String)">
@@ -682,6 +683,13 @@
             Get a Organization By Id
             </summary>
             <param name="id"></param>
+            <returns>Status 200 Ok</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.v1.Orgs.OrgsController.GetIdByCode(System.String)">
+            <summary>
+            Get Org Id By Code
+            </summary>
+            <param name="code"></param>
             <returns>Status 200 Ok</returns>
         </member>
         <member name="M:EDO_FOMS.Server.Controllers.v1.Orgs.OrgsController.Post(EDO_FOMS.Application.Features.Orgs.Commands.AddEditOrgCommand)">

@@ -33,7 +33,7 @@ namespace EDO_FOMS.Client.Infrastructure.Routes
         public static string GetAgreementMembers(int orgId, string search) => $"{Ctrl}/members?orgId={orgId}&search={search}";
 
         public static string GetFoundContacts(SearchContactsRequest r) =>
-            $"{Ctrl}/contacts?orgType={r.OrgType}&baseRole={r.BaseRole}&search={r.SearchString}&take={r.Take}";
+            $"{Ctrl}/contacts?orgType={r.OrgType}&baseRole={r.BaseRole}&search={r.SearchString}&take={r.Take}&orgId={r.OrgId}";
 
         public static string GetDocsPaged(GetPagedDocumentsRequest r)
         {

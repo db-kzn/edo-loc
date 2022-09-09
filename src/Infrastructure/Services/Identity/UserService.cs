@@ -165,10 +165,11 @@ namespace EDO_FOMS.Infrastructure.Services.Identity
             var result = _mapper.Map<List<UserResponse>>(users);
             return await Result<List<UserResponse>>.SuccessAsync(result);
         }
-        public async Task<Result<List<ContactResponse>>> GetFoundContacts(OrgTypes orgType, UserBaseRoles baseRole, string searchString, int take = 10)
+        public async Task<Result<List<ContactResponse>>> GetFoundContacts(OrgTypes orgType, UserBaseRoles baseRole, string searchString, int take = 10, int? orgId = null)
         {
             var users = _userManager.Users;
 
+            if (orgId is not null) { users = users.Where(u => u.OrgId == orgId); }
             if (orgType != OrgTypes.Undefined) { users = users.Where(u => u.OrgType == orgType); }
             if (baseRole != UserBaseRoles.Undefined) { users = users.Where(u => u.BaseRole == baseRole); }
 

@@ -13,6 +13,9 @@ namespace EDO_FOMS.Client.Infrastructure.Managers.Orgs
         Task<IResult<int>> SaveAsync(AddEditOrgCommand request);
         Task<IResult<GetOrgByIdResponse>> GetByIdAsync(GetOrgByIdQuery request);
 
+        Task<IResult<int>> GetIdByCodeAsync(string code);
+
+
         //Task<IResult<int>> DeleteAsync(int id);
         //Task<IResult<string>> ExportToExcelAsync(string searchString = "");
     }

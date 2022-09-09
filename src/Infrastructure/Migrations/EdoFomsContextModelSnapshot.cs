@@ -325,6 +325,9 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.Property<string>("Pattern")
                         .HasColumnType("text");
 
+                    b.Property<int>("ValueFlag")
+                        .HasColumnType("integer");
+
                     b.Property<int>("ValueType")
                         .HasColumnType("integer");
 

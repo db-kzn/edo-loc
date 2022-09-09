@@ -41,5 +41,11 @@ namespace EDO_FOMS.Client.Infrastructure.Managers.Orgs
             var response = await _httpClient.PostAsJsonAsync(Routes.OrgsEndpoints.Save, request);
             return await response.ToResult<int>();
         }
+
+        public async Task<IResult<int>> GetIdByCodeAsync(string code)
+        {
+            var response = await _httpClient.GetAsync(Routes.OrgsEndpoints.GetIdByCode(code));
+            return await response.ToResult<int>();
+        }
     }
 }

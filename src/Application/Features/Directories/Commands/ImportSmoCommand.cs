@@ -2,6 +2,7 @@
 using EDO_FOMS.Application.Interfaces.Repositories;
 using EDO_FOMS.Application.Models.Dir;
 using EDO_FOMS.Domain.Entities.Dir;
+using EDO_FOMS.Domain.Entities.Org;
 using EDO_FOMS.Domain.Enums;
 using EDO_FOMS.Shared.Wrapper;
 using MediatR;
@@ -66,10 +67,11 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
             if (response.Total > 0)
             {
                 var companies = _unitOfWork.Repository<Company>();
+                var orgs = _unitOfWork.Repository<Organization>();
 
                 smos.ForEach(async smo =>
                 {
-                    Company company = companies.Entities.FirstOrDefault(c => c.Code == smo.SmoCod);
+                    var company = companies.Entities.FirstOrDefault(c => c.Code == smo.SmoCod);
 
                     if (company is null)
                     {
@@ -87,6 +89,13 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
                         {
                             response.Skipped++;
                         }
+                    }
+
+                    var org = orgs.Entities.FirstOrDefault(o => o.Inn == smo.Inn);
+                    if (org is not null && string.IsNullOrWhiteSpace(org.OmsCode))
+                    {
+                        org.OmsCode = smo.SmoCod;
+                        await orgs.UpdateAsync(org);
                     }
                 });
 
