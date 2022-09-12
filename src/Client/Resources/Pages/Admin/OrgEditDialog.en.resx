@@ -135,6 +135,9 @@
   <data name="Name" xml:space="preserve">
     <value>Name</value>
   </data>
+  <data name="NSI Code" xml:space="preserve">
+    <value>NSI Code</value>
+  </data>
   <data name="Org ID" xml:space="preserve">
     <value>Organization ID</value>
   </data>

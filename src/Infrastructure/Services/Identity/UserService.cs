@@ -310,7 +310,7 @@ namespace EDO_FOMS.Infrastructure.Services.Identity
                     Type = org.Type,
                     State = org.State,
 
-                    Ogrn = org.Ogrn,
+                    OmsCode = org.OmsCode,
                     Phone = "",
                     Email = org.Email
                 };

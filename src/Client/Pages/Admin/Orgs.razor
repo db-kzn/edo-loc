@@ -61,7 +61,7 @@
         <HeaderContent>
             <MudTh><MudTableSortLabel T="OrgsResponse" SortLabel="Id">@_localizer["ID"]</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel T="OrgsResponse" SortLabel="Inn">@_localizer["Org INN"]</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel T="OrgsResponse" SortLabel="Ogrn">@_localizer["Org OGRN"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="OrgsResponse" SortLabel="Code">@_localizer["NSI Code"]</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel T="OrgsResponse" SortLabel="Name">@_localizer["Org Name"]</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel T="OrgsResponse" SortLabel="ShortName">@_localizer["Org Short Name"]</MudTableSortLabel></MudTh>
 
@@ -78,8 +78,8 @@
             <MudTd DataLabel="@_localizer["Org INN"]">
                 <MudHighlighter Text="@context.Inn" HighlightedText="@_searchString" />
             </MudTd>
-            <MudTd DataLabel="@_localizer["Org OGRN"]">
-                <MudHighlighter Text="@context.Ogrn" HighlightedText="@_searchString" />
+            <MudTd DataLabel="@_localizer["NSI Code"]">
+                <MudHighlighter Text="@context.Code" HighlightedText="@_searchString" />
             </MudTd>
             <MudTd DataLabel="@_localizer["Org Name"]">
                 <MudHighlighter Text="@context.Name" HighlightedText="@_searchString" />

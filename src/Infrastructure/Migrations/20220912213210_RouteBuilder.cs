@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace EDO_FOMS.Infrastructure.Migrations
 {
-    public partial class RouteBuider : Migration
+    public partial class RouteBuilder : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -219,6 +219,25 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ParamGroups",
+                schema: "sys",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    Version = table.Column<int>(type: "integer", nullable: false),
+                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "text", nullable: true),
+                    LastModifiedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ParamGroups", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Routes",
                 schema: "dir",
                 columns: table => new
@@ -254,6 +273,33 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Routes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Params",
+                schema: "sys",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ParamGroupId = table.Column<int>(type: "integer", nullable: false),
+                    Property = table.Column<string>(type: "text", nullable: true),
+                    Value = table.Column<string>(type: "text", nullable: true),
+                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "text", nullable: true),
+                    LastModifiedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Params", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Params_ParamGroups_ParamGroupId",
+                        column: x => x.ParamGroupId,
+                        principalSchema: "sys",
+                        principalTable: "ParamGroups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -528,6 +574,12 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 column: "RoutePacketFileId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Params_ParamGroupId",
+                schema: "sys",
+                table: "Params",
+                column: "ParamGroupId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RouteDocTypes_DocumentTypeId",
                 schema: "dir",
                 table: "RouteDocTypes",
@@ -598,6 +650,10 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 schema: "doc");
 
             migrationBuilder.DropTable(
+                name: "Params",
+                schema: "sys");
+
+            migrationBuilder.DropTable(
                 name: "RouteDocTypes",
                 schema: "dir");
 
@@ -620,6 +676,10 @@ namespace EDO_FOMS.Infrastructure.Migrations
             migrationBuilder.DropTable(
                 name: "RoutePacketFiles",
                 schema: "dir");
+
+            migrationBuilder.DropTable(
+                name: "ParamGroups",
+                schema: "sys");
 
             migrationBuilder.DropTable(
                 name: "RouteSteps",

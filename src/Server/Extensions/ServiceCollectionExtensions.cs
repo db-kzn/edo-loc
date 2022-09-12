@@ -230,6 +230,7 @@ namespace EDO_FOMS.Server.Extensions
 
             services.Configure<AppStorageInfo>(configuration.GetSection(nameof(AppStorageInfo)));
             services.AddTransient<IDiskService, DiskService>();
+            services.AddTransient<IUploadService, UploadService>();
 
             services.Configure<MailConfiguration>(configuration.GetSection(nameof(MailConfiguration)));
             services.AddTransient<IMailService, SMTPMailService>();
@@ -245,8 +246,8 @@ namespace EDO_FOMS.Server.Extensions
             services.AddTransient<IAccountService, AccountService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IChatService, ChatService>();
-            services.AddTransient<IUploadService, UploadService>();
-            services.AddTransient<IDiskService, DiskService>();
+            //services.AddTransient<IDiskService, DiskService>();
+            //services.AddTransient<IUploadService, UploadService>();
             services.AddTransient<IAuditService, AuditService>();
             services.AddScoped<IExcelService, ExcelService>();
             return services;

@@ -7,6 +7,7 @@ public interface IUploadService
 {
     string Upload(UploadRequest request);
     UploadResult UploadDoc(UploadRequest request, int ver, string path);
+    UploadResult ImportDoc(string importFileName);
     UploadResult ArchiveDoc(string path, string name);
     bool UploadSign(byte[] Data, string path, string name);
     bool DeleteFolder(string path);

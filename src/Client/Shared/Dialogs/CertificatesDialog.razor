@@ -6,124 +6,123 @@
 <MudDialog Style="min-width: 550px; background-color: var(--mud-palette-background-grey);">
 
     <TitleContent>
-        <MudText Typo="Typo.h6">  
-            <MudIcon Icon="@Icons.Material.TwoTone.Verified" Class="mr-3 mb-n1" Color="Color.Default"/>
-                @_localizer["Сhoose a certificate"]
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.TwoTone.Verified" Class="mr-3 mb-n1" Color="Color.Default" />
+            @_localizer["Сhoose a certificate"]
         </MudText>
     </TitleContent>
 
     <DialogContent>
         <MudContainer Style="max-height: 80vh; overflow-y: scroll;">
-        @if(OnInitializing)
-        {
-            <MudProgressLinear Color="Color.Success" Indeterminate="true" Class="my-1" />
-            <MudProgressLinear Color="Color.Error" Indeterminate="true" Class="my-1"/>
-        }
-        else if(OnChecking)
-        {
-        <MudList Clickable="false">
-            @if(CadesPluginApiLoaded)
+            @if (OnInitializing)
             {
-                <MudListItem Text="@(_localizer["CadesPluginApi Loaded"] + ": " + CadesPluginApiVersion)" Icon="@Icons.Material.TwoTone.CheckCircle" IconColor="Color.Success" IconSize="Size.Large"/>
+                <MudProgressLinear Color="Color.Success" Indeterminate="true" Class="my-1" />
+                <MudProgressLinear Color="Color.Error" Indeterminate="true" Class="my-1" />
             }
-            else
+            else if (OnChecking)
             {
-                <MudListItem Text="@_localizer["CadesPluginApi Unloaded"]" Icon="@Icons.Material.TwoTone.Circle" IconColor="Color.Error" IconSize="Size.Large"/>
-            }
-
-            @if(BrowserPluginLoaded)
-            {
-                <MudListItem Text="@(_localizer["Browser plugin loaded"] + ": " + BrowserPluginVersion)" Icon="@Icons.Material.TwoTone.CheckCircle" IconColor="Color.Success" IconSize="Size.Large"/>
-            }
-            else
-            {
-                <MudListItem Text="@_localizer["Browser plugin unloaded"]" Icon="@Icons.Material.TwoTone.Circle" IconColor="Color.Error" IconSize="Size.Large"/>
-            }
-
-            @if(CspEnabled)
-            {
-                <MudListItem Text="@(_localizer["CSP enabled"] + ": " + CspVersion)" Icon="@Icons.Material.TwoTone.CheckCircle" IconColor="Color.Success" IconSize="Size.Large"/>
-            }
-            else
-            {
-                <MudListItem Text="@_localizer["CSP disabled"]" Icon="@Icons.Material.TwoTone.Circle" IconColor="Color.Error" IconSize="Size.Large"/>
-            }
-
-            @if(CspName != "")
-            {
-                <MudListItem Text="@CspName"Icon="@Icons.Material.TwoTone.CheckCircle" IconColor="Color.Success" IconSize="Size.Large"/>
-            }
-
-            @if(CorrectCertCount > 0)
-            {
-                <MudListItem Text="@(_localizer["Сorrect certificates {0} from {1}", CorrectCertCount, AllCertCount])" Icon="@Icons.Material.TwoTone.CheckCircle" IconColor="Color.Success" IconSize="Size.Large"/>
-            }
-            else
-            {
-                <MudListItem Text="@_localizer["No valid certificates found from {0}", AllCertCount]" Icon="@Icons.Material.TwoTone.Circle" IconColor="Color.Error" IconSize="Size.Large"/>
-            }
-            </MudList>
-        }
-        else
-        {
-            <MudList Clickable="true" @bind-SelectedValue="SelectedValue">
-            @foreach (Cert cert in CorrectCertList)
-            {
-                <MudPaper Class="ma-4" Elevation="2">
-                    @if(cert.Version == 3)
+                <MudList Clickable="false">
+                    @if (CadesPluginApiLoaded)
                     {
-                        <MudListItem Icon="@Icons.Material.TwoTone.HomeWork" IconColor="Color.Success" IconSize="Size.Large"
-                                Value="cert" OnClick="OnClickCert">
-                            <MudText Typo="Typo.h6">@cert.Subject.Org</MudText>
-                            <MudText Typo="Typo.subtitle1">@_localizer["INN"]: @cert.Subject.InnLe, @_localizer["SNILS"]: @cert.Subject.Snils</MudText>
-                            <MudText Typo="Typo.overline"><b>@cert.Subject.Title</b> @cert.Subject.Surname @cert.Subject.GivenName</MudText>
-                        </MudListItem>
+                        <MudListItem Text="@(_localizer["CadesPluginApi Loaded"] + ": " + CadesPluginApiVersion)" Icon="@Icons.Material.TwoTone.CheckCircle" IconColor="Color.Success" IconSize="Size.Large" />
                     }
-                    else if (cert.Version == 2)
+                    else
                     {
-                        <MudListItem Icon="@Icons.Material.TwoTone.AccountBalance" IconColor="Color.Primary" IconSize="Size.Large"
-                                Value="cert" OnClick="OnClickCert">
-                            <MudText Typo="Typo.h6">@cert.Subject.Org</MudText>
-                            <MudText Typo="Typo.subtitle1">@_localizer["SNILS"]: @cert.Subject.Snils</MudText>
-                            <MudText Typo="Typo.overline"><b>@cert.Subject.Title</b> @cert.Subject.Surname @cert.Subject.GivenName</MudText>
-                        </MudListItem>
+                        <MudListItem Text="@_localizer["CadesPluginApi Unloaded"]" Icon="@Icons.Material.TwoTone.Circle" IconColor="Color.Error" IconSize="Size.Large" />
                     }
-                    @*else
+
+                    @if (BrowserPluginLoaded)
                     {
-                    <MudListItem Icon="@Icons.Material.TwoTone.AccountBox" IconColor="Color.Warning" IconSize="Size.Large"
+                        <MudListItem Text="@(_localizer["Browser plugin loaded"] + ": " + BrowserPluginVersion)" Icon="@Icons.Material.TwoTone.CheckCircle" IconColor="Color.Success" IconSize="Size.Large" />
+                    }
+                    else
+                    {
+                        <MudListItem Text="@_localizer["Browser plugin unloaded"]" Icon="@Icons.Material.TwoTone.Circle" IconColor="Color.Error" IconSize="Size.Large" />
+                    }
+
+                    @if (CspEnabled)
+                    {
+                        <MudListItem Text="@(_localizer["CSP enabled"] + ": " + CspVersion)" Icon="@Icons.Material.TwoTone.CheckCircle" IconColor="Color.Success" IconSize="Size.Large" />
+                    }
+                    else
+                    {
+                        <MudListItem Text="@_localizer["CSP disabled"]" Icon="@Icons.Material.TwoTone.Circle" IconColor="Color.Error" IconSize="Size.Large" />
+                    }
+
+                    @if (CspName != "")
+                    {
+                        <MudListItem Text="@CspName" Icon="@Icons.Material.TwoTone.CheckCircle" IconColor="Color.Success" IconSize="Size.Large" />
+                    }
+
+                    @if (CorrectCertCount > 0)
+                    {
+                        <MudListItem Text="@(_localizer["Сorrect certificates {0} from {1}", CorrectCertCount, AllCertCount])" Icon="@Icons.Material.TwoTone.CheckCircle" IconColor="Color.Success" IconSize="Size.Large" />
+                    }
+                    else
+                    {
+                        <MudListItem Text="@_localizer["No valid certificates found from {0}", AllCertCount]" Icon="@Icons.Material.TwoTone.Circle" IconColor="Color.Error" IconSize="Size.Large" />
+                    }
+                </MudList>
+            }
+            else
+            {
+                <MudList Clickable="true" @bind-SelectedValue="SelectedValue">
+                    @foreach (Cert cert in CorrectCertList)
+                    {
+                        <MudPaper Class="ma-4" Elevation="2">
+                            @if (cert.Version == 3)
+                            {
+                                <MudListItem Icon="@Icons.Material.TwoTone.HomeWork" IconColor="Color.Success" IconSize="Size.Large"
+                                 Value="cert" OnClick="OnClickCert">
+                                    <MudText Typo="Typo.h6">@cert.Subject.Org</MudText>
+                                    <MudText Typo="Typo.subtitle1">@_localizer["INN"]: @cert.Subject.InnLe, @_localizer["SNILS"]: @cert.Subject.Snils</MudText>
+                                    <MudText Typo="Typo.overline"><b>@cert.Subject.Title</b> @cert.Subject.Surname @cert.Subject.GivenName</MudText>
+                                </MudListItem>
+                            }
+                            else if (cert.Version == 2)
+                            {
+                                <MudListItem Icon="@Icons.Material.TwoTone.AccountBalance" IconColor="Color.Primary" IconSize="Size.Large"
+                                 Value="cert" OnClick="OnClickCert">
+                                    <MudText Typo="Typo.h6">@cert.Subject.Org</MudText>
+                                    <MudText Typo="Typo.subtitle1">@_localizer["SNILS"]: @cert.Subject.Snils</MudText>
+                                    <MudText Typo="Typo.overline"><b>@cert.Subject.Title</b> @cert.Subject.Surname @cert.Subject.GivenName</MudText>
+                                </MudListItem>
+                            }
+                            @*else
+                            {
+                            <MudListItem Icon="@Icons.Material.TwoTone.AccountBox" IconColor="Color.Warning" IconSize="Size.Large"
                             Value="cert" OnClick="OnClickCert">
-                        <MudText Typo="Typo.subtitle1">VER: @cert.Version - @_localizer["SNILS"]: @cert.Subject.Snils</MudText>
-                        <MudText Typo="Typo.overline"><b>@cert.Subject.Title</b> @cert.Subject.Surname @cert.Subject.GivenName</MudText>
-                    </MudListItem>
-                    }*@
-                    
-                </MudPaper>
+                            <MudText Typo="Typo.subtitle1">VER: @cert.Version - @_localizer["SNILS"]: @cert.Subject.Snils</MudText>
+                            <MudText Typo="Typo.overline"><b>@cert.Subject.Title</b> @cert.Subject.Surname @cert.Subject.GivenName</MudText>
+                            </MudListItem>
+                            }*@
+                        </MudPaper>
+                    }
+                </MudList>
             }
-            </MudList>
-        }
         </MudContainer>
     </DialogContent>
-    
+
     <DialogActions>
-        @if(!OnInitializing)
+        @if (!OnInitializing)
         {
             <MudItem xs="12" Class="d-flex justify-center">
-                @if(!CheckIsSuccess)
+                @if (!CheckIsSuccess)
                 {
                     <MudButton Variant="Variant.Outlined" Color="Color.Warning" OnClick="HelpOpen" Size="Size.Large" Style="width: 100%;"
-                        StartIcon="@Icons.Material.Outlined.ReportProblem">
+                       StartIcon="@Icons.Material.Outlined.ReportProblem">
                         @_localizer["Installation guide"]
                     </MudButton>
                 }
-                else if(ShowSuccessCheck && OnChecking)
+                else if (ShowSuccessCheck && OnChecking)
                 {
                     <MudButton Variant="Variant.Outlined" Color="Color.Primary" OnClick="@(() => { OnChecking = false; })" Size="Size.Large" Style="width: 100%;"
-                        StartIcon="@Icons.Material.Outlined.GppGood">
+                       StartIcon="@Icons.Material.Outlined.GppGood">
                         @_localizer["Ok"]
                     </MudButton>
                 }
             </MudItem>
         }
-    </DialogActions>    
+    </DialogActions>
 
 </MudDialog>

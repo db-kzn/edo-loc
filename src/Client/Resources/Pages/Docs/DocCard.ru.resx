@@ -183,6 +183,9 @@
   <data name="Employees not found" xml:space="preserve">
     <value>Сотрудники не найдены</value>
   </data>
+  <data name="Executor" xml:space="preserve">
+    <value>Исполнитель</value>
+  </data>
   <data name="Fund" xml:space="preserve">
     <value>ФОМС</value>
   </data>

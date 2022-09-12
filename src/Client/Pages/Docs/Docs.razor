@@ -19,12 +19,11 @@
             <MudIconButton Icon="@Icons.Material.Outlined.Sync" OnClick="RenewAsync"></MudIconButton>
         </MudTooltip>
 
-        @if (_importsCount > 0 && _loaded)
+        @if (importPossible && _loaded)
         {
-            <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.TwoTone.Unarchive" Color="Color.Success"
-                   OnClick="ImportFiles" Disabled="@(!_loaded)">
-                @($"{_localizer["To Import"]}: {_importsCount}")
-            </MudButton>
+            <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Import"]" Color="Color.Tertiary" Placement="Placement.Right" Arrow="true">
+                <MudIconButton Variant="Variant.Text" Icon="@Icons.Material.Rounded.Upload" Color="Color.Default" OnClick="ImportFiles" Disabled="@(!_loaded)"></MudIconButton>
+            </MudTooltip>
         }
 
         <MudSpacer />
@@ -63,8 +62,12 @@
               RowClassFunc="@UnreadRowClassFunc" RowClass="actions">
 
         <ColGroup>
-            <col /><col /><col /><col />
-            <col class="col-date" /><col />
+            <col />
+            <col />
+            <col />
+            <col />
+            <col class="col-date" />
+            <col />
             <col class="col-date-time" />
         </ColGroup>
 
@@ -333,28 +336,28 @@
 
 @if (_canDocsCreate)
 {
-    if (_routeTitles.Count == 1)
+    if (_activeRoutes.Count == 1)
     {
         <MudItem Class="fab-btn-add">
             <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Upload new document"]" Color="Color.Tertiary" Placement="Placement.Left" Arrow="true">
-                <MudFab Color="Color.Secondary" Icon="@Icons.Material.Rounded.Add" aria-label="upload" OnClick="() => AddDocAsync(_routeTitles[0].Id)" />
+                <MudFab Color="Color.Secondary" Icon="@Icons.Material.Rounded.Add" aria-label="upload" OnClick="() => AddDocAsync(_activeRoutes[0].Id)" />
             </MudTooltip>
         </MudItem>
     }
-    else if (_routeTitles.Count > 0) @* <= 10, > 10 -> диалоговое окно*@
+    else if (_activeRoutes.Count > 0) @* <= 10, > 10 -> диалоговое окно*@
     {
         <MudItem Class="fab-btn-add">
-            <MudMenu AnchorOrigin="Origin.TopCenter" TransformOrigin="Origin.BottomRight" Dense="@(_routeTitles.Count > 10)">
+            <MudMenu AnchorOrigin="Origin.TopCenter" TransformOrigin="Origin.BottomRight" Dense="@(_activeRoutes.Count > 10)">
                 <ActivatorContent>
                     <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Upload new document"]" Color="Color.Tertiary" Placement="Placement.Left" Arrow="true">
                         <MudFab Color="Color.Secondary" Icon="@Icons.Material.Rounded.Add" aria-label="upload" />
                     </MudTooltip>
                 </ActivatorContent>
 
-                @*OnClick="() => AddDocAsync(_routeTitles[0].Id)" *@
+                @*OnClick="() => AddDocAsync(_activeRoutes[0].Id)" *@
 
                 <ChildContent>
-                    @foreach (var route in _routeTitles)
+                    @foreach (var route in _activeRoutes)
                     {
                         <MudMenuItem OnClick="() => AddDocAsync(route.Id)">@route.Name</MudMenuItem>
                     }

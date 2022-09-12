@@ -1,0 +1,87 @@
+﻿@namespace EDO_FOMS.Client.Pages.Docs
+
+@using EDO_FOMS.Application.Models.Dir
+
+@inject Microsoft.Extensions.Localization.IStringLocalizer<AvailableImportDialog> _localizer
+
+<MudDialog Style="min-width: 550px; background-color: var(--mud-palette-background-grey);">
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Rounded.Upload" Class="mr-3 mb-n1" />
+            @_localizer["Available Import"]
+        </MudText>
+    </TitleContent>
+
+    <DialogContent>
+        @if (importState == ImportStates.ChooseRoute)
+        {
+
+            <MudTable Hover="true" Dense="false" Bordered="false" Striped="true" Breakpoint="Breakpoint.Xs"
+                  @ref="_mudTable" T="ActiveRouteModel" @bind-SelectedItem="_selectedRoute" OnRowClick="OnRowClickAsync"
+                  Items="@availableImports" Loading="@(!_loaded)" LoadingProgressColor="Color.Info"
+                  Style="margin-bottom: 0;" RowClass="cursor-pointer">
+
+                <HeaderContent>
+                    <MudTh></MudTh>
+                    <MudTh>@_localizer["Code"]</MudTh>
+                    <MudTh>@_localizer["Short"]</MudTh>
+                    <MudTh>@_localizer["Name"]</MudTh>
+                    <MudTh>@_localizer["Mask"]</MudTh>
+                    <MudTh>@_localizer["Files"]</MudTh>
+                </HeaderContent>
+
+                <RowTemplate>
+                    <MudTd>
+                        @if (context.Count > 0)
+                        {
+                            <MudIcon Icon="@Icons.Material.Outlined.FastForward" Color="@Color.Success" />
+                            //PlayCircleOutline
+                        }
+                        else
+                        {
+                            <MudIcon Icon="@Icons.Material.Outlined.Clear" Color="@Color.Error" />
+                            //Adjust
+                        }
+                    </MudTd>
+                    <MudTd Style="text-align:right">@context.Code</MudTd>
+                    <MudTd>@context.Short</MudTd>
+                    <MudTd>@context.Name</MudTd>
+                    <MudTd>@context.Mask</MudTd>
+                    <MudTd Style="text-align:right">@context.Count</MudTd>
+                </RowTemplate>
+            </MudTable>
+        }
+        else if (importState == ImportStates.InProcess)
+        {
+            <MudProgressLinear Color="Color.Info" Size="Size.Large" Indeterminate="true" Class="my-7" />
+        }
+        else if (importState == ImportStates.Сompleted)
+        {
+            <MudText Typo="Typo.body1">@($"{_localizer["Files"]}: {_selectedRoute.Count}. {_localizer["Errors"]}: {importErrors}")</MudText>
+        }
+    </DialogContent>
+
+    <DialogActions>
+        @if (importState == ImportStates.ChooseRoute)
+        {
+            <MudButton Variant="Variant.Outlined" Color="Color.Default" Size="Size.Large" FullWidth
+                   StartIcon="@Icons.Material.Rounded.Close" OnClick="Cancel" Class="mx-4">
+                @_localizer["Close"]
+            </MudButton>
+        }
+        else if (importState == ImportStates.InProcess)
+        {
+            <MudButton Variant="Variant.Outlined" Color="Color.Default" Size="Size.Large" FullWidth
+                   StartIcon="@Icons.Material.Outlined.Eject" OnClick="Ok" Class="mx-4">
+                @_localizer["Stop"]
+            </MudButton>
+        }
+        else if (importState == ImportStates.Сompleted)
+        {
+        <MudButton Variant="Variant.Outlined" Color="Color.Primary" Size="Size.Large" FullWidth
+                   StartIcon="@Icons.Material.Rounded.Done" OnClick="Ok" Class="mx-4">
+            @_localizer["Ok"]
+        </MudButton>
+        }
+    </DialogActions>
+</MudDialog>

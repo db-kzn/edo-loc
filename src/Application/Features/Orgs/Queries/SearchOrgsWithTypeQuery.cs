@@ -45,7 +45,7 @@ internal class SearchOrgsWithTypeQueryHandler : IRequestHandler<SearchOrgsWithTy
         {
             Id = e.Id,
             Inn = e.Inn,
-            Ogrn = e.Ogrn,
+            Code = e.OmsCode,
 
             Name = e.Name,
             ShortName = e.ShortName,

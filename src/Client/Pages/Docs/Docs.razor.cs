@@ -18,6 +18,7 @@ using Microsoft.JSInterop;
 using MudBlazor;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -35,9 +36,11 @@ namespace EDO_FOMS.Client.Pages.Docs
         private MudTable<DocModel> _mudTable;
         private IEnumerable<DocModel> _pagedData;
         private DocModel _doc;
-
         private readonly List<DocModel> _docs = new();
-        private readonly List<RouteTitleModel> _routeTitles = new();
+
+        //private int _importsCount;
+        private bool importPossible = false;
+        private readonly List<ActiveRouteModel> _activeRoutes = new();
 
         public OrgsResponse orgContact;
         public ContactResponse employeeContact;
@@ -71,8 +74,6 @@ namespace EDO_FOMS.Client.Pages.Docs
         //private int _currentPage;
         //private int _pageSize = 10;
 
-        private int _importsCount;
-
         private MudDatePicker _dateFrom;
         private MudDatePicker _dateTo;
         private MudDatePicker _createOnFrom;
@@ -95,21 +96,22 @@ namespace EDO_FOMS.Client.Pages.Docs
             delay = _stateService.TooltipDelay;
             duration = _stateService.TooltipDuration;
 
-            var response = await DocManager.GetRouteTitlesAsync();
+            var response =  await DocManager.GetActiveRoutesAsync();
 
             if (response.Succeeded)
             {
-                _routeTitles.Clear();
-                response.Data.ForEach(rt => _routeTitles.Add(rt));
-                await _jsRuntime.InvokeVoidAsync("azino.Console", _routeTitles, "Route Titles");
+                _activeRoutes.Clear();
+                response.Data.ForEach(rt => _activeRoutes.Add(rt));
+                importPossible = _activeRoutes.Any(r => r.ParseFileName) && _canDocsCreate;
+                await _jsRuntime.InvokeVoidAsync("azino.Console", _activeRoutes, "Active Routes");
             }
 
-            if (_canDocsCreate)
-            {
-                var result = await DocManager.CheckForImportsAsync();
-                await _jsRuntime.InvokeVoidAsync("azino.Console", result, "For Imports");
-                if (result.Succeeded) { _importsCount = result.Data; }
-            }
+            //if (_canDocsCreate)
+            //{
+            //    var result = await DocManager.CheckForImportsAsync();
+            //    await _jsRuntime.InvokeVoidAsync("azino.Console", result, "For Imports");
+            //    if (result.Succeeded) { _importsCount = result.Data; }
+            //}
         }
 
         private void OnToggledDense(bool toggled)
@@ -353,10 +355,20 @@ namespace EDO_FOMS.Client.Pages.Docs
             var options = new DialogOptions { CloseButton = true };
 
             var dialog = _dialogService.Show<InProgressDialog>("", parameters, options);
+
             return await dialog.Result;
         }
 
-        private void ImportFiles() { }
+        private async void ImportFiles()
+        {
+            var parameters = new DialogParameters() { }; //{ nameof(InProgressDialog.Doc), doc }
+            var options = new DialogOptions { CloseButton = true }; // MaxWidth = MaxWidth.Medium, FullWidth = true, DisableBackdropClick = true
+
+            var dialog = _dialogService.Show<AvailableImportDialog>("", parameters, options);
+            var result = await dialog.Result;
+
+            if (!result.Cancelled) { await RenewAsync(); }
+        }
 
         private static string OrgName(OrgsResponse c)
         {

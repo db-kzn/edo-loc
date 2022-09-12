@@ -135,6 +135,9 @@
   <data name="Name" xml:space="preserve">
     <value>Наименование</value>
   </data>
+  <data name="NSI Code" xml:space="preserve">
+    <value>Код из реестра НСИ</value>
+  </data>
   <data name="Org ID" xml:space="preserve">
     <value>Идентификатор организации</value>
   </data>

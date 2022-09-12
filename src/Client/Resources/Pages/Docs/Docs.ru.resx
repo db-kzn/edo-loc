@@ -189,6 +189,9 @@
   <data name="From" xml:space="preserve">
     <value>C</value>
   </data>
+  <data name="Import" xml:space="preserve">
+    <value>Импорт</value>
+  </data>
   <data name="In progress" xml:space="preserve">
     <value>На подписании</value>
   </data>

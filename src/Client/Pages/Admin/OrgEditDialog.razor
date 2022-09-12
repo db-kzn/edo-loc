@@ -42,7 +42,7 @@
                     <MudTextField For="@(() => AddEditOrgModel.Inn)" @bind-Value="AddEditOrgModel.Inn" Label="@_localizer["Org INN"]" ReadOnly="@(!_canSystemEdit)"/>
                 </MudItem>
                 <MudItem xs="6" Class="input-field">
-                    <MudTextField For="@(() => AddEditOrgModel.Ogrn)" @bind-Value="AddEditOrgModel.Ogrn" Label="@_localizer["Org OGRN"]" ReadOnly="@(!_canSystemEdit)" />
+                    <MudTextField For="@(() => AddEditOrgModel.OmsCode)" @bind-Value="AddEditOrgModel.OmsCode" Label="@_localizer["NSI Code"]" ReadOnly="@(!_canSystemEdit)" />
                 </MudItem>
     
                @* <MudItem xs="6" Class="input-field">

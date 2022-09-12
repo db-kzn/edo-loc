@@ -79,7 +79,8 @@ namespace EDO_FOMS.Client.Pages.Docs
 
             if (!isSucceeded)
             {
-                // Show Error on Init
+                // Show Error on Init or:
+                // NavigateToDocs();
             }
 
             StateHasChanged();
@@ -218,7 +219,6 @@ namespace EDO_FOMS.Client.Pages.Docs
             var response = await DocManager.GetFoundContacts(request);
             return (response.Succeeded) ? response.Data : new();
         }
-
         private async Task<bool> LoadDocAsync(int id)
         {
             var response = await DocManager.GetDocCardAsync(id);
@@ -287,8 +287,9 @@ namespace EDO_FOMS.Client.Pages.Docs
         {
             if (act.Contact is null) { return; }
 
-            if (!act.Members.Exists(m => m.Contact.Id != act.Contact.Id))
+            if (!act.Members.Exists(m => m.UserId == act.Contact.Id))
             {
+                //await _jsRuntime.InvokeVoidAsync("azino.Console", m, "NEW Doc");
                 act.Members.Add(NewMainMember(act));
             }
 
@@ -575,7 +576,6 @@ namespace EDO_FOMS.Client.Pages.Docs
                 Extension = Path.GetExtension(_file.Name)
             };
         }
-
         private static string TryParse(string text, string pattern)
         {
             var result = string.Empty;

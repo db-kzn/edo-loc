@@ -47,7 +47,10 @@ namespace EDO_FOMS.Infrastructure.Contexts
         public DbSet<DocumentStatus> DocumentStatuses { get; set; }
         public DbSet<DocPacketFile> DocPacketFiles { get; set; }
         public DbSet<DocumentExtendedAttribute> DocumentExtendedAttributes { get; set; }
+
         public DbSet<Subscribe> Subscribes { get; set; }
+        public DbSet<ParamGroup> ParamGroups { get; set; }
+        public DbSet<Param> Params { get; set; }
 
         public DbSet<ChatHistory<EdoFomsUser>> ChatHistories { get; set; }
 
@@ -149,6 +152,9 @@ namespace EDO_FOMS.Infrastructure.Contexts
             builder.Entity<DocumentExtendedAttribute>(entity => entity.ToTable(name: "DocumentExtendedAttributes", schema: "doc"));
 
             builder.Entity<Subscribe>(entity => entity.ToTable(name: "Subscribes", schema: "sys"));
+            builder.Entity<ParamGroup>(entity => entity.ToTable(name: "ParamGroups", schema: "sys"));
+            builder.Entity<Param>(entity => entity.ToTable(name: "Params", schema: "sys"));
+
             builder.Entity<Audit>(entity => entity.ToTable(name: "AuditTrails", schema: "sys"));
 
             builder.Entity<ChatHistory<EdoFomsUser>>(entity =>

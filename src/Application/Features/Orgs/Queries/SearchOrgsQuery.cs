@@ -46,7 +46,7 @@ internal class SearchOrgsQueryHandler : IRequestHandler<SearchOrgsQuery, Paginat
         {
             Id = e.Id,
             Inn = e.Inn,
-            Ogrn = e.Ogrn,
+            Code = e.OmsCode,
 
             Name = e.Name,
             ShortName = e.ShortName,

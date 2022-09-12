@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EDO_FOMS.Infrastructure.Migrations
 {
     [DbContext(typeof(EdoFomsContext))]
-    [Migration("20220908192855_RouteBuider")]
-    partial class RouteBuider
+    [Migration("20220912213210_RouteBuilder")]
+    partial class RouteBuilder
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -1016,6 +1016,73 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.ToTable("Organizations", "org");
                 });
 
+            modelBuilder.Entity("EDO_FOMS.Domain.Entities.Public.Param", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("ParamGroupId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Property")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParamGroupId");
+
+                    b.ToTable("Params", "sys");
+                });
+
+            modelBuilder.Entity("EDO_FOMS.Domain.Entities.Public.ParamGroup", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Version")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ParamGroups", "sys");
+                });
+
             modelBuilder.Entity("EDO_FOMS.Domain.Entities.Public.Subscribe", b =>
                 {
                     b.Property<int>("Id")
@@ -1546,6 +1613,17 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.Navigation("Entity");
                 });
 
+            modelBuilder.Entity("EDO_FOMS.Domain.Entities.Public.Param", b =>
+                {
+                    b.HasOne("EDO_FOMS.Domain.Entities.Public.ParamGroup", "Group")
+                        .WithMany("Params")
+                        .HasForeignKey("ParamGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Group");
+                });
+
             modelBuilder.Entity("EDO_FOMS.Domain.Entities.Public.Subscribe", b =>
                 {
                     b.OwnsOne("EDO_FOMS.Domain.Entities.Public.Notify", "Chat", b1 =>
@@ -1802,6 +1880,11 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.Navigation("ExtendedAttributes");
 
                     b.Navigation("PacketFiles");
+                });
+
+            modelBuilder.Entity("EDO_FOMS.Domain.Entities.Public.ParamGroup", b =>
+                {
+                    b.Navigation("Params");
                 });
 
             modelBuilder.Entity("EDO_FOMS.Infrastructure.Models.Identity.EdoFomsRole", b =>

@@ -62,7 +62,7 @@ namespace EDO_FOMS.Client.Pages.Personal
                 _orgModel.Name = org.Name;
                 _orgModel.ShortName = org.ShortName;
 
-                _orgModel.Ogrn = org.Ogrn;
+                _orgModel.OmsCode = org.OmsCode;
                 _orgModel.Email = org.Email;
                 _orgModel.Phone = org.Phone;
 

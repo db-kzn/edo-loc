@@ -83,7 +83,6 @@ namespace EDO_FOMS.Server.Controllers.Docums
         {
             return Ok(await _mediator.Send(new CheckForImportsQuery()));
         }
-
         /// <summary>
         /// Get Route Titles
         /// </summary>
@@ -92,7 +91,18 @@ namespace EDO_FOMS.Server.Controllers.Docums
         [HttpGet("route-titles")]
         public async Task<IActionResult> GetRouteTitles()
         {
-            return Ok(await _mediator.Send(new GetRouteTitlesQuery()));
+            return Ok(await _mediator.Send(new GetActiveRoutesQuery()));
+        }
+        /// <summary>
+        /// Get Imports Count
+        /// </summary>
+        /// <param name="routeId"></param>
+        /// <returns>Status 200 OK</returns>
+        [Authorize(Policy = Permissions.Documents.Create)]
+        [HttpGet("import-files")]
+        public async Task<IActionResult> GetImportFiles(int routeId)
+        {
+            return Ok(await _mediator.Send(new GetImportFilesQuery(routeId)));
         }
 
         /// <summary>

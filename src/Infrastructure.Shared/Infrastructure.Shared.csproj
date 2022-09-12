@@ -10,7 +10,7 @@
     <ProjectReference Include="..\Application\Application.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="MailKit" Version="3.3.0" />
+    <PackageReference Include="MailKit" Version="3.4.0" />
     <PackageReference Include="MimeKit" Version="3.4.0" />
   </ItemGroup>
 </Project>

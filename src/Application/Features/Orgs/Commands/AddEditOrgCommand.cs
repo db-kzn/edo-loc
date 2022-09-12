@@ -35,7 +35,7 @@ namespace EDO_FOMS.Application.Features.Orgs.Commands
         public OrgTypes Type { get; set; } = OrgTypes.MO; // N/D, FOND, SMO, MO, CA
         public OrgStates State { get; set; } = OrgStates.Active; // N/D, OnSubmit, Active, Inactive, Blocked, Closed, Deleted
 
-        public string Ogrn { get; set; }
+        public string OmsCode { get; set; }
         public string Phone { get; set; }
         public string Email { get; set; }
     }
@@ -85,7 +85,7 @@ namespace EDO_FOMS.Application.Features.Orgs.Commands
                 if (org == null) { return await Result<int>.FailAsync(_localizer["Organization Not Found!"]); }
 
                 org.Inn = command.Inn;// ?? org.Inn;
-                org.Ogrn = command.Ogrn;
+                org.OmsCode = command.OmsCode;
                 org.Name = command.Name;
                 org.ShortName = command.ShortName;
 

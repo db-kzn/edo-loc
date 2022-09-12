@@ -7,16 +7,15 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Threading;
-using AutoMapper;
 using EDO_FOMS.Application.Interfaces.Repositories;
 using EDO_FOMS.Application.Interfaces.Services.FileSystem;
-using EDO_FOMS.Application.Interfaces.Services.Identity;
 using Microsoft.Extensions.Localization;
 using EDO_FOMS.Domain.Entities.Doc;
 using EDO_FOMS.Application.Models;
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using EDO_FOMS.Application.Configurations;
 
 namespace EDO_FOMS.Application.Features.Documents.Commands;
 
@@ -67,22 +66,19 @@ public class ActMember
 
 internal class AddEditDocCommandHandler : IRequestHandler<AddEditDocCommand, Result<int>>
 {
-    private readonly IMapper _mapper;
-    private readonly IUserService _userService;
+    //private readonly AppStorageInfo _storage;
     private readonly IUnitOfWork<int> _unitOfWork;
     private readonly IUploadService _uploadService;
     private readonly IStringLocalizer<AddEditDocCommandHandler> _localizer;
 
     public AddEditDocCommandHandler(
-        IMapper mapper,
-        IUserService userService,
+        //AppStorageInfo storage,
         IUnitOfWork<int> unitOfWork,
         IUploadService uploadService,
         IStringLocalizer<AddEditDocCommandHandler> localizer
         )
     {
-        _mapper = mapper;
-        _userService = userService;
+        //_storage = storage;
         _unitOfWork = unitOfWork;
         _uploadService = uploadService;
         _localizer = localizer;
@@ -131,13 +127,24 @@ internal class AddEditDocCommandHandler : IRequestHandler<AddEditDocCommand, Res
 
             CurrentStep = command.CurrentStep,
             TotalSteps = command.TotalSteps,
+            Version = 1,
 
             URL = command.URL,
             StoragePath = string.Empty,
-            Version = 1
+            FileName = command.UploadRequest?.FileName ?? string.Empty
         };
 
-        if (command.UploadRequest != null) { Upload(ref doc, command.UploadRequest); }
+        if (command.UploadRequest != null)
+        {
+            if (command.UploadRequest.IsServerImport)
+            {
+                ImportFile(ref doc);
+            }
+            else
+            {
+                Upload(ref doc, command.UploadRequest);
+            }
+        }
 
         // Определение первого активного этапа маршрута
         if (command.Members is not null && command.CurrentStep > 0)
@@ -342,5 +349,13 @@ internal class AddEditDocCommandHandler : IRequestHandler<AddEditDocCommand, Res
             doc.StoragePath = uploadResult?.StoragePath ?? "";
             doc.FileName = uploadResult?.FileName ?? "";
         }
+    }
+    private void ImportFile(ref Document doc)
+    {
+        var result = _uploadService.ImportDoc(doc.FileName);
+
+        doc.URL = result?.URL ?? "";
+        doc.StoragePath = result?.StoragePath ?? "";
+        //doc.FileName = result?.FileName ?? "";
     }
 }

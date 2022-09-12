@@ -37,7 +37,9 @@ namespace EDO_FOMS.Client.Infrastructure.Managers.Doc.Document
         Task<IResult<List<ContactResponse>>> GetFoundContacts(SearchContactsRequest request);
         Task<IResult<List<ContactResponse>>> GetAgreementMembersAsync(int orgId, string search);
 
-        Task<IResult<List<RouteTitleModel>>> GetRouteTitlesAsync();
+        Task<IResult<List<ActiveRouteModel>>> GetActiveRoutesAsync();
+        Task<IResult<List<ActiveRouteModel>>> CheckForImportsAsync();
+        Task<IResult<List<string>>> GetImportFilesAsync(int routeId);
 
         Task<IResult<int>> PostAsync(AddEditDocumentCommand command);
         Task<IResult<int>> PostDocAsync(AddEditDocCommand command);
@@ -48,7 +50,6 @@ namespace EDO_FOMS.Client.Infrastructure.Managers.Doc.Document
 
         Task<IResult<int>> ChangeStageAsync(ChangeDocStageCommand request);
         Task<IResult<int>> DeleteAsync(int id);
-        Task<IResult<int>> CheckForImportsAsync();
 
         Task<string> GetBase64Async(string url);
     }

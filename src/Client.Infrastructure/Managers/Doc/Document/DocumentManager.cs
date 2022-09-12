@@ -134,10 +134,20 @@ namespace EDO_FOMS.Client.Infrastructure.Managers.Doc.Document
             return await response.ToResult<List<ContactResponse>>();
         }
 
-        public async Task<IResult<List<RouteTitleModel>>> GetRouteTitlesAsync()
+        public async Task<IResult<List<ActiveRouteModel>>> GetActiveRoutesAsync()
         {
             var response = await _httpClient.GetAsync(Routes.DocumentsEndpoints.GetRouteTitles);
-            return await response.ToResult<List<RouteTitleModel>>();
+            return await response.ToResult<List<ActiveRouteModel>>();
+        }
+        public async Task<IResult<List<ActiveRouteModel>>> CheckForImportsAsync()
+        {
+            var response = await _httpClient.GetAsync(Routes.DocumentsEndpoints.GetImportsCount);
+            return await response.ToResult<List<ActiveRouteModel>>();
+        }
+        public async Task<IResult<List<string>>> GetImportFilesAsync(int routeId)
+        {
+            var response = await _httpClient.GetAsync(Routes.DocumentsEndpoints.GetImportFiles(routeId));
+            return await response.ToResult<List<string>>();
         }
 
         public async Task<IResult<int>> ChangeStageAsync(ChangeDocStageCommand request)
@@ -155,12 +165,6 @@ namespace EDO_FOMS.Client.Infrastructure.Managers.Doc.Document
         public async Task<IResult<int>> PostAgreementSignedAsync(AgreementSignedCommand command)
         {
             var response = await _httpClient.PostAsJsonAsync(Routes.DocumentsEndpoints.PostAgreementSigned, command);
-            return await response.ToResult<int>();
-        }
-
-        public async Task<IResult<int>> CheckForImportsAsync()
-        {
-            var response = await _httpClient.GetAsync(Routes.DocumentsEndpoints.GetImportsCount);
             return await response.ToResult<int>();
         }
     }

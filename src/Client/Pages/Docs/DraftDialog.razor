@@ -9,21 +9,19 @@
 
     <MudDialog Style="background-color: var(--mud-palette-background-grey);">
         <TitleContent>
-            @{
-                if (_doc.Id == 0)
-                {
-                    <MudText Typo="Typo.h6">
-                        <MudIcon Icon="@Icons.Material.Outlined.Upload" Class="mr-3 mb-n1" />
-                        @_localizer["Upload document"]
-                    </MudText>
-                }
-                else
-                {
-                    <MudText Typo="Typo.h6">
-                        <MudIcon Icon="@Icons.Material.Outlined.PublishedWithChanges" Class="mr-3 mb-n1" />
-                        @_localizer["Update document"]
-                    </MudText>
-                }
+            @if (_doc.Id == 0)
+            {
+                <MudText Typo="Typo.h6">
+                    <MudIcon Icon="@Icons.Material.Outlined.Upload" Class="mr-3 mb-n1" />
+                    @_localizer["Upload document"]
+                </MudText>
+            }
+            else
+            {
+                <MudText Typo="Typo.h6">
+                    <MudIcon Icon="@Icons.Material.Outlined.PublishedWithChanges" Class="mr-3 mb-n1" />
+                    @_localizer["Update document"]
+                </MudText>
             }
         </TitleContent>
 
@@ -64,7 +62,7 @@
                                    StartIcon="@Icons.Material.Outlined.AttachFile" IconColor="Color.Default" Style="height: 56px;"
                                    for="fileInput" HtmlTag="label">
                                 @((_file != null && !string.IsNullOrEmpty(_file.Name)) ? _file.Name :
-                            (string.IsNullOrEmpty(_doc.UploadRequest.FileName)) ? _localizer["No file"] : _doc.UploadRequest.FileName)
+                                    (string.IsNullOrEmpty(_doc.UploadRequest.FileName)) ? _localizer["No file"] : _doc.UploadRequest.FileName)
                             </MudButton>
 
                             <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["View document from server"]" Color="Color.Tertiary" Placement="Placement.Left" Arrow="true">

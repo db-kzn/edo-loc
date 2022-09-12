@@ -1,282 +1,348 @@
-﻿using EDO_FOMS.Application.Extensions;
+﻿using EDO_FOMS.Application.Configurations;
+using EDO_FOMS.Application.Extensions;
 using EDO_FOMS.Application.Interfaces.Services.FileSystem;
 using EDO_FOMS.Application.Models;
 using EDO_FOMS.Application.Requests;
 using EDO_FOMS.Domain.Enums;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.IO;
 using System.IO.Compression;
 
-namespace EDO_FOMS.Infrastructure.Services.FileSystem
+namespace EDO_FOMS.Infrastructure.Services.FileSystem;
+
+public class UploadService : IUploadService
 {
-    public class UploadService : IUploadService
+    private readonly AppStorageInfo _storage;
+    private readonly ILogger<DiskService> _logger;
+
+    private const string numberPattern = "_({0})";
+
+    public UploadService(
+        IOptions<AppStorageInfo> appStorageInfo,
+        ILogger<DiskService> logger
+        )
     {
-        private const string numberPattern = "_({0})";
+        _storage = appStorageInfo.Value;
+        _logger = logger;
+    }
 
-        public string Upload(UploadRequest request)
+    public string Upload(UploadRequest request)
+    {
+        if (request.Data == null) return string.Empty;
+        var streamData = new MemoryStream(request.Data);
+
+        if (streamData.Length > 0)
         {
-            if (request.Data == null) return string.Empty;
-            var streamData = new MemoryStream(request.Data);
-
-            if (streamData.Length > 0)
-            {
-                var currentDir = Directory.GetCurrentDirectory();
-                var dirRoot = Directory.GetDirectoryRoot(currentDir);
-
-                var folderByType = Path.Combine("Files", request.UploadType.ToDescriptionString());
-                var storagePath = Path.Combine("home", "edo", folderByType);
-
-                var pathToSave = Path.Combine(dirRoot, storagePath);
-
-                bool exists = Directory.Exists(pathToSave);
-                if (!exists) { Directory.CreateDirectory(pathToSave); }
-
-                var fileName = request.FileName.Trim('"');
-
-                var fullPath = Path.Combine(pathToSave, fileName);
-                var dbPath = Path.Combine(storagePath, fileName);
-
-                if (File.Exists(dbPath))
-                {
-                    dbPath = NextAvailableFilename(dbPath);
-                    fullPath = NextAvailableFilename(fullPath);
-                }
-
-                using (var stream = new FileStream(fullPath, FileMode.Create))
-                {
-                    streamData.CopyTo(stream);
-                }
-
-                return dbPath;
-            }
-            else
-            {
-                return string.Empty;
-            }
-        }
-
-        public UploadResult UploadDoc(UploadRequest request, int ver = 1, string prevStoragePath = "")
-        {
-            if (request.Data == null) { return null; } // string.Empty;
-            var streamData = new MemoryStream(request.Data);
-            if (streamData.Length == 0) { return null; } // string.Empty;
-
             var currentDir = Directory.GetCurrentDirectory();
             var dirRoot = Directory.GetDirectoryRoot(currentDir);
-            var basePath = Path.Combine(dirRoot, "home", "edo"); // Base Path on the Storage
 
-            if (!string.IsNullOrWhiteSpace(prevStoragePath))
+            var folderByType = Path.Combine("Files", request.UploadType.ToDescriptionString());
+            var storagePath = Path.Combine("home", "edo", folderByType);
+
+            var pathToSave = Path.Combine(dirRoot, storagePath);
+
+            bool exists = Directory.Exists(pathToSave);
+            if (!exists) { Directory.CreateDirectory(pathToSave); }
+
+            var fileName = request.FileName.Trim('"');
+
+            var fullPath = Path.Combine(pathToSave, fileName);
+            var dbPath = Path.Combine(storagePath, fileName);
+
+            if (File.Exists(dbPath))
             {
-                // Delete Folder by prevStoragePath
-                var deletePath = Path.Combine(basePath, prevStoragePath);
-                Directory.Delete(deletePath, true);
+                dbPath = NextAvailableFilename(dbPath);
+                fullPath = NextAvailableFilename(fullPath);
             }
-
-            var storagePath = Path.Combine("Files", request.UploadType.ToDescriptionString()); // Files\docs
-
-            var fileName = request.FileName.Trim('"'); // Path.GetFileName(request.FileName)
-
-            if (request.UploadType == UploadType.Document)
-            {
-                var nowDate = DateTime.Today;
-                var year = nowDate.ToString("yyyy");
-                var month = nowDate.ToString("MM");
-                var day = nowDate.ToString("dd");
-
-                var fileBase = Path.GetFileNameWithoutExtension(fileName);
-                if (ver > 1) { fileBase += $"_v{ver}"; }
-
-                var docPath = Path.Combine(year, month, day, fileBase);
-                storagePath = Path.Combine(storagePath, docPath);
-            }
-
-            var pathToSave = Path.Combine(basePath, storagePath);
-
-            if (Directory.Exists(pathToSave))
-            {
-                storagePath = GetNextUrlName(basePath, storagePath);
-                pathToSave = Path.Combine(basePath, storagePath);
-            }
-
-            Directory.CreateDirectory(pathToSave);
-
-            var fullUrl = Path.Combine(storagePath, fileName);
-            var fullPath = Path.Combine(basePath, fullUrl);
 
             using (var stream = new FileStream(fullPath, FileMode.Create))
             {
                 streamData.CopyTo(stream);
             }
 
-            UploadResult result = new()
-            {
-                URL = fullUrl,
-                StoragePath = storagePath,
-                FileName = fileName
-            };
+            return dbPath;
+        }
+        else
+        {
+            return string.Empty;
+        }
+    }
 
-            return result;
+    public UploadResult UploadDoc(UploadRequest request, int ver = 1, string prevStoragePath = "")
+    {
+        if (request.Data == null) { return null; } // string.Empty;
+        var streamData = new MemoryStream(request.Data);
+        if (streamData.Length == 0) { return null; } // string.Empty;
+
+        var currentDir = Directory.GetCurrentDirectory();
+        var dirRoot = Directory.GetDirectoryRoot(currentDir);
+        var basePath = Path.Combine(dirRoot, "home", "edo"); // Base Path on the Storage
+
+        if (!string.IsNullOrWhiteSpace(prevStoragePath))
+        {
+            // Delete Folder by prevStoragePath
+            var deletePath = Path.Combine(basePath, prevStoragePath);
+            Directory.Delete(deletePath, true);
         }
 
-        public UploadResult ArchiveDoc(string storagePath, string fileName)
+        var fileName = request.FileName.Trim('"'); // Path.GetFileName(request.FileName)
+
+        var storagePath = Path.Combine("Files", request.UploadType.ToDescriptionString()); // Files\docs
+
+        if (request.UploadType == UploadType.Document)
         {
-            var currentDir = Directory.GetCurrentDirectory();
-            var dirRoot = Directory.GetDirectoryRoot(currentDir);
-            var basePath = Path.Combine(dirRoot, "home", "edo"); // Base Path on the Storage
-
-            var docPath = Path.Combine(basePath, storagePath);
-
-            if (!Directory.Exists(docPath)) { return null; } // Нечего архивировать
-
-            var fileTitle = Path.GetFileNameWithoutExtension(fileName);
-            var archName = fileTitle + ".zip";
-            var archivePath = Path.Combine("Files", "arcs");
-
             var nowDate = DateTime.Today;
             var year = nowDate.ToString("yyyy");
             var month = nowDate.ToString("MM");
             var day = nowDate.ToString("dd");
-            var pathByDay = Path.Combine(year, month, day);
 
-            archivePath = Path.Combine(archivePath, pathByDay);
-            var pathToArch = Path.Combine(basePath, archivePath);
-            if (!Directory.Exists(pathToArch)) { Directory.CreateDirectory(pathToArch); }
+            var fileBase = Path.GetFileNameWithoutExtension(fileName);
+            if (ver > 1) { fileBase += $"_v{ver}"; }
 
-            var arcUrl = Path.Combine(archivePath, archName);
-            var fullPath = Path.Combine(basePath, arcUrl);
-            if (File.Exists(fullPath))
-            {
-                arcUrl = GetNextArcPath(basePath, archivePath, fileTitle);
-                fullPath = Path.Combine(basePath, arcUrl);
-            }
-            ZipFile.CreateFromDirectory(docPath, fullPath);
-
-            var result = new UploadResult()
-            {
-                URL = arcUrl,              // Полный путь для загрузки архива
-                StoragePath = archivePath, // Путь сохранения архива
-                FileName = archName        // Исходное имя с заменой PDF на ZIP
-            };
-
-            return result;
+            var docPath = Path.Combine(year, month, day, fileBase);
+            storagePath = Path.Combine(storagePath, docPath);
         }
 
-        public bool UploadSign(byte[] Data, string path, string name)
+        var pathToSave = Path.Combine(basePath, storagePath);
+
+        if (Directory.Exists(pathToSave))
         {
-            var signName = CheckName(name) + ".sig";
-
-            if (Data == null) { return false; }
-            var streamData = new MemoryStream(Data);
-            if (streamData.Length == 0) { return false; }
-
-            var currentDir = Directory.GetCurrentDirectory();
-            var dirRoot = Directory.GetDirectoryRoot(currentDir);
-            var basePath = Path.Combine(dirRoot, "home", "edo"); // Base Path on the Storage
-
-            var fullPath = Path.Combine(basePath, path, signName);
-
-            try
-            {
-                using var stream = new FileStream(fullPath, FileMode.Create);
-                streamData.CopyTo(stream);
-            }
-            catch
-            {
-                return false;
-            }
-
-            return true;
+            storagePath = GetNextUrlName(basePath, storagePath);
+            pathToSave = Path.Combine(basePath, storagePath);
         }
 
-        public bool DeleteFolder(string path)
+        Directory.CreateDirectory(pathToSave);
+
+        var fullUrl = Path.Combine(storagePath, fileName);
+        var fullPath = Path.Combine(basePath, fullUrl);
+
+        using (var stream = new FileStream(fullPath, FileMode.Create))
         {
-            if (!Directory.Exists(path)) { return false; }
-
-            Directory.Delete(path, true);
-
-            return true;
+            streamData.CopyTo(stream);
         }
 
-        public static string NextAvailableFilename(string path)
+        UploadResult result = new()
         {
-            // Short-cut if already available
-            if (!File.Exists(path)) { return path; }
+            URL = fullUrl,
+            StoragePath = storagePath,
+            FileName = fileName
+        };
 
-            // If path has extension then insert the number pattern just before the extension and return next filename
-            if (Path.HasExtension(path))
-            {
-                return GetNextFilename(path.Insert(path.LastIndexOf(Path.GetExtension(path)), numberPattern));
-            }
+        return result;
+    }
+    public UploadResult ImportDoc(string fileName)
+    {
+        var pathForImport = _storage.PathForImport;
+        if (!Directory.Exists(pathForImport)) { return null; } // Error
 
-            // Otherwise just append the pattern to the path and return next filename
-            return GetNextFilename(path + numberPattern);
-        }
-        private static string GetNextFilename(string pattern)
+        var filePath = Path.Combine(pathForImport, fileName);
+        var file = new FileInfo(filePath);
+        if (!file.Exists) { return null; } // Error
+
+        var currentDir = Directory.GetCurrentDirectory();
+        var dirRoot = Directory.GetDirectoryRoot(currentDir);
+        var basePath = Path.Combine(dirRoot, "home", "edo"); // Base Path on the Storage
+        var storagePath = Path.Combine("Files", UploadType.Document.ToDescriptionString()); // Files\docs
+
+        var nowDate = DateTime.Today;
+        var year = nowDate.ToString("yyyy");
+        var month = nowDate.ToString("MM");
+        var day = nowDate.ToString("dd");
+
+        var fileBase = Path.GetFileNameWithoutExtension(fileName);
+        var docPath = Path.Combine(year, month, day, fileBase);
+        storagePath = Path.Combine(storagePath, docPath);
+        var pathToSave = Path.Combine(basePath, storagePath);
+
+        if (Directory.Exists(pathToSave))
         {
-            string tmp = string.Format(pattern, 1);
-            //if (tmp == pattern)
-            //throw new ArgumentException("The pattern must include an index place-holder", "pattern");
-
-            if (!File.Exists(tmp))
-                return tmp; // short-circuit if no matches
-
-            int min = 1, max = 2; // min is inclusive, max is exclusive/untested
-
-            while (File.Exists(string.Format(pattern, max)))
-            {
-                min = max;
-                max *= 2;
-            }
-
-            while (max != min + 1)
-            {
-                int pivot = (max + min) / 2;
-                if (File.Exists(string.Format(pattern, pivot)))
-                    min = pivot;
-                else
-                    max = pivot;
-            }
-
-            return string.Format(pattern, max);
+            storagePath = GetNextUrlName(basePath, storagePath);
+            pathToSave = Path.Combine(basePath, storagePath);
         }
-        private static string GetNextUrlName(string storage, string url)
+
+        var fullUrl = Path.Combine(storagePath, fileName);
+        var fullPath = Path.Combine(basePath, fullUrl);
+
+        try
         {
-            var i = 1;
-            var testUrl = $"{url}_{i}";
-
-            while (Directory.Exists($"{Path.Combine(storage, testUrl)}"))
-            {
-                i += 1;
-                testUrl = $"{url}_{i}";
-            }
-
-            return testUrl;
+            Directory.CreateDirectory(pathToSave);
+            file.MoveTo(fullPath);
         }
-        private static string GetNextArcPath(string storage, string url, string fileTitle)
+        catch (Exception)
         {
-            var i = 1;
-            var testUrl = Path.Combine(url, $"{fileTitle}_{i}.zip");
-            var testPath = Path.Combine(storage, testUrl);
-
-            while (File.Exists(testPath))
-            {
-                i++;
-                testUrl = Path.Combine(url, $"{fileTitle}_{i}.zip");
-                testPath = Path.Combine(storage, testUrl);
-            }
-
-            return testUrl;
+            //_logger.LogError(message: ex.Message);
+            return null; // Error
         }
-        private static string CheckName(string name)
+
+        UploadResult result = new()
         {
-            if (string.IsNullOrWhiteSpace(name)) { return ""; }
+            URL = fullUrl,
+            StoragePath = storagePath,
+            FileName = fileName
+        };
 
-            foreach (char c in " +=[]:;,./?*<>(){}\\\"")
-            {
-                if (name.Contains(c)) { name = name.Replace(c, '_'); }
-            }
+        return result;
+    }
+    public UploadResult ArchiveDoc(string storagePath, string fileName)
+    {
+        var currentDir = Directory.GetCurrentDirectory();
+        var dirRoot = Directory.GetDirectoryRoot(currentDir);
+        var basePath = Path.Combine(dirRoot, "home", "edo"); // Base Path on the Storage
 
-            return name;
+        var docPath = Path.Combine(basePath, storagePath);
+
+        if (!Directory.Exists(docPath)) { return null; } // Нечего архивировать
+
+        var fileTitle = Path.GetFileNameWithoutExtension(fileName);
+        var archName = fileTitle + ".zip";
+        var archivePath = Path.Combine("Files", "arcs");
+
+        var nowDate = DateTime.Today;
+        var year = nowDate.ToString("yyyy");
+        var month = nowDate.ToString("MM");
+        var day = nowDate.ToString("dd");
+        var pathByDay = Path.Combine(year, month, day);
+
+        archivePath = Path.Combine(archivePath, pathByDay);
+        var pathToArch = Path.Combine(basePath, archivePath);
+        if (!Directory.Exists(pathToArch)) { Directory.CreateDirectory(pathToArch); }
+
+        var arcUrl = Path.Combine(archivePath, archName);
+        var fullPath = Path.Combine(basePath, arcUrl);
+        if (File.Exists(fullPath))
+        {
+            arcUrl = GetNextArcPath(basePath, archivePath, fileTitle);
+            fullPath = Path.Combine(basePath, arcUrl);
         }
+        ZipFile.CreateFromDirectory(docPath, fullPath);
+
+        var result = new UploadResult()
+        {
+            URL = arcUrl,              // Полный путь для загрузки архива
+            StoragePath = archivePath, // Путь сохранения архива
+            FileName = archName        // Исходное имя с заменой PDF на ZIP
+        };
+
+        return result;
+    }
+
+    public bool UploadSign(byte[] Data, string path, string name)
+    {
+        var signName = CheckName(name) + ".sig";
+
+        if (Data == null) { return false; }
+        var streamData = new MemoryStream(Data);
+        if (streamData.Length == 0) { return false; }
+
+        var currentDir = Directory.GetCurrentDirectory();
+        var dirRoot = Directory.GetDirectoryRoot(currentDir);
+        var basePath = Path.Combine(dirRoot, "home", "edo"); // Base Path on the Storage
+
+        var fullPath = Path.Combine(basePath, path, signName);
+
+        try
+        {
+            using var stream = new FileStream(fullPath, FileMode.Create);
+            streamData.CopyTo(stream);
+        }
+        catch
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    public bool DeleteFolder(string path)
+    {
+        if (!Directory.Exists(path)) { return false; }
+
+        Directory.Delete(path, true);
+
+        return true;
+    }
+
+    public static string NextAvailableFilename(string path)
+    {
+        // Short-cut if already available
+        if (!File.Exists(path)) { return path; }
+
+        // If path has extension then insert the number pattern just before the extension and return next filename
+        if (Path.HasExtension(path))
+        {
+            return GetNextFilename(path.Insert(path.LastIndexOf(Path.GetExtension(path)), numberPattern));
+        }
+
+        // Otherwise just append the pattern to the path and return next filename
+        return GetNextFilename(path + numberPattern);
+    }
+    private static string GetNextFilename(string pattern)
+    {
+        string tmp = string.Format(pattern, 1);
+        //if (tmp == pattern)
+        //throw new ArgumentException("The pattern must include an index place-holder", "pattern");
+
+        if (!File.Exists(tmp))
+            return tmp; // short-circuit if no matches
+
+        int min = 1, max = 2; // min is inclusive, max is exclusive/untested
+
+        while (File.Exists(string.Format(pattern, max)))
+        {
+            min = max;
+            max *= 2;
+        }
+
+        while (max != min + 1)
+        {
+            int pivot = (max + min) / 2;
+            if (File.Exists(string.Format(pattern, pivot)))
+                min = pivot;
+            else
+                max = pivot;
+        }
+
+        return string.Format(pattern, max);
+    }
+    private static string GetNextUrlName(string storage, string url)
+    {
+        var i = 1;
+        var testUrl = $"{url}_{i}";
+
+        while (Directory.Exists($"{Path.Combine(storage, testUrl)}"))
+        {
+            i += 1;
+            testUrl = $"{url}_{i}";
+        }
+
+        return testUrl;
+    }
+    private static string GetNextArcPath(string storage, string url, string fileTitle)
+    {
+        var i = 1;
+        var testUrl = Path.Combine(url, $"{fileTitle}_{i}.zip");
+        var testPath = Path.Combine(storage, testUrl);
+
+        while (File.Exists(testPath))
+        {
+            i++;
+            testUrl = Path.Combine(url, $"{fileTitle}_{i}.zip");
+            testPath = Path.Combine(storage, testUrl);
+        }
+
+        return testUrl;
+    }
+    private static string CheckName(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name)) { return ""; }
+
+        foreach (char c in " +=[]:;,./?*<>(){}\\\"")
+        {
+            if (name.Contains(c)) { name = name.Replace(c, '_'); }
+        }
+
+        return name;
     }
 }

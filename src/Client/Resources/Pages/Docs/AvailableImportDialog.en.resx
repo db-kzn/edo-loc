@@ -117,160 +117,34 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Actions" xml:space="preserve">
-    <value>Actions</value>
+  <data name="Available Import" xml:space="preserve">
+    <value>Available Import</value>
   </data>
-  <data name="Additional doc files" xml:space="preserve">
-    <value>Additional doc files</value>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
   </data>
-  <data name="Agreed" xml:space="preserve">
-    <value>Agreed</value>
+  <data name="Code" xml:space="preserve">
+    <value>Code</value>
   </data>
-  <data name="Card" xml:space="preserve">
-    <value>Card</value>
+  <data name="Errors" xml:space="preserve">
+    <value>Errors</value>
   </data>
-  <data name="Chief" xml:space="preserve">
-    <value>Chief</value>
+  <data name="Files" xml:space="preserve">
+    <value>Files</value>
   </data>
-  <data name="Chief of Fund Contact Required" xml:space="preserve">
-    <value>Chief of Fund Contact Required</value>
+  <data name="Mask" xml:space="preserve">
+    <value>Mask</value>
   </data>
-  <data name="Contact Required" xml:space="preserve">
-    <value>Contact Required</value>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
   </data>
-  <data name="Description" xml:space="preserve">
-    <value>Description</value>
+  <data name="Ok" xml:space="preserve">
+    <value>Ok</value>
   </data>
-  <data name="Doc File Required" xml:space="preserve">
-    <value>Doc File Required</value>
+  <data name="Short" xml:space="preserve">
+    <value>Short</value>
   </data>
-  <data name="Doc Title Required" xml:space="preserve">
-    <value>Doc Title Required</value>
-  </data>
-  <data name="Document" xml:space="preserve">
-    <value>Document</value>
-  </data>
-  <data name="Document Card" xml:space="preserve">
-    <value>Document Card</value>
-  </data>
-  <data name="Document Date" xml:space="preserve">
-    <value>Document Date</value>
-  </data>
-  <data name="Document status" xml:space="preserve">
-    <value>Document status</value>
-  </data>
-  <data name="Document type" xml:space="preserve">
-    <value>Document type</value>
-  </data>
-  <data name="Documents" xml:space="preserve">
-    <value>Documents</value>
-  </data>
-  <data name="Draft" xml:space="preserve">
-    <value>Draft</value>
-  </data>
-  <data name="Employee" xml:space="preserve">
-    <value>Employee</value>
-  </data>
-  <data name="Employee of a MO" xml:space="preserve">
-    <value>Employee of a MO</value>
-  </data>
-  <data name="Employee of a SMO" xml:space="preserve">
-    <value>Employee of a SMO</value>
-  </data>
-  <data name="Employee of the Fund OMS" xml:space="preserve">
-    <value>Employee of the Fund OMS</value>
-  </data>
-  <data name="Employees not found" xml:space="preserve">
-    <value>Employees not found</value>
-  </data>
-  <data name="Executor" xml:space="preserve">
-    <value>Executor</value>
-  </data>
-  <data name="Fund" xml:space="preserve">
-    <value>Fund</value>
-  </data>
-  <data name="Head of the Fund OMS" xml:space="preserve">
-    <value>Head of the Fund OMS</value>
-  </data>
-  <data name="In progress" xml:space="preserve">
-    <value>In progress</value>
-  </data>
-  <data name="MO" xml:space="preserve">
-    <value>MO</value>
-  </data>
-  <data name="MO Contact Required" xml:space="preserve">
-    <value>MO Contact Required</value>
-  </data>
-  <data name="No file" xml:space="preserve">
-    <value>No file</value>
-  </data>
-  <data name="Not necessary" xml:space="preserve">
-    <value>Not necessary</value>
-  </data>
-  <data name="Number" xml:space="preserve">
-    <value>Number</value>
-  </data>
-  <data name="of a" xml:space="preserve">
-    <value>of a</value>
-  </data>
-  <data name="of the" xml:space="preserve">
-    <value>of the</value>
-  </data>
-  <data name="Rejected" xml:space="preserve">
-    <value>Rejected</value>
-  </data>
-  <data name="Required to fill" xml:space="preserve">
-    <value>Required to fill</value>
-  </data>
-  <data name="Responsible (FOND)" xml:space="preserve">
-    <value>Responsible (FOND)</value>
-  </data>
-  <data name="Save" xml:space="preserve">
-    <value>Save</value>
-  </data>
-  <data name="Send" xml:space="preserve">
-    <value>Send</value>
-  </data>
-  <data name="Signer (MO)" xml:space="preserve">
-    <value>Signer (MO)</value>
-  </data>
-  <data name="Signer (SMO)" xml:space="preserve">
-    <value>Signer (SMO)</value>
-  </data>
-  <data name="SMO" xml:space="preserve">
-    <value>SMO</value>
-  </data>
-  <data name="SMO Contact Required" xml:space="preserve">
-    <value>SMO Contact Required</value>
-  </data>
-  <data name="Stage" xml:space="preserve">
-    <value>Stage</value>
-  </data>
-  <data name="Supervisor (FOND)" xml:space="preserve">
-    <value>Supervisor (FOND)</value>
-  </data>
-  <data name="Title" xml:space="preserve">
-    <value>Title</value>
-  </data>
-  <data name="Undefined" xml:space="preserve">
-    <value>Undefined</value>
-  </data>
-  <data name="Update" xml:space="preserve">
-    <value>Update</value>
-  </data>
-  <data name="Update document" xml:space="preserve">
-    <value>Update document</value>
-  </data>
-  <data name="Upload document" xml:space="preserve">
-    <value>Upload document</value>
-  </data>
-  <data name="Upload file" xml:space="preserve">
-    <value>Upload file</value>
-  </data>
-  <data name="Uploading" xml:space="preserve">
-    <value>Uploading</value>
-  </data>
-  <data name="View document from server" xml:space="preserve">
-    <value>View document from server</value>
+  <data name="Stop" xml:space="preserve">
+    <value>Stop</value>
   </data>
 </root>

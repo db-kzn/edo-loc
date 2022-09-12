@@ -7,7 +7,7 @@ namespace EDO_FOMS.Application.Features.Orgs.Queries
 		public int Id { get; set; }
 
 		public string Inn { get; set; }
-		public string Ogrn { get; set; }
+		public string OmsCode { get; set; }
 		public string Name { get; set; }
 		public string ShortName { get; set; }
 

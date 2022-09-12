@@ -238,7 +238,7 @@ namespace EDO_FOMS.Client.Pages.Admin
                     {
                         Id = org.Id,
                         Inn = org.Inn,
-                        Ogrn = org.Ogrn,
+                        OmsCode = org.Code,
 
                         Name = org.Name,
                         ShortName = org.ShortName,
