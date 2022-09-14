@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using EDO_FOMS.Application.Interfaces.Chat;
 using EDO_FOMS.Application.Models.Chat;
+using EDO_FOMS.Application.Interfaces.Common;
 
 namespace EDO_FOMS.Application.Interfaces.Services
 {
-    public interface IChatService
+    public interface IChatService : IService
     {
         Task<Result<IEnumerable<ChatUserResponse>>> GetChatUsersAsync(string userId);
 

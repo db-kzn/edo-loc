@@ -1,8 +1,9 @@
-﻿using System;
+﻿using EDO_FOMS.Application.Interfaces.Common;
+using System;
 
 namespace EDO_FOMS.Application.Interfaces.Services.Storage
 {
-    public interface ISyncServerStorageService
+    public interface ISyncServerStorageService : IService
     {
         /// <summary>
         /// Clears all data from server storage.

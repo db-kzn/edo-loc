@@ -4,6 +4,6 @@ using Microsoft.Extensions.Configuration;
 
 namespace EDO_FOMS.Infrastructure.Services.Storage;
 
-public class ServerState : IServerState
+public class ServerState : IServerStateService
 {
 }

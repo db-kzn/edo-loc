@@ -1,9 +1,10 @@
-﻿using EDO_FOMS.Application.Models;
+﻿using EDO_FOMS.Application.Interfaces.Common;
+using EDO_FOMS.Application.Models;
 using EDO_FOMS.Application.Requests;
 
 namespace EDO_FOMS.Application.Interfaces.Services.FileSystem;
 
-public interface IUploadService
+public interface IUploadService : IService
 {
     string Upload(UploadRequest request);
     UploadResult UploadDoc(UploadRequest request, int ver, string path);

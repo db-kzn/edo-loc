@@ -551,6 +551,19 @@
             <param name="command"></param>
             <returns>Status 200 OK</returns>
         </member>
+        <member name="M:EDO_FOMS.Server.Controllers.System.AdminController.GetUserCerts">
+            <summary>
+            Get Mail Configuration
+            </summary>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.System.AdminController.SaveMailParams(EDO_FOMS.Application.Configurations.MailConfiguration)">
+            <summary>
+            Save Mail Configuration
+            </summary>
+            <param name="mail"></param>
+            <returns>Status 200 OK</returns>
+        </member>
         <member name="M:EDO_FOMS.Server.Controllers.System.AdminController.Post(EDO_FOMS.Application.Models.MailModel)">
             <summary>
             Send Mail

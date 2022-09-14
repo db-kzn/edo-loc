@@ -1,9 +1,10 @@
-﻿using System;
+﻿using EDO_FOMS.Application.Interfaces.Common;
+using System;
 using System.Threading.Tasks;
 
 namespace EDO_FOMS.Application.Interfaces.Services.Storage
 {
-    public interface IServerStorageService
+    public interface IServerStorageService : IService
     {
         /// <summary>
         /// Clears all data from server storage.

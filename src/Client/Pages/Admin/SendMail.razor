@@ -7,62 +7,125 @@
 
 
 <MudPaper Square="true" Elevation="3" Style="z-index: 1;">
-    <MudToolBar  Elevation="2">
-        <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Send Mail"]" Color="Color.Tertiary" Placement="Placement.Right">
+    <MudToolBar Elevation="2">
+        <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Mail Server Params"]" Color="Color.Tertiary" Placement="Placement.Right">
             <MudText Typo="Typo.button">@_localizer["Mail"]</MudText>
         </MudTooltip>
 
         @*<MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Renew"]" Color="Color.Tertiary" Placement="Placement.Right">
-            <MudIconButton Icon="@Icons.Material.Outlined.Sync" aria-label="Renew" OnClick="RenewAsync"></MudIconButton>
+        <MudIconButton Icon="@Icons.Material.Outlined.Sync" aria-label="Renew" OnClick="RenewAsync"></MudIconButton>
         </MudTooltip>*@
 
         <MudSpacer />
 
-        @*<MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" Class="search-field" Immediate="true" FullWidth=false 
-            Placeholder="@_localizer["Search For Users"]" T="string" @bind-Value="_searchString" 
-            Adornment="Adornment.End" AdornmentColor="Color.Primary" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" >
+        @*<MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" Class="search-field" Immediate="true" FullWidth=false
+        Placeholder="@_localizer["Search For Users"]" T="string" @bind-Value="_searchString"
+        Adornment="Adornment.End" AdornmentColor="Color.Primary" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" >
         </MudTextField>*@
 
         @*Class="mt-0 mb-3"*@
         @*<MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Link to the organization"]" Color="Color.Tertiary" Placement="Placement.Left">
-            <MudIconButton Icon="@Icons.Material.Outlined.AddLink" Color="Color.Inherit" Edge="Edge.End"/>
+        <MudIconButton Icon="@Icons.Material.Outlined.AddLink" Color="Color.Inherit" Edge="Edge.End"/>
         </MudTooltip>*@
     </MudToolBar>
 </MudPaper>
 
 <MudContainer MaxWidth="MaxWidth.False" Class="pa-6">
-    <EditForm Model="@_mailModel" OnValidSubmit="ToSend">
-        <MudCard>
-            <MudCardContent>
-                <MudGrid>
-                    <MudItem md="6">
-                        <MudTextField @bind-Value="@_mailModel.Email" For="@(() => _mailModel.Email)" Label="@_localizer["Address"]" Variant="Variant.Text" />
-                    </MudItem>
+    <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" @ref="_tabs">
+        <ChildContent>
+            <MudTabPanel Text="@_localizer["Params"]">
+                <MudCard>
+                    <MudCardContent>
+                        <MudGrid Style="max-height: 70vh; overflow-y: scroll;">
+                            <MudItem xs="6">
+                                <MudTextField @bind-Value="mail.Host" Label="@_localizer["Host"]" />
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudTextField @bind-Value="mail.Port" Label="@_localizer["Port"]" />
+                            </MudItem>
 
-                    <MudItem md="6">
-                        <MudTextField @bind-Value="@_mailModel.Theme" For="@(() => _mailModel.Theme)" Label="@_localizer["Theme"]" Variant="Variant.Text" />
-                    </MudItem>
+                            <MudItem xs="6">
+                                <MudTextField @bind-Value="mail.UserName" Label="@_localizer["User Name"]" />
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudTextField @bind-Value="mail.Password" InputType="@passwordInput" Label="@_localizer["Password"]"
+                                              Adornment="Adornment.End" AdornmentIcon="@passwordInputIcon" AdornmentColor="@iconColor"
+                                              OnAdornmentClick="ShowPassword" AdornmentAriaLabel="@_localizer["Show Password"]" />
+                            </MudItem>
 
-                    <MudItem md="12">
-                        <MudTextField @bind-Value="@_mailModel.Text" For="@(() => _mailModel.Text)" Label="@_localizer["Mail Text"]" Variant="Variant.Outlined" />
-                    </MudItem>
-                </MudGrid>
-            </MudCardContent>
+                            <MudItem xs="6">
+                                <MudTextField @bind-Value="mail.From" Label="@_localizer["Service e-mail"]" />
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudTextField @bind-Value="mail.DisplayName" Label="@_localizer["Display Name"]" />
+                            </MudItem>
 
-            <MudDivider />
+                            <MudItem xs="12">
+                                <MudTextField @bind-Value="mail.MailPattern" Label="@_localizer["Mail Pattern"]" />
+                            </MudItem>
+                        </MudGrid>
+                    </MudCardContent>
 
-            <MudCardActions>
-                <MudButton FullWidth="true" Variant="Variant.Outlined" Color="Color.Primary" Class="ml-auto" ButtonType="ButtonType.Submit">@_localizer["Send"]</MudButton>
-            </MudCardActions>
-        </MudCard>
-    </EditForm>
+                    <MudDivider />
+
+                    <MudCardActions>
+                        <MudButton Size="Size.Large" Class="mx-2" FullWidth Variant="Variant.Outlined" Color="Color.Primary"
+                                   StartIcon="@Icons.Material.Rounded.Done"
+                                   OnClick="() => SaveAsync()">
+                            @_localizer["Save"]
+                        </MudButton>
+                        <MudButton Size="Size.Large" Class="mx-2" FullWidth Variant="Variant.Outlined" Color="Color.Default"
+                                   EndIcon="@Icons.Material.Rounded.KeyboardDoubleArrowRight"
+                                   OnClick="() => _tabs.ActivatePanel(1)">
+                            @_localizer["Testing"]
+                        </MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudTabPanel>
+
+            <MudTabPanel Text="@_localizer["Test"]">
+                <MudCard>
+                    <MudCardContent>
+                        <MudGrid>
+                            <MudItem md="6">
+                                <MudTextField @bind-Value="@_mailModel.Email" For="@(() => _mailModel.Email)" Label="@_localizer["Address"]" Variant="Variant.Outlined" />
+                            </MudItem>
+
+                            <MudItem md="6">
+                                <MudTextField @bind-Value="@_mailModel.Theme" For="@(() => _mailModel.Theme)" Label="@_localizer["Theme"]" Variant="Variant.Outlined" />
+                            </MudItem>
+
+                            <MudItem md="12">
+                                <MudTextField Lines="5" @bind-Value="@_mailModel.Text" For="@(() => _mailModel.Text)" Label="@_localizer["Mail Text"]" Variant="Variant.Outlined" />
+                            </MudItem>
+                        </MudGrid>
+                    </MudCardContent>
+
+                    <MudDivider />
+
+                    <MudCardActions>
+                        <MudButton Size="Size.Large" Class="mx-2" FullWidth Variant="Variant.Outlined" Color="Color.Default"
+                                   StartIcon="@Icons.Material.Rounded.KeyboardDoubleArrowLeft"
+                                   OnClick="() => _tabs.ActivatePanel(0)">
+                            @_localizer["Params"]
+                        </MudButton>
+                        <MudButton Size="Size.Large" Class="mx-2" FullWidth="true" Variant="Variant.Outlined" Color="Color.Primary"
+                                   EndIcon="@Icons.Material.Rounded.Send"
+                                   OnClick="() => ToSend()">
+                            @_localizer["Send"]
+                            </MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudTabPanel>
+        </ChildContent>
+    </MudTabs>
 </MudContainer>
 
 <MudDrawer Anchor="Anchor.Right" Elevation="1" Variant="@DrawerVariant.Persistent" ClipMode="DrawerClipMode.Always">
     <MudDrawerHeader Style="padding: 8px 4px 8px 16px;">
         <MudText Style="align-self:center;" Typo="Typo.h6" Inline="true">@_localizer[""]</MudText>
     </MudDrawerHeader>
-    
+
     <MudDivider />
 
     <MudList Clickable="true" Class="py-0">

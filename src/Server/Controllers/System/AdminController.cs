@@ -1,7 +1,10 @@
-﻿using EDO_FOMS.Application.Features.Certs.Commands;
+﻿using EDO_FOMS.Application.Configurations;
+using EDO_FOMS.Application.Features.Certs.Commands;
 using EDO_FOMS.Application.Features.Certs.Queries;
 using EDO_FOMS.Application.Features.Orgs.Commands;
 using EDO_FOMS.Application.Features.Orgs.Queries;
+using EDO_FOMS.Application.Features.System.Command;
+using EDO_FOMS.Application.Features.System.Queries;
 using EDO_FOMS.Application.Interfaces.Services.Identity;
 using EDO_FOMS.Application.Models;
 using EDO_FOMS.Application.Requests.Admin;
@@ -174,6 +177,29 @@ namespace EDO_FOMS.Server.Controllers.System
         public async Task<IActionResult> Post(AddEditOrgCommand command)
         {
             return Ok(await _mediator.Send(command));
+        }
+
+        /// <summary>
+        /// Get Mail Configuration
+        /// </summary>
+        /// <returns>Status 200 OK</returns>
+        [Authorize(Policy = Permissions.System.View)]
+        [HttpGet("mail-params")]
+        public async Task<IActionResult> GetUserCerts()
+        {
+            return Ok(await _mediator.Send(new GetMailParamsQuery()));
+        }
+
+        /// <summary>
+        /// Save Mail Configuration
+        /// </summary>
+        /// <param name="mail"></param>
+        /// <returns>Status 200 OK</returns>
+        [Authorize(Policy = Permissions.System.Edit)]
+        [HttpPost("mail-params")]
+        public async Task<IActionResult> SaveMailParams(MailConfiguration mail)
+        {
+            return Ok(await _mediator.Send(new SaveMailParamsCommand(mail)));
         }
 
         /// <summary>

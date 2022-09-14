@@ -1,6 +1,7 @@
 ﻿using EDO_FOMS.Application.Interfaces.Services;
 using EDO_FOMS.Domain.Entities.Dir;
 using EDO_FOMS.Domain.Entities.Org;
+using EDO_FOMS.Domain.Entities.Public;
 using EDO_FOMS.Domain.Enums;
 using EDO_FOMS.Infrastructure.Contexts;
 using EDO_FOMS.Infrastructure.Helpers;
@@ -11,7 +12,6 @@ using EDO_FOMS.Shared.Constants.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
-using MudBlazor;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -43,6 +43,8 @@ namespace EDO_FOMS.Infrastructure
 
         public void Initialize()
         {
+            MailGroupParams();
+
             CreateRoles();
             CreateDocTypes();
             //CreateOrgTypes();
@@ -57,6 +59,38 @@ namespace EDO_FOMS.Infrastructure
             //AddMo2();
 
             //AddUserWoOrg();
+        }
+
+        private void MailGroupParams()
+        {
+            Task.Run(async () =>
+            {
+
+                var mail = _db.ParamGroups.FirstOrDefault(c => c.Name == "MailServer");
+                if (mail == null)
+                {
+                    mail = new ParamGroup()
+                    {
+                        Name = "MailServer",
+                        Version = 1,
+                        Params = new()
+                        {
+                            new() { Property = "From", Value = "edo@azino.ru" },
+                            new() { Property = "Host", Value = "smtp.yandex.ru" },
+                            new() { Property = "Port", Value = "465" },
+                            new() { Property = "UserName", Value = "edo@azino.ru" },
+                            new() { Property = "Password", Value = "wsrbzrtuhcnzydyf" },
+                            new() { Property = "DisplayName", Value = "ЭДО ДЕМОСТЕНД" },
+                            new() { Property = "MailPattern", Value = @"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$" }
+                        }
+                    };
+
+                    await _db.ParamGroups.AddAsync(mail);
+                    await _db.SaveChangesAsync();
+
+                    _logger.LogInformation(_localizer["Seeded Mail Server Group Params"]);
+                }
+            }).GetAwaiter().GetResult();
         }
 
         private void CreateRoles()

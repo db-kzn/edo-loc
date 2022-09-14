@@ -118,13 +118,37 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Address" xml:space="preserve">
-    <value>Адрес</value>
+    <value>Адрес получателя</value>
+  </data>
+  <data name="Display Name" xml:space="preserve">
+    <value>Наименование службы</value>
+  </data>
+  <data name="Host" xml:space="preserve">
+    <value>Адрес (доменное имя) сервера исходящей почты</value>
   </data>
   <data name="Mail" xml:space="preserve">
-    <value>Письмо</value>
+    <value>Почта</value>
+  </data>
+  <data name="Mail Pattern" xml:space="preserve">
+    <value>Паттерн корректного адреса</value>
+  </data>
+  <data name="Mail Server Params" xml:space="preserve">
+    <value>Параметры почтового сервера</value>
   </data>
   <data name="Mail Text" xml:space="preserve">
     <value>Текст</value>
+  </data>
+  <data name="Params" xml:space="preserve">
+    <value>Параметры</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Пароль</value>
+  </data>
+  <data name="Port" xml:space="preserve">
+    <value>Порт отправки почты</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Сохранить</value>
   </data>
   <data name="Send" xml:space="preserve">
     <value>Отправить</value>
@@ -132,7 +156,19 @@
   <data name="Send Mail" xml:space="preserve">
     <value>Отправка писем</value>
   </data>
+  <data name="Service e-mail" xml:space="preserve">
+    <value>Адрес сервисной службы</value>
+  </data>
+  <data name="Test" xml:space="preserve">
+    <value>Тест</value>
+  </data>
+  <data name="Testing" xml:space="preserve">
+    <value>Тестирование</value>
+  </data>
   <data name="Theme" xml:space="preserve">
     <value>Тема</value>
+  </data>
+  <data name="User Name" xml:space="preserve">
+    <value>Имя подключения</value>
   </data>
 </root>

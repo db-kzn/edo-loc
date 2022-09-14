@@ -148,7 +148,7 @@
     <value>Изменение</value>
   </data>
   <data name="EMail" xml:space="preserve">
-    <value>EMail</value>
+    <value>e-mail</value>
   </data>
   <data name="Filials" xml:space="preserve">
     <value>Дочки</value>
@@ -164,6 +164,9 @@
   </data>
   <data name="New organization" xml:space="preserve">
     <value>Новая организация</value>
+  </data>
+  <data name="NSI Code" xml:space="preserve">
+    <value>Код реестра НСИ</value>
   </data>
   <data name="Ogrn" xml:space="preserve">
     <value>ОГРН</value>

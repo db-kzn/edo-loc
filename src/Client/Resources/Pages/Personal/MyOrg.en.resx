@@ -165,6 +165,9 @@
   <data name="New organization" xml:space="preserve">
     <value>New organization</value>
   </data>
+  <data name="NSI Code" xml:space="preserve">
+    <value>NSI Code</value>
+  </data>
   <data name="Ogrn" xml:space="preserve">
     <value>OGRN</value>
   </data>

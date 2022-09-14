@@ -36,7 +36,6 @@ using EDO_FOMS.Application.Features.Orgs.Commands;
 using EDO_FOMS.Domain.Entities.Public;
 using EDO_FOMS.Application.Features.System.Command;
 using System.Linq.Expressions;
-using EDO_FOMS.Shared.Models;
 using EDO_FOMS.Application.Features.Orgs.Queries;
 
 namespace EDO_FOMS.Infrastructure.Services.Identity

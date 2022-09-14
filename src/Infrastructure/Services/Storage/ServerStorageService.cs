@@ -90,17 +90,10 @@ namespace EDO_FOMS.Infrastructure.Services.Storage
             return _storageProvider.RemoveItemAsync(key);
         }
 
-        public ValueTask ClearAsync()
-            => _storageProvider.ClearAsync();
-
-        public ValueTask<int> LengthAsync()
-            => _storageProvider.LengthAsync();
-
-        public ValueTask<string> KeyAsync(int index)
-            => _storageProvider.KeyAsync(index);
-
-        public ValueTask<bool> ContainKeyAsync(string key)
-            => _storageProvider.ContainKeyAsync(key);
+        public ValueTask ClearAsync() => _storageProvider.ClearAsync();
+        public ValueTask<int> LengthAsync() => _storageProvider.LengthAsync();
+        public ValueTask<string> KeyAsync(int index) => _storageProvider.KeyAsync(index);
+        public ValueTask<bool> ContainKeyAsync(string key) => _storageProvider.ContainKeyAsync(key);
 
         public void SetItem<T>(string key, T data)
         {
@@ -174,17 +167,10 @@ namespace EDO_FOMS.Infrastructure.Services.Storage
             _storageProvider.RemoveItem(key);
         }
 
-        public void Clear()
-            => _storageProvider.Clear();
-
-        public int Length()
-            => _storageProvider.Length();
-
-        public string Key(int index)
-            => _storageProvider.Key(index);
-
-        public bool ContainKey(string key)
-            => _storageProvider.ContainKey(key);
+        public void Clear() => _storageProvider.Clear();
+        public int Length() => _storageProvider.Length();
+        public string Key(int index) => _storageProvider.Key(index);
+        public bool ContainKey(string key) => _storageProvider.ContainKey(key);
 
         public event EventHandler<ChangingEventArgs> Changing;
         private async Task<ChangingEventArgs> RaiseOnChangingAsync(string key, object data)

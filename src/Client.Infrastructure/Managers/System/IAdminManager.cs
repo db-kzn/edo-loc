@@ -1,4 +1,5 @@
-﻿using EDO_FOMS.Application.Features.Certs.Commands;
+﻿using EDO_FOMS.Application.Configurations;
+using EDO_FOMS.Application.Features.Certs.Commands;
 using EDO_FOMS.Application.Features.Certs.Queries;
 using EDO_FOMS.Application.Features.Orgs.Commands;
 using EDO_FOMS.Application.Features.Orgs.Queries;
@@ -37,6 +38,8 @@ namespace EDO_FOMS.Client.Infrastructure.Managers.System
         Task<IResult<int>> AddEditCertAsync(AddEditCertCommand request);
         Task<IResult<int>> DeleteCertAsync(int certId);
 
+        Task<IResult<MailConfiguration>> GetMailParamsAsync();
+        Task<IResult<bool>> SaveMailParamsAsync(MailConfiguration mail);
         Task<IResult<bool>> PostMailAsync(MailModel mail);
     }
 }

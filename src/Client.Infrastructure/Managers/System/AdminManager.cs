@@ -1,4 +1,5 @@
-﻿using EDO_FOMS.Application.Features.Certs.Commands;
+﻿using EDO_FOMS.Application.Configurations;
+using EDO_FOMS.Application.Features.Certs.Commands;
 using EDO_FOMS.Application.Features.Certs.Queries;
 using EDO_FOMS.Application.Features.Orgs.Commands;
 using EDO_FOMS.Application.Features.Orgs.Queries;
@@ -120,6 +121,16 @@ namespace EDO_FOMS.Client.Infrastructure.Managers.System
             return await response.ToResult<int>();
         }
 
+        public async Task<IResult<MailConfiguration>> GetMailParamsAsync()
+        {
+            var response = await _httpClient.GetAsync(Routes.AdminEndpoints.GetMailParams);
+            return await response.ToResult<MailConfiguration>();
+        }
+        public async Task<IResult<bool>> SaveMailParamsAsync(MailConfiguration mail)
+        {
+            var response = await _httpClient.PostAsJsonAsync(Routes.AdminEndpoints.SaveMailParams, mail);
+            return await response.ToResult<bool>();
+        }
         public async Task<IResult<bool>> PostMailAsync(MailModel mail)
         {
             var response = await _httpClient.PostAsJsonAsync(Routes.AdminEndpoints.SendMail, mail);
