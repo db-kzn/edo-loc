@@ -44,6 +44,7 @@ namespace EDO_FOMS.Infrastructure
         public void Initialize()
         {
             MailGroupParams();
+            HomePageParams();
 
             CreateRoles();
             CreateDocTypes();
@@ -65,7 +66,6 @@ namespace EDO_FOMS.Infrastructure
         {
             Task.Run(async () =>
             {
-
                 var mail = _db.ParamGroups.FirstOrDefault(c => c.Name == "MailServer");
                 if (mail == null)
                 {
@@ -89,6 +89,36 @@ namespace EDO_FOMS.Infrastructure
                     await _db.SaveChangesAsync();
 
                     _logger.LogInformation(_localizer["Seeded Mail Server Group Params"]);
+                }
+            }).GetAwaiter().GetResult();
+        }
+
+        private void HomePageParams()
+        {
+            Task.Run(async () =>
+            {
+                var home = _db.ParamGroups.FirstOrDefault(c => c.Name == "HomePage");
+                if (home == null)
+                {
+                    home = new ParamGroup()
+                    {
+                        Name = "HomePage",
+                        Version = 1,
+                        Params = new()
+                        {
+                            new() { Property = "Title", Value = "ЭДО ОМС" },
+                            new() { Property = "Description", Value = "Электронный документооборот в сфере ОМС" },
+                            new() { Property = "DocSupportPhone", Value = "(XXX) XXX-XX-XX" },
+                            new() { Property = "DocSupportEmail", Value = "" },
+                            new() { Property = "TechSupportPhone", Value = "(XXX) XXX-XX-XX, (XXX) XXX-XX-XX" },
+                            new() { Property = "TechSupportEmail", Value = "edo_support@ffoms.ru" }
+                        }
+                    };
+
+                    await _db.ParamGroups.AddAsync(home);
+                    await _db.SaveChangesAsync();
+
+                    _logger.LogInformation(_localizer["Seeded Home Page Group Params"]);
                 }
             }).GetAwaiter().GetResult();
         }

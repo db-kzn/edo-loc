@@ -180,12 +180,35 @@ namespace EDO_FOMS.Server.Controllers.System
         }
 
         /// <summary>
+        /// Get Home Configuration
+        /// </summary>
+        /// <returns>Status 200 OK</returns>
+        [Authorize(Policy = Permissions.System.View)]
+        [HttpGet("home-params")]
+        public async Task<IActionResult> GetHomeParams()
+        {
+            return Ok(await _mediator.Send(new GetHomeParamsQuery()));
+        }
+
+        /// <summary>
+        /// Save Home Configuration
+        /// </summary>
+        /// <param name="home"></param>
+        /// <returns>Status 200 OK</returns>
+        [Authorize(Policy = Permissions.System.Edit)]
+        [HttpPost("home-params")]
+        public async Task<IActionResult> SaveMailParams(HomeConfiguration home)
+        {
+            return Ok(await _mediator.Send(new SaveHomeParamsCommand(home)));
+        }
+
+        /// <summary>
         /// Get Mail Configuration
         /// </summary>
         /// <returns>Status 200 OK</returns>
         [Authorize(Policy = Permissions.System.View)]
         [HttpGet("mail-params")]
-        public async Task<IActionResult> GetUserCerts()
+        public async Task<IActionResult> GetMailParams()
         {
             return Ok(await _mediator.Send(new GetMailParamsQuery()));
         }

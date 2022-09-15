@@ -38,6 +38,8 @@ namespace EDO_FOMS.Client.Infrastructure.Managers.System
         Task<IResult<int>> AddEditCertAsync(AddEditCertCommand request);
         Task<IResult<int>> DeleteCertAsync(int certId);
 
+        Task<IResult<HomeConfiguration>> GetHomeParamsAsync();
+        Task<IResult<bool>> SaveHomeParamsAsync(HomeConfiguration home);
         Task<IResult<MailConfiguration>> GetMailParamsAsync();
         Task<IResult<bool>> SaveMailParamsAsync(MailConfiguration mail);
         Task<IResult<bool>> PostMailAsync(MailModel mail);

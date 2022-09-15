@@ -1,0 +1,90 @@
+﻿@namespace EDO_FOMS.Client.Pages.Main
+
+<MudDialog Style="background-color: var(--mud-palette-background-grey); min-width: 300px;">
+    <TitleContent>
+        <MudText Typo="Typo.h6" Class="d-flex align-center">
+            История изменений
+        </MudText>
+    </TitleContent>
+
+    <DialogContent>
+        <MudList Style="max-height: 70vh; overflow-y: scroll;">
+
+            <MudListItem Text="Версия от 14.09.2022" InitiallyExpanded="true" Icon="@Icons.Material.TwoTone.AddBox" IconColor="Color.Info">
+                <NestedList>
+                    <MudListItem Text="Настройка параметров почтового сервера перенесена в админку" />
+                    <MudListItem Text="Добавлено автоматическое определение кодов реестра НСИ при регистрации ораганизации" />
+                    <MudListItem Text="Добавлен импорт документов по пользовательским маршрутам" />
+                    <MudListItem Text="Внесены изменения в правила прохожения маршрутов" />
+                </NestedList>
+            </MudListItem>
+
+            <MudListItem Text="Версия от 26.08.2022" InitiallyExpanded="false" Icon="@Icons.Material.Outlined.AddBox" IconColor="Color.Default">
+                <NestedList>
+                    <MudListItem Text="Добавлены новые условия в конструкто маршрутов" />
+                    <MudListItem Text="Добавлен разбор имени файла по паттернам" />
+                    <MudListItem Text="Обновлена карточка документов" />
+                    <MudListItem Text="Обновлена карточка маршрутов" />
+                    <MudListItem Text="Обновлен прелоадер" />
+                </NestedList>
+            </MudListItem>
+
+            <MudListItem Text="Версия от 05.08.2022" InitiallyExpanded="false" Icon="@Icons.Material.Outlined.AddBox" IconColor="Color.Default">
+                <NestedList>
+                    <MudListItem Text="Разработана нотация описания маршрутов документов на базе BPMN 2.0" />
+                    <MudListItem Text="Добавлен справочник видов документов" />
+                    <MudListItem Text="Добавлен импорт реестров НСИ" />
+                    <MudListItem Text="Добавлен конструктор маршрутов" />
+                    <MudListItem Text="Протестирована поддержка контейнеризации (Docker)" />
+                </NestedList>
+            </MudListItem>
+
+            <MudListItem Text="Версия от 04.05.2022" InitiallyExpanded="false" Icon="@Icons.Material.Outlined.AddBox" IconColor="Color.Default">
+                <NestedList>
+                    <MudListItem Text="Реализована поддержка VipNet CSP" />
+                    <MudListItem Text="Добавлен счетчик новых документов в Подписанные" />
+                    <MudListItem Text="Добавлена пагинация таблиц и плотность строк" />
+                    <MudListItem Text="Добавлены расширенные фильтры" />
+                    <MudListItem Text="Добавлено групповое подписание" />
+                    <MudListItem Text="Добавлена задержка при отображении подсказок" />
+                </NestedList>
+            </MudListItem>
+
+            <MudListItem Text="Версия от 25.03.2022" InitiallyExpanded="false" Icon="@Icons.Material.Outlined.AddBox" IconColor="Color.Default">
+                <NestedList>
+                    <MudListItem Text="Наименование организации увеличено до 500 символов" />
+                    <MudListItem Text="К системным меткам времени добавлена поправка на часовой пояс" />
+                    <MudListItem Text="Обновлен функционал фильтрации таблиц" />
+                </NestedList>
+            </MudListItem>
+
+            <MudListItem Text="Версия от 15.03.2022" InitiallyExpanded="false" Icon="@Icons.Material.Outlined.AddBox" IconColor="Color.Default">
+                <NestedList>
+                    <MudListItem Text="Добавлена проверка токена при входе в систему" />
+                    <MudListItem Text="Добавлен учет сертификата используемого при подписании" />
+                    <MudListItem Text="Реализована отправка уведомлений о процессах подписания/согласования документов" />
+                    <MudListItem Text="Реализована подписка на группы системных уведомлений" />
+                    <MudListItem Text="Добавлен счетчик новых отмененных документов в папке Исходящие" />
+                    <MudListItem Text="Изменена логика счетчика документов в папке Входящие" />
+                    <MudListItem Text="Добавлен скролл у карточки документов и карточки нового документа" />
+                    <MudListItem Text="Добавлено удаление лишних пробелов у ряда текстовых полей" />
+                    <MudListItem Text="Добавлена проверка корректности символов в именах файлов подписей" />
+                    <MudListItem Text="Обновлена структура базы данных" />
+                    <MudListItem Text="Обновлены все используемые пакеты" />
+                    <MudListItem Text="Увеличена стабильность системы" />
+                    <MudListItem Text="Выполнен поверхностный рефакторинг" />
+                </NestedList>
+            </MudListItem>
+
+            <MudListItem Text="Версия от 25.02.2022" InitiallyExpanded="false" Icon="@Icons.Material.Outlined.AddBox" IconColor="Color.Default">
+                <NestedList>
+                    <MudListItem Text="Реализован основной функционал системы" />
+                    <MudListItem Text="Настроен запуск в качестве приложения" />
+                </NestedList>
+            </MudListItem>
+
+        </MudList>
+    </DialogContent>
+
+</MudDialog>
+

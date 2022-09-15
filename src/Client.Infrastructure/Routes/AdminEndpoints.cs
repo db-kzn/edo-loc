@@ -44,6 +44,8 @@ namespace EDO_FOMS.Client.Infrastructure.Routes
 
         public const string UpdateUsersOrgType = $"{Ctrl}users/org-type";
 
+        public const string GetHomeParams = $"{Ctrl}home-params";
+        public const string SaveHomeParams = $"{Ctrl}home-params";
         public const string GetMailParams = $"{Ctrl}mail-params";
         public const string SaveMailParams = $"{Ctrl}mail-params";
         public const string SendMail = $"{Ctrl}send-mail";

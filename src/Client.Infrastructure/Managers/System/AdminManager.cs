@@ -121,6 +121,16 @@ namespace EDO_FOMS.Client.Infrastructure.Managers.System
             return await response.ToResult<int>();
         }
 
+        public async Task<IResult<HomeConfiguration>> GetHomeParamsAsync()
+        {
+            var response = await _httpClient.GetAsync(Routes.AdminEndpoints.GetHomeParams);
+            return await response.ToResult<HomeConfiguration>();
+        }
+        public async Task<IResult<bool>> SaveHomeParamsAsync(HomeConfiguration home)
+        {
+            var response = await _httpClient.PostAsJsonAsync(Routes.AdminEndpoints.SaveHomeParams, home);
+            return await response.ToResult<bool>();
+        }
         public async Task<IResult<MailConfiguration>> GetMailParamsAsync()
         {
             var response = await _httpClient.GetAsync(Routes.AdminEndpoints.GetMailParams);

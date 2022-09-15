@@ -6,7 +6,6 @@
 
 <MudContainer>
     <MudGrid>
-        
         <MudItem xs="12" sm="12" md="12" Class="my-16 pt-16">
             <div class="d-flex justify-center mt-4">
                 <MudIcon Icon="@Icons.Material.TwoTone.HealthAndSafety" Color="Color.Error" Size="Size.Large" Style="width: 250px; height: 250px;" />
@@ -14,69 +13,45 @@
         </MudItem>
 
         <MudItem xs="12" sm="12" md="12">
-            <MudText Align="Align.Center" Typo="Typo.h2" Color="Color.Primary">@_localizer["Title"]</MudText>
-            <MudText Align="Align.Center" Typo="Typo.h6">@_localizer["FullName"]</MudText>
+            <MudText Align="Align.Center" Typo="Typo.h2" Color="Color.Primary">@home.Title</MudText>
+            <MudText Align="Align.Center" Typo="Typo.h6">@home.Description</MudText>
         </MudItem>
-
-        @*<MudItem xs="12" sm="12" md="12">
-            <MudText Align="Align.Center">
-                @_localizer["Based on"] 
-                <MudLink Href="https://www.piter.com/product/chistaya-arhitektura-iskusstvo-razrabotki-programmnogo-obespecheniya" Target="_blank">
-                    @_localizer["Clean architecture"] 
-                    </MudLink>
-                 @_localizer["for"] 
-                <MudLink Href="https://ru.wikipedia.org/wiki/Blazor" Target="_blank">Blazor</MudLink> - 
-                <MudLink Href="https://ru.wikipedia.org/wiki/WebAssembly" Target="_blank">WebAssembly</MudLink>
-            </MudText>
-            
-
-            <MudText Align="Align.Center">
-                @_localizer["MudBlazor Description"]
-                <MudLink Href="https://www.mudblazor.com" Target="_blank">MudBlazor</MudLink>
-                (@_localizer["Component Library"])
-            </MudText>
-        </MudItem>
-
-        <MudItem xs="12" sm="12" md="12">
-            <div class="pa-4 justify-center my-4 mud-text-align-center">
-                <MudButton Variant="Variant.Outlined" Color="Color.Primary" Link="https://facebook.com/" Target="_blank">@_localizer["Project Page"]</MudButton>
-            </div>
-        </MudItem>
-
-        <MudItem xs="12" sm="12" md="12">
-            <MudExpansionPanels>
-                <MudExpansionPanel Text="@_localizer["Getting Started"]" MaxHeight="150">
-                    @_localizer["Increase you are stuck anywhere or have any queries regarding this implementation, I have compiled a Quick Start Guide for you reference."]
-                    <MudButton Variant="Variant.Text" DisableElevation="true" Color="Color.Secondary" Link="https://facebook/" Target="_blank">@_localizer["Read The Guide"]</MudButton>
-                </MudExpansionPanel>
-                <MudExpansionPanel Text="@_localizer["Important Links"]" MaxHeight="500">
-                    <MudList Clickable="true">
-                        <MudListItem Text="@_localizer["Github Repository"]" Href="https://github.com/" />
-                        <MudListItem Text="@_localizer["Quick Start Guide"]" Href="https://facebook.com/" />
-                    </MudList>
-                </MudExpansionPanel>
-                <MudExpansionPanel Text="@_localizer["Learning Resources"]" MaxHeight="1000">
-                    @_localizer["Here are few articles that should help you get started."]
-                    <MudList Clickable="true">
-                        
-                    </MudList>
-                </MudExpansionPanel>
-            </MudExpansionPanels>
-        </MudItem>*@
-        
     </MudGrid>
 
     <MudItem Class="support-info">
-        <MudText Align="Align.Right" Typo="Typo.h6" Color="Color.Info">Контакты по работе с договорами:</MudText>
-        <MudText Align="Align.Right" Typo="Typo.body1">(843) 291-77-30</MudText>
+        @if (_canSystemEdit)
+        {
+            <div style="width: 100%; display: flex;">
+                <MudSpacer />
+                <MudIconButton Color="Color.Default" OnClick="PageParams" Icon="@Icons.Material.TwoTone.Edit"></MudIconButton>
+            </div>
+        }
+
+        <MudText Align="Align.Right" Typo="Typo.h6" Color="Color.Info">Контакты по работе с документами:</MudText>
+        @if (!string.IsNullOrWhiteSpace(home.DocSupportPhone))
+        {
+            <MudText Align="Align.Right" Typo="Typo.body1">@home.DocSupportPhone</MudText>
+        }
+
+        @if (!string.IsNullOrWhiteSpace(home.DocSupportEmail))
+        {
+            <MudText Align="Align.Right" Typo="Typo.body1">@home.DocSupportEmail</MudText>
+        }
+
         <MudText Align="Align.Right" Typo="Typo.h6" Color="Color.Info">Контакты технической поддержки:</MudText>
-        <MudText Align="Align.Right" Typo="Typo.body1">(843) 291-77-59, (843) 291-77-55</MudText>
-        <MudText Align="Align.Right" Typo="Typo.body1">e-mail: edo_support@fomsrt.ru</MudText>
+        @if (!string.IsNullOrWhiteSpace(home.TechSupportPhone))
+        {
+            <MudText Align="Align.Right" Typo="Typo.body1">@home.TechSupportPhone</MudText>
+        }
+
+        @if (!string.IsNullOrWhiteSpace(home.TechSupportEmail))
+        {
+            <MudText Align="Align.Right" Typo="Typo.body1">@home.TechSupportEmail</MudText>
+        }
     </MudItem>
 
     <MudItem Class="build-info">
-        <MudButton Variant="Variant.Text" Color="Color.Default" OnClick="ShowChangeLogs">Версия от 04.05.2022</MudButton>
-        @*<MudText Align="Align.Left" Typo="Typo.body1">Версия от 28.02.2022</MudText>*@
+        <MudButton Variant="Variant.Text" Color="Color.Default" OnClick="ShowChangeLogs">Версия от 14.09.2022</MudButton>
     </MudItem>
 
 </MudContainer>

@@ -551,7 +551,20 @@
             <param name="command"></param>
             <returns>Status 200 OK</returns>
         </member>
-        <member name="M:EDO_FOMS.Server.Controllers.System.AdminController.GetUserCerts">
+        <member name="M:EDO_FOMS.Server.Controllers.System.AdminController.GetHomeParams">
+            <summary>
+            Get Home Configuration
+            </summary>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.System.AdminController.SaveMailParams(EDO_FOMS.Application.Configurations.HomeConfiguration)">
+            <summary>
+            Save Home Configuration
+            </summary>
+            <param name="home"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:EDO_FOMS.Server.Controllers.System.AdminController.GetMailParams">
             <summary>
             Get Mail Configuration
             </summary>

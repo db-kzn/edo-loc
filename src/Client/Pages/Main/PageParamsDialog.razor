@@ -1,0 +1,51 @@
+﻿@namespace EDO_FOMS.Client.Pages.Main
+
+@using EDO_FOMS.Application.Configurations
+
+@inject Microsoft.Extensions.Localization.IStringLocalizer<PageParamsDialog> _localizer
+
+<MudDialog Style="background-color: var(--mud-palette-background-grey);">
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Outlined.Home" Class="mr-3 mb-n1" />
+            @_localizer["Home Page Params"]
+        </MudText>
+    </TitleContent>
+
+    <DialogContent>
+        <MudGrid Style="max-height: 70vh; overflow-y: scroll;">
+            <MudItem xs="12">
+                <MudTextField For="@(() => _home.Title)" @bind-Value="_home.Title" Label="@_localizer["Title"]" />
+            </MudItem>
+            <MudItem xs="12">
+                <MudTextField For="@(() => _home.Description)" @bind-Value="_home.Description" Label="@_localizer["Description"]" />
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudTextField For="@(() => _home.DocSupportPhone)" @bind-Value="_home.DocSupportPhone" Label="@_localizer["Doc Support Phone"]" />
+            </MudItem>
+            <MudItem xs="12">
+                <MudTextField For="@(() => _home.DocSupportEmail)" @bind-Value="_home.DocSupportEmail" Label="@_localizer["Doc Support Email"]" />
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudTextField For="@(() => _home.TechSupportPhone)" @bind-Value="_home.TechSupportPhone" Label="@_localizer["Tech Support Phone"]" />
+            </MudItem>
+            <MudItem xs="12">
+                <MudTextField For="@(() => _home.TechSupportEmail)" @bind-Value="_home.TechSupportEmail" Label="@_localizer["Tech Support Email"]" />
+            </MudItem>
+        </MudGrid>
+    </DialogContent>
+
+    <DialogActions>
+        <MudButton Class="mx-4" Variant="Variant.Outlined" FullWidth="true" Color="Color.Default"
+                   StartIcon="@Icons.Material.Rounded.Close" OnClick="(() => Close())">
+            @_localizer["Cancel"]
+        </MudButton>
+
+        <MudButton Class="mx-4" Variant="Variant.Outlined" FullWidth="true" Color="Color.Primary"
+                   EndIcon="@Icons.Material.Rounded.Done" OnClick="(() => SaveAsync())">
+            @_localizer["Save"]
+        </MudButton>
+    </DialogActions>
+</MudDialog>
