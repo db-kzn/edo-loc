@@ -448,10 +448,10 @@ namespace EDO_FOMS.Infrastructure
             {
                 var org = new Organization()
                 {
-                    Inn = "1653006786",
-                    Ogrn = "1021602860300",
-                    Name = "ГОСУДАРСТВЕННОЕ УЧРЕЖДЕНИЕ \"ТЕРРИТОРИАЛЬНЫЙ ФОНД ОБЯЗАТЕЛЬНОГО МЕДИЦИНСКОГО СТРАХОВАНИЯ РЕСПУБЛИКИ ТАТАРСТАН\"",
-                    ShortName = "ФОМС РТ",
+                    Inn = "1655417750",
+                    Ogrn = "",
+                    Name = "ООО \"АЙТИ ПРО100\"",
+                    ShortName = "АЙТИ ПРО100",
 
                     //UserId = user?.Id,
                     //UserSnils = user.Snils,
@@ -461,7 +461,7 @@ namespace EDO_FOMS.Infrastructure
                     State = OrgStates.Active,
 
                     Phone = "+78430000000",
-                    Email = "info-edo@fomsrt.ru",
+                    Email = "edo@azino.ru",
 
                     CreatedOn = DateTime.Now
                     //CreatedBy = user.Id
@@ -534,22 +534,22 @@ namespace EDO_FOMS.Infrastructure
                 var admin = new EdoFomsUser
                 {
                     OrgId = org.Id,
-                    UserName = "1653006786-11621585130", // ORG INNLE + USER SNILS 
+                    UserName = "1655417750-03821340828", // ORG INNLE + USER SNILS 
 
-                    InnLe = "1653006786",
-                    Snils = "11621585130",
-                    Inn = "165034812106",
+                    InnLe = "1655417750",
+                    Snils = "03821340828",
+                    Inn = "",
 
-                    Title = "Заместитель начальника управления",
-                    Surname = "Ибрагимов",
-                    GivenName = "Фаниль Ильхамович",
+                    Title = "Админ ЭДО",
+                    Surname = "Закирова",
+                    GivenName = "Венера Раушановна",
                     ProfilePictureDataUrl = "",
 
                     BaseRole = UserBaseRoles.Admin,
                     OrgType = OrgTypes.Fund,
                     IsActive = true,
 
-                    Email = "ibragimov.fi@fomsrt.ru",
+                    Email = "kira@azino.ru",
                     EmailConfirmed = true,
                     PhoneNumber = "",
                     PhoneNumberConfirmed = false,
