@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace EDO_FOMS.Client.Pages.Dirs
 {
@@ -281,17 +282,60 @@ namespace EDO_FOMS.Client.Pages.Dirs
 
         private async Task AddEditStepAsync(RouteStepModel step)
         {
-            var parameters = new DialogParameters() { { nameof(RouteStepDialog.Step), step } };
-            var options = new DialogOptions() { DisableBackdropClick = true, CloseButton = false, CloseOnEscapeKey = false };
+            await _jsRuntime.InvokeVoidAsync("azino.Console", step, "RouteStepModel");
+
+            var stepClone = new RouteStepModel(step);
+
+            await _jsRuntime.InvokeVoidAsync("azino.Console", stepClone, "RouteStepModel Clone");
+
+
+            var parameters = new DialogParameters() { { nameof(RouteStepDialog.Step), stepClone } };
+            var options = new DialogOptions() { DisableBackdropClick = false, CloseButton = true, CloseOnEscapeKey = true };
             var dialog = _dialogService.Show<RouteStepDialog>("", parameters, options);
             var result = await dialog.Result;
 
-            if (!result.Cancelled)
+            if (result.Cancelled) { return; }
+            
+            var s = (RouteStepModel)result.Data;
+
+
+            if (s is null) // Delete Step
             {
-                var s = (RouteStepModel)result.Data;
-                if (s is null) { Route.Steps.Remove(step); }
-                _dropContainer.Refresh();
+                Route.Steps.Remove(step);
             }
+            else // Update Step
+            {
+                //step.Id = s.Id;
+                //step.RouteId = s.RouteId;
+
+                //step.StageNumber = s.StageNumber;
+                //step.Number = s.Number;
+
+                step.ActType = s.ActType;
+                step.AutoSearch = s.AutoSearch;
+
+                step.OrgType = s.OrgType;
+                step.OrgId = s.OrgId;
+                //step.OrgMember = s.OrgMember; // Used only for View
+
+                step.Requred = s.Requred;
+                step.MemberGroup = s.MemberGroup;
+
+                step.SomeParticipants = s.SomeParticipants;
+                step.AllRequred = s.AllRequred;
+
+                step.HasAgreement = s.HasAgreement;
+                step.HasReview = s.HasReview;
+
+                step.Description = s.Description;
+
+                step.Members = s.Members;
+                //step.Members.Clear();
+                //step.Members.AddRange(s.Members);
+            }
+
+            _dropContainer.Refresh();
+            
         }
         private async Task AddStepAsync(int stageNumber)
         {

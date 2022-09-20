@@ -69,5 +69,39 @@ namespace EDO_FOMS.Application.Models.Dir
                 Contact = null // RouteStep has no Contact Object
             }).ToList();
         }
+        public RouteStepModel(RouteStepModel s)
+        {
+            Id = s.Id;
+            RouteId = s.RouteId;
+
+            StageNumber = s.StageNumber;
+            Number = s.Number;
+
+            ActType = s.ActType;
+            AutoSearch = s.AutoSearch;
+
+            OrgType = s.OrgType;
+            OrgId = s.OrgId;
+            OrgMember = s.OrgMember;
+
+            Requred = s.Requred;
+            MemberGroup = s.MemberGroup;
+
+            SomeParticipants = s.SomeParticipants;
+            AllRequred = s.AllRequred;
+
+            HasAgreement = s.HasAgreement;
+            HasReview = s.HasReview;
+
+            Description = s.Description;
+
+            Members = s.Members.Select(m => new RouteStepMemberModel()
+                {
+                    Act = m.Act,
+                    IsAdditional = m.IsAdditional,
+                    UserId = m.UserId,
+                    Contact = m.Contact
+                }).ToList();
+        }
     }
 }
