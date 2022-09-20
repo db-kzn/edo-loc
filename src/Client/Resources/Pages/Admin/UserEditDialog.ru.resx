@@ -120,8 +120,14 @@
   <data name="Activate User" xml:space="preserve">
     <value>Активировать</value>
   </data>
+  <data name="Active" xml:space="preserve">
+    <value>Активный</value>
+  </data>
   <data name="Administrator" xml:space="preserve">
     <value>Администратор ЭДО</value>
+  </data>
+  <data name="Allowed" xml:space="preserve">
+    <value>Разрешено</value>
   </data>
   <data name="Base Role" xml:space="preserve">
     <value>Роль</value>
@@ -176,6 +182,9 @@
   </data>
   <data name="Locality" xml:space="preserve">
     <value>Населенный пункт</value>
+  </data>
+  <data name="Not Allowed" xml:space="preserve">
+    <value>Не разрешено</value>
   </data>
   <data name="OGRN" xml:space="preserve">
     <value>ОГРН</value>

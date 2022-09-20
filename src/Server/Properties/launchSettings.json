@@ -2,7 +2,6 @@
   "profiles": {
     "Dev": {
       "commandName": "Project",
-      "workingDirectory": "D:\\Repositories\\edo\\src\\Server",
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
