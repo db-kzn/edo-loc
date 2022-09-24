@@ -113,7 +113,7 @@
                 <MudItem xs="4">
                     <MudSelect T="int" Label="@_localizer["Document type"]" Disabled="@(onUpload || Route.ProtectedMode)"
                                AdornmentIcon="@Icons.Material.Outlined.DocumentScanner" Adornment="Adornment.Start"
-                               For="@(() => Doc.TypeId)" @bind-Value="Doc.TypeId">
+                               For="@(() => Doc.TypeId)" @bind-Value="Doc.TypeId" AnchorOrigin="Origin.BottomCenter">
                         @foreach (var type in RouteDocTypes) //_allDocTypes
                         {
                             <MudSelectItem Value="@type.Id">@type.Label</MudSelectItem>

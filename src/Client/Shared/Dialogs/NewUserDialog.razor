@@ -62,7 +62,7 @@
                     <MudTextField For="@(() => _newUser.Email)" @bind-Value="_newUser.Email" Label="@_localizer["E-Mail"]" InputType="InputType.Email"/>
                 </MudItem>
                 <MudItem xs="6" Class="input-field">
-                    <MudSelect T="UserBaseRoles" Label="@_localizer["Base Role"]" @bind-Value="_newUser.BaseRole">
+                    <MudSelect T="UserBaseRoles" Label="@_localizer["Base Role"]" @bind-Value="_newUser.BaseRole" AnchorOrigin="Origin.BottomCenter">
                         @*AdornmentIcon="@(_newUser.Role == _admin ? Icons.Material.Outlined.Stars : Icons.Material.Outlined.AccountCircle)" AdornmentColor="@(_newUser.Role == _admin ? Color.Error : Color.Primary)"*@
                         
                         <MudSelectItem T="UserBaseRoles" Value="UserBaseRoles.User">

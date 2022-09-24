@@ -90,7 +90,7 @@
                 <MudItem xs="4">
                     <MudSelect T="int" Label="@_localizer["Document type"]" Disabled="@onUpload"
                                AdornmentIcon="@Icons.Material.Outlined.DocumentScanner" Adornment="Adornment.Start"
-                               For="@(() => _doc.TypeId)" @bind-Value="_doc.TypeId">
+                               For="@(() => _doc.TypeId)" @bind-Value="_doc.TypeId" AnchorOrigin="Origin.BottomCenter">
                         @foreach (var type in _docTypes)
                         {
                             <MudSelectItem Value="@type.Id">@type.Label</MudSelectItem>

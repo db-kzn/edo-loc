@@ -185,7 +185,7 @@
         }
         
         @*<MudItem xs="12" Class="d-flex justify-center">
-            <MudSelect T="FakeCert" @bind-Value="@_fakeCert" Label="Выбор тестового сертификата" Variant="Variant.Outlined" ToStringFunc="@converter" SelectedValuesChanged="@(() => FakeChanged())">
+        <MudSelect T="FakeCert" @bind-Value="@_fakeCert" Label="Выбор тестового сертификата" Variant="Variant.Outlined" ToStringFunc="@converter" SelectedValuesChanged="@(() => FakeChanged())" AnchorOrigin="Origin.BottomCenter">
                 @foreach (FakeCert fc in FakeCerts)
                 {
                     <MudSelectItem Value="@fc" />

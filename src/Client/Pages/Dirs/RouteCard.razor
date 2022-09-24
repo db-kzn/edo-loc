@@ -60,7 +60,7 @@
                             </MudItem>
 
                             <MudItem xs="3">
-                                <MudSelect T="UserBaseRoles" @bind-Value="Route.ForUserRole" Label="@_localizer["User Role"]">
+                                <MudSelect T="UserBaseRoles" @bind-Value="Route.ForUserRole" Label="@_localizer["User Role"]" AnchorOrigin="Origin.BottomCenter">
                                     <MudSelectItem T="UserBaseRoles" Value="UserBaseRoles.Employee">
                                         <div class="d-flex flex-row" style="height: 24px;">
                                             <MudIcon Icon="@Icons.Material.Outlined.HistoryEdu" Color="Color.Default" Size="Size.Small" Class="mr-2" />
@@ -106,7 +106,7 @@
                             </MudItem>
 
                             <MudItem xs="6">
-                                <MudSelect T="EndActions" @bind-Value="Route.EndAction" Label="@_localizer["End Action"]">
+                                <MudSelect T="EndActions" @bind-Value="Route.EndAction" Label="@_localizer["End Action"]" AnchorOrigin="Origin.BottomCenter">
                                     <MudSelectItem T="EndActions" Value="@EndActions.SignedByAll">
                                         <div class="d-flex flex-row" style="height: 24px;">
                                             <MudIcon Icon="@Icons.Material.Outlined.AssignmentTurnedIn" Color="Color.Default" Size="Size.Small" Class="mr-2" />

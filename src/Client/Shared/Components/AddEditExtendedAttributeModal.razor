@@ -39,7 +39,8 @@
                     <MudTextField Disabled For="@(() => AddEditExtendedAttributeModel.EntityId)" @bind-Value="AddEditExtendedAttributeModel.EntityId" Label="@_localizer["Entity Id"]" />
                 </MudItem>
                 <MudItem xs="12" md="6">
-                    <MudSelect T="EntityExtendedAttributeType" Label="@_localizer["Type"]" For="@(() => AddEditExtendedAttributeModel.Type)" @bind-Value="AddEditExtendedAttributeModel.Type" Variant="Variant.Filled">
+                    <MudSelect T="EntityExtendedAttributeType" Label="@_localizer["Type"]" For="@(() => AddEditExtendedAttributeModel.Type)"
+                               @bind-Value="AddEditExtendedAttributeModel.Type" Variant="Variant.Filled" AnchorOrigin="Origin.BottomCenter">
                         @foreach (var typeName in Enum.GetNames(typeof(EntityExtendedAttributeType)))
                         {
                             <MudSelectItem T="EntityExtendedAttributeType" Value="@(Enum.GetValues<EntityExtendedAttributeType>().FirstOrDefault(x => x.ToString() == typeName))">@typeName</MudSelectItem>

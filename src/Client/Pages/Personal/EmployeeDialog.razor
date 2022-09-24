@@ -52,7 +52,7 @@
                 </MudItem>
 
                 <MudItem xs="6" Class="input-field">
-                    <MudSelect T="UserBaseRoles" Label="@_localizer["Base Role"]" @bind-Value="EmployeeModel.BaseRole" ReadOnly="@(!_canSelfOrgEdit)">
+                    <MudSelect T="UserBaseRoles" Label="@_localizer["Base Role"]" @bind-Value="EmployeeModel.BaseRole" ReadOnly="@(!_canSelfOrgEdit)" AnchorOrigin="Origin.BottomCenter">
                         @*AdornmentIcon="@(EmployeeModel.Role == _admin ? Icons.Material.Outlined.Stars : Icons.Material.Outlined.AccountCircle)" AdornmentColor="@(EmployeeModel.Role == _admin ? Color.Error : Color.Primary)"*@
                        
                         <MudSelectItem T="UserBaseRoles" Value="UserBaseRoles.User" Disabled="@(!_canManageUsers)">

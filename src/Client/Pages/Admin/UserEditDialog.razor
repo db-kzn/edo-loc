@@ -60,7 +60,7 @@
                         </MudItem>
 
                         <MudItem xs="6" Class="input-field">
-                            <MudSelect T="UserBaseRoles" Label="@_localizer["Base Role"]" @bind-Value="EditUser.BaseRole">
+                            <MudSelect T="UserBaseRoles" Label="@_localizer["Base Role"]" @bind-Value="EditUser.BaseRole" AnchorOrigin="Origin.BottomCenter">
                                 @*AdornmentIcon="@(EditUser.Role == _admin ? Icons.Material.Outlined.Stars : Icons.Material.Outlined.AccountCircle)" AdornmentColor="@(EditUser.Role == _admin ? Color.Error : Color.Primary)"*@
                                  
                                 <MudSelectItem T="UserBaseRoles" Value="UserBaseRoles.User">

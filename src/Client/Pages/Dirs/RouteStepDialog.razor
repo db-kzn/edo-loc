@@ -114,7 +114,7 @@
                 <MudIcon Icon="@Icons.Material.Outlined.AssignmentTurnedIn" Color="Color.Default" Size="Size.Small" Class="mr-2" />
                 </div>*@
 
-                <MudSelect T="MemberGroups" @bind-Value="@Step.MemberGroup" Label="@_localizer["Member Group"]">
+                <MudSelect T="MemberGroups" @bind-Value="@Step.MemberGroup" Label="@_localizer["Member Group"]" AnchorOrigin="Origin.BottomCenter">
                     <MudSelectItem T="MemberGroups" Value="@MemberGroups.Undefined">@_localizer["Group not defined"]</MudSelectItem>
                     <MudSelectItem T="MemberGroups" Value="@MemberGroups.OnlyHead">@_localizer["Only Head"]</MudSelectItem>
                     <MudSelectItem T="MemberGroups" Value="@MemberGroups.HeadAndAccountant">@_localizer["Head And Accountant"]</MudSelectItem>

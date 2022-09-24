@@ -61,7 +61,7 @@
                 </MudItem>
 
                 <MudItem xs="6" Class="input-field">
-                    <MudSelect T="OrgTypes" Label="@_localizer["Type"]" @bind-Value="AddEditOrgModel.Type" ReadOnly="@(!_canSystemEdit)">
+                    <MudSelect T="OrgTypes" Label="@_localizer["Type"]" @bind-Value="AddEditOrgModel.Type" ReadOnly="@(!_canSystemEdit)" AnchorOrigin="Origin.BottomCenter">
                         <MudSelectItem T="OrgTypes" Value="OrgTypes.MO">
                             <div class="d-flex flex-row" style="height: 24px;">
                                 <MudIcon Icon="@Icons.Material.Outlined.MedicalServices" Color="Color.Primary" Size="Size.Small" Class="mr-2"/>Медицинская организация
@@ -81,7 +81,7 @@
                 </MudItem>
 
                 <MudItem xs="6" Class="input-field">
-                    <MudSelect T="OrgStates" Label="@_localizer["Status"]" @bind-Value="AddEditOrgModel.State" ReadOnly="@(!_canSystemEdit)">
+                    <MudSelect T="OrgStates" Label="@_localizer["Status"]" @bind-Value="AddEditOrgModel.State" ReadOnly="@(!_canSystemEdit)" AnchorOrigin="Origin.BottomCenter">
                         <MudSelectItem T="OrgStates" Value="OrgStates.OnSubmit">
                             <div class="d-flex flex-row" style="height: 24px;">
                                 <MudIcon Icon="@Icons.Material.Outlined.SkipNext" Color="Color.Warning" Size="Size.Small" Class="mr-2"/>На регистрации
