@@ -91,7 +91,11 @@ namespace EDO_FOMS.Client.Pages.Dirs
             await _mudTable.ReloadServerData();
         }
 
-        private void OnRowClickAsync() => _navigationManager.NavigateTo($"dirs/routes/route-card/{_route.Id}");
+        private void OnRowClickAsync()
+        {
+            //if (!_canSystemEdit) { return; }
+            _navigationManager.NavigateTo($"dirs/routes/route-card/{_route.Id}");
+        }
 
         private async Task<TableData<RouteModel>> ServerReloadAsync(TableState state = null)
         {

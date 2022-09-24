@@ -36,10 +36,10 @@
                     <MudCardContent>
                         <MudGrid Style="max-height: 70vh; overflow-y: scroll;">
                             <MudItem xs="3">
-                                <MudTextField @bind-Value="Route.Code" Label="@_localizer["Code"]" />
+                                <MudTextField @bind-Value="Route.Code" Label="@_localizer["Code"]"/>
                             </MudItem>
                             <MudItem xs="3">
-                                <MudTextField @bind-Value="Route.Short" Label="@_localizer["Short Name"]" />
+                                <MudTextField @bind-Value="Route.Short" Label="@_localizer["Short Name"]"/>
                             </MudItem>
                             <MudItem xs="6">
                                 <MudTextField @bind-Value="Route.Name" Label="@_localizer["Name"]" />
@@ -184,16 +184,20 @@
                             </MudItem>*@
                         </MudGrid>
                     </MudCardContent>
+
                     <MudCardActions>
                         <MudButton Size="Size.Large" Class="mx-2" FullWidth Variant="Variant.Outlined" StartIcon="@Icons.Material.Rounded.Close" Color="Color.Default"
                                    OnClick="Close">
                             @_localizer["Cancel"]
                         </MudButton>
                         @*EndIcon="@Icons.Material.Rounded.DoneOutline"*@
+                        @if (_canSystemEdit)
+                        {
                         <MudButton Class="mx-2" Size="Size.Large" FullWidth Variant="Variant.Outlined" Color="Color.Primary"
                                    OnClick="() => SaveAsync()">
                             @_localizer["Save"]
                         </MudButton>
+                        }
                         <MudButton Size="Size.Large" Class="mx-2" FullWidth Variant="Variant.Outlined" EndIcon="@Icons.Material.Rounded.KeyboardDoubleArrowRight" Color="Color.Default"
                                    OnClick="() => _tabs.ActivatePanel(1)">
                             @_localizer["Stages"]
@@ -390,10 +394,13 @@
                             @_localizer["Title"]
                         </MudButton>
                         @*EndIcon="@Icons.Material.Rounded.DoneOutline"*@
+                        @if (_canSystemEdit)
+                        {
                         <MudButton Class="mx-2" Size="Size.Large" FullWidth Variant="Variant.Outlined" Color="Color.Primary"
                                    OnClick="() => SaveAsync()">
                             @_localizer["Save"]
                         </MudButton>
+                        }
                         @if (Route.ParseFileName)
                         {
                             <MudButton Class="mx-2" Size="Size.Large" FullWidth Variant="Variant.Outlined" EndIcon="@Icons.Material.Rounded.KeyboardDoubleArrowRight" Color="Color.Default"
@@ -456,10 +463,13 @@
                             @_localizer["Stages"]
                         </MudButton>
                         @*EndIcon="@Icons.Material.Rounded.DoneOutline"*@
+                        @if (_canSystemEdit)
+                        {
                         <MudButton Class="mx-2" Size="Size.Large" FullWidth Variant="Variant.Outlined" Color="Color.Primary"
                                    OnClick="() => SaveAsync()">
                             @_localizer["Save"]
                         </MudButton>
+                        }
                         <MudButton Size="Size.Large" Class="mx-2" FullWidth Variant="Variant.Outlined" EndIcon="@Icons.Material.Rounded.PlaylistAddCheck" Color="Color.Default"
                                    OnClick="() => ParseCheckAsync()">
                             @_localizer["Check"]
@@ -485,6 +495,5 @@
 
     <MudDivider />
 
-    <MudList Clickable="true" Class="py-0">
-    </MudList>
+    <MudList Clickable="true" Class="py-0"></MudList>
 </MudDrawer>

@@ -282,12 +282,9 @@ namespace EDO_FOMS.Client.Pages.Dirs
 
         private async Task AddEditStepAsync(RouteStepModel step)
         {
-            await _jsRuntime.InvokeVoidAsync("azino.Console", step, "RouteStepModel");
-
             var stepClone = new RouteStepModel(step);
-
-            await _jsRuntime.InvokeVoidAsync("azino.Console", stepClone, "RouteStepModel Clone");
-
+            //await _jsRuntime.InvokeVoidAsync("azino.Console", step, "RouteStepModel");
+            //await _jsRuntime.InvokeVoidAsync("azino.Console", stepClone, "RouteStepModel Clone");
 
             var parameters = new DialogParameters() { { nameof(RouteStepDialog.Step), stepClone } };
             var options = new DialogOptions() { DisableBackdropClick = false, CloseButton = true, CloseOnEscapeKey = true };
