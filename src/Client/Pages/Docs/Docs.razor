@@ -344,7 +344,7 @@
             </MudTooltip>
         </MudItem>
     }
-    else if (_activeRoutes.Count > 0) @* <= 10, > 10 -> диалоговое окно*@
+    else if (_activeRoutes.Count > 1) @* <= 10, > 10 -> диалоговое окно*@
     {
         <MudItem Class="fab-btn-add">
             <MudMenu AnchorOrigin="Origin.TopCenter" TransformOrigin="Origin.BottomRight" Dense="@(_activeRoutes.Count > 10)">

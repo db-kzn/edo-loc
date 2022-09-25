@@ -295,7 +295,7 @@ namespace EDO_FOMS.Client.Pages.Docs
         {
             if (doc.Stage == DocStages.Draft)
             {
-                AddEditDocAsync(doc);
+                AddEditDoc(doc);
             }
             else
             {
@@ -310,7 +310,7 @@ namespace EDO_FOMS.Client.Pages.Docs
             //if (!result.Cancelled) { await _mudTable.ReloadServerData(); }
             _navigationManager.NavigateTo($"/docs/doc-card/{routeId}/{0}");
         }
-        private void AddEditDocAsync(DocModel doc)
+        private void AddEditDoc(DocModel doc)
         {
             _navigationManager.NavigateTo($"/docs/doc-card/{doc.RouteId}/{doc.DocId}");
 
