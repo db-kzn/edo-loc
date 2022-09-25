@@ -107,13 +107,21 @@
             <MudTd DataLabel="@_localizer["Action"]">
                 <div class="d-flex flex-row" style="height: 24px;">
                     @if(context.Action == ActTypes.Signing)
-                    { <MudIcon Icon="@Icons.Material.Outlined.Draw" Color="Color.Success" Class="mr-2"/> }
+                    {
+                        <MudIcon Icon="@Icons.Material.Outlined.Draw" Color="Color.Error" Class="mr-2" />
+                    }
                     else if(context.Action == ActTypes.Agreement)
-                    { <MudIcon Icon="@Icons.Material.Outlined.Rule" Color="Color.Error" Class="mr-2"/> }
+                    {
+                        <MudIcon Icon="@Icons.Material.Outlined.OfflinePin" Color="Color.Warning" Class="mr-2" />
+                    }
                     else if(context.Action == ActTypes.Review)
-                    { <MudIcon Icon="@Icons.Material.Outlined.AddTask" Color="Color.Warning" Class="mr-2"/> }
+                    {
+                        <MudIcon Icon="@Icons.Material.Outlined.MapsUgc" Color="Color.Success" Class="mr-2" />
+                    }
                     else if(context.Action == ActTypes.Executing || context.Action == ActTypes.Initiation)
-                    { <MudIcon Icon="@Icons.Material.Outlined.PlayCircle" Color="Color.Tertiary" Class="mr-2"/> }
+                    {
+                        <MudIcon Icon="@Icons.Material.Outlined.SlowMotionVideo" Color="Color.Tertiary" Class="mr-2"/>
+                    }
                     @context.ActionName
                 </div>
             </MudTd>
@@ -187,24 +195,24 @@
         <MudListItem Icon="@Icons.Material.Outlined.TaskAlt" Text="@_localizer["Action"]" InitiallyExpanded="false"
             AdornmentColor="Color.Primary" IconColor="@(Filter.ChangedAction ? Color.Error : Color.Primary)">
             <NestedList>
-                <MudListItem Icon="@(Filter.ActionToRun ? Icons.Material.Outlined.PlayCircle : Icons.Material.Outlined.CheckBoxOutlineBlank)"
-                    IconColor="@(Filter.ActionToRun ? Color.Tertiary : Color.Default)" OnClick="@(() => OnAction("ToRun"))">
-                    @_localizer["ToRun"]
+                <MudListItem Icon="@(Filter.ActionToSign ? Icons.Material.Outlined.Draw : Icons.Material.Outlined.CheckBoxOutlineBlank)"
+                             IconColor="@(Filter.ActionToSign ? Color.Error : Color.Default)" OnClick="@(() => OnAction("ToSign"))">
+                    @_localizer["ToSign"]
                 </MudListItem>
 
-                <MudListItem Icon="@(Filter.ActionToApprove ? Icons.Material.Outlined.Rule : Icons.Material.Outlined.CheckBoxOutlineBlank)"
-                    IconColor="@(Filter.ActionToApprove ? Color.Error : Color.Default)" OnClick="@(() => OnAction("ToApprove"))">
+                <MudListItem Icon="@(Filter.ActionToApprove ? Icons.Material.Outlined.OfflinePin : Icons.Material.Outlined.CheckBoxOutlineBlank)"
+                             IconColor="@(Filter.ActionToApprove ? Color.Warning : Color.Default)" OnClick="@(() => OnAction("ToApprove"))">
                     @_localizer["ToApprove"]
                 </MudListItem>
 
-                <MudListItem Icon="@(Filter.ActionToVerify ? Icons.Material.Outlined.AddTask : Icons.Material.Outlined.CheckBoxOutlineBlank)"
-                    IconColor="@(Filter.ActionToVerify ? Color.Warning : Color.Default)" OnClick="@(() => OnAction("ToVerify"))">
+                <MudListItem Icon="@(Filter.ActionToVerify ? Icons.Material.Outlined.MapsUgc : Icons.Material.Outlined.CheckBoxOutlineBlank)"
+                    IconColor="@(Filter.ActionToVerify ? Color.Success : Color.Default)" OnClick="@(() => OnAction("ToVerify"))">
                     @_localizer["ToVerify"]
                 </MudListItem>
 
-                <MudListItem Icon="@(Filter.ActionToSign ? Icons.Material.Outlined.Draw : Icons.Material.Outlined.CheckBoxOutlineBlank)"
-                    IconColor="@(Filter.ActionToSign ? Color.Success : Color.Default)" OnClick="@(() => OnAction("ToSign"))">
-                    @_localizer["ToSign"]
+                <MudListItem Icon="@(Filter.ActionToRun ? Icons.Material.Outlined.SlowMotionVideo : Icons.Material.Outlined.CheckBoxOutlineBlank)"
+                    IconColor="@(Filter.ActionToRun ? Color.Tertiary : Color.Default)" OnClick="@(() => OnAction("ToRun"))">
+                    @_localizer["ToRun"]
                 </MudListItem>
             </NestedList>
         </MudListItem>

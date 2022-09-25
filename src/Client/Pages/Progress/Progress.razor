@@ -100,13 +100,21 @@
                     @context.DocStageName*@
 
                     @if(context.Action == ActTypes.Signing)
-                    { <MudIcon Icon="@Icons.Material.Outlined.Draw" Color="@(context.ActionBlocked ? Color.Default : Color.Success)" Class="mr-2"/> }
+                    { 
+                        <MudIcon Icon="@Icons.Material.Outlined.Draw" Color="@(context.ActionBlocked ? Color.Default : Color.Error)" Class="mr-2"/>
+                    }
                     else if(context.Action == ActTypes.Agreement)
-                    { <MudIcon Icon="@Icons.Material.Outlined.Rule" Color="@(context.ActionBlocked ? Color.Default : Color.Error)" Class="mr-2"/> }
+                    { 
+                        <MudIcon Icon="@Icons.Material.Outlined.OfflinePin" Color="@(context.ActionBlocked ? Color.Default : Color.Warning)" Class="mr-2"/>                    
+                    }
                     else if(context.Action == ActTypes.Review)
-                    { <MudIcon Icon="@Icons.Material.Outlined.AddTask" Color="@(context.ActionBlocked ? Color.Default : Color.Warning)" Class="mr-2"/> }
+                    {
+                        <MudIcon Icon="@Icons.Material.Outlined.MapsUgc" Color="@(context.ActionBlocked ? Color.Default : Color.Success)" Class="mr-2" />
+                    }
                     else if(context.Action == ActTypes.Executing || context.Action == ActTypes.Initiation)
-                    { <MudIcon Icon="@Icons.Material.Outlined.PlayCircle" Color="@(context.ActionBlocked ? Color.Default : Color.Tertiary)" Class="mr-2"/> }
+                    {
+                        <MudIcon Icon="@Icons.Material.Outlined.SlowMotionVideo" Color="@(context.ActionBlocked ? Color.Default : Color.Tertiary)" Class="mr-2" />
+                    }
                     @context.ActionName
                 </div>
             </MudTd>
