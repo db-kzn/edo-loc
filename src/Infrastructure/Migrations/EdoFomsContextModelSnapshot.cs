@@ -17,7 +17,7 @@ namespace EDO_FOMS.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.8")
+                .HasAnnotation("ProductVersion", "6.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -129,6 +129,9 @@ namespace EDO_FOMS.Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
+                    b.Property<int?>("Region")
+                        .HasColumnType("integer");
+
                     b.Property<string>("ShortName")
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
@@ -166,6 +169,10 @@ namespace EDO_FOMS.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Code")
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)");
+
                     b.Property<int>("Color")
                         .HasColumnType("integer");
 
@@ -176,7 +183,8 @@ namespace EDO_FOMS.Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
-                        .HasColumnType("text");
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
 
                     b.Property<int>("Icon")
                         .HasColumnType("integer");
@@ -185,7 +193,8 @@ namespace EDO_FOMS.Infrastructure.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("Label")
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("text");
@@ -194,13 +203,16 @@ namespace EDO_FOMS.Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Name")
-                        .HasColumnType("text");
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)");
 
                     b.Property<string>("NameEn")
-                        .HasColumnType("text");
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)");
 
                     b.Property<string>("Short")
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.HasKey("Id");
 
@@ -237,6 +249,9 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.Property<bool>("DateIsToday")
                         .HasColumnType("boolean");
 
+                    b.Property<int?>("DepartmentId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Description")
                         .HasMaxLength(4000)
                         .HasColumnType("character varying(4000)");
@@ -245,6 +260,12 @@ namespace EDO_FOMS.Infrastructure.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<int>("EndAction")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("ExecDepartId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("ExecJobTitleId")
                         .HasColumnType("integer");
 
                     b.Property<string>("ExecutorId")
@@ -261,6 +282,9 @@ namespace EDO_FOMS.Infrastructure.Migrations
 
                     b.Property<bool>("IsPackage")
                         .HasColumnType("boolean");
+
+                    b.Property<int?>("JobTitleId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("text");
@@ -295,6 +319,10 @@ namespace EDO_FOMS.Infrastructure.Migrations
                         .HasColumnType("boolean");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.HasIndex("JobTitleId");
 
                     b.ToTable("Routes", "dir");
                 });
@@ -591,6 +619,9 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.Property<string>("EmplId")
                         .HasColumnType("text");
 
+                    b.Property<bool>("InQueue")
+                        .HasColumnType("boolean");
+
                     b.Property<bool>("IsAdditional")
                         .HasColumnType("boolean");
 
@@ -712,6 +743,9 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.Property<DateTime?>("Date")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<int?>("DepartmentId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
@@ -733,6 +767,9 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.Property<bool>("IsPublic")
                         .HasColumnType("boolean");
 
+                    b.Property<int?>("KeyOrgId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("text");
 
@@ -748,8 +785,14 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.Property<int?>("PreviousId")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("RecipientId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("RouteId")
                         .HasColumnType("integer");
+
+                    b.Property<DateTime>("SignStartAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("Stage")
                         .HasColumnType("integer");
@@ -774,9 +817,13 @@ namespace EDO_FOMS.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DepartmentId");
+
                     b.HasIndex("EmplOrgId");
 
                     b.HasIndex("ParentId");
+
+                    b.HasIndex("RecipientId");
 
                     b.HasIndex("TypeId");
 
@@ -942,6 +989,167 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.ToTable("Certificates", "org");
                 });
 
+            modelBuilder.Entity("EDO_FOMS.Domain.Entities.Org.Department", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Label")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<int?>("OrgId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Short")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Departments", "sys");
+                });
+
+            modelBuilder.Entity("EDO_FOMS.Domain.Entities.Org.Employee", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ChangerId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int?>("DepartmentId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("GivenName")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("Inn")
+                        .HasMaxLength(12)
+                        .HasColumnType("character varying(12)");
+
+                    b.Property<string>("InnLe")
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)");
+
+                    b.Property<int?>("JobTitleId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("OrgId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("OrganizationId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Snils")
+                        .HasMaxLength(11)
+                        .HasColumnType("character varying(11)");
+
+                    b.Property<string>("Surname")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("Title")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.HasIndex("JobTitleId");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.ToTable("Employees", "org");
+                });
+
+            modelBuilder.Entity("EDO_FOMS.Domain.Entities.Org.JobTitle", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Label")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<int?>("OrgId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Short")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("JobTitles", "sys");
+                });
+
             modelBuilder.Entity("EDO_FOMS.Domain.Entities.Org.Organization", b =>
                 {
                     b.Property<int>("Id")
@@ -1014,7 +1222,7 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.ToTable("Organizations", "org");
                 });
 
-            modelBuilder.Entity("EDO_FOMS.Domain.Entities.Public.Param", b =>
+            modelBuilder.Entity("EDO_FOMS.Domain.Entities.System.Param", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1050,7 +1258,7 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.ToTable("Params", "sys");
                 });
 
-            modelBuilder.Entity("EDO_FOMS.Domain.Entities.Public.ParamGroup", b =>
+            modelBuilder.Entity("EDO_FOMS.Domain.Entities.System.ParamGroup", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1081,7 +1289,7 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.ToTable("ParamGroups", "sys");
                 });
 
-            modelBuilder.Entity("EDO_FOMS.Domain.Entities.Public.Subscribe", b =>
+            modelBuilder.Entity("EDO_FOMS.Domain.Entities.System.Subscribe", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1458,6 +1666,21 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.Navigation("ToUser");
                 });
 
+            modelBuilder.Entity("EDO_FOMS.Domain.Entities.Dir.Route", b =>
+                {
+                    b.HasOne("EDO_FOMS.Domain.Entities.Org.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentId");
+
+                    b.HasOne("EDO_FOMS.Domain.Entities.Org.JobTitle", "JobTitle")
+                        .WithMany()
+                        .HasForeignKey("JobTitleId");
+
+                    b.Navigation("Department");
+
+                    b.Navigation("JobTitle");
+                });
+
             modelBuilder.Entity("EDO_FOMS.Domain.Entities.Dir.RouteDocType", b =>
                 {
                     b.HasOne("EDO_FOMS.Domain.Entities.Dir.DocumentType", "DocumentType")
@@ -1577,6 +1800,10 @@ namespace EDO_FOMS.Infrastructure.Migrations
 
             modelBuilder.Entity("EDO_FOMS.Domain.Entities.Doc.Document", b =>
                 {
+                    b.HasOne("EDO_FOMS.Domain.Entities.Org.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentId");
+
                     b.HasOne("EDO_FOMS.Domain.Entities.Org.Organization", "Issuer")
                         .WithMany()
                         .HasForeignKey("EmplOrgId")
@@ -1587,15 +1814,23 @@ namespace EDO_FOMS.Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("ParentId");
 
+                    b.HasOne("EDO_FOMS.Domain.Entities.Org.Organization", "Recipient")
+                        .WithMany()
+                        .HasForeignKey("RecipientId");
+
                     b.HasOne("EDO_FOMS.Domain.Entities.Dir.DocumentType", "Type")
                         .WithMany()
                         .HasForeignKey("TypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Department");
+
                     b.Navigation("Issuer");
 
                     b.Navigation("Parent");
+
+                    b.Navigation("Recipient");
 
                     b.Navigation("Type");
                 });
@@ -1611,9 +1846,30 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.Navigation("Entity");
                 });
 
-            modelBuilder.Entity("EDO_FOMS.Domain.Entities.Public.Param", b =>
+            modelBuilder.Entity("EDO_FOMS.Domain.Entities.Org.Employee", b =>
                 {
-                    b.HasOne("EDO_FOMS.Domain.Entities.Public.ParamGroup", "Group")
+                    b.HasOne("EDO_FOMS.Domain.Entities.Org.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentId");
+
+                    b.HasOne("EDO_FOMS.Domain.Entities.Org.JobTitle", "JobTitle")
+                        .WithMany()
+                        .HasForeignKey("JobTitleId");
+
+                    b.HasOne("EDO_FOMS.Domain.Entities.Org.Organization", "Organization")
+                        .WithMany()
+                        .HasForeignKey("OrganizationId");
+
+                    b.Navigation("Department");
+
+                    b.Navigation("JobTitle");
+
+                    b.Navigation("Organization");
+                });
+
+            modelBuilder.Entity("EDO_FOMS.Domain.Entities.System.Param", b =>
+                {
+                    b.HasOne("EDO_FOMS.Domain.Entities.System.ParamGroup", "Group")
                         .WithMany("Params")
                         .HasForeignKey("ParamGroupId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1622,9 +1878,9 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.Navigation("Group");
                 });
 
-            modelBuilder.Entity("EDO_FOMS.Domain.Entities.Public.Subscribe", b =>
+            modelBuilder.Entity("EDO_FOMS.Domain.Entities.System.Subscribe", b =>
                 {
-                    b.OwnsOne("EDO_FOMS.Domain.Entities.Public.Notify", "Chat", b1 =>
+                    b.OwnsOne("EDO_FOMS.Domain.Entities.System.Notify", "Chat", b1 =>
                         {
                             b1.Property<int>("SubscribeId")
                                 .HasColumnType("integer");
@@ -1664,7 +1920,7 @@ namespace EDO_FOMS.Infrastructure.Migrations
                                 .HasForeignKey("SubscribeId");
                         });
 
-                    b.OwnsOne("EDO_FOMS.Domain.Entities.Public.Notify", "Email", b1 =>
+                    b.OwnsOne("EDO_FOMS.Domain.Entities.System.Notify", "Email", b1 =>
                         {
                             b1.Property<int>("SubscribeId")
                                 .HasColumnType("integer");
@@ -1704,7 +1960,7 @@ namespace EDO_FOMS.Infrastructure.Migrations
                                 .HasForeignKey("SubscribeId");
                         });
 
-                    b.OwnsOne("EDO_FOMS.Domain.Entities.Public.Notify", "Sms", b1 =>
+                    b.OwnsOne("EDO_FOMS.Domain.Entities.System.Notify", "Sms", b1 =>
                         {
                             b1.Property<int>("SubscribeId")
                                 .HasColumnType("integer");
@@ -1744,7 +2000,7 @@ namespace EDO_FOMS.Infrastructure.Migrations
                                 .HasForeignKey("SubscribeId");
                         });
 
-                    b.OwnsOne("EDO_FOMS.Domain.Entities.Public.Notify", "Telegram", b1 =>
+                    b.OwnsOne("EDO_FOMS.Domain.Entities.System.Notify", "Telegram", b1 =>
                         {
                             b1.Property<int>("SubscribeId")
                                 .HasColumnType("integer");
@@ -1880,7 +2136,7 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     b.Navigation("PacketFiles");
                 });
 
-            modelBuilder.Entity("EDO_FOMS.Domain.Entities.Public.ParamGroup", b =>
+            modelBuilder.Entity("EDO_FOMS.Domain.Entities.System.ParamGroup", b =>
                 {
                     b.Navigation("Params");
                 });

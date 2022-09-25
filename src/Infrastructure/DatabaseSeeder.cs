@@ -1,7 +1,7 @@
 ﻿using EDO_FOMS.Application.Interfaces.Services;
 using EDO_FOMS.Domain.Entities.Dir;
 using EDO_FOMS.Domain.Entities.Org;
-using EDO_FOMS.Domain.Entities.Public;
+using EDO_FOMS.Domain.Entities.System;
 using EDO_FOMS.Domain.Enums;
 using EDO_FOMS.Infrastructure.Contexts;
 using EDO_FOMS.Infrastructure.Helpers;

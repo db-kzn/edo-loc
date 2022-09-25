@@ -3,7 +3,7 @@ using EDO_FOMS.Application.Interfaces.Services.FileSystem;
 using EDO_FOMS.Application.Interfaces.Services.Identity;
 using EDO_FOMS.Application.Models;
 using EDO_FOMS.Domain.Entities.Doc;
-using EDO_FOMS.Domain.Entities.Public;
+using EDO_FOMS.Domain.Entities.System;
 using EDO_FOMS.Domain.Enums;
 using EDO_FOMS.Shared.Wrapper;
 using MediatR;

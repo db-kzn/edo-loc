@@ -22,6 +22,7 @@ namespace EDO_FOMS.Domain.Entities.Doc
         public bool IsRequired { get; set; } = false;                              // Обязательное согласование
         public bool IsCanceled { get; set; } = false;                              // Отмененное согласование
         public bool IsAdditional { get; set; } = false;                            // Дополнительный участник согласование
+        public bool InQueue { get; set; } = false;                                 // В очереди выполнения (подписания/согласования)
 
         //public ActTypes Act { get; set; } = ActTypes.Undefined;                    // Тип процесса: подписание, согласование или рецензирование
         //public AgreementActions Action { get; set; } = AgreementActions.Undefined; // Действие участника 

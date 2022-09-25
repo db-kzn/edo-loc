@@ -15,7 +15,7 @@ using System.Linq;
 using EDO_FOMS.Application.Models;
 using System.Text.Json.Serialization;
 using EDO_FOMS.Application.Serialization.JsonConverters;
-using EDO_FOMS.Domain.Entities.Public;
+using EDO_FOMS.Domain.Entities.System;
 using EDO_FOMS.Application.Interfaces.Services.FileSystem;
 
 namespace EDO_FOMS.Application.Features.Documents.Commands.AddEdit;

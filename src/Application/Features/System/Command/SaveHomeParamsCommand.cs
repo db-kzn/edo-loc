@@ -1,6 +1,6 @@
 ﻿using EDO_FOMS.Application.Configurations;
 using EDO_FOMS.Application.Interfaces.Repositories;
-using EDO_FOMS.Domain.Entities.Public;
+using EDO_FOMS.Domain.Entities.System;
 using EDO_FOMS.Shared.Wrapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;

@@ -1,6 +1,6 @@
 ﻿using EDO_FOMS.Domain.Contracts;
 
-namespace EDO_FOMS.Domain.Entities.Public
+namespace EDO_FOMS.Domain.Entities.System
 {
     public class Param : AuditableEntity<int>
     {

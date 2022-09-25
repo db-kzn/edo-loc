@@ -1,31 +1,32 @@
-﻿using EDO_FOMS.Domain.Enums;
+﻿using EDO_FOMS.Domain.Contracts;
 using System.ComponentModel.DataAnnotations;
 
 namespace EDO_FOMS.Domain.Entities.Org
 {
-    public class Employee
+    public class Employee : AuditableEntity<int>
     {
-        public string UserId { get; set; }
-        public int EmployeeId { get; set; }
-
         public int OrgId { get; set; }
+        public Organization Organization { get; set; }
+        public int? DepartmentId { get; set; } = null;
+        public Department Department { get; set; }
+        public int? JobTitleId { get; set; } = null;
+        public JobTitle JobTitle { get; set; }
+
+        public string UserId { get; set; } = null;            // Пользователь системы
+        public string ChangerId { get; set; } = null;         // Пользователь - Сменщик
 
         [MaxLength(10)]
-        public string InnLe { get; set; }
+        public string InnLe { get; set; } = string.Empty;
         [MaxLength(11)]
-        public string Snils { get; set; }
+        public string Snils { get; set; } = string.Empty;
         [MaxLength(12)]
-        public string Inn { get; set; }
+        public string Inn { get; set; } = string.Empty;
 
         [MaxLength(200)]
-        public string Title { get; set; }
+        public string Title { get; set; } = string.Empty;     // Обращение: Фамилия ИО
         [MaxLength(200)]
-        public string Surname { get; set; }
+        public string Surname { get; set; } = string.Empty;   // Фамилия
         [MaxLength(200)]
-        public string GivenName { get; set; }
-
-        public OrgTypes OrgType { get; set; } = OrgTypes.Undefined;  // N/D, FOND, SMO, MO, CA
-        public UserBaseRoles BaseRole { get; set; } = UserBaseRoles.Employee; // N/D, Sys Admin, Chief, Employee
-        public bool IsActive { get; set; } = true;
+        public string GivenName { get; set; } = string.Empty; // Имя (Отчество)
     }
 }

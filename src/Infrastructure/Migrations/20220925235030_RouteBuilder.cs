@@ -20,16 +20,6 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 schema: "doc",
                 table: "Documents");
 
-            migrationBuilder.DropIndex(
-                name: "IX_Documents_IssuerId",
-                schema: "doc",
-                table: "Documents");
-
-            migrationBuilder.DropColumn(
-                name: "IssuerId",
-                schema: "doc",
-                table: "Documents");
-
             migrationBuilder.EnsureSchema(
                 name: "sys");
 
@@ -56,6 +46,18 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 name: "AuditTrails",
                 newName: "AuditTrails",
                 newSchema: "sys");
+
+            migrationBuilder.RenameColumn(
+                name: "IssuerId",
+                schema: "doc",
+                table: "Documents",
+                newName: "RecipientId");
+
+            migrationBuilder.RenameIndex(
+                name: "IX_Documents_IssuerId",
+                schema: "doc",
+                table: "Documents",
+                newName: "IX_Documents_RecipientId");
 
             migrationBuilder.RenameColumn(
                 name: "Step",
@@ -105,12 +107,34 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 oldClrType: typeof(DateTime),
                 oldType: "timestamp with time zone");
 
+            migrationBuilder.AddColumn<int>(
+                name: "DepartmentId",
+                schema: "doc",
+                table: "Documents",
+                type: "integer",
+                nullable: true);
+
             migrationBuilder.AddColumn<string>(
                 name: "ExecutorId",
                 schema: "doc",
                 table: "Documents",
                 type: "text",
                 nullable: true);
+
+            migrationBuilder.AddColumn<int>(
+                name: "KeyOrgId",
+                schema: "doc",
+                table: "Documents",
+                type: "integer",
+                nullable: true);
+
+            migrationBuilder.AddColumn<DateTime>(
+                name: "SignStartAt",
+                schema: "doc",
+                table: "Documents",
+                type: "timestamp with time zone",
+                nullable: false,
+                defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
 
             migrationBuilder.AlterColumn<int>(
                 name: "OrgId",
@@ -120,6 +144,14 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 nullable: true,
                 oldClrType: typeof(int),
                 oldType: "integer");
+
+            migrationBuilder.AddColumn<bool>(
+                name: "InQueue",
+                schema: "doc",
+                table: "Agreements",
+                type: "boolean",
+                nullable: false,
+                defaultValue: false);
 
             migrationBuilder.AddColumn<bool>(
                 name: "IsAdditional",
@@ -158,6 +190,58 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 type: "integer",
                 nullable: true);
 
+            migrationBuilder.AlterColumn<string>(
+                name: "Short",
+                schema: "dir",
+                table: "DocumentTypes",
+                type: "character varying(50)",
+                maxLength: 50,
+                nullable: true,
+                oldClrType: typeof(string),
+                oldType: "text",
+                oldNullable: true);
+
+            migrationBuilder.AlterColumn<string>(
+                name: "NameEn",
+                schema: "dir",
+                table: "DocumentTypes",
+                type: "character varying(300)",
+                maxLength: 300,
+                nullable: true,
+                oldClrType: typeof(string),
+                oldType: "text",
+                oldNullable: true);
+
+            migrationBuilder.AlterColumn<string>(
+                name: "Name",
+                schema: "dir",
+                table: "DocumentTypes",
+                type: "character varying(300)",
+                maxLength: 300,
+                nullable: true,
+                oldClrType: typeof(string),
+                oldType: "text",
+                oldNullable: true);
+
+            migrationBuilder.AlterColumn<string>(
+                name: "Description",
+                schema: "dir",
+                table: "DocumentTypes",
+                type: "character varying(4000)",
+                maxLength: 4000,
+                nullable: true,
+                oldClrType: typeof(string),
+                oldType: "text",
+                oldNullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "Code",
+                schema: "dir",
+                table: "DocumentTypes",
+                type: "character varying(10)",
+                maxLength: 10,
+                nullable: true);
+
             migrationBuilder.AddColumn<int>(
                 name: "Color",
                 schema: "dir",
@@ -178,7 +262,8 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 name: "Label",
                 schema: "dir",
                 table: "DocumentTypes",
-                type: "text",
+                type: "character varying(100)",
+                maxLength: 100,
                 nullable: true);
 
             migrationBuilder.CreateTable(
@@ -190,6 +275,7 @@ namespace EDO_FOMS.Infrastructure.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Type = table.Column<int>(type: "integer", nullable: false),
                     State = table.Column<int>(type: "integer", nullable: false),
+                    Region = table.Column<int>(type: "integer", nullable: true),
                     TfOkato = table.Column<string>(type: "character varying(5)", maxLength: 5, nullable: true),
                     Code = table.Column<string>(type: "character varying(6)", maxLength: 6, nullable: true),
                     Inn = table.Column<string>(type: "character varying(12)", maxLength: 12, nullable: true),
@@ -219,6 +305,50 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Departments",
+                schema: "sys",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    OrgId = table.Column<int>(type: "integer", nullable: true),
+                    Code = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: true),
+                    Label = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    Short = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    Name = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
+                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "text", nullable: true),
+                    LastModifiedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Departments", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "JobTitles",
+                schema: "sys",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    OrgId = table.Column<int>(type: "integer", nullable: true),
+                    Code = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: true),
+                    Label = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    Short = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    Name = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
+                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "text", nullable: true),
+                    LastModifiedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_JobTitles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ParamGroups",
                 schema: "sys",
                 columns: table => new
@@ -238,6 +368,53 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Employees",
+                schema: "org",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    OrgId = table.Column<int>(type: "integer", nullable: false),
+                    OrganizationId = table.Column<int>(type: "integer", nullable: true),
+                    DepartmentId = table.Column<int>(type: "integer", nullable: true),
+                    JobTitleId = table.Column<int>(type: "integer", nullable: true),
+                    UserId = table.Column<string>(type: "text", nullable: true),
+                    ChangerId = table.Column<string>(type: "text", nullable: true),
+                    InnLe = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: true),
+                    Snils = table.Column<string>(type: "character varying(11)", maxLength: 11, nullable: true),
+                    Inn = table.Column<string>(type: "character varying(12)", maxLength: 12, nullable: true),
+                    Title = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
+                    Surname = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
+                    GivenName = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
+                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "text", nullable: true),
+                    LastModifiedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Employees", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Employees_Departments_DepartmentId",
+                        column: x => x.DepartmentId,
+                        principalSchema: "sys",
+                        principalTable: "Departments",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Employees_JobTitles_JobTitleId",
+                        column: x => x.JobTitleId,
+                        principalSchema: "sys",
+                        principalTable: "JobTitles",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Employees_Organizations_OrganizationId",
+                        column: x => x.OrganizationId,
+                        principalSchema: "org",
+                        principalTable: "Organizations",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Routes",
                 schema: "dir",
                 columns: table => new
@@ -249,9 +426,13 @@ namespace EDO_FOMS.Infrastructure.Migrations
                     Short = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
                     Name = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: true),
                     Description = table.Column<string>(type: "character varying(4000)", maxLength: 4000, nullable: true),
-                    ExecutorId = table.Column<string>(type: "text", nullable: true),
                     ForUserRole = table.Column<int>(type: "integer", nullable: false),
                     EndAction = table.Column<int>(type: "integer", nullable: false),
+                    ExecDepartId = table.Column<int>(type: "integer", nullable: true),
+                    DepartmentId = table.Column<int>(type: "integer", nullable: true),
+                    ExecJobTitleId = table.Column<int>(type: "integer", nullable: true),
+                    JobTitleId = table.Column<int>(type: "integer", nullable: true),
+                    ExecutorId = table.Column<string>(type: "text", nullable: true),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false),
                     DateIsToday = table.Column<bool>(type: "boolean", nullable: false),
                     NameOfFile = table.Column<bool>(type: "boolean", nullable: false),
@@ -273,6 +454,18 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Routes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Routes_Departments_DepartmentId",
+                        column: x => x.DepartmentId,
+                        principalSchema: "sys",
+                        principalTable: "Departments",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Routes_JobTitles_JobTitleId",
+                        column: x => x.JobTitleId,
+                        principalSchema: "sys",
+                        principalTable: "JobTitles",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -538,6 +731,12 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Documents_DepartmentId",
+                schema: "doc",
+                table: "Documents",
+                column: "DepartmentId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Documents_EmplOrgId",
                 schema: "doc",
                 table: "Documents",
@@ -574,6 +773,24 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 column: "RoutePacketFileId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Employees_DepartmentId",
+                schema: "org",
+                table: "Employees",
+                column: "DepartmentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Employees_JobTitleId",
+                schema: "org",
+                table: "Employees",
+                column: "JobTitleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Employees_OrganizationId",
+                schema: "org",
+                table: "Employees",
+                column: "OrganizationId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Params_ParamGroupId",
                 schema: "sys",
                 table: "Params",
@@ -598,6 +815,18 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 column: "RouteId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Routes_DepartmentId",
+                schema: "dir",
+                table: "Routes",
+                column: "DepartmentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Routes_JobTitleId",
+                schema: "dir",
+                table: "Routes",
+                column: "JobTitleId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RouteStages_RouteId",
                 schema: "dir",
                 table: "RouteStages",
@@ -619,6 +848,15 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
+                name: "FK_Documents_Departments_DepartmentId",
+                schema: "doc",
+                table: "Documents",
+                column: "DepartmentId",
+                principalSchema: "sys",
+                principalTable: "Departments",
+                principalColumn: "Id");
+
+            migrationBuilder.AddForeignKey(
                 name: "FK_Documents_Organizations_EmplOrgId",
                 schema: "doc",
                 table: "Documents",
@@ -627,6 +865,15 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 principalTable: "Organizations",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Documents_Organizations_RecipientId",
+                schema: "doc",
+                table: "Documents",
+                column: "RecipientId",
+                principalSchema: "org",
+                principalTable: "Organizations",
+                principalColumn: "Id");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -637,7 +884,17 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 table: "Agreements");
 
             migrationBuilder.DropForeignKey(
+                name: "FK_Documents_Departments_DepartmentId",
+                schema: "doc",
+                table: "Documents");
+
+            migrationBuilder.DropForeignKey(
                 name: "FK_Documents_Organizations_EmplOrgId",
+                schema: "doc",
+                table: "Documents");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Documents_Organizations_RecipientId",
                 schema: "doc",
                 table: "Documents");
 
@@ -648,6 +905,10 @@ namespace EDO_FOMS.Infrastructure.Migrations
             migrationBuilder.DropTable(
                 name: "DocPacketFiles",
                 schema: "doc");
+
+            migrationBuilder.DropTable(
+                name: "Employees",
+                schema: "org");
 
             migrationBuilder.DropTable(
                 name: "Params",
@@ -689,6 +950,19 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 name: "Routes",
                 schema: "dir");
 
+            migrationBuilder.DropTable(
+                name: "Departments",
+                schema: "sys");
+
+            migrationBuilder.DropTable(
+                name: "JobTitles",
+                schema: "sys");
+
+            migrationBuilder.DropIndex(
+                name: "IX_Documents_DepartmentId",
+                schema: "doc",
+                table: "Documents");
+
             migrationBuilder.DropIndex(
                 name: "IX_Documents_EmplOrgId",
                 schema: "doc",
@@ -710,9 +984,29 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 table: "Organizations");
 
             migrationBuilder.DropColumn(
+                name: "DepartmentId",
+                schema: "doc",
+                table: "Documents");
+
+            migrationBuilder.DropColumn(
                 name: "ExecutorId",
                 schema: "doc",
                 table: "Documents");
+
+            migrationBuilder.DropColumn(
+                name: "KeyOrgId",
+                schema: "doc",
+                table: "Documents");
+
+            migrationBuilder.DropColumn(
+                name: "SignStartAt",
+                schema: "doc",
+                table: "Documents");
+
+            migrationBuilder.DropColumn(
+                name: "InQueue",
+                schema: "doc",
+                table: "Agreements");
 
             migrationBuilder.DropColumn(
                 name: "IsAdditional",
@@ -738,6 +1032,11 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 name: "RouteStepId",
                 schema: "doc",
                 table: "Agreements");
+
+            migrationBuilder.DropColumn(
+                name: "Code",
+                schema: "dir",
+                table: "DocumentTypes");
 
             migrationBuilder.DropColumn(
                 name: "Color",
@@ -776,6 +1075,18 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 newName: "AuditTrails");
 
             migrationBuilder.RenameColumn(
+                name: "RecipientId",
+                schema: "doc",
+                table: "Documents",
+                newName: "IssuerId");
+
+            migrationBuilder.RenameIndex(
+                name: "IX_Documents_RecipientId",
+                schema: "doc",
+                table: "Documents",
+                newName: "IX_Documents_IssuerId");
+
+            migrationBuilder.RenameColumn(
                 name: "StageNumber",
                 schema: "doc",
                 table: "Agreements",
@@ -803,13 +1114,6 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 oldType: "timestamp with time zone",
                 oldNullable: true);
 
-            migrationBuilder.AddColumn<int>(
-                name: "IssuerId",
-                schema: "doc",
-                table: "Documents",
-                type: "integer",
-                nullable: true);
-
             migrationBuilder.AlterColumn<int>(
                 name: "OrgId",
                 schema: "doc",
@@ -821,11 +1125,49 @@ namespace EDO_FOMS.Infrastructure.Migrations
                 oldType: "integer",
                 oldNullable: true);
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Documents_IssuerId",
+            migrationBuilder.AlterColumn<string>(
+                name: "Short",
                 schema: "doc",
-                table: "Documents",
-                column: "IssuerId");
+                table: "DocumentTypes",
+                type: "text",
+                nullable: true,
+                oldClrType: typeof(string),
+                oldType: "character varying(50)",
+                oldMaxLength: 50,
+                oldNullable: true);
+
+            migrationBuilder.AlterColumn<string>(
+                name: "NameEn",
+                schema: "doc",
+                table: "DocumentTypes",
+                type: "text",
+                nullable: true,
+                oldClrType: typeof(string),
+                oldType: "character varying(300)",
+                oldMaxLength: 300,
+                oldNullable: true);
+
+            migrationBuilder.AlterColumn<string>(
+                name: "Name",
+                schema: "doc",
+                table: "DocumentTypes",
+                type: "text",
+                nullable: true,
+                oldClrType: typeof(string),
+                oldType: "character varying(300)",
+                oldMaxLength: 300,
+                oldNullable: true);
+
+            migrationBuilder.AlterColumn<string>(
+                name: "Description",
+                schema: "doc",
+                table: "DocumentTypes",
+                type: "text",
+                nullable: true,
+                oldClrType: typeof(string),
+                oldType: "character varying(4000)",
+                oldMaxLength: 4000,
+                oldNullable: true);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Agreements_Organizations_OrgId",

@@ -5,7 +5,7 @@ using EDO_FOMS.Application.Models;
 using EDO_FOMS.Application.Requests;
 using EDO_FOMS.Domain.Entities.Doc;
 using EDO_FOMS.Domain.Entities.Org;
-using EDO_FOMS.Domain.Entities.Public;
+using EDO_FOMS.Domain.Entities.System;
 using EDO_FOMS.Domain.Enums;
 using EDO_FOMS.Shared.Wrapper;
 using MediatR;
