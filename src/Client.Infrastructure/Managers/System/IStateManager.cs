@@ -1,5 +1,5 @@
 ﻿using EDO_FOMS.Application.Models;
-using EDO_FOMS.Domain.Entities.Public;
+using EDO_FOMS.Domain.Entities.System;
 using EDO_FOMS.Shared.Wrapper;
 using System.Threading.Tasks;
 

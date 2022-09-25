@@ -1,7 +1,7 @@
 ﻿using EDO_FOMS.Domain.Contracts;
 using System.Collections.Generic;
 
-namespace EDO_FOMS.Domain.Entities.Public
+namespace EDO_FOMS.Domain.Entities.System
 {
     public class ParamGroup : AuditableEntity<int>
     {

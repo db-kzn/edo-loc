@@ -1,6 +1,6 @@
 ﻿using EDO_FOMS.Application.Features.System.Command;
 using EDO_FOMS.Application.Features.System.Queries;
-using EDO_FOMS.Domain.Entities.Public;
+using EDO_FOMS.Domain.Entities.System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;

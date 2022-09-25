@@ -1,11 +1,11 @@
 ﻿using EDO_FOMS.Domain.Contracts;
-using EDO_FOMS.Domain.Entities.ExtendedAttributes;
 using EDO_FOMS.Domain.Entities.Dir;
+using EDO_FOMS.Domain.Entities.ExtendedAttributes;
 using EDO_FOMS.Domain.Entities.Org;
+using EDO_FOMS.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using EDO_FOMS.Domain.Enums;
 
 namespace EDO_FOMS.Domain.Entities.Doc
 {
@@ -15,10 +15,14 @@ namespace EDO_FOMS.Domain.Entities.Doc
         public List<DocPacketFile> PacketFiles { get; set; } = null;
 
         public string EmplId { get; set; }                                // Инициатор документа -> Заменить на EmployeeId
+        public string ExecutorId { get; set; }                            // Исполнитель
+
         public int EmplOrgId { get; set; }                                // Отправитель - организация инициатора
         [ForeignKey("EmplOrgId")]
-        public virtual Organization Issuer { get; set; }
-        public string ExecutorId { get; set; }                            // Исполнитель
+        public virtual Organization Issuer { get; set; }                  // Издатель
+
+        public int? KeyOrgId { get; set; }                                // Ключевой участник для отображения в таблице
+        public virtual Organization Recipient { get; set; }               // Получатель
 
         public int? ParentId { get; set; }                                // Родительский документ
         [ForeignKey("ParentId")]
@@ -37,10 +41,13 @@ namespace EDO_FOMS.Domain.Entities.Doc
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;           // Примечание
         public bool IsPublic { get; set; } = false;                       // Публичный - доступен всем сотрудникам организации
+        public int? DepartmentId { get; set; } = null;                    // Документ отдела
+        public Department Department { get; set; }
 
         public int CurrentStep { get; set; }                              // Текущий этап подписания
         public int TotalSteps { get; set; }                               // Всего этапов подписания
         public int Version { get; set; }                                  // Номер попытки прохождения документа
+        public DateTime SignStartAt { get; set; }                         // Подписание началось в (для присоединенных подписей PDF)
 
         public string URL { get; set; }
         public string StoragePath { get; set; }

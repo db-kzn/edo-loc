@@ -1,6 +1,6 @@
 ﻿using EDO_FOMS.Application.Models;
 using EDO_FOMS.Client.Infrastructure.Extensions;
-using EDO_FOMS.Domain.Entities.Public;
+using EDO_FOMS.Domain.Entities.System;
 using EDO_FOMS.Shared.Wrapper;
 using System.Net.Http;
 using System.Net.Http.Json;

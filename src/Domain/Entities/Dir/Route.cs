@@ -1,4 +1,5 @@
 ﻿using EDO_FOMS.Domain.Contracts;
+using EDO_FOMS.Domain.Entities.Org;
 using EDO_FOMS.Domain.Enums;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -28,9 +29,14 @@ public class Route : AuditableEntity<int>
     [MaxLength(4000)]
     public string Description { get; set; } = string.Empty;                  // + Описание маршрута (комментарий)
 
-    public string ExecutorId { get; set; } = string.Empty;                   // + Исполнитель
     public UserBaseRoles ForUserRole { get; set; } = UserBaseRoles.Employee; // + Минимальная роль инициатора имеющая доступ к маршруту
     public EndActions EndAction { get; set; } = EndActions.SignedByAll;      // + Действие по завершению маршрута
+
+    public int? ExecDepartId { get; set; } = null;                           //   Отдел исполнителя
+    public Department Department { get; set; }
+    public int? ExecJobTitleId { get; set; } = null;                         //   Должность исполнителя
+    public JobTitle JobTitle { get; set; }
+    public string ExecutorId { get; set; } = string.Empty;                   // + Исполнитель
 
     public bool IsActive { get; set; } = true;                               // + Используемый маршрут
     public bool DateIsToday { get; set; } = true;                            // + Дата документа - устанивить сегодня

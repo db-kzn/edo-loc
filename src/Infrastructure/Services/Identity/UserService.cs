@@ -33,7 +33,7 @@ using System.Threading.Tasks;
 using EDO_FOMS.Application.Models;
 using MediatR;
 using EDO_FOMS.Application.Features.Orgs.Commands;
-using EDO_FOMS.Domain.Entities.Public;
+using EDO_FOMS.Domain.Entities.System;
 using EDO_FOMS.Application.Features.System.Command;
 using System.Linq.Expressions;
 using EDO_FOMS.Application.Features.Orgs.Queries;
@@ -677,7 +677,7 @@ namespace EDO_FOMS.Infrastructure.Services.Identity
 
             Employee employee = new()
             {
-                EmployeeId = 0,
+                Id = 0,
                 UserId = user.Id,
                 OrgId = user.OrgId,
 
@@ -689,9 +689,9 @@ namespace EDO_FOMS.Infrastructure.Services.Identity
                 Surname = user.Surname,
                 GivenName = user.GivenName,
 
-                OrgType = user.OrgType,
-                BaseRole = user.BaseRole,
-                IsActive = user.IsActive
+                //OrgType = user.OrgType,
+                //BaseRole = user.BaseRole,
+                //IsActive = user.IsActive
             };
 
             return employee;

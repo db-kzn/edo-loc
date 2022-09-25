@@ -632,7 +632,7 @@
             </summary>
             <returns>Status 200 OK</returns>
         </member>
-        <member name="M:EDO_FOMS.Server.Controllers.System.StateController.PostSubscribe(EDO_FOMS.Domain.Entities.Public.Subscribe)">
+        <member name="M:EDO_FOMS.Server.Controllers.System.StateController.PostSubscribe(EDO_FOMS.Domain.Entities.System.Subscribe)">
             <summary>
             Notices Subscribe
             <param name="command"></param>

@@ -1,8 +1,7 @@
 ﻿using EDO_FOMS.Domain.Contracts;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
 
-namespace EDO_FOMS.Domain.Entities.Public
+namespace EDO_FOMS.Domain.Entities.System
 {
     [Index("UserId", IsUnique = false)]
     public class Subscribe : AuditableEntity<int>

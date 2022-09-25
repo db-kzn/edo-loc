@@ -1,9 +1,6 @@
 ﻿using EDO_FOMS.Client.Extensions;
-using EDO_FOMS.Client.Infrastructure.Managers.System;
-using EDO_FOMS.Domain.Entities.Public;
-using Microsoft.AspNetCore.Components;
+using EDO_FOMS.Domain.Entities.System;
 using Microsoft.JSInterop;
-using MudBlazor;
 using System.Threading.Tasks;
 
 namespace EDO_FOMS.Client.Pages.Personal

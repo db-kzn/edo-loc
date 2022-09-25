@@ -11,7 +11,7 @@ using EDO_FOMS.Domain.Entities.ExtendedAttributes;
 using EDO_FOMS.Domain.Entities.Org;
 using EDO_FOMS.Domain.Entities.Doc;
 using EDO_FOMS.Domain.Entities.Dir;
-using EDO_FOMS.Domain.Entities.Public;
+using EDO_FOMS.Domain.Entities.System;
 using EDO_FOMS.Infrastructure.Models.Audit;
 
 namespace EDO_FOMS.Infrastructure.Contexts
@@ -41,13 +41,17 @@ namespace EDO_FOMS.Infrastructure.Contexts
         public DbSet<RoutePacketFile> RoutePacketFiles { get; set; }
 
         public DbSet<Organization> Organizations { get; set; }
+        public DbSet<Employee> Employees { get; set; }
         public DbSet<Certificate> Certificates { get; set; }
+
         public DbSet<Document> Documents { get; set; }
         public DbSet<Agreement> Agreements { get; set; }
         public DbSet<DocumentStatus> DocumentStatuses { get; set; }
         public DbSet<DocPacketFile> DocPacketFiles { get; set; }
         public DbSet<DocumentExtendedAttribute> DocumentExtendedAttributes { get; set; }
 
+        public DbSet<Department> Departments { get; set; }
+        public DbSet<JobTitle> JobTitles { get; set; }
         public DbSet<Subscribe> Subscribes { get; set; }
         public DbSet<ParamGroup> ParamGroups { get; set; }
         public DbSet<Param> Params { get; set; }
@@ -143,6 +147,7 @@ namespace EDO_FOMS.Infrastructure.Contexts
             });
 
             builder.Entity<Organization>(entity => entity.ToTable(name: "Organizations", schema: "org"));
+            builder.Entity<Employee>(entity => entity.ToTable(name: "Employees", schema: "org"));
             builder.Entity<Certificate>(entity => entity.ToTable(name: "Certificates", schema: "org"));
 
             builder.Entity<Document>(entity => entity.ToTable(name: "Documents", schema: "doc"));
@@ -151,10 +156,11 @@ namespace EDO_FOMS.Infrastructure.Contexts
             builder.Entity<DocPacketFile>(entity => entity.ToTable(name: "DocPacketFiles", schema: "doc"));
             builder.Entity<DocumentExtendedAttribute>(entity => entity.ToTable(name: "DocumentExtendedAttributes", schema: "doc"));
 
+            builder.Entity<Department>(entity => entity.ToTable(name: "Departments", schema: "sys"));
+            builder.Entity<JobTitle>(entity => entity.ToTable(name: "JobTitles", schema: "sys"));
             builder.Entity<Subscribe>(entity => entity.ToTable(name: "Subscribes", schema: "sys"));
             builder.Entity<ParamGroup>(entity => entity.ToTable(name: "ParamGroups", schema: "sys"));
             builder.Entity<Param>(entity => entity.ToTable(name: "Params", schema: "sys"));
-
             builder.Entity<Audit>(entity => entity.ToTable(name: "AuditTrails", schema: "sys"));
 
             builder.Entity<ChatHistory<EdoFomsUser>>(entity =>
