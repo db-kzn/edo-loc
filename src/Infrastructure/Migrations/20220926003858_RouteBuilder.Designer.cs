@@ -12,7 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EDO_FOMS.Infrastructure.Migrations
 {
     [DbContext(typeof(EdoFomsContext))]
+<<<<<<<< HEAD:src/Infrastructure/Migrations/20220926003858_RouteBuilder.Designer.cs
     [Migration("20220926003858_RouteBuilder")]
+========
+    [Migration("20220925235030_RouteBuilder")]
+>>>>>>>> c398aef3098c57f3754b670dc68714f50d2a45f8:src/Infrastructure/Migrations/20220925235030_RouteBuilder.Designer.cs
     partial class RouteBuilder
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
