@@ -10,7 +10,7 @@
 	<PackageReference Include="AutoMapper" Version="11.0.1" />
 	<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
 	<PackageReference Include="Blazored.LocalStorage" Version="4.2.0" />
-	<PackageReference Include="EPPlus" Version="6.0.7" />
+	<PackageReference Include="EPPlus" Version="6.0.8" />
 	<PackageReference Include="Hangfire.Core" Version="1.7.31" />
 	<PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="6.0.9" />
 	<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
@@ -21,8 +21,8 @@
 		<PrivateAssets>all</PrivateAssets>
 		<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	</PackageReference>
-	<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.6" />
-	<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.NodaTime" Version="6.0.6" />
+	<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.7" />
+	<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.NodaTime" Version="6.0.7" />
 	<PackageReference Include="SevenZip" Version="19.0.0" />
   </ItemGroup>
   
