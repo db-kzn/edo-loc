@@ -1,6 +1,7 @@
 ﻿using EDO_FOMS.Application.Models.Dir;
 using EDO_FOMS.Application.Responses.Docums;
 using EDO_FOMS.Domain.Entities.Dir;
+using EDO_FOMS.Domain.Entities.Org;
 using EDO_FOMS.Domain.Enums;
 using System.Collections.Generic;
 
@@ -23,10 +24,16 @@ namespace EDO_FOMS.Client.Models
         public string Name { get; set; } = string.Empty;                         // + Наименование маршрута
         public string Description { get; set; } = string.Empty;                  // + Описание маршрута
 
-        public string ExecutorId { get; set; } = string.Empty;
-        public ContactResponse Executor { get; set; } = null;
+
         public UserBaseRoles ForUserRole { get; set; } = UserBaseRoles.Employee; // + Минимальная роль пользователя имеющая доступ к маршруту
         public EndActions EndAction { get; set; } = EndActions.ToArchive;        // + Действие по завершению маршрута
+
+        public int? ExecDepartId { get; set; } = null;                           //   Отдел исполнителя
+        public Department Department { get; set; }
+        public int? ExecJobTitleId { get; set; } = null;                         //   Должность исполнителя
+        public JobTitle JobTitle { get; set; }
+        public string ExecutorId { get; set; } = string.Empty;
+        public ContactResponse Executor { get; set; } = null;
 
         public bool IsActive { get; set; } = false;                              // + Используемый маршрут
         public bool DateIsToday { get; set; } = false;                           // + Дата документа - устанивить сегодня

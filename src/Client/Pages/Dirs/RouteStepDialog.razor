@@ -44,6 +44,24 @@
                 </MudSelect>
             </MudItem>
             <MudItem xs="6">
+                @*<MudCheckBox @bind-Checked="@Step.OnlyHead" Label="@_localizer["Only Chief"]" Color="Color.Primary"
+                CheckedIcon="@Icons.Material.Outlined.WorkspacePremium" UnCheckedColor="Color.Default" />*@
+
+                @*<div class="d-flex flex-row" style="height: 24px;">
+                <MudIcon Icon="@Icons.Material.Outlined.AssignmentTurnedIn" Color="Color.Default" Size="Size.Small" Class="mr-2" />
+                </div>*@
+
+                <MudSelect T="MemberGroups" @bind-Value="@Step.MemberGroup" Label="@_localizer["Member Group"]" AnchorOrigin="Origin.BottomCenter">
+                    <MudSelectItem T="MemberGroups" Value="@MemberGroups.Undefined">@_localizer["Group not defined"]</MudSelectItem>
+                    <MudSelectItem T="MemberGroups" Value="@MemberGroups.OnlyHead">@_localizer["Only Head"]</MudSelectItem>
+                    <MudSelectItem T="MemberGroups" Value="@MemberGroups.HeadAndAccountant">@_localizer["Head And Accountant"]</MudSelectItem>
+                    <MudSelectItem T="MemberGroups" Value="@MemberGroups.OrgAdmin">@_localizer["Org Admin"]</MudSelectItem>
+                    <MudSelectItem T="MemberGroups" Value="@MemberGroups.OnlyEmployees">@_localizer["Only Employees"]</MudSelectItem>
+                    <MudSelectItem T="MemberGroups" Value="@MemberGroups.ExtExpert">@_localizer["External Expert"]</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="6">
                 <MudSelect T="OrgTypes" @bind-Value="Step.OrgType" Label="@_localizer["Org Type"]" Variant="Variant.Text" AnchorOrigin="Origin.BottomCenter">
                     <MudSelectItem T="OrgTypes" Value="@OrgTypes.Undefined">
                         <div class="d-flex flex-row" style="height: 24px; vertical-align: middle;">
@@ -88,7 +106,7 @@
                     </MudSelectItem>
                 </MudSelect>
             </MudItem>
-            <MudItem xs="12">
+            <MudItem xs="6">
                 @*<MudNumericField @bind-Value="@Step.OrgId" Label="@_localizer["Member Org"]" Variant="Variant.Text" />*@
                 <MudAutocomplete Label="@_localizer["Member Org"]" ToStringFunc="@(e => OrgName(e))"
                                  T="OrgsResponse" Value="Step.OrgMember" SearchFunc="@SearchOrgAsync" ValueChanged="@(o => OrgChanged(o))"
@@ -103,25 +121,12 @@
             </MudItem>
 
             <MudItem xs="6">
-                <MudCheckBox @bind-Checked="@Step.Requred" Label="@_localizer["Requred"]" Color="Color.Primary"
-                             CheckedIcon="@Icons.Material.Rounded.WarningAmber" UnCheckedColor="Color.Default" />
+                <MudCheckBox @bind-Checked="@Step.IsKeyMember" Label="@_localizer["Is Key Member"]" Color="Color.Primary"
+                             CheckedIcon="@Icons.Material.Rounded.RadioButtonChecked" UncheckedIcon="@Icons.Material.Rounded.RadioButtonUnchecked" UnCheckedColor="Color.Default" />
             </MudItem>
             <MudItem xs="6">
-                @*<MudCheckBox @bind-Checked="@Step.OnlyHead" Label="@_localizer["Only Chief"]" Color="Color.Primary"
-                CheckedIcon="@Icons.Material.Outlined.WorkspacePremium" UnCheckedColor="Color.Default" />*@
-
-                @*<div class="d-flex flex-row" style="height: 24px;">
-                <MudIcon Icon="@Icons.Material.Outlined.AssignmentTurnedIn" Color="Color.Default" Size="Size.Small" Class="mr-2" />
-                </div>*@
-
-                <MudSelect T="MemberGroups" @bind-Value="@Step.MemberGroup" Label="@_localizer["Member Group"]" AnchorOrigin="Origin.BottomCenter">
-                    <MudSelectItem T="MemberGroups" Value="@MemberGroups.Undefined">@_localizer["Group not defined"]</MudSelectItem>
-                    <MudSelectItem T="MemberGroups" Value="@MemberGroups.OnlyHead">@_localizer["Only Head"]</MudSelectItem>
-                    <MudSelectItem T="MemberGroups" Value="@MemberGroups.HeadAndAccountant">@_localizer["Head And Accountant"]</MudSelectItem>
-                    <MudSelectItem T="MemberGroups" Value="@MemberGroups.OrgAdmin">@_localizer["Org Admin"]</MudSelectItem>
-                    <MudSelectItem T="MemberGroups" Value="@MemberGroups.OnlyEmployees">@_localizer["Only Employees"]</MudSelectItem>
-                    <MudSelectItem T="MemberGroups" Value="@MemberGroups.ExtExpert">@_localizer["External Expert"]</MudSelectItem>
-                </MudSelect>
+                <MudCheckBox @bind-Checked="@Step.Requred" Label="@_localizer["Requred"]" Color="Color.Primary"
+                             CheckedIcon="@Icons.Material.Rounded.WarningAmber" UnCheckedColor="Color.Default" />
             </MudItem>
 
             <MudItem xs="6">

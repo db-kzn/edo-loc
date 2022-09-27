@@ -16,18 +16,19 @@ namespace EDO_FOMS.Application.Models.Dir
         public int Number { get; set; } = 0;                                    // - Номер процесса в этапе, для сортировки последовательности
 
         public ActTypes ActType { get; set; } = ActTypes.Signing;               // + Тип шага: подписание, согласование или рецензирование
-        public int AutoSearch { get; set; } = 0;                                // + Автопоиск - количество записей
+        public MemberGroups MemberGroup { get; set; } = MemberGroups.Undefined; // + Группа участников
 
         public OrgTypes OrgType { get; set; } = OrgTypes.Undefined;             // + Тип организации, может быть не определен
         public int? OrgId { get; set; } = null;                                 // + Индекс организации участника
         public OrgsResponse OrgMember { get; set; } = null;                     // + Организация участник
 
+        public bool IsKeyMember { get; set; } = false;                          // + Является ключевым участником
         public bool Requred { get; set; } = true;                               // + Обязательный шаг
-        public MemberGroups MemberGroup { get; set; } = MemberGroups.Undefined; // + Группа участников
 
         public bool SomeParticipants { get; set; } = true;                      // - Несколько участников
         public bool AllRequred { get; set; } = true;                            // + Если несколько, то условие завершения: все или любой
 
+        public int AutoSearch { get; set; } = 0;                                // + Автопоиск - количество записей
         public bool HasAgreement { get; set; } = false;                         // + Содержит согласование
         public bool HasReview { get; set; } = false;                            // + Содержит рецензирование
 
@@ -44,18 +45,19 @@ namespace EDO_FOMS.Application.Models.Dir
             Number = s.Number;
 
             ActType = s.ActType;
-            AutoSearch = s.AutoSearch;
+            MemberGroup = s.MemberGroup;
 
             OrgType = s.OrgType;
             OrgId = s.OrgId;
             OrgMember = null; // RouteStep has no Organization Object
 
+            IsKeyMember = s.IsKeyMember;
             Requred = s.Requred;
-            MemberGroup = s.MemberGroup;
 
             SomeParticipants = s.SomeParticipants;
             AllRequred = s.AllRequred;
 
+            AutoSearch = s.AutoSearch;
             HasAgreement = s.HasAgreement;
             HasReview = s.HasReview;
 
@@ -78,18 +80,19 @@ namespace EDO_FOMS.Application.Models.Dir
             Number = s.Number;
 
             ActType = s.ActType;
-            AutoSearch = s.AutoSearch;
+            MemberGroup = s.MemberGroup;
 
             OrgType = s.OrgType;
             OrgId = s.OrgId;
             OrgMember = s.OrgMember;
 
+            IsKeyMember = s.IsKeyMember;
             Requred = s.Requred;
-            MemberGroup = s.MemberGroup;
 
             SomeParticipants = s.SomeParticipants;
             AllRequred = s.AllRequred;
 
+            AutoSearch = s.AutoSearch;
             HasAgreement = s.HasAgreement;
             HasReview = s.HasReview;
 

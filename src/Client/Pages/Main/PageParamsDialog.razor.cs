@@ -18,8 +18,8 @@ namespace EDO_FOMS.Client.Pages.Main
         private async Task SaveAsync()
         {
             await AdmManager.SaveHomeParamsAsync(_home);
-            Close();
+            MudDialog.Close();
         }
-        public void Close() => MudDialog.Cancel();
+        public void Cancel() => MudDialog.Cancel();
     }
 }

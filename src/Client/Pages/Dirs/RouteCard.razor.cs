@@ -215,9 +215,12 @@ namespace EDO_FOMS.Client.Pages.Dirs
                 Name = Route.Name,
                 Description = Route.Description,
 
-                ExecutorId = Route.Executor?.Id ?? string.Empty,
                 ForUserRole = Route.ForUserRole,
                 EndAction = Route.EndAction,
+
+                //ExecDepartId = null,
+                //ExecJobTitleId = null,
+                ExecutorId = Route.Executor?.Id ?? string.Empty,
 
                 IsActive = Route.IsActive,
                 DateIsToday = Route.DateIsToday,
@@ -309,18 +312,30 @@ namespace EDO_FOMS.Client.Pages.Dirs
                 //step.Number = s.Number;
 
                 step.ActType = s.ActType;
-                step.AutoSearch = s.AutoSearch;
+                step.MemberGroup = s.MemberGroup;
 
                 step.OrgType = s.OrgType;
                 step.OrgId = s.OrgId;
                 //step.OrgMember = s.OrgMember; // Used only for View
 
+                if (step.IsKeyMember != s.IsKeyMember)
+                {
+                    if (s.IsKeyMember)
+                    {
+                        // Установить KeyOrgId
+                    }
+                    else
+                    {
+                        // Очистить KeyOrgId
+                    }
+                    step.IsKeyMember = s.IsKeyMember;
+                }
                 step.Requred = s.Requred;
-                step.MemberGroup = s.MemberGroup;
 
                 step.SomeParticipants = s.SomeParticipants;
                 step.AllRequred = s.AllRequred;
 
+                step.AutoSearch = s.AutoSearch;
                 step.HasAgreement = s.HasAgreement;
                 step.HasReview = s.HasReview;
 

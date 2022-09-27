@@ -4,7 +4,7 @@ namespace EDO_FOMS.Client.Infrastructure.Settings
 {
     public class EdoFomsTheme
     {
-        private static Typography DefaultTypography = new Typography()
+        private static readonly Typography DefaultTypography = new()
         {
             Default = new Default()
             {
@@ -104,7 +104,7 @@ namespace EDO_FOMS.Client.Infrastructure.Settings
             }
         };
 
-        private static LayoutProperties DefaultLayoutProperties = new LayoutProperties()
+        private static readonly LayoutProperties DefaultLayoutProperties = new LayoutProperties()
         {
             DefaultBorderRadius = "3px"
         };
@@ -118,6 +118,8 @@ namespace EDO_FOMS.Client.Infrastructure.Settings
 
                 AppbarBackground = "#1E88E5",
                 Background = Colors.Grey.Lighten5,
+
+                Divider = "#EEE",
 
                 DrawerBackground = "#FFF",
                 DrawerText = "rgba(0,0,0, 0.7)"

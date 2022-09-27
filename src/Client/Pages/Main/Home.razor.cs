@@ -68,13 +68,8 @@ namespace EDO_FOMS.Client.Pages.Main
             };
 
             var dialog = _dialogService.Show<PageParamsDialog>("", parameters, options);
-
             var result = await dialog.Result;
-            if (!result.Cancelled)
-            {
-                await LoadParamsAsync();
-                StateHasChanged();
-            }
+            if (!result.Cancelled) { await LoadParamsAsync(); }
         }
         private void ShowChangeLogs() => _ = _dialogService.Show<ChangeLogsDialog>();
     }
