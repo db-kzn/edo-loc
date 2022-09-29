@@ -210,8 +210,8 @@
   <data name="Only Employees" xml:space="preserve">
     <value>Only Employees</value>
   </data>
-  <data name="Only Head" xml:space="preserve">
-    <value>Only Head</value>
+  <data name="Only Heads" xml:space="preserve">
+    <value>Only Heads</value>
   </data>
   <data name="Org Admin" xml:space="preserve">
     <value>Org Admin</value>

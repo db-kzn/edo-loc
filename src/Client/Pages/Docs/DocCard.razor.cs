@@ -347,6 +347,20 @@ namespace EDO_FOMS.Client.Pages.Docs
             OrgTypes.Treasury => Icons.Material.Outlined.AccountBalance,
             _ => Icons.Material.Outlined.Business
         };
+        private static Color IconColorByOrgType(RouteStepModel step)
+        {
+            if (!step.IsKeyMember) { return Color.Default; }
+
+            return step.OrgType switch
+            {
+                OrgTypes.Fund => Color.Error,
+                OrgTypes.MO => Color.Primary,
+                OrgTypes.SMO => Color.Success,
+                OrgTypes.MEO => Color.Tertiary,
+                OrgTypes.Treasury => Color.Warning,
+                _ => Color.Default
+            };
+        }
         private string LabelByStep(RouteStepModel step) =>
             $"{_localizer[(step.MemberGroup == MemberGroups.OnlyHead) ? "Chief" : "Employee"]} " +
             $"{_localizer["of the"]} {_localizer[step.OrgType.ToString()]}";
@@ -403,6 +417,7 @@ namespace EDO_FOMS.Client.Pages.Docs
             {
                 AddMainContact(a);
                 a.Members.ForEach(m => Doc.Members.Add(NewDocActMember(a, m)));
+                if (a.Step.IsKeyMember && a.Members.Count > 0) { Doc.KeyOrgId = a.Members[0].Contact?.OrgId; }
             });
 
             await _jsRuntime.InvokeVoidAsync("azino.Console", Doc, "Doc To Save");

@@ -82,17 +82,18 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
         public int Number { get; set; }                                          // - Номер процесса в этапе, для сортировки последовательности
 
         public ActTypes ActType { get; set; } = ActTypes.Signing;                // + Тип шага: подписание, согласование или рецензирование
-        public bool Requred { get; set; } = true;                                // + Обязательный шаг
+        public MemberGroups MemberGroup { get; set; }                            // + Группа участников
 
         public OrgTypes OrgType { get; set; } = OrgTypes.Undefined;              // + Тип организации, может быть не определен
         public int? OrgId { get; set; } = null;                                  // + Организация участник
 
-        public MemberGroups MemberGroup { get; set; }                            // + Группа участников
-        public int AutoSearch { get; set; } = 0;                                 // + Автопоиск - количество записей
+        public bool IsKeyMember { get; set; } = false;                           // + Является ключевым участником
+        public bool Requred { get; set; } = true;                                // + Обязательный шаг
 
         public bool SomeParticipants { get; set; } = true;                       // - Несколько участников
         public bool AllRequred { get; set; } = true;                             // + Если несколько, то условие завершения: все или любой
 
+        public int AutoSearch { get; set; } = 0;                                 // + Автопоиск - количество записей
         public bool HasAgreement { get; set; } = false;                          // + Содержит согласование
         public bool HasReview { get; set; } = false;                             // + Содержит рецензирование
 
@@ -191,17 +192,18 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
                     Number = s.Number,
 
                     ActType = s.ActType,
-                    AutoSearch = s.AutoSearch,
+                    MemberGroup = s.MemberGroup,
 
                     OrgType = s.OrgType,
                     OrgId = s.OrgId,
 
+                    IsKeyMember = s.IsKeyMember,
                     Requred = s.Requred,
-                    MemberGroup = s.MemberGroup,
 
                     SomeParticipants = s.SomeParticipants,
                     AllRequred = s.AllRequred,
 
+                    AutoSearch = s.AutoSearch,
                     HasAgreement = s.HasAgreement,
                     HasReview = s.HasReview,
 
@@ -344,17 +346,18 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
                         Number = c.Number,
 
                         ActType = c.ActType,
-                        AutoSearch = c.AutoSearch,
+                        MemberGroup = c.MemberGroup,
 
                         OrgType = c.OrgType,
                         OrgId = c.OrgId,
 
+                        IsKeyMember = c.IsKeyMember,
                         Requred = c.Requred,
-                        MemberGroup = c.MemberGroup,
 
                         SomeParticipants = c.SomeParticipants,
                         AllRequred = c.AllRequred,
 
+                        AutoSearch = c.AutoSearch,
                         HasAgreement = c.HasAgreement,
                         HasReview = c.HasReview,
 
@@ -376,17 +379,18 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
                         r.Number = c.Number;
 
                         r.ActType = c.ActType;
-                        r.AutoSearch = c.AutoSearch;
+                        r.MemberGroup = c.MemberGroup;
 
                         r.OrgType = c.OrgType;
                         r.OrgId = c.OrgId;
 
+                        r.IsKeyMember = c.IsKeyMember;
                         r.Requred = c.Requred;
-                        r.MemberGroup = c.MemberGroup;
 
                         r.SomeParticipants = c.SomeParticipants;
                         r.AllRequred = c.AllRequred;
 
+                        r.AutoSearch = c.AutoSearch;
                         r.HasAgreement = c.HasAgreement;
                         r.HasReview = c.HasReview;
 

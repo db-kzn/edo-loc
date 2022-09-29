@@ -52,6 +52,10 @@
     font-weight: bold;
 }
 
+.border-active-color {
+    border-color: var(--mud-palette-primary);
+}
+
 /* SITE LOADER */
 
 @keyframes donut-spin {

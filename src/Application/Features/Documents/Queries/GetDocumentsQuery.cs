@@ -44,7 +44,13 @@ internal class GetDocumentsQueryHandler : IRequestHandler<GetDocumentsQuery, Pag
             Id = e.Id,
             EmplId = e.EmplId,
             EmplOrgId = e.EmplOrgId,
+
+            KeyOrgId = e.KeyOrgId,
+            RecipientInn = e.Recipient.Inn,
+            RecipientShort = e.Recipient.ShortName,
+
             ParentId = e.ParentId,
+            PreviousId = e.PreviousId,
 
             RouteId = e.RouteId,
             Stage = e.Stage,
@@ -59,13 +65,15 @@ internal class GetDocumentsQueryHandler : IRequestHandler<GetDocumentsQuery, Pag
             Title = e.Title,
             Description = e.Description,
             IsPublic = e.IsPublic,
+            DepartmentId = e.DepartmentId,
 
             CurrentStep = e.CurrentStep,
             TotalSteps = e.TotalSteps,
             Version = e.Version,
+            //SignStartAt = e.SignStartAt,
 
             URL = e.URL,
-            StoragePath = e.StoragePath,
+            //StoragePath = e.StoragePath,
             FileName = e.FileName,
 
             CreatedBy = e.CreatedBy,

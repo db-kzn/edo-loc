@@ -24,7 +24,6 @@ namespace EDO_FOMS.Client.Models
         public string Name { get; set; } = string.Empty;                         // + Наименование маршрута
         public string Description { get; set; } = string.Empty;                  // + Описание маршрута
 
-
         public UserBaseRoles ForUserRole { get; set; } = UserBaseRoles.Employee; // + Минимальная роль пользователя имеющая доступ к маршруту
         public EndActions EndAction { get; set; } = EndActions.ToArchive;        // + Действие по завершению маршрута
 

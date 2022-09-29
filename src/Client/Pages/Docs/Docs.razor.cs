@@ -250,7 +250,7 @@ namespace EDO_FOMS.Client.Pages.Docs
                 await _jsRuntime.InvokeVoidAsync("azino.Console", request, "Docs Request");
                 response = await DocManager.GetDocsAsync(request);
             }
-            //await _jsRuntime.InvokeVoidAsync("azino.Console", response, "Docs Paged Response");
+            await _jsRuntime.InvokeVoidAsync("azino.Console", response, "Docs Paged Response");
 
             if (!response.Succeeded)
             {
@@ -556,27 +556,41 @@ namespace EDO_FOMS.Client.Pages.Docs
             {
                 DocId = d.Id,
                 EmplId = d.EmplId,
+
                 EmplOrgId = d.EmplOrgId,
+                KeyOrgId = d.KeyOrgId,
+                RecipientShort = d.RecipientShort,
+                RecipientInn = d.RecipientInn,
+
                 ParentId = d.ParentId,
-                TypeId = d.TypeId,
-                TypeName = d.TypeName,
-                TypeShort = d.TypeShort,
-                Number = d.Number,
-                Date = d.Date,
-                DateStr = d.Date?.ToString("d") ?? string.Empty,
-                Title = d.Title,
-                Description = d.Description,
-                IsPublic = d.IsPublic,
+                PreviousId = d.PreviousId,
+
                 RouteId = d.RouteId,
                 Stage = d.Stage,
                 StageName = _localizer[d.Stage.ToString()],
                 HasChanges = d.HasChanges,
+
+                TypeId = d.TypeId,
+                TypeName = d.TypeName,
+                TypeShort = d.TypeShort,
+
+                Number = d.Number,
+                Date = d.Date,
+                DateStr = d.Date?.ToString("d") ?? string.Empty,
+
+                Title = d.Title,
+                Description = d.Description,
+                IsPublic = d.IsPublic,
+                DepartmentId = d.DepartmentId,
+
                 CurrentStep = d.CurrentStep,
                 TotalSteps = d.TotalSteps,
                 Version = d.Version,
+
                 URL = d.URL,
                 //StoragePath = d.StoragePath,
                 FileName = d.FileName,
+
                 CreatedBy = d.CreatedBy,
                 CreatedOn = d.CreatedOn.AddHours(tz),
                 CreatedOnStr = d.CreatedOn.AddHours(tz).ToString("g")

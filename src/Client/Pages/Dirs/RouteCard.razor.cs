@@ -295,13 +295,17 @@ namespace EDO_FOMS.Client.Pages.Dirs
             var result = await dialog.Result;
 
             if (result.Cancelled) { return; }
-            
-            var s = (RouteStepModel)result.Data;
 
+            var s = (RouteStepModel)result.Data;
 
             if (s is null) // Delete Step
             {
                 Route.Steps.Remove(step);
+            }
+            else if (s.Id == -1) // Add New Step
+            {
+                s.Id = 0;
+                Route.Steps.Add(s);
             }
             else // Update Step
             {
@@ -318,18 +322,11 @@ namespace EDO_FOMS.Client.Pages.Dirs
                 step.OrgId = s.OrgId;
                 //step.OrgMember = s.OrgMember; // Used only for View
 
-                if (step.IsKeyMember != s.IsKeyMember)
+                if (!step.IsKeyMember && s.IsKeyMember)
                 {
-                    if (s.IsKeyMember)
-                    {
-                        // Установить KeyOrgId
-                    }
-                    else
-                    {
-                        // Очистить KeyOrgId
-                    }
-                    step.IsKeyMember = s.IsKeyMember;
+                    Route.Steps.ForEach(rs => rs.IsKeyMember = false); // clear old radio value
                 }
+                step.IsKeyMember = s.IsKeyMember;
                 step.Requred = s.Requred;
 
                 step.SomeParticipants = s.SomeParticipants;
@@ -347,19 +344,17 @@ namespace EDO_FOMS.Client.Pages.Dirs
             }
 
             _dropContainer.Refresh();
-            
+
         }
         private async Task AddStepAsync(int stageNumber)
         {
-            var step = new RouteStepModel() { StageNumber = stageNumber };
-            Route.Steps.Add(step);
+            // Id = -1 |> Is Current Adding Step
+            var step = new RouteStepModel() { Id = -1, StageNumber = stageNumber };
+            //Route.Steps.Add(step);
 
             await AddEditStepAsync(step);
         }
-        private async Task EditStepAsync(RouteStepModel step)
-        {
-            await AddEditStepAsync(step);
-        }
+        private async Task EditStepAsync(RouteStepModel step) => await AddEditStepAsync(step);
         private static void StepUpdated(MudItemDropInfo<RouteStepModel> info)
         {
             if (int.TryParse(info.DropzoneIdentifier, out int stageNumber))
@@ -399,17 +394,18 @@ namespace EDO_FOMS.Client.Pages.Dirs
                 Number = s.Number,
 
                 ActType = s.ActType,
-                AutoSearch = s.AutoSearch,
+                MemberGroup = s.MemberGroup,
 
                 OrgType = s.OrgType,
                 OrgId = s.OrgId,
 
+                IsKeyMember = s.IsKeyMember,
                 Requred = s.Requred,
-                MemberGroup = s.MemberGroup,
 
                 SomeParticipants = s.SomeParticipants,
                 AllRequred = s.AllRequred,
 
+                AutoSearch = s.AutoSearch,
                 HasAgreement = s.HasAgreement,
                 HasReview = s.HasReview,
 
@@ -428,11 +424,19 @@ namespace EDO_FOMS.Client.Pages.Dirs
             };
         }
 
-        private static string StepClass(bool required)
+        private static string StepClass(RouteStepModel step)
         {
-            var border = required ? "border-solid" : "border-dotted";
-            var css = $"{border} px-0 py-0 my-4 rounded-lg border-2 mud-border-lines-default";
+            var border = step.Requred ? "border-solid" : "border-dotted";
+            var color = step.IsKeyMember ? "border-active-color" : "";
+
+            var css = $"{border} {color} px-0 py-0 my-4 rounded-lg border-2 mud-border-lines-default";
             return css;
+        }
+        private static string StepHeadStyle(RouteStepModel step)
+        {
+            var color = step.IsKeyMember ? "--mud-palette-background" : "--mud-palette-background-grey";
+            var style = $"padding: 4px 16px; height: 32px; background-color: var({color})!important;";
+            return style;
         }
         private async Task ParseCheckAsync()
         {

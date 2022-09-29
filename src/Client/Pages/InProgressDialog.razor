@@ -70,7 +70,8 @@
             <MudItem xs="12">
                 <MudTable Hover="true" Dense="false" Bordered="false" Striped="true" Breakpoint="Breakpoint.Xs"
                           Loading="@(!_loaded)" LoadingProgressColor="Color.Info" Style="margin-bottom: 0;"
-                          @ref="_mudTable" T="AgreementsProgressResponse" Items="@_agreements" @bind-SelectedItem="_agreement">
+                          @ref="_mudTable" T="AgreementsProgressResponse" Items="@_agreements" @bind-SelectedItem="_agreement"
+                          RowStyleFunc="RowStyle">
 
                     <HeaderContent>
                         <MudTh>@_localizer["Step"]</MudTh>
@@ -265,25 +266,25 @@
     <DialogActions>
         @if (Doc.AgreementId == null || _isAnswered)
         {
-            <MudButton Variant="Variant.Outlined" FullWidth="true" Color="Color.Default" Size="Size.Large"
+            <MudButton Class="mx-2" Variant="Variant.Outlined" FullWidth="true" Color="Color.Default" Size="Size.Large"
                    StartIcon="@Icons.Material.Filled.Done" IconColor="Color.Info" OnClick="ClickOk">
                 <MudText Typo="Typo.button" Class="ms-4">@_localizer["Ok"]</MudText>
             </MudButton>
         }
         else
         {
-            <MudButton Variant="Variant.Outlined" FullWidth="true" Color="Color.Success" Size="Size.Large"
+            <MudButton Class="mx-2" Variant="Variant.Outlined" FullWidth="true" Color="Color.Success" Size="Size.Large"
                    StartIcon="@Icons.Material.Filled.Done" IconColor="Color.Success" OnClick="ClickAgree">
                 <MudText Typo="Typo.button" Class="ms-4">@_localizer[_action]</MudText>
             </MudButton>
             if (_isMain)
             {
-                <MudButton Variant="Variant.Outlined" FullWidth="true" Color="Color.Default" Size="Size.Large"
+                <MudButton Class="mx-2" Variant="Variant.Outlined" FullWidth="true" Color="Color.Default" Size="Size.Large"
                    StartIcon="@Icons.Material.Filled.AddTask" IconColor="Color.Inherit" OnClick="ClickAddMembers">
                     <MudText Typo="Typo.button" Class="ms-4">@_localizer["Add Members"]</MudText>
                 </MudButton>
             }
-            <MudButton Variant="Variant.Outlined" FullWidth="true" Color="Color.Error" Size="Size.Large"
+            <MudButton Class="mx-2" Variant="Variant.Outlined" FullWidth="true" Color="Color.Error" Size="Size.Large"
                    StartIcon="@Icons.Material.Filled.Close" IconColor="Color.Error" OnClick="ClickReject">
                 <MudText Typo="Typo.button" Class="ms-4">
                     @((_action == nameof(AgreementActions.ToReview)) ? _localizer["Refuse"] : _localizer["Reject"])

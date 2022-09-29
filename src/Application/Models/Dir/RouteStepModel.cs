@@ -32,7 +32,7 @@ namespace EDO_FOMS.Application.Models.Dir
         public bool HasAgreement { get; set; } = false;                         // + Содержит согласование
         public bool HasReview { get; set; } = false;                            // + Содержит рецензирование
 
-        public string Description { get; set; }                                 // - Описание процесса
+        public string Description { get; set; } = string.Empty;                 // - Описание процесса
         public List<RouteStepMemberModel> Members { get; set; } = new();        // + Список участников
 
         public RouteStepModel() { }

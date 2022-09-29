@@ -219,6 +219,9 @@
   <data name="Pause" xml:space="preserve">
     <value>Перезапустить</value>
   </data>
+  <data name="Recipient" xml:space="preserve">
+    <value>Получатель</value>
+  </data>
   <data name="Rejected" xml:space="preserve">
     <value>Отклонено</value>
   </data>

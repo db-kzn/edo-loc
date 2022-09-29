@@ -15,7 +15,6 @@ using EDO_FOMS.Application.Models;
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using EDO_FOMS.Application.Configurations;
 
 namespace EDO_FOMS.Application.Features.Documents.Commands;
 
@@ -25,8 +24,10 @@ public partial class AddEditDocCommand : IRequest<Result<int>>
     public int? ParentId { get; set; }                                         // Родительский документ
 
     public string EmplId { get; set; } = string.Empty;                         // Инициатор подписания
-    public int EmplOrgId { get; set; } = 0;                                    // Организация инициатора
     public string ExecutorId { get; set; } = string.Empty;                     // Исполнитель
+
+    public int EmplOrgId { get; set; } = 0;                                    // Организация инициатора
+    public int? KeyOrgId { get; set; } = null;                                 // Ключевой участник для отображения в таблице
 
     public int TypeId { get; set; } = 1;                                       // Тип документа: 1 - Договор, 2 - Приложение 
     [JsonConverter(typeof(TrimmingJsonConverter))]
@@ -107,8 +108,10 @@ internal class AddEditDocCommandHandler : IRequestHandler<AddEditDocCommand, Res
             //PacketFiles = new(),
 
             EmplId = command.EmplId,
-            EmplOrgId = command.EmplOrgId,
             ExecutorId = command.ExecutorId,
+
+            EmplOrgId = command.EmplOrgId,
+            KeyOrgId = command.KeyOrgId,
 
             ParentId = null,
             PreviousId = null,
@@ -228,8 +231,10 @@ internal class AddEditDocCommandHandler : IRequestHandler<AddEditDocCommand, Res
         if (doc is null) { return await Result<int>.FailAsync(_localizer["Document Not Found!"]); }
 
         doc.EmplId = command.EmplId;
-        doc.EmplOrgId = command.EmplOrgId;
         doc.ExecutorId = command.ExecutorId;
+
+        doc.EmplOrgId = command.EmplOrgId;
+        doc.KeyOrgId = command.KeyOrgId;
 
         doc.TypeId = command.TypeId;
         doc.Number = command.Number;

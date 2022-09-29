@@ -248,8 +248,8 @@
                                 </ChildContent>
 
                                 <ItemRenderer>
-                                    <MudListItem DisableRipple Class="@StepClass(context.Requred)" OnClick="() => EditStepAsync(context)">
-                                        <div class="d-flex flex-row rounded-lg" style="padding: 4px 16px; height: 32px; background-color: var(--mud-palette-background-grey) !important;">
+                                    <MudListItem DisableRipple Class="@StepClass(context)" OnClick="() => EditStepAsync(context)">
+                                        <div class="d-flex flex-row rounded-lg" style="@StepHeadStyle(context)">
                                             @if (context.ActType == ActTypes.Signing)
                                             {
                                                 <MudIcon Class="mr-2" Color="Color.Error" Icon="@Icons.Material.Outlined.Draw" />

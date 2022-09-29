@@ -270,4 +270,7 @@
   <data name="Import" xml:space="preserve">
     <value>Import</value>
   </data>
+  <data name="Recipient" xml:space="preserve">
+    <value>Recipient</value>
+  </data>
 </root>

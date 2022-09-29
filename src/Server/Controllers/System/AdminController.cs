@@ -183,7 +183,7 @@ namespace EDO_FOMS.Server.Controllers.System
         /// Get Home Configuration
         /// </summary>
         /// <returns>Status 200 OK</returns>
-        [Authorize(Policy = Permissions.System.View)]
+        [Authorize(Policy = Permissions.Documents.View)]
         [HttpGet("home-params")]
         public async Task<IActionResult> GetHomeParams()
         {

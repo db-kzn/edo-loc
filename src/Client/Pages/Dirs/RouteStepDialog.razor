@@ -53,7 +53,7 @@
 
                 <MudSelect T="MemberGroups" @bind-Value="@Step.MemberGroup" Label="@_localizer["Member Group"]" AnchorOrigin="Origin.BottomCenter">
                     <MudSelectItem T="MemberGroups" Value="@MemberGroups.Undefined">@_localizer["Group not defined"]</MudSelectItem>
-                    <MudSelectItem T="MemberGroups" Value="@MemberGroups.OnlyHead">@_localizer["Only Head"]</MudSelectItem>
+                    <MudSelectItem T="MemberGroups" Value="@MemberGroups.OnlyHead">@_localizer["Only Heads"]</MudSelectItem>
                     <MudSelectItem T="MemberGroups" Value="@MemberGroups.HeadAndAccountant">@_localizer["Head And Accountant"]</MudSelectItem>
                     <MudSelectItem T="MemberGroups" Value="@MemberGroups.OrgAdmin">@_localizer["Org Admin"]</MudSelectItem>
                     <MudSelectItem T="MemberGroups" Value="@MemberGroups.OnlyEmployees">@_localizer["Only Employees"]</MudSelectItem>
@@ -242,13 +242,13 @@
     </DialogContent>
 
     <DialogActions>
-        <MudButton Class="mx-2" Variant="Variant.Outlined" FullWidth="true" Color="Color.Default" StartIcon="@Icons.Material.Outlined.Clear"
-                   OnClick="() => Delete()">
+        <MudButton Class="mx-2" Variant="Variant.Outlined" FullWidth="true" Color="Color.Default"
+                   StartIcon="@Icons.Material.Rounded.DeleteOutline" OnClick="Delete">
             @_localizer["Delete"]
         </MudButton>
 
-        <MudButton Class="mx-2" ButtonType="ButtonType.Submit" Variant="Variant.Outlined" FullWidth="true" Color="Color.Primary" EndIcon="@Icons.Material.Outlined.Done"
-                   OnClick="() => Ok()">
+        <MudButton Class="mx-2" ButtonType="ButtonType.Submit" Variant="Variant.Outlined" FullWidth="true" Color="Color.Primary"
+                   EndIcon="@Icons.Material.Outlined.Done" OnClick="Ok">
             @_localizer["Ok"]
         </MudButton>
     </DialogActions>

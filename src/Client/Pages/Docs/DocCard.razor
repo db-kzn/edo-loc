@@ -167,7 +167,7 @@
                                     <div class="d-flex">
                                         <MudAutocomplete T="ContactResponse" @bind-Value="act.Contact" SearchFunc="@((text) => SearchContactsAsync(act, text))"
                                                  ResetValueOnEmptyText="@resetValueOnEmptyText" CoerceText="@coerceText" CoerceValue="@coerceValue" Clearable="false"
-                                                 Adornment="Adornment.Start" AdornmentColor="Color.Default" AdornmentIcon="@IconByOrgType(act.Step.OrgType)"
+                                                 Adornment="Adornment.Start" AdornmentColor="@IconColorByOrgType(act.Step)" AdornmentIcon="@IconByOrgType(act.Step.OrgType)"
                                                  Label="@LabelByStep(act.Step)" Required="act.Step.Requred"
                                                  Placeholder="@(act.Members.Count > 0 ? "" : act.Step.Requred ? _localizer["Required to fill"] : _localizer["Not necessary"])"
                                                  ToStringFunc="@(e => (e == null) ? null : ContactName(e))" Disabled="@(onUpload || Route.ProtectedMode)">

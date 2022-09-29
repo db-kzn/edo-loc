@@ -175,7 +175,7 @@
     <value>Руководитель и Главбух</value>
   </data>
   <data name="Is Key Member" xml:space="preserve">
-    <value>Ключевой участник</value>
+    <value>Основной получатель</value>
   </data>
   <data name="Main member" xml:space="preserve">
     <value>Основной участник</value>
@@ -210,8 +210,8 @@
   <data name="Only Employees" xml:space="preserve">
     <value>Только сотрудники</value>
   </data>
-  <data name="Only Head" xml:space="preserve">
-    <value>Только руководитель</value>
+  <data name="Only Heads" xml:space="preserve">
+    <value>Только руководители</value>
   </data>
   <data name="Org Admin" xml:space="preserve">
     <value>Администратор организации</value>

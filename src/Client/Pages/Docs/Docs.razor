@@ -62,12 +62,9 @@
               RowClassFunc="@UnreadRowClassFunc" RowClass="actions">
 
         <ColGroup>
-            <col />
-            <col />
-            <col />
-            <col />
+            <col /><col /><col /><col />
             <col class="col-date" />
-            <col />
+            <col /><col />
             <col class="col-date-time" />
         </ColGroup>
 
@@ -79,6 +76,8 @@
             <MudTh><MudTableSortLabel T="DocModel" SortLabel="Number">@_localizer["Number"]</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel T="DocModel" SortLabel="Date">@_localizer["Date"]</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel T="DocModel" SortLabel="Title">@_localizer["Title"]</MudTableSortLabel></MudTh>
+
+            <MudTh>@_localizer["Recipient"]</MudTh>
 
             <MudTh><MudTableSortLabel T="DocModel" SortLabel="CreatedOn">@_localizer["Create on"]</MudTableSortLabel></MudTh>
         </HeaderContent>
@@ -143,6 +142,11 @@
             </MudTd>
             <MudTd DataLabel="@_localizer["Title"]">
                 <MudHighlighter Text="@context.Title" HighlightedText="@_searchString" CaseSensitive="@matchCase" />
+            </MudTd>
+
+            <MudTd DataLabel="@_localizer["Recipient"]">
+                <MudHighlighter Text="@(string.IsNullOrWhiteSpace(context.RecipientShort) ? context.RecipientInn : context.RecipientShort)"
+                    HighlightedText="@_searchString" CaseSensitive="@matchCase" />
             </MudTd>
 
             @*<MudTd DataLabel="@_localizer["File Name"]">

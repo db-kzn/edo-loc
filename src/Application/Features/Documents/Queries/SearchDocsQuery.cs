@@ -72,7 +72,7 @@ internal class SearchDocsQueryHandler : IRequestHandler<SearchDocsQuery, Paginat
             Version = e.Version,
 
             URL = e.URL,
-            StoragePath = e.StoragePath,
+            //StoragePath = e.StoragePath,
             FileName = e.FileName,
 
             CreatedBy = e.CreatedBy,

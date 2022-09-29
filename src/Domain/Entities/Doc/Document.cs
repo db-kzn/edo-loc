@@ -21,7 +21,8 @@ namespace EDO_FOMS.Domain.Entities.Doc
         [ForeignKey("EmplOrgId")]
         public virtual Organization Issuer { get; set; }                  // Издатель
 
-        public int? KeyOrgId { get; set; }                                // Ключевой участник для отображения в таблице
+        public int? KeyOrgId { get; set; } = null;                        // Ключевой участник для отображения в таблице
+        [ForeignKey("KeyOrgId")]
         public virtual Organization Recipient { get; set; }               // Получатель
 
         public int? ParentId { get; set; }                                // Родительский документ

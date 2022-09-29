@@ -8,6 +8,7 @@ using EDO_FOMS.Client.Infrastructure.Managers.Doc.Document;
 using EDO_FOMS.Client.Models;
 using EDO_FOMS.Application.Features.Agreements.Queries;
 using EDO_FOMS.Domain.Enums;
+using System;
 
 namespace EDO_FOMS.Client.Pages
 {
@@ -105,5 +106,9 @@ namespace EDO_FOMS.Client.Pages
         }
 
         private void ClickAddMembers() => MudDialog.Close(DialogResult.Ok(nameof(AgreementActions.AddMembers)));
+        private Func<AgreementsProgressResponse, int, string> RowStyle => (a, _) =>
+        {
+            return (a.UserOrgId == Doc.KeyOrgId) ? " font-style: italic;" : "";
+        };
     }
 }
