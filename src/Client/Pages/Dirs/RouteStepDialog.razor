@@ -242,13 +242,13 @@
     </DialogContent>
 
     <DialogActions>
-        <MudButton Class="mx-2" Variant="Variant.Outlined" FullWidth="true" Color="Color.Default" StartIcon="@Icons.Material.Outlined.Clear"
-                   OnClick="() => Delete()">
+        <MudButton Class="mx-2" Variant="Variant.Outlined" FullWidth="true" Color="Color.Default" Size="Size.Large"
+                    StartIcon="@Icons.Material.Outlined.Clear" OnClick="() => Delete()">
             @_localizer["Delete"]
         </MudButton>
 
-        <MudButton Class="mx-2" ButtonType="ButtonType.Submit" Variant="Variant.Outlined" FullWidth="true" Color="Color.Primary" EndIcon="@Icons.Material.Outlined.Done"
-                   OnClick="() => Ok()">
+        <MudButton Class="mx-2" Variant="Variant.Outlined" FullWidth="true" Color="Color.Primary"
+                   EndIcon="@Icons.Material.Outlined.Done" OnClick="() => Ok()"  Size="Size.Large" ButtonType="ButtonType.Submit">
             @_localizer["Ok"]
         </MudButton>
     </DialogActions>

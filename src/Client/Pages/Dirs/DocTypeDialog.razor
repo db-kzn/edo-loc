@@ -1,0 +1,142 @@
+﻿@namespace EDO_FOMS.Client.Pages.Dirs
+
+@using EDO_FOMS.Domain.Enums
+
+@inject Microsoft.Extensions.Localization.IStringLocalizer<DocTypeDialog> _localizer
+
+<MudDialog>
+    <TitleContent>
+        @if (AddEditDocTypeCommand.Id == 0)
+        {
+            <MudText Typo="Typo.h6">
+                <MudIcon Icon="@Icons.Material.Outlined.AddBox" Class="mr-3 mb-n1" />
+                @_localizer["Add Doc Type"]
+            </MudText>
+        }
+        else
+        {
+            <MudText Typo="Typo.h6">
+                <MudIcon Icon="@Icons.Material.Outlined.DesignServices" Class="mr-3 mb-n1" />
+                @_localizer["Edit Doc Type"]
+            </MudText>
+        }
+    </TitleContent>
+
+    <DialogContent>
+        <MudGrid>
+            <MudItem xs="6" Class="input-field">
+                <MudSelect T="DocIcons" Label="@_localizer["Icon"]" @bind-Value="AddEditDocTypeCommand.Icon" AnchorOrigin="Origin.BottomCenter">
+
+                    <MudSelectItem T="DocIcons" Value="DocIcons.Undefined">
+                        <div class="d-flex flex-row" style="height: 24px;">@_localizer["Undefined"]</div>
+                    </MudSelectItem>
+
+                    <MudSelectItem T="DocIcons" Value="DocIcons.AssignmentLate">
+                        <div class="d-flex flex-row" style="height: 24px;">
+                            <MudIcon Icon="@Icons.Material.Outlined.AssignmentLate" Color="Color.Default" Size="Size.Small" Class="mr-2" />Assignment Late
+                        </div>
+                    </MudSelectItem>
+
+                    <MudSelectItem T="DocIcons" Value="DocIcons.AssignmentTurnedIn">
+                        <div class="d-flex flex-row" style="height: 24px;">
+                            <MudIcon Icon="@Icons.Material.Outlined.AssignmentTurnedIn" Color="Color.Default" Size="Size.Small" Class="mr-2" />Assignment Turned In
+                        </div>
+                    </MudSelectItem>
+
+                    <MudSelectItem T="DocIcons" Value="DocIcons.CalendarToday">
+                        <div class="d-flex flex-row" style="height: 24px;">
+                            <MudIcon Icon="@Icons.Material.Outlined.CalendarToday" Color="Color.Default" Size="Size.Small" Class="mr-2" />Calendar Today
+                        </div>
+                    </MudSelectItem>
+
+                    <MudSelectItem T="DocIcons" Value="DocIcons.ContactPage">
+                        <div class="d-flex flex-row" style="height: 24px;">
+                            <MudIcon Icon="@Icons.Material.Outlined.ContactPage" Color="Color.Default" Size="Size.Small" Class="mr-2" />Contact Page
+                        </div>
+                    </MudSelectItem>
+
+                    <MudSelectItem T="DocIcons" Value="DocIcons.Description">
+                        <div class="d-flex flex-row" style="height: 24px;">
+                            <MudIcon Icon="@Icons.Material.Outlined.Description" Color="Color.Default" Size="Size.Small" Class="mr-2" />Description
+                        </div>
+                    </MudSelectItem>
+
+                    <MudSelectItem T="DocIcons" Value="DocIcons.Difference">
+                        <div class="d-flex flex-row" style="height: 24px;">
+                            <MudIcon Icon="@Icons.Material.Outlined.Difference" Color="Color.Default" Size="Size.Small" Class="mr-2" />Difference
+                        </div>
+                    </MudSelectItem>
+
+                    <MudSelectItem T="DocIcons" Value="DocIcons.EventRepeat">
+                        <div class="d-flex flex-row" style="height: 24px;">
+                            <MudIcon Icon="@Icons.Material.Outlined.EventRepeat" Color="Color.Default" Size="Size.Small" Class="mr-2" />Event Repeat
+                        </div>
+                    </MudSelectItem>
+
+                    <MudSelectItem T="DocIcons" Value="DocIcons.FactCheck">
+                        <div class="d-flex flex-row" style="height: 24px;">
+                            <MudIcon Icon="@Icons.Material.Outlined.FactCheck" Color="Color.Default" Size="Size.Small" Class="mr-2" />Fact Check
+                        </div>
+                    </MudSelectItem>
+
+                    <MudSelectItem T="DocIcons" Value="DocIcons.HelpCenter">
+                        <div class="d-flex flex-row" style="height: 24px;">
+                            <MudIcon Icon="@Icons.Material.Outlined.HelpCenter" Color="Color.Default" Size="Size.Small" Class="mr-2" />Help Center
+                        </div>
+                    </MudSelectItem>
+
+                    <MudSelectItem T="DocIcons" Value="DocIcons.Newspaper">
+                        <div class="d-flex flex-row" style="height: 24px;">
+                            <MudIcon Icon="@Icons.Material.Outlined.Newspaper" Color="Color.Default" Size="Size.Small" Class="mr-2" />Newspaper
+                        </div>
+                    </MudSelectItem>
+
+                    <MudSelectItem T="DocIcons" Value="DocIcons.NoteAdd">
+                        <div class="d-flex flex-row" style="height: 24px;">
+                            <MudIcon Icon="@Icons.Material.Outlined.NoteAdd" Color="Color.Default" Size="Size.Small" Class="mr-2" />Note Add
+                        </div>
+                    </MudSelectItem>
+
+                    <MudSelectItem T="DocIcons" Value="DocIcons.Receipt">
+                        <div class="d-flex flex-row" style="height: 24px;">
+                            <MudIcon Icon="@Icons.Material.Outlined.Receipt" Color="Color.Default" Size="Size.Small" Class="mr-2" />Receipt
+                        </div>
+                    </MudSelectItem>
+
+                    <MudSelectItem T="DocIcons" Value="DocIcons.TableChart">
+                        <div class="d-flex flex-row" style="height: 24px;">
+                            <MudIcon Icon="@Icons.Material.Outlined.TableChart" Color="Color.Default" Size="Size.Small" Class="mr-2" />Table Chart
+                        </div>
+                    </MudSelectItem>
+
+                </MudSelect>
+            </MudItem>
+            <MudItem xs="6" Class="input-field">
+                <MudTextField For="@(() => AddEditDocTypeCommand.Label)" @bind-Value="AddEditDocTypeCommand.Label"
+                              Label="@_localizer["Label"]" Variant="Variant.Text" />
+            </MudItem>
+
+            <MudItem xs="6" Class="input-field">
+                <MudTextField For="@(() => AddEditDocTypeCommand.Code)" @bind-Value="AddEditDocTypeCommand.Code"
+                              Label="@_localizer["Code"]" Variant="Variant.Text" />
+            </MudItem>
+            <MudItem xs="6" Class="input-field">
+                <MudTextField For="@(() => AddEditDocTypeCommand.Short)" @bind-Value="AddEditDocTypeCommand.Short"
+                              Label="@_localizer["Short"]" Variant="Variant.Text" />
+            </MudItem>
+
+            <MudItem xs="12" Class="input-field">
+                <MudTextField For="@(() => AddEditDocTypeCommand.Name)" @bind-Value="AddEditDocTypeCommand.Name"
+                              Label="@_localizer["Name"]" Variant="Variant.Text" />
+            </MudItem>
+        </MudGrid>
+    </DialogContent>
+
+    <DialogActions>
+        <MudButton Class="mx-2" Variant="Variant.Outlined" FullWidth="true" Color="Color.Primary" Size="Size.Large"
+                   EndIcon="@Icons.Material.Outlined.Done" OnClick="SaveAsync">
+            @(AddEditDocTypeCommand.Id != 0 ? _localizer["Update"] : _localizer["Save"])
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+

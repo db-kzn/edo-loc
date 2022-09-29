@@ -47,6 +47,13 @@
             <param name="request"></param>
             <returns>Status 200 OK</returns>
         </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Directories.DirectoriesController.PostDocType(EDO_FOMS.Application.Features.Directories.Commands.AddEditDocTypeCommand)">
+            <summary>
+            Add/Edit Doc Type
+            </summary>
+            <param name="command"></param>
+            <returns>Status 200 OK</returns>
+        </member>
         <member name="M:EDO_FOMS.Server.Controllers.Directories.DirectoriesController.GetCompanies(System.Int32,System.Int32,System.String,System.Boolean,System.String)">
             <summary>
             Get Companies

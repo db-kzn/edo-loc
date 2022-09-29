@@ -10,17 +10,16 @@ namespace EDO_FOMS.Client.Infrastructure.Managers.Dir
 {
     public interface IDirectoryManager : IManager
     {
-
         Task<PaginatedResult<CompaniesResponse>> GetCompaniesAsync(GetPagedCompaniesRequest request);
         Task<PaginatedResult<CompaniesResponse>> SearchCompaniesAsync(SearchCompaniesRequest request);
 
         Task<PaginatedResult<DocTypesResponse>> GetDocTypesAsync(GetPagedDocTypesRequest request);
         Task<PaginatedResult<DocTypesResponse>> SearchDocTypesAsync(SearchDocTypesRequest request);
+        Task<IResult<int>> DocTypePostAsync(AddEditDocTypeCommand command);
 
         Task<PaginatedResult<RoutesResponse>> GetRoutesAsync(GetPagedRoutesRequest request);
         Task<IResult<RouteCardResponse>> GetRouteCardAsync(int id);
         Task<IResult<int>> RoutePostAsync(AddEditRouteCommand command);
-
 
         Task<IResult<CheckCompaniesForImportsResponse>> CheckCompaniesForImportsAsync();
         Task<IResult<ImportResponse>> ImportFomsAsync();

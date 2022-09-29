@@ -106,7 +106,8 @@ namespace EDO_FOMS.Application.Features.Orgs.Commands
                 //org.DocTypeId = (command.TypeId == 0) ? org.DocumentTypeId : command.DocumentTypeId;
 
                 await _unitOfWork.Repository<Organization>().UpdateAsync(org);
-                await _unitOfWork.CommitAndRemoveCache(cancellationToken, AppConstants.Cache.GetAllOrgsCacheKey);
+                _ = await _unitOfWork.CommitAndRemoveCache(cancellationToken, AppConstants.Cache.GetAllOrgsCacheKey);
+
                 return await Result<int>.SuccessAsync(org.Id, _localizer["Organization Updated"]);
             }
         }

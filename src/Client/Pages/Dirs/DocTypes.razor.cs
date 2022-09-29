@@ -1,7 +1,9 @@
-﻿using EDO_FOMS.Application.Features.Directories.Queries;
+﻿using EDO_FOMS.Application.Features.Directories.Commands;
+using EDO_FOMS.Application.Features.Directories.Queries;
 using EDO_FOMS.Application.Requests.Directories;
 using EDO_FOMS.Client.Extensions;
 using EDO_FOMS.Client.Infrastructure.Managers.Dir;
+using EDO_FOMS.Domain.Enums;
 using EDO_FOMS.Shared.Constants.Permission;
 using EDO_FOMS.Shared.Wrapper;
 using Microsoft.AspNetCore.Authorization;
@@ -107,11 +109,10 @@ public partial class DocTypes
         await GetDocTypesAsync(state);
 
         if (!_loaded) { _loaded = true; }
-        StateHasChanged();
+        //StateHasChanged();
 
         return new TableData<DocTypesResponse> { TotalItems = _totalItems, Items = _pagedData };
     }
-
     private async Task GetDocTypesAsync(TableState state = null)
     {
         //await _jsRuntime.InvokeVoidAsync("azino.Console", _stateService, "Docs State");
@@ -159,5 +160,61 @@ public partial class DocTypes
         _loaded = true;
     }
 
-    private void OnRowClickAsync() { }
+    private async Task OnRowClickAsync() => await AddEditDocTypeAsync(_docType);
+    private async Task AddDocTypeAsync() => await AddEditDocTypeAsync(new());
+    private async Task AddEditDocTypeAsync(DocTypesResponse docType)
+    {
+        var param = new DialogParameters
+        {
+            { 
+                nameof(DocTypeDialog.AddEditDocTypeCommand),
+                new AddEditDocTypeCommand()
+                {
+                    Id = docType.Id,
+                    IsActive = docType.IsActive,
+                    Icon = docType.Icon,
+                    Color = docType.Color,
+
+                    Code = docType.Code,
+                    Short = docType.Short,
+                    Label = docType.Label,
+                    Name = docType.Name,
+
+                    NameEn = docType.NameEn,
+                    Description = docType.Description
+                }
+            }
+        };
+
+        var dialog = _dialogService.Show<DocTypeDialog>("", param);
+        var result = await dialog.Result;
+
+        if (!result.Cancelled) { await _mudTable.ReloadServerData(); }
+    }
+
+    private static string DocTypeIcon(DocIcons icon)
+    {
+        return icon switch
+        {
+            DocIcons.AssignmentLate => Icons.Material.Outlined.AssignmentLate,
+            DocIcons.AssignmentTurnedIn => Icons.Material.Outlined.AssignmentTurnedIn,
+            DocIcons.CalendarToday => Icons.Material.Outlined.CalendarToday,
+            
+            DocIcons.ContactPage => Icons.Material.Outlined.ContactPage,
+            DocIcons.Description => Icons.Material.Outlined.Description,
+            DocIcons.Difference => Icons.Material.Outlined.Difference,
+            
+            DocIcons.EventRepeat => Icons.Material.Outlined.EventRepeat,
+            DocIcons.FactCheck => Icons.Material.Outlined.FactCheck,
+            DocIcons.HelpCenter => Icons.Material.Outlined.HelpCenter,
+            
+            DocIcons.Newspaper => Icons.Material.Outlined.Newspaper,
+            DocIcons.NoteAdd => Icons.Material.Outlined.NoteAdd,
+            DocIcons.Receipt => Icons.Material.Outlined.Receipt,
+            
+            DocIcons.TableChart => Icons.Material.Outlined.TableChart,
+
+            _ => Icons.Material.Outlined.HelpOutline
+        };
+    }
 }

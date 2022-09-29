@@ -7,14 +7,16 @@ namespace EDO_FOMS.Application.Features.Directories.Queries
     {
         public int Id { get; set; }
         public bool IsActive { get; set; } = true;
+        
         public DocIcons Icon { get; set; } = DocIcons.Undefined;
-        public Color Color { get; set; } = Color.Primary;
+        public Color Color { get; set; } = Color.Default;
+        public string Label { get; set; } = string.Empty;
 
-        public string Short { get; set; }
-        public string Label { get; set; }
-        public string Name { get; set; }
+        public string Code { get; set; } = string.Empty;
+        public string Short { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
 
-        public string NameEn { get; set; }
-        public string Description { get; set; }
+        public string NameEn { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
     }
 }

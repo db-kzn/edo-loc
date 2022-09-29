@@ -40,11 +40,13 @@ internal class GetDocTypesQueryHandler : IRequestHandler<GetDocTypesQuery, Pagin
         {
             Id = e.Id,
             IsActive = e.IsActive,
+
             Icon = e.Icon,
             Color = e.Color,
-
-            Short = e.Short,
             Label = e.Label,
+
+            Code = e.Code,
+            Short = e.Short,
             Name = e.Name,
 
             NameEn = e.NameEn,

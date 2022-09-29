@@ -46,6 +46,18 @@ namespace EDO_FOMS.Server.Controllers.Directories
         }
 
         /// <summary>
+        /// Add/Edit Doc Type
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns>Status 200 OK</returns>
+        [Authorize(Policy = Permissions.System.Edit)]
+        [HttpPost("doc-type")]
+        public async Task<IActionResult> PostDocType(AddEditDocTypeCommand command)
+        {
+            return Ok(await _mediator.Send(command));
+        }
+
+        /// <summary>
         /// Get Companies
         /// </summary>
         /// <param name="pageNumber"></param>

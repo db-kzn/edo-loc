@@ -40,6 +40,11 @@ namespace EDO_FOMS.Client.Infrastructure.Managers.Dir
             var response = await _httpClient.PostAsJsonAsync(Routes.DirectoriesEndpoints.SearchDocTypesPaged, request);
             return await response.ToPaginatedResult<DocTypesResponse>();
         }
+        public async Task<IResult<int>> DocTypePostAsync(AddEditDocTypeCommand command)
+        {
+            var response = await _httpClient.PostAsJsonAsync(Routes.DirectoriesEndpoints.AddEditDocType, command);
+            return await response.ToResult<int>();
+        }
 
         public async Task<PaginatedResult<RoutesResponse>> GetRoutesAsync(GetPagedRoutesRequest request)
         {
@@ -79,6 +84,5 @@ namespace EDO_FOMS.Client.Infrastructure.Managers.Dir
             var response = await _httpClient.GetAsync(Routes.DirectoriesEndpoints.ImportMo);
             return await response.ToResult<ImportResponse>();
         }
-
     }
 }
