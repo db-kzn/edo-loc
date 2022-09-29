@@ -34,6 +34,8 @@ namespace EDO_FOMS.Client.Infrastructure.Routes
 
             return $"{Ctrl}/companies?pageNumber={r.PageNumber}&pageSize={r.PageSize}&searchString={r.SearchString}&matchCase={r.MatchCase}&orderBy={sort}";
         }
+
+        public const string AddEditDocType = $"{Ctrl}/doc-type";
         public static string GetDocTypesPaged(GetPagedDocTypesRequest r)
         {
             var sort = (r.OrderBy?.Any() == true) ? string.Join(",", r.OrderBy) : ""; // Id Descending

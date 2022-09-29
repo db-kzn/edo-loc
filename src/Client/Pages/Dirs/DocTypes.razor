@@ -57,8 +57,10 @@
             <col /><col /><col />
         </ColGroup>
 
+        @*InitialDirection="SortDirection.Ascending" *@
+
         <HeaderContent>
-            <MudTh><MudTableSortLabel InitialDirection="SortDirection.Ascending" T="DocTypesResponse" SortLabel="Id">@_localizer["Id"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="DocTypesResponse" SortLabel="Code">@_localizer["Code"]</MudTableSortLabel></MudTh>
             
             <MudTh>@_localizer["Icon"]</MudTh>
             <MudTh><MudTableSortLabel T="DocTypesResponse" SortLabel="Label">@_localizer["Label"]</MudTableSortLabel></MudTh>
@@ -71,13 +73,10 @@
         </HeaderContent>
 
         <RowTemplate>
-            <MudTd DataLabel="@_localizer["Id"]">@context.Id</MudTd>
+            <MudTd DataLabel="@_localizer["Code"]">@context.Code</MudTd>
 
             <MudTd DataLabel="@_localizer["Icon"]">
-                <MudIcon Color="@context.Color" Class="mx-2"
-                    Icon="@((context.Icon == DocIcons.Description) ? Icons.Material.Outlined.Description : (context.Icon == DocIcons.NoteAdd) ? Icons.Material.Outlined.NoteAdd :
-                            (context.Icon == DocIcons.Receipt) ? Icons.Material.Outlined.Receipt : (context.Icon == DocIcons.FactCheck) ? Icons.Material.Outlined.FactCheck :
-                            (context.Icon == DocIcons.TableChart) ? Icons.Material.Outlined.TableChart : Icons.Material.Outlined.HelpOutline)" />
+                <MudIcon Color="@context.Color" Class="mx-2" Icon="@DocTypeIcon(context.Icon)" />
             </MudTd>
             <MudTd DataLabel="@_localizer["Label"]">
                 <MudHighlighter Text="@context.Label" HighlightedText="@_searchString" />
@@ -113,3 +112,12 @@
 
     <MudList Clickable="true" Class="py-0"></MudList>
 </MudDrawer>
+
+@if (_canSystemEdit)
+{
+    <MudItem Class="fab-btn-add">
+        <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Add new doc type"]" Color="Color.Tertiary" Placement="Placement.Left">
+            <MudFab Color="Color.Secondary" Icon="@Icons.Material.Filled.Add" aria-label="add" OnClick="AddDocTypeAsync" />
+        </MudTooltip>
+    </MudItem>
+}

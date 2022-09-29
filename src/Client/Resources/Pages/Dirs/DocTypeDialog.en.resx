@@ -117,52 +117,34 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Add new doc type" xml:space="preserve">
-    <value>Добавить вид</value>
+  <data name="Add Doc Type" xml:space="preserve">
+    <value>Add Doc Type</value>
   </data>
   <data name="Code" xml:space="preserve">
-    <value>Код</value>
+    <value>Code</value>
   </data>
-  <data name="Description" xml:space="preserve">
-    <value>Описание</value>
-  </data>
-  <data name="Directory document types" xml:space="preserve">
-    <value>Справочник видов документов</value>
-  </data>
-  <data name="Doc.Types" xml:space="preserve">
-    <value>Виды документов</value>
+  <data name="Edit Doc Type" xml:space="preserve">
+    <value>Edit Doc Type</value>
   </data>
   <data name="Icon" xml:space="preserve">
-    <value>Иконка</value>
-  </data>
-  <data name="Id" xml:space="preserve">
-    <value>№</value>
+    <value>Icon</value>
   </data>
   <data name="Label" xml:space="preserve">
-    <value>Ярлык</value>
-  </data>
-  <data name="Match Case Off" xml:space="preserve">
-    <value>Без учета регистра</value>
-  </data>
-  <data name="Match Case On" xml:space="preserve">
-    <value>Учитывать регистр</value>
+    <value>Label</value>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>Наименование</value>
+    <value>Name</value>
   </data>
-  <data name="NameEn" xml:space="preserve">
-    <value>На английском</value>
-  </data>
-  <data name="Renew" xml:space="preserve">
-    <value>Обновить</value>
-  </data>
-  <data name="Rows density" xml:space="preserve">
-    <value>Плотность строк</value>
-  </data>
-  <data name="Search For Types" xml:space="preserve">
-    <value>Поиск по типам</value>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
   </data>
   <data name="Short" xml:space="preserve">
-    <value>Кратко</value>
+    <value>Short</value>
+  </data>
+  <data name="Undefined" xml:space="preserve">
+    <value>Undefined</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Update</value>
   </data>
 </root>
