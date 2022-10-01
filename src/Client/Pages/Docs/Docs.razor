@@ -165,32 +165,32 @@
                     @{
                         if (context.Stage == DocStages.Draft)
                         {
-                            <MudTooltip Delay="@delay" Duration="@duration" Placement="Placement.Left" Color="Color.Tertiary" Arrow="true" Text="@_localizer["Run"]">
-                                <MudIconButton Class="mx-1" Variant="Variant.Outlined" Size="Size.Small" aria-label="Run"
+                                <MudTooltip Delay="@delay" Duration="@duration" Placement="Placement.Left" Color="Color.Tertiary" Arrow="true" Text="@_localizer["Run"]">
+                                    <MudIconButton Class="mx-1" Variant="Variant.Outlined" Size="Size.Small" aria-label="Run"
                                        Color="Color.Success" Icon="@Icons.Material.Outlined.PlayArrow" Disabled="@(!_loaded || string.IsNullOrWhiteSpace(context.FileName))"
                                        OnClick="(() => RunProcessAsync(context.DocId))">
-                                </MudIconButton>
-                            </MudTooltip>
+                                    </MudIconButton>
+                                </MudTooltip>
                         }
 
                         if (context.Stage == DocStages.InProgress || context.Stage == DocStages.Rejected || context.Stage == DocStages.Agreed)
                         {
-                            <MudTooltip Delay="@delay" Duration="@duration" Placement="Placement.Left" Color="Color.Tertiary" Arrow="true" Text="@_localizer["Pause"]">
-                                <MudIconButton Class="mx-1" Variant="Variant.Outlined" Size="Size.Small" aria-label="Pause"
+                                <MudTooltip Delay="@delay" Duration="@duration" Placement="Placement.Left" Color="Color.Tertiary" Arrow="true" Text="@_localizer["Pause"]">
+                                    <MudIconButton Class="mx-1" Variant="Variant.Outlined" Size="Size.Small" aria-label="Pause"
                                        Color="Color.Warning" Icon="@Icons.Material.Outlined.Replay" Disabled="@(!_loaded)"
                                        OnClick="(() => StopProcessAsync(context.DocId))">
-                                </MudIconButton>
-                            </MudTooltip>
+                                    </MudIconButton>
+                                </MudTooltip>
                         }
 
                         if (context.Stage == DocStages.Draft || context.Stage == DocStages.InProgress || context.Stage == DocStages.Rejected)
                         {
-                            <MudTooltip Delay="@delay" Duration="@duration" Placement="Placement.Left" Color="Color.Tertiary" Arrow="true" Text="@_localizer["Delete"]">
-                                <MudIconButton Class="mx-1" Variant="Variant.Outlined" Size="Size.Small" aria-label="Delete"
+                                <MudTooltip Delay="@delay" Duration="@duration" Placement="Placement.Left" Color="Color.Tertiary" Arrow="true" Text="@_localizer["Delete"]">
+                                    <MudIconButton Class="mx-1" Variant="Variant.Outlined" Size="Size.Small" aria-label="Delete"
                                        Color="Color.Error" Icon="@Icons.Material.Outlined.Clear" Disabled="@(!_loaded)"
                                        OnClick="(() => DeleteDocAsync(context.DocId))">
-                                </MudIconButton>
-                            </MudTooltip>
+                                    </MudIconButton>
+                                </MudTooltip>
                         }
                     }
                 </span>
@@ -254,15 +254,13 @@
         <MudListItem Icon="@Icons.Material.Outlined.DocumentScanner" Text="@_localizer["Type"]" InitiallyExpanded="false"
                      AdornmentColor="Color.Primary" IconColor="@(Filter.ChangedType ? Color.Error : Color.Primary)">
             <NestedList>
-                <MudListItem Icon="@(Filter.TypeContract ? Icons.Material.TwoTone.Description : Icons.Material.Outlined.CheckBoxOutlineBlank)"
-                             IconColor="@(Filter.TypeContract ? Color.Tertiary : Color.Default)" OnClick="@(() => OnType("Contract"))">
-                    @_localizer["Contract"]
-                </MudListItem>
-
-                <MudListItem Icon="@(Filter.TypeAgreement ? Icons.Material.TwoTone.NoteAdd : Icons.Material.Outlined.CheckBoxOutlineBlank)"
-                             IconColor="@(Filter.TypeAgreement ? Color.Warning : Color.Default)" OnClick="@(() => OnType("Agreement"))">
-                    @_localizer["Agreement"]
-                </MudListItem>
+                @foreach (var dt in Filter.DocTypes)
+                {
+                    <MudListItem Icon="@(dt.IsChecked ? DocTypeIcon(dt.Icon) : Icons.Material.Outlined.CheckBoxOutlineBlank)"
+                                 IconColor="@(dt.IsChecked ? dt.Color : Color.Default)" OnClick="@(() => OnType(dt))">
+                        @dt.Label
+                    </MudListItem>               
+                }                
             </NestedList>
         </MudListItem>
         <MudDivider />

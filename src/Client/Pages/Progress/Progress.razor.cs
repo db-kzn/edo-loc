@@ -97,7 +97,7 @@ namespace EDO_FOMS.Client.Pages.Progress
             delay = _stateService.TooltipDelay;
             duration = _stateService.TooltipDuration;
 
-            var docTypeTitles = await DirManager.GetAllDocTypeTitlesAsunc();
+            var docTypeTitles = await DirManager.GetAllDocTypeTitlesAsync();
 
             if (docTypeTitles.Succeeded)
             {

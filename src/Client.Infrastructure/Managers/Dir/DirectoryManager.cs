@@ -2,8 +2,10 @@
 using EDO_FOMS.Application.Requests.Directories;
 using EDO_FOMS.Application.Responses.Directories;
 using EDO_FOMS.Client.Infrastructure.Extensions;
+using EDO_FOMS.Domain.Enums;
 using EDO_FOMS.Shared.Wrapper;
 using MediatR;
+using MudBlazor;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -47,7 +49,7 @@ namespace EDO_FOMS.Client.Infrastructure.Managers.Dir
             return await response.ToResult<int>();
         }
 
-        public async Task<IResult<List<GetAllDocTypeTitlesResponse>>> GetAllDocTypeTitlesAsunc()
+        public async Task<IResult<List<GetAllDocTypeTitlesResponse>>> GetAllDocTypeTitlesAsync()
         {
             var response = await _httpClient.GetAsync(Routes.DirectoriesEndpoints.GetAllDocTypeTitles);
             return await response.ToResult<List<GetAllDocTypeTitlesResponse>>();
@@ -90,6 +92,32 @@ namespace EDO_FOMS.Client.Infrastructure.Managers.Dir
         {
             var response = await _httpClient.GetAsync(Routes.DirectoriesEndpoints.ImportMo);
             return await response.ToResult<ImportResponse>();
-        }        
+        }
+
+        public string DocTypeIcon(DocIcons icon)
+        {
+            return icon switch
+            {
+                DocIcons.AssignmentLate => Icons.Material.Outlined.AssignmentLate,
+                DocIcons.AssignmentTurnedIn => Icons.Material.Outlined.AssignmentTurnedIn,
+                DocIcons.CalendarToday => Icons.Material.Outlined.CalendarToday,
+
+                DocIcons.ContactPage => Icons.Material.Outlined.ContactPage,
+                DocIcons.Description => Icons.Material.Outlined.Description,
+                DocIcons.Difference => Icons.Material.Outlined.Difference,
+
+                DocIcons.EventRepeat => Icons.Material.Outlined.EventRepeat,
+                DocIcons.FactCheck => Icons.Material.Outlined.FactCheck,
+                DocIcons.HelpCenter => Icons.Material.Outlined.HelpCenter,
+
+                DocIcons.Newspaper => Icons.Material.Outlined.Newspaper,
+                DocIcons.NoteAdd => Icons.Material.Outlined.NoteAdd,
+                DocIcons.Receipt => Icons.Material.Outlined.Receipt,
+
+                DocIcons.TableChart => Icons.Material.Outlined.TableChart,
+
+                _ => Icons.Material.Outlined.HelpOutline
+            };
+        }
     }
 }
