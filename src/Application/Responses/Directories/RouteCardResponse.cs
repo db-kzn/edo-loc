@@ -4,7 +4,7 @@ using EDO_FOMS.Domain.Entities.Dir;
 using EDO_FOMS.Domain.Enums;
 using System.Collections.Generic;
 
-namespace EDO_FOMS.Application.Features.Directories.Queries
+namespace EDO_FOMS.Application.Responses.Directories
 {
     public class RouteCardResponse
     {

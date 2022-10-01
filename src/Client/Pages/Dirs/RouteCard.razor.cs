@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using EDO_FOMS.Application.Features.Directories.Commands;
-using EDO_FOMS.Application.Features.Directories.Queries;
 using EDO_FOMS.Application.Features.DocumentTypes.Queries;
 using EDO_FOMS.Application.Models.Dir;
 using EDO_FOMS.Application.Requests.Documents;
+using EDO_FOMS.Application.Responses.Directories;
 using EDO_FOMS.Application.Responses.Docums;
 using EDO_FOMS.Client.Extensions;
 using EDO_FOMS.Client.Infrastructure.Managers.Dir;

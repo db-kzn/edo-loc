@@ -54,6 +54,12 @@
             <param name="command"></param>
             <returns>Status 200 OK</returns>
         </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Directories.DirectoriesController.GetDocTypeTitles">
+            <summary>
+            Get All Doc Type Titles
+            </summary>
+            <returns>Status 200 OK</returns>
+        </member>
         <member name="M:EDO_FOMS.Server.Controllers.Directories.DirectoriesController.GetCompanies(System.Int32,System.Int32,System.String,System.Boolean,System.String)">
             <summary>
             Get Companies

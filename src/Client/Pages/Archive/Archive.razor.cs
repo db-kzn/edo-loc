@@ -5,6 +5,7 @@ using EDO_FOMS.Application.Requests.Documents;
 using EDO_FOMS.Application.Responses.Docums;
 using EDO_FOMS.Client.Extensions;
 using EDO_FOMS.Client.Infrastructure.Filters;
+using EDO_FOMS.Client.Infrastructure.Managers.Dir;
 using EDO_FOMS.Client.Infrastructure.Managers.Doc.Document;
 using EDO_FOMS.Client.Models;
 using EDO_FOMS.Domain.Enums;
@@ -28,6 +29,8 @@ namespace EDO_FOMS.Client.Pages.Archive
         public Origin AnchorOrigin { get; set; } = Origin.BottomRight;
 
         [Inject] private IDocumentManager DocManager { get; set; }
+        [Inject] private IDirectoryManager DirManager { get; set; }
+
         [CascadingParameter]
         public NavCounts NavCounts { get; set; }
 
@@ -89,6 +92,13 @@ namespace EDO_FOMS.Client.Pages.Archive
 
             delay = _stateService.TooltipDelay;
             duration = _stateService.TooltipDuration;
+
+            var docTypeTitles = await DirManager.GetAllDocTypeTitlesAsunc();
+
+            if (docTypeTitles.Succeeded)
+            {
+                await _jsRuntime.InvokeVoidAsync("azino.Console", docTypeTitles, "Doc Type Titles");
+            }
 
             //var state = await _authStateProvider.GetAuthenticationStateAsync();
             //var user = state.User;

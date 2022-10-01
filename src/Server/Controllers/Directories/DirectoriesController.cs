@@ -25,11 +25,11 @@ namespace EDO_FOMS.Server.Controllers.Directories
         [HttpGet("doc-types")]
         public async Task<IActionResult> GetDocTypes(int pageNumber, int pageSize, string searchString, bool matchCase = false, string orderBy = "")
         {
-            var companies = await _mediator.Send(
+            var docTypes = await _mediator.Send(
                 new GetDocTypesQuery(
                     new GetPagedDocTypesRequest(pageSize, pageNumber, searchString, orderBy, matchCase)
                 ));
-            return Ok(companies);
+            return Ok(docTypes);
         }
 
         /// <summary>
@@ -41,8 +41,8 @@ namespace EDO_FOMS.Server.Controllers.Directories
         [HttpPost("search-doc-types")]
         public async Task<IActionResult> SearchDocTypes(SearchDocTypesRequest request)
         {
-            var docs = await _mediator.Send(new SearchDocTypesQuery(request));
-            return Ok(docs);
+            var docTypes = await _mediator.Send(new SearchDocTypesQuery(request));
+            return Ok(docTypes);
         }
 
         /// <summary>
@@ -55,6 +55,18 @@ namespace EDO_FOMS.Server.Controllers.Directories
         public async Task<IActionResult> PostDocType(AddEditDocTypeCommand command)
         {
             return Ok(await _mediator.Send(command));
+        }
+
+        /// <summary>
+        /// Get All Doc Type Titles
+        /// </summary>
+        /// <returns>Status 200 OK</returns>
+        [Authorize(Policy = Permissions.Documents.View)]
+        [HttpGet("doc-type-titles")]
+        public async Task<IActionResult> GetDocTypeTitles()
+        {
+            var allDocTypeTitles = await _mediator.Send(new GetAllDocTypeTitlesQuery());
+            return Ok(allDocTypeTitles);
         }
 
         /// <summary>

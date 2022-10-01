@@ -1,9 +1,10 @@
 ﻿using EDO_FOMS.Application.Features.Directories.Commands;
-using EDO_FOMS.Application.Features.Directories.Queries;
 using EDO_FOMS.Application.Requests.Directories;
+using EDO_FOMS.Application.Responses.Directories;
 using EDO_FOMS.Client.Infrastructure.Extensions;
 using EDO_FOMS.Shared.Wrapper;
 using MediatR;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
@@ -46,6 +47,12 @@ namespace EDO_FOMS.Client.Infrastructure.Managers.Dir
             return await response.ToResult<int>();
         }
 
+        public async Task<IResult<List<GetAllDocTypeTitlesResponse>>> GetAllDocTypeTitlesAsunc()
+        {
+            var response = await _httpClient.GetAsync(Routes.DirectoriesEndpoints.GetAllDocTypeTitles);
+            return await response.ToResult<List<GetAllDocTypeTitlesResponse>>();
+        }
+
         public async Task<PaginatedResult<RoutesResponse>> GetRoutesAsync(GetPagedRoutesRequest request)
         {
             var response = await _httpClient.GetAsync(Routes.DirectoriesEndpoints.GetRoutesPaged(request));
@@ -83,6 +90,6 @@ namespace EDO_FOMS.Client.Infrastructure.Managers.Dir
         {
             var response = await _httpClient.GetAsync(Routes.DirectoriesEndpoints.ImportMo);
             return await response.ToResult<ImportResponse>();
-        }
+        }        
     }
 }

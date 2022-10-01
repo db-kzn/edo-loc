@@ -1,6 +1,6 @@
 ﻿using EDO_FOMS.Domain.Enums;
 
-namespace EDO_FOMS.Application.Features.Directories.Queries
+namespace EDO_FOMS.Application.Responses.Directories
 {
     public class RoutesResponse
     {

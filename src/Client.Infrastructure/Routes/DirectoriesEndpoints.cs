@@ -36,6 +36,8 @@ namespace EDO_FOMS.Client.Infrastructure.Routes
         }
 
         public const string AddEditDocType = $"{Ctrl}/doc-type";
+        public const string GetAllDocTypeTitles = $"{Ctrl}/doc-type-titles";
+
         public static string GetDocTypesPaged(GetPagedDocTypesRequest r)
         {
             var sort = (r.OrderBy?.Any() == true) ? string.Join(",", r.OrderBy) : ""; // Id Descending

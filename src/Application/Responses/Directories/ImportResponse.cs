@@ -1,4 +1,4 @@
-﻿namespace EDO_FOMS.Application.Features.Directories.Commands
+﻿namespace EDO_FOMS.Application.Responses.Directories
 {
     public class ImportResponse
     {

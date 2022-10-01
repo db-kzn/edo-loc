@@ -1,6 +1,5 @@
-﻿using EDO_FOMS.Application.Features.Directories.Commands;
-using EDO_FOMS.Application.Features.Directories.Queries;
-using EDO_FOMS.Application.Requests.Directories;
+﻿using EDO_FOMS.Application.Requests.Directories;
+using EDO_FOMS.Application.Responses.Directories;
 using EDO_FOMS.Client.Extensions;
 using EDO_FOMS.Client.Infrastructure.Filters;
 using EDO_FOMS.Client.Infrastructure.Managers.Dir;
