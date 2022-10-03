@@ -7,10 +7,15 @@ namespace EDO_FOMS.Application.Features.Agreements.Queries
 {
     public class EmployeeAgreementsResponse
     {
-        public int? EmplOrgId { get; set; }
-        public string EmplId { get; set; }
         public int AgreementId { get; set; }
+        public string EmplId { get; set; }
+
+        public int? EmplOrgId { get; set; }
         public int? ParentAgreementId { get; set; }
+
+        public int? KeyOrgId { get; set; } = null;
+        public string RecipientShort { get; set; } = string.Empty;
+        public string RecipientInn { get; set; } = string.Empty;
 
         public List<ContactModel> Recipients { get; set; } // Список организаций получателей
 

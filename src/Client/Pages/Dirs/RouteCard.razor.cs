@@ -171,7 +171,7 @@ namespace EDO_FOMS.Client.Pages.Dirs
                 return _localizer[""];
             }
 
-            if (selectedDocTypes.Count == 5)
+            if (selectedDocTypes.Count == _docTypes.Count)
             {
                 return _localizer["Any Docs"];
             }

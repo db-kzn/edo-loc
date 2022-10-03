@@ -493,9 +493,14 @@ namespace EDO_FOMS.Client.Pages.Progress
         {
             return new()
             {
+                AgreementId = a.AgreementId,
+
                 EmplOrgId = a.EmplOrgId,  // Организация получателя
                 EmplId = a.EmplId,
-                AgreementId = a.AgreementId,
+
+                KeyOrgId = a.KeyOrgId,
+                RecipientShort = a.RecipientShort,
+                RecipientInn = a.RecipientInn,
 
                 //Recipients
 

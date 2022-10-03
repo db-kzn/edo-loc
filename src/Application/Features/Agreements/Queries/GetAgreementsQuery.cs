@@ -43,10 +43,15 @@ internal class GetDocumentsQueryHandler : IRequestHandler<GetAgreementsQuery, Pa
 
         Expression<Func<Agreement, GetAgreementsResponse>> expression = e => new GetAgreementsResponse
         {
-            EmplOrgId = e.OrgId,
-            EmplId = e.EmplId,
             AgreementId = e.Id,
             ParentAgreementId  = e.ParentId,
+
+            EmplId = e.EmplId,
+            EmplOrgId = e.OrgId,
+
+            KeyOrgId = e.Document.KeyOrgId,
+            RecipientInn = e.Document.Recipient.Inn,
+            RecipientShort = e.Document.Recipient.ShortName,
 
             //Recipients 
 

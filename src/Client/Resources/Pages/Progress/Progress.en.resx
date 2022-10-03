@@ -228,6 +228,9 @@
   <data name="Progress" xml:space="preserve">
     <value>Progress</value>
   </data>
+  <data name="Recipient" xml:space="preserve">
+    <value>Recipient</value>
+  </data>
   <data name="Refuse" xml:space="preserve">
     <value>Refuse</value>
   </data>

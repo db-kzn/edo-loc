@@ -62,13 +62,9 @@
               RowClassFunc="@UnreadRowClassFunc" RowClass="actions">
 
         <ColGroup>
-            <col />
-            <col />
-            <col />
-            <col />
+            <col /><col /><col /><col />
             <col class="col-date" />
-            <col />
-            <col />
+            <col /><col />
             <col class="col-date-time" />
         </ColGroup>
 
@@ -129,7 +125,7 @@
                 </div>
             </MudTd>
 
-            <MudTd DataLabel="@_localizer["Steps"]">
+            <MudTd DataLabel="@_localizer["Step"]">
                 @context.CurrentStep из @context.TotalSteps
             </MudTd>
 

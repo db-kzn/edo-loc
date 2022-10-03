@@ -53,10 +53,15 @@ internal class SearchAgrsQueryHandler : IRequestHandler<SearchAgrsQuery, Paginat
 
         Expression<Func<Agreement, GetAgreementsResponse>> expression = e => new GetAgreementsResponse
         {
-            EmplOrgId = e.OrgId,
-            EmplId = e.EmplId,
             AgreementId = e.Id,
             ParentAgreementId = e.ParentId,
+
+            EmplOrgId = e.OrgId,
+            EmplId = e.EmplId,
+
+            KeyOrgId = e.Document.KeyOrgId,
+            RecipientInn = e.Document.Recipient.Inn,
+            RecipientShort = e.Document.Recipient.ShortName,
 
             //Recipients 
 

@@ -42,15 +42,15 @@ internal class GetDocumentsQueryHandler : IRequestHandler<GetDocumentsQuery, Pag
         Expression<Func<Document, GetDocumentsResponse>> expression = e => new GetDocumentsResponse
         {
             Id = e.Id,
+            ParentId = e.ParentId,
+            PreviousId = e.PreviousId,
+
             EmplId = e.EmplId,
             EmplOrgId = e.EmplOrgId,
 
             KeyOrgId = e.KeyOrgId,
             RecipientInn = e.Recipient.Inn,
             RecipientShort = e.Recipient.ShortName,
-
-            ParentId = e.ParentId,
-            PreviousId = e.PreviousId,
 
             RouteId = e.RouteId,
             Stage = e.Stage,

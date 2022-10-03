@@ -7,16 +7,16 @@ namespace EDO_FOMS.Application.Features.Documents.Queries
     public class GetDocumentsResponse
     {
         public int Id { get; set; } = 0;
+        public int? ParentId { get; set; }
+        public int? PreviousId { get; set; }
+
         public string EmplId { get; set; }
-        
         public int EmplOrgId { get; set; }
+
         public int? KeyOrgId { get; set; }
         //public virtual Organization Recipient { get; set; }
         public string RecipientShort { get; set; }
         public string RecipientInn { get; set; }
-
-        public int? ParentId { get; set; }
-        public int? PreviousId { get; set; }
 
         public int RouteId { get; set; } = 1;
         public DocStages Stage { get; set; }

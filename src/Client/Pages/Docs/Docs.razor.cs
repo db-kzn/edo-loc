@@ -238,6 +238,7 @@ namespace EDO_FOMS.Client.Pages.Docs
                 await _jsRuntime.InvokeVoidAsync("azino.Console", request, "Docs Request");
                 response = await DocManager.GetDocsAsync(request);
             }
+
             await _jsRuntime.InvokeVoidAsync("azino.Console", response, "Docs Paged Response");
 
             if (!response.Succeeded)
@@ -576,15 +577,15 @@ namespace EDO_FOMS.Client.Pages.Docs
             return new()
             {
                 DocId = d.Id,
-                EmplId = d.EmplId,
+                ParentId = d.ParentId,
+                PreviousId = d.PreviousId,
 
+                EmplId = d.EmplId,
                 EmplOrgId = d.EmplOrgId,
+
                 KeyOrgId = d.KeyOrgId,
                 RecipientShort = d.RecipientShort,
                 RecipientInn = d.RecipientInn,
-
-                ParentId = d.ParentId,
-                PreviousId = d.PreviousId,
 
                 RouteId = d.RouteId,
                 Stage = d.Stage,

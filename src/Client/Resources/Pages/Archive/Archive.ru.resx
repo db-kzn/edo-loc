@@ -228,6 +228,9 @@
   <data name="Progress" xml:space="preserve">
     <value>Входящие</value>
   </data>
+  <data name="Recipient" xml:space="preserve">
+    <value>Получатель</value>
+  </data>
   <data name="Refuse" xml:space="preserve">
     <value>Отклонить</value>
   </data>

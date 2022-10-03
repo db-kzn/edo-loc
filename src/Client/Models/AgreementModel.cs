@@ -7,10 +7,15 @@ namespace EDO_FOMS.Client.Models
 {
     public class AgreementModel
     {
-        public int? EmplOrgId { get; set; }
-        public string EmplId { get; set; }
         public int AgreementId { get; set; }
         public int? ParentAgreementId { get; set; }
+
+        public string EmplId { get; set; }
+        public int? EmplOrgId { get; set; }
+
+        public int? KeyOrgId { get; set; }
+        public string RecipientShort { get; set; }
+        public string RecipientInn { get; set; }
 
         public List<ContactModel> Recipients { get; set; } // Список организаций получателей
 

@@ -49,9 +49,15 @@ internal class SearchDocsQueryHandler : IRequestHandler<SearchDocsQuery, Paginat
         Expression<Func<Document, GetDocumentsResponse>> expression = e => new GetDocumentsResponse
         {
             Id = e.Id,
+            ParentId = e.ParentId,
+            PreviousId = e.PreviousId,
+
             EmplId = e.EmplId,
             EmplOrgId = e.EmplOrgId,
-            ParentId = e.ParentId,
+
+            KeyOrgId = e.KeyOrgId,
+            RecipientInn = e.Recipient.Inn,
+            RecipientShort = e.Recipient.ShortName,
 
             RouteId = e.RouteId,
             Stage = e.Stage,
@@ -66,10 +72,12 @@ internal class SearchDocsQueryHandler : IRequestHandler<SearchDocsQuery, Paginat
             Title = e.Title,
             Description = e.Description,
             IsPublic = e.IsPublic,
+            DepartmentId = e.DepartmentId,
 
             CurrentStep = e.CurrentStep,
             TotalSteps = e.TotalSteps,
             Version = e.Version,
+            //SignStartAt = e.SignStartAt,
 
             URL = e.URL,
             //StoragePath = e.StoragePath,
