@@ -7,6 +7,7 @@ using EDO_FOMS.Client.Extensions;
 using EDO_FOMS.Client.Infrastructure.Filters;
 using EDO_FOMS.Client.Infrastructure.Managers.Dir;
 using EDO_FOMS.Client.Infrastructure.Managers.Doc.Document;
+using EDO_FOMS.Client.Infrastructure.Models.Dirs;
 using EDO_FOMS.Client.Models;
 using EDO_FOMS.Domain.Enums;
 using EDO_FOMS.Shared.Constants.Permission;
@@ -75,7 +76,7 @@ namespace EDO_FOMS.Client.Pages.Archive
         private MudDatePicker _dateTo;
         private MudDatePicker _createOnFrom;
         private MudDatePicker _createOnTo;
-
+ 
         protected override async Task OnInitializedAsync()
         {
             _authUser = await _authManager.CurrentUser();
@@ -92,6 +93,8 @@ namespace EDO_FOMS.Client.Pages.Archive
 
             delay = _stateService.TooltipDelay;
             duration = _stateService.TooltipDuration;
+
+            await GetAllDocTypeTitlesAsync();
 
             var docTypeTitles = await DirManager.GetAllDocTypeTitlesAsync();
 
@@ -177,15 +180,7 @@ namespace EDO_FOMS.Client.Pages.Archive
                 //if (Filter.StageRejected) stages.Add(DocStages.Rejected);
 
                 List<int> types = new();
-                if (!Filter.TypeContract && !Filter.TypeAgreement)
-                {
-                    types.AddRange(new List<int> { 1, 2 }); // ID from db
-                }
-                else
-                {
-                    if (Filter.TypeContract) { types.Add(1); }
-                    if (Filter.TypeAgreement) { types.Add(2); }
-                }
+                Filter.DocTypes.ForEach(dt => { if (dt.IsChecked) { types.Add(dt.Id); } });
 
                 List<AgreementActions> actions = new();
                 if (!Filter.ActionToRun && !Filter.ActionToApprove && !Filter.ActionToVerify && !Filter.ActionToSign)
@@ -278,6 +273,22 @@ namespace EDO_FOMS.Client.Pages.Archive
             }
 
             _loaded = true;
+        }
+
+        private async Task GetAllDocTypeTitlesAsync()
+        {
+            var response = await DirManager.GetAllDocTypeTitlesAsync();
+
+            if (!response.Succeeded) { return; }
+
+            await _jsRuntime.InvokeVoidAsync("azino.Console", response.Data, "Doc Type Titles");
+
+            var docTypeTitles = response.Data;
+
+            docTypeTitles.ForEach(dtt => {
+                Filter.DocTypes.Add(new FilterDocTypeModel(dtt));
+                FilterDefault.DocTypes.Add(new FilterDocTypeModel(dtt));
+            });
         }
 
         //TableRowClickEventArgs<AgreementModel> e
@@ -488,13 +499,17 @@ namespace EDO_FOMS.Client.Pages.Archive
             FilterIsActive();
             //FilterIsEmpty();
         }
-        private void OnType(string type)
+        private void OnType(FilterDocTypeModel dt)
         {
-            if (type == "Contract") Filter.TypeContract = !Filter.TypeContract;
-            else if (type == "Agreement") Filter.TypeAgreement = !Filter.TypeAgreement;
+            dt.IsChecked = !dt.IsChecked;
 
-            Filter.ChangedType = Filter.TypeContract != FilterDefault.TypeContract ||
-                Filter.TypeAgreement != FilterDefault.TypeAgreement;
+            Filter.ChangedType = false;
+
+            Filter.DocTypes.ForEach(dt =>
+            {
+                var dtd = FilterDefault.DocTypes.Find(t => t.Id == dt.Id);
+                if (dt.IsChecked != dtd.IsChecked) { Filter.ChangedType = true; }
+            });
 
             FilterIsActive();
             //FilterIsEmpty();
@@ -549,8 +564,8 @@ namespace EDO_FOMS.Client.Pages.Archive
             Filter.ActionToVerify = FilterDefault.ActionToVerify;
             Filter.ActionToSign = FilterDefault.ActionToSign;
 
-            Filter.TypeContract = FilterDefault.TypeContract;
-            Filter.TypeAgreement = FilterDefault.TypeAgreement;
+            Filter.DocTypes.Clear();
+            FilterDefault.DocTypes.ForEach(dt => Filter.DocTypes.Add(new FilterDocTypeModel(dt)));
 
             Filter.TextNumber = FilterDefault.TextNumber;
             Filter.TextTitle = FilterDefault.TextTitle;
@@ -585,5 +600,7 @@ namespace EDO_FOMS.Client.Pages.Archive
         //        a.DocTitle?.Contains(_searchString, comparison) == true ||
         //        a.DocCreatedOnStr?.Contains(_searchString, comparison) == true;
         //}
+
+        private string DocTypeIcon(DocIcons icon) => DirManager.DocTypeIcon(icon);
     }
 }

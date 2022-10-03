@@ -10,7 +10,7 @@
 @inject Microsoft.Extensions.Localization.IStringLocalizer<Archive> _localizer
 
 <MudPaper Square="true" Elevation="3" Style="z-index: 1;">
-    <MudToolBar  Elevation="2">
+    <MudToolBar Elevation="2">
         <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Signed documents"]" Color="Color.Tertiary" Placement="Placement.Right">
             <MudText Typo="Typo.button">@_localizer["Documents"]</MudText>
         </MudTooltip>
@@ -21,24 +21,24 @@
 
         <MudSpacer />
 
-        <MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" Class="search-field" Immediate="false" FullWidth=false 
-            Placeholder="@_localizer["Document search"]" T="string" Clearable="true" ValueChanged="@(s => OnSearch(s))"
-            Adornment="Adornment.Start" AdornmentColor="Color.Default" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" >
+        <MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" Class="search-field" Immediate="false" FullWidth=false
+                      Placeholder="@_localizer["Document search"]" T="string" Clearable="true" ValueChanged="@(s => OnSearch(s))"
+                      Adornment="Adornment.Start" AdornmentColor="Color.Default" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium">
         </MudTextField>
 
         <MudTooltip Delay="@delay" Duration="@duration" Placement="Placement.Left" Color="Color.Tertiary" Arrow="true"
-            Text="@(matchCase ? _localizer["Match Case On"] : _localizer["Match Case Off"])">
+                    Text="@(matchCase ? _localizer["Match Case On"] : _localizer["Match Case Off"])">
             <MudToggleIconButton Toggled="@matchCase" ToggledChanged="OnToggledMatchCase"
-                 Icon="@Icons.Material.Filled.FormatStrikethrough" Color="@Color.Default"
-                 ToggledIcon="@Icons.Material.Filled.TextFields" ToggledColor="@Color.Default"/>
+                                 Icon="@Icons.Material.Filled.FormatStrikethrough" Color="@Color.Default"
+                                 ToggledIcon="@Icons.Material.Filled.TextFields" ToggledColor="@Color.Default" />
         </MudTooltip>
 
         <MudTooltip Delay="@delay" Duration="@duration" Placement="Placement.Left" Color="Color.Tertiary" Arrow="true"
-            Text="@_localizer["Rows density"]">
+                    Text="@_localizer["Rows density"]">
 
             <MudToggleIconButton Toggled="@dense" ToggledChanged="OnToggledDense"
-                 Icon="@Icons.Material.Filled.DensityMedium" Color="@Color.Default"
-                 ToggledIcon="@Icons.Material.Filled.DensitySmall" ToggledColor="@Color.Default"/>
+                                 Icon="@Icons.Material.Filled.DensityMedium" Color="@Color.Default"
+                                 ToggledIcon="@Icons.Material.Filled.DensitySmall" ToggledColor="@Color.Default" />
         </MudTooltip>
 
         <MudTooltip Delay="@delay" Duration="@duration" Placement="Placement.Left" Color="Color.Tertiary" Arrow="true" Text="@_localizer["Filter"]">
@@ -49,14 +49,17 @@
 
 <MudContainer MaxWidth="MaxWidth.False" Class="pa-6">
     <MudTable Hover="true" Dense="@dense" Bordered="false" Striped="true" Breakpoint="Breakpoint.Xs"
-        @ref="_mudTable" T="AgreementModel" @bind-SelectedItem="_agreement" OnRowClick="OnRowClickAsync"
-        ServerData="@(new Func<TableState, Task<TableData<AgreementModel>>>(ServerReloadAsync))"
-        Loading="@(!_loaded)" LoadingProgressColor="Color.Info" RowsPerPage="@_rowsPerPage"
-        RowClassFunc="@UnreadRowClassFunc" RowClass="actions">
+              @ref="_mudTable" T="AgreementModel" @bind-SelectedItem="_agreement" OnRowClick="OnRowClickAsync"
+              ServerData="@(new Func<TableState, Task<TableData<AgreementModel>>>(ServerReloadAsync))"
+              Loading="@(!_loaded)" LoadingProgressColor="Color.Info" RowsPerPage="@_rowsPerPage"
+              RowClassFunc="@UnreadRowClassFunc" RowClass="actions">
 
         <ColGroup>
-            <col /><col />
-            <col /><col class="col-date" /><col />
+            <col />
+            <col />
+            <col />
+            <col class="col-date" />
+            <col />
             <col class="col-date-time" />
         </ColGroup>
 
@@ -74,66 +77,66 @@
         </HeaderContent>
 
         <RowTemplate>
-             @*<MudTd>
-                <div class="d-flex flex-row" style="height: 24px;">
-                    @if (context.DocStage == DocStages.Archive)
-                    {
-                        <MudIcon Icon="@Icons.Material.TwoTone.Archive" Color="Color.Tertiary" Class="mr-2"/>
-                    }
-                    else if (context.DocStage == DocStages.Draft)
-                    {
-                        <MudIcon Icon="@Icons.Material.TwoTone.IntegrationInstructions" Color="Color.Default" Class="mr-2"/>
-                    }
-                    else if (context.DocStage == DocStages.InProgress)
-                    {
-                        <MudIcon Icon="@Icons.Material.TwoTone.NoteAlt" Color="Color.Warning" Class="mr-2"/>
-                    }
-                    else if (context.DocStage == DocStages.Rejected)
-                    {
-                        <MudIcon Icon="@Icons.Material.TwoTone.AssignmentReturn" Color="Color.Error" Class="mr-2"/>
-                    }
-                    else if (context.DocStage == DocStages.Agreed)
-                    {
-                        <MudIcon Icon="@Icons.Material.TwoTone.AssignmentTurnedIn" Color="Color.Success" Class="mr-2"/>
-                    }
-                    else if (context.DocStage == DocStages.Deleted)
-                    {
-                        <MudIcon Icon="@Icons.Material.TwoTone.Delete" Color="Color.Default" Class="mr-2"/>
-                    }
-                    @context.DocStageName
-                </div>
+            @*<MudTd>
+            <div class="d-flex flex-row" style="height: 24px;">
+            @if (context.DocStage == DocStages.Archive)
+            {
+            <MudIcon Icon="@Icons.Material.TwoTone.Archive" Color="Color.Tertiary" Class="mr-2"/>
+            }
+            else if (context.DocStage == DocStages.Draft)
+            {
+            <MudIcon Icon="@Icons.Material.TwoTone.IntegrationInstructions" Color="Color.Default" Class="mr-2"/>
+            }
+            else if (context.DocStage == DocStages.InProgress)
+            {
+            <MudIcon Icon="@Icons.Material.TwoTone.NoteAlt" Color="Color.Warning" Class="mr-2"/>
+            }
+            else if (context.DocStage == DocStages.Rejected)
+            {
+            <MudIcon Icon="@Icons.Material.TwoTone.AssignmentReturn" Color="Color.Error" Class="mr-2"/>
+            }
+            else if (context.DocStage == DocStages.Agreed)
+            {
+            <MudIcon Icon="@Icons.Material.TwoTone.AssignmentTurnedIn" Color="Color.Success" Class="mr-2"/>
+            }
+            else if (context.DocStage == DocStages.Deleted)
+            {
+            <MudIcon Icon="@Icons.Material.TwoTone.Delete" Color="Color.Default" Class="mr-2"/>
+            }
+            @context.DocStageName
+            </div>
             </MudTd>*@
 
             <MudTd DataLabel="@_localizer["Action"]">
                 <div class="d-flex flex-row" style="height: 24px;">
-                    @if(context.Action == ActTypes.Signing)
+                    @if (context.Action == ActTypes.Signing)
                     {
                         <MudIcon Icon="@Icons.Material.Outlined.Draw" Color="Color.Error" Class="mr-2" />
                     }
-                    else if(context.Action == ActTypes.Agreement)
+                    else if (context.Action == ActTypes.Agreement)
                     {
                         <MudIcon Icon="@Icons.Material.Outlined.OfflinePin" Color="Color.Warning" Class="mr-2" />
                     }
-                    else if(context.Action == ActTypes.Review)
+                    else if (context.Action == ActTypes.Review)
                     {
                         <MudIcon Icon="@Icons.Material.Outlined.MapsUgc" Color="Color.Success" Class="mr-2" />
                     }
-                    else if(context.Action == ActTypes.Executing || context.Action == ActTypes.Initiation)
+                    else if (context.Action == ActTypes.Executing || context.Action == ActTypes.Initiation)
                     {
-                        <MudIcon Icon="@Icons.Material.Outlined.SlowMotionVideo" Color="Color.Tertiary" Class="mr-2"/>
+                        <MudIcon Icon="@Icons.Material.Outlined.SlowMotionVideo" Color="Color.Tertiary" Class="mr-2" />
                     }
                     @context.ActionName
                 </div>
             </MudTd>
 
             @*<MudTd DataLabel="@_localizer["Steps"]">
-                @context.DocCurrentStep из @context.DocTotalSteps
+            @context.DocCurrentStep из @context.DocTotalSteps
             </MudTd>*@
 
             <MudTd DataLabel="@_localizer["Type"]">
                 @*<MudHighlighter Text="@context.DocTypeName" HighlightedText="@_searchString" />*@
                 @context.DocTypeName
-             </MudTd>
+            </MudTd>
 
             <MudTd DataLabel="@_localizer["Number"]">
                 <MudHighlighter Text="@context.DocNumber" HighlightedText="@_searchString" />
@@ -147,9 +150,9 @@
             </MudTd>
 
             @*<MudTd DataLabel="@_localizer["File Name"]">
-                <MudLink Href="@context.DocURL" Underline="Underline.None" Target="_blank">
-                    <MudHighlighter Text="@context.DocFileName" HighlightedText="@_searchString" />
-                </MudLink>
+            <MudLink Href="@context.DocURL" Underline="Underline.None" Target="_blank">
+            <MudHighlighter Text="@context.DocFileName" HighlightedText="@_searchString" />
+            </MudLink>
             </MudTd>*@
 
             <MudTd DataLabel="@_localizer["Create on"]">
@@ -171,7 +174,7 @@
         <MudText Style="align-self:center;" Typo="Typo.button" Inline="true">@_localizer["Advanced filter"]</MudText>
         <MudSpacer />
         <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Reset"]" Color="Color.Tertiary" Placement="Placement.Left" Arrow="true">
-            <MudIconButton Icon="@Icons.Material.Outlined.SettingsBackupRestore" Color="Color.Primary" OnClick="FilterReset" Disabled="@(!Filter.IsActive)"/>
+            <MudIconButton Icon="@Icons.Material.Outlined.SettingsBackupRestore" Color="Color.Primary" OnClick="FilterReset" Disabled="@(!Filter.IsActive)" />
         </MudTooltip>
     </MudDrawerHeader>
 
@@ -179,21 +182,21 @@
 
     <MudList Clickable="true" Class="py-0">
         <MudListItem Icon="@Icons.Material.Outlined.AssignmentInd" Text="@_localizer["Attendee"]" InitiallyExpanded="false"
-            AdornmentColor="Color.Primary" IconColor="@(Filter.ChangedAttendee ? Color.Error : Color.Primary)">
+                     AdornmentColor="Color.Primary" IconColor="@(Filter.ChangedAttendee ? Color.Error : Color.Primary)">
             <NestedList>
                 <MudAutocomplete Class="mx-2" Label="@_localizer["Organization"]" ToStringFunc="@(e => OrgName(e))" Disabled="@(!_loaded)"
-                    T="OrgsResponse" Value="orgContact" SearchFunc="@SearchOrgAsync" ValueChanged="@(o => OrgChanged(o))"
-                    ResetValueOnEmptyText="@resetValueOnEmptyText" CoerceText="@coerceText" CoerceValue="@coerceValue" Dense="true"/>
+                                 T="OrgsResponse" Value="orgContact" SearchFunc="@SearchOrgAsync" ValueChanged="@(o => OrgChanged(o))"
+                                 ResetValueOnEmptyText="@resetValueOnEmptyText" CoerceText="@coerceText" CoerceValue="@coerceValue" Dense="true" />
 
                 <MudAutocomplete Class="mx-2" Label="@_localizer["Employee"]" ToStringFunc="@(e => EmployeeName(e))" Disabled="@(!_loaded)"
-                    T="ContactResponse" Value="employeeContact" SearchFunc="@SearchEmployeeAsync" ValueChanged="@(e => EmployeeChanged(e))"
-                    ResetValueOnEmptyText="@resetValueOnEmptyText" CoerceText="@coerceText" CoerceValue="@coerceValue" Dense="true"/>
+                                 T="ContactResponse" Value="employeeContact" SearchFunc="@SearchEmployeeAsync" ValueChanged="@(e => EmployeeChanged(e))"
+                                 ResetValueOnEmptyText="@resetValueOnEmptyText" CoerceText="@coerceText" CoerceValue="@coerceValue" Dense="true" />
             </NestedList>
         </MudListItem>
         <MudDivider />
 
         <MudListItem Icon="@Icons.Material.Outlined.TaskAlt" Text="@_localizer["Action"]" InitiallyExpanded="false"
-            AdornmentColor="Color.Primary" IconColor="@(Filter.ChangedAction ? Color.Error : Color.Primary)">
+                     AdornmentColor="Color.Primary" IconColor="@(Filter.ChangedAction ? Color.Error : Color.Primary)">
             <NestedList>
                 <MudListItem Icon="@(Filter.ActionToSign ? Icons.Material.Outlined.Draw : Icons.Material.Outlined.CheckBoxOutlineBlank)"
                              IconColor="@(Filter.ActionToSign ? Color.Error : Color.Default)" OnClick="@(() => OnAction("ToSign"))">
@@ -206,12 +209,12 @@
                 </MudListItem>
 
                 <MudListItem Icon="@(Filter.ActionToVerify ? Icons.Material.Outlined.MapsUgc : Icons.Material.Outlined.CheckBoxOutlineBlank)"
-                    IconColor="@(Filter.ActionToVerify ? Color.Success : Color.Default)" OnClick="@(() => OnAction("ToVerify"))">
+                             IconColor="@(Filter.ActionToVerify ? Color.Success : Color.Default)" OnClick="@(() => OnAction("ToVerify"))">
                     @_localizer["ToVerify"]
                 </MudListItem>
 
                 <MudListItem Icon="@(Filter.ActionToRun ? Icons.Material.Outlined.SlowMotionVideo : Icons.Material.Outlined.CheckBoxOutlineBlank)"
-                    IconColor="@(Filter.ActionToRun ? Color.Tertiary : Color.Default)" OnClick="@(() => OnAction("ToRun"))">
+                             IconColor="@(Filter.ActionToRun ? Color.Tertiary : Color.Default)" OnClick="@(() => OnAction("ToRun"))">
                     @_localizer["ToRun"]
                 </MudListItem>
             </NestedList>
@@ -219,39 +222,37 @@
         <MudDivider />
 
         <MudListItem Icon="@Icons.Material.Outlined.DocumentScanner" Text="@_localizer["Type"]" InitiallyExpanded="false"
-            AdornmentColor="Color.Primary" IconColor="@(Filter.ChangedType ? Color.Error : Color.Primary)">
+                     AdornmentColor="Color.Primary" IconColor="@(Filter.ChangedType ? Color.Error : Color.Primary)">
             <NestedList>
-                <MudListItem Icon="@(Filter.TypeContract ? Icons.Material.TwoTone.Description : Icons.Material.Outlined.CheckBoxOutlineBlank)"
-                    IconColor="@(Filter.TypeContract ? Color.Tertiary : Color.Default)" OnClick="@(() => OnType("Contract"))">
-                    @_localizer["Contract"]
-                </MudListItem>
-
-                <MudListItem Icon="@(Filter.TypeAgreement ? Icons.Material.TwoTone.NoteAdd : Icons.Material.Outlined.CheckBoxOutlineBlank)"
-                    IconColor="@(Filter.TypeAgreement ? Color.Warning : Color.Default)" OnClick="@(() => OnType("Agreement"))">
-                    @_localizer["Agreement"]
-                </MudListItem>
+                @foreach (var dt in Filter.DocTypes)
+                {
+                    <MudListItem Icon="@(dt.IsChecked ? DocTypeIcon(dt.Icon) : Icons.Material.Outlined.CheckBoxOutlineBlank)"
+                             IconColor="@(dt.IsChecked ? dt.Color : Color.Default)" OnClick="@(() => OnType(dt))">
+                        @dt.Label
+                    </MudListItem>
+                }
             </NestedList>
         </MudListItem>
         <MudDivider />
 
         <MudListItem Icon="@Icons.Material.Outlined.FontDownload" Text="@_localizer["Text"]" InitiallyExpanded="false"
-            AdornmentColor="Color.Primary" IconColor="@(Filter.ChangedText ? Color.Error : Color.Primary)">
+                     AdornmentColor="Color.Primary" IconColor="@(Filter.ChangedText ? Color.Error : Color.Primary)">
             <NestedList>
                 <MudTextField Class="mx-2" Label="@_localizer["Number"]" Variant="Variant.Text" Margin="Margin.Dense"
-                    @bind-Value="Filter.TextNumber" TextChanged="@(() => OnText())">
+                              @bind-Value="Filter.TextNumber" TextChanged="@(() => OnText())">
                 </MudTextField>
                 <MudTextField Class="mx-2" Label="@_localizer["Title"]" Variant="Variant.Text" Margin="Margin.Dense"
-                    @bind-Value="Filter.TextTitle" TextChanged="@(() => OnText())">
+                              @bind-Value="Filter.TextTitle" TextChanged="@(() => OnText())">
                 </MudTextField>
             </NestedList>
         </MudListItem>
         <MudDivider />
 
         <MudListItem Icon="@Icons.Material.Outlined.DateRange" Text="@_localizer["Date"]" InitiallyExpanded="false"
-            AdornmentColor="Color.Primary" IconColor="@(Filter.ChangedDate ? Color.Error : Color.Primary)">
+                     AdornmentColor="Color.Primary" IconColor="@(Filter.ChangedDate ? Color.Error : Color.Primary)">
             <NestedList>
                 <MudDatePicker Class="mx-2" Label="@_localizer["From"]" Editable="false" DisableToolbar="true" AdornmentIcon="@Icons.Material.TwoTone.Today"
-                    @ref="_dateFrom" Date="Filter.DateFrom" DateChanged="@((d) => OnDate("From", d))" AutoClose="true">
+                               @ref="_dateFrom" Date="Filter.DateFrom" DateChanged="@((d) => OnDate("From", d))" AutoClose="true">
                     <PickerActions>
                         <MudButton StartIcon="@Icons.Material.TwoTone.EventBusy" OnClick="@(() => _dateFrom.Clear())">@_localizer["Clear"]</MudButton>
                         @*<MudButton OnClick="@(() => _dateFrom.Close(false))">@_localizer["Cancel"]</MudButton>*@
@@ -260,7 +261,7 @@
                 </MudDatePicker>
 
                 <MudDatePicker Class="mx-2" Label="@_localizer["To"]" Editable="false" DisableToolbar="true" AdornmentIcon="@Icons.Material.TwoTone.Event"
-                    @ref="_dateTo" Date="Filter.DateTo" DateChanged="@((d) => OnDate("To", d))" AutoClose="true">
+                               @ref="_dateTo" Date="Filter.DateTo" DateChanged="@((d) => OnDate("To", d))" AutoClose="true">
                     <PickerActions>
                         <MudButton StartIcon="@Icons.Material.TwoTone.EventBusy" OnClick="@(() => _dateTo.Clear())">@_localizer["Clear"]</MudButton>
                         @*<MudButton OnClick="@(() => _dateTo.Close(false))">@_localizer["Cancel"]</MudButton>*@
@@ -272,10 +273,10 @@
         <MudDivider />
 
         <MudListItem Icon="@Icons.Material.Outlined.DateRange" Text="@_localizer["Create on"]" InitiallyExpanded="false"
-            AdornmentColor="Color.Primary" IconColor="@(Filter.ChangedCreateOn ? Color.Error : Color.Primary)">
+                     AdornmentColor="Color.Primary" IconColor="@(Filter.ChangedCreateOn ? Color.Error : Color.Primary)">
             <NestedList>
                 <MudDatePicker Class="mx-2" Label="@_localizer["From"]" Editable="false" DisableToolbar="true" AdornmentIcon="@Icons.Material.TwoTone.Today"
-                    @ref="_createOnFrom" Date="Filter.CreateOnFrom" DateChanged="@((d) => OnCreateOn("From", d))" AutoClose="true">
+                               @ref="_createOnFrom" Date="Filter.CreateOnFrom" DateChanged="@((d) => OnCreateOn("From", d))" AutoClose="true">
                     <PickerActions>
                         <MudButton StartIcon="@Icons.Material.TwoTone.EventBusy" OnClick="@(() => _createOnFrom.Clear())">@_localizer["Clear"]</MudButton>
                         @*<MudButton StartIcon="@Icons.Material.Outlined.Clear" OnClick="@(() => _createOnFrom.Close(false))">@_localizer["Cancel"]</MudButton>*@
@@ -284,7 +285,7 @@
                 </MudDatePicker>
 
                 <MudDatePicker Class="mx-2" Label="@_localizer["To"]" Editable="false" DisableToolbar="true" AdornmentIcon="@Icons.Material.TwoTone.Event"
-                    @ref="_createOnTo" Date="Filter.CreateOnTo" DateChanged="@((d) => OnCreateOn("To", d))" AutoClose="true">
+                               @ref="_createOnTo" Date="Filter.CreateOnTo" DateChanged="@((d) => OnCreateOn("To", d))" AutoClose="true">
                     <PickerActions>
                         <MudButton StartIcon="@Icons.Material.TwoTone.EventBusy" OnClick="@(() => _createOnTo.Clear())">@_localizer["Clear"]</MudButton>
                         @*<MudButton OnClick="@(() => _createOnTo.Close(false))">@_localizer["Cancel"]</MudButton>*@
@@ -299,7 +300,7 @@
         @*Disabled="@(Filter.IsEmpty)" *@
         <MudListItem>
             <MudButton FullWidth="true" Variant="Variant.Outlined" StartIcon="@Icons.Outlined.Done" Color="Color.Primary"
-                 OnClick="ApplyFilter">@_localizer["Apply"]</MudButton>
+                       OnClick="ApplyFilter">@_localizer["Apply"]</MudButton>
         </MudListItem>
         <MudDivider />
     </MudList>

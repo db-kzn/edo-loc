@@ -247,15 +247,13 @@
         <MudListItem Icon="@Icons.Material.Outlined.DocumentScanner" Text="@_localizer["Type"]" InitiallyExpanded="false"
             AdornmentColor="Color.Primary" IconColor="@(Filter.ChangedType ? Color.Error : Color.Primary)">
             <NestedList>
-                <MudListItem Icon="@(Filter.TypeContract ? Icons.Material.TwoTone.Description : Icons.Material.Outlined.CheckBoxOutlineBlank)"
-                    IconColor="@(Filter.TypeContract ? Color.Tertiary : Color.Default)" OnClick="@(() => OnType("Contract"))">
-                    @_localizer["Contract"]
-                </MudListItem>
-
-                <MudListItem Icon="@(Filter.TypeAgreement ? Icons.Material.TwoTone.NoteAdd : Icons.Material.Outlined.CheckBoxOutlineBlank)"
-                    IconColor="@(Filter.TypeAgreement ? Color.Warning : Color.Default)" OnClick="@(() => OnType("Agreement"))">
-                    @_localizer["Agreement"]
-                </MudListItem>
+                @foreach (var dt in Filter.DocTypes)
+                {
+                    <MudListItem Icon="@(dt.IsChecked ? DocTypeIcon(dt.Icon) : Icons.Material.Outlined.CheckBoxOutlineBlank)"
+                                 IconColor="@(dt.IsChecked ? dt.Color : Color.Default)" OnClick="@(() => OnType(dt))">
+                        @dt.Label
+                    </MudListItem>               
+                }   
             </NestedList>
         </MudListItem>
         <MudDivider />
