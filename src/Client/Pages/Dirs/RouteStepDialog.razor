@@ -130,12 +130,16 @@
             </MudItem>
 
             <MudItem xs="6">
-                <MudCheckBox @bind-Checked="@Step.SomeParticipants" Label="@_localizer["Some Participants"]" Color="Color.Primary"
-                             CheckedIcon="@Icons.Material.Outlined.SafetyDivider" UnCheckedColor="Color.Default" />
+                <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["One participant is enough to complete the process"]" Color="Color.Tertiary" Placement="Placement.Bottom" Arrow>
+                    <MudCheckBox @bind-Checked="@Step.SomeParticipants" Label="@_localizer["Some Participants"]" Color="Color.Primary"
+                                 CheckedIcon="@Icons.Material.Outlined.SafetyDivider" UnCheckedColor="Color.Default" />
+                </MudTooltip>
             </MudItem>
             <MudItem xs="6">
-                <MudCheckBox @bind-Checked="@Step.AllRequred" Label="@_localizer["All Requred"]" Color="Color.Primary" Disabled="@(!Step.SomeParticipants)"
-                             CheckedIcon="@Icons.Material.Outlined.Groups" UnCheckedColor="Color.Default" />
+                <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["One participant from each organization is required to complete the process"]" Color="Color.Tertiary" Placement="Placement.Bottom" Arrow>
+                    <MudCheckBox @bind-Checked="@Step.AllRequred" Label="@_localizer["All Requred"]" Color="Color.Primary" Disabled="@(!Step.SomeParticipants)"
+                                 CheckedIcon="@Icons.Material.Outlined.Groups" UnCheckedColor="Color.Default" />
+                </MudTooltip>
             </MudItem>
 
             <MudItem xs="6">
@@ -179,7 +183,7 @@
             <MudItem xs="6">
                 <MudNumericField @bind-Value="@Step.AutoSearch" Label="@_localizer["Auto Search"]" Variant="Variant.Text" Min="0" Max="10"
                                  Text="@(Step.AutoSearch > 0 ? Step.AutoSearch.ToString() : "")"
-                                 Placeholder="@_localizer["Disabled"]"/>
+                                 Placeholder="@_localizer["Disabled"]" />
             </MudItem>
 
             <MudItem xs="6">

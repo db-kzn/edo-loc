@@ -312,7 +312,7 @@
                                         else if (context.OrgType == OrgTypes.MEO)
                                         {
                                             <div class="d-flex flex-row" style="padding: 4px 16px; height: 32px;">
-                                                <MudIcon Icon="@Icons.Material.Outlined.LocalPolice" Color="Color.Secondary" Size="Size.Small" Class="mr-2" />
+                                                <MudIcon Icon="@Icons.Material.Outlined.LocalPolice" Color="Color.Tertiary" Size="Size.Small" Class="mr-2" />
                                                 <MudText Style="vertical-align: middle;">Военкомат</MudText>
                                             </div>
                                         }
@@ -337,20 +337,20 @@
                                                 @if (context.AllRequred)
                                                 {
                                                     <MudIcon Icon="@Icons.Material.TwoTone.Groups" Color="Color.Default" Class="mr-2" />
-                                                    <MudText Style="vertical-align: middle;">Группа (все)</MudText>
+                                                    <MudText Style="vertical-align: middle;">По одному</MudText>
                                                 }
                                                 else
                                                 {
                                                     <MudIcon Icon="@Icons.Material.Outlined.SafetyDivider" Color="Color.Default" Class="mr-2" />
-                                                    <MudText Style="vertical-align: middle;">Группа (любой)</MudText>
+                                                    <MudText Style="vertical-align: middle;">Любой</MudText>
                                                 }
                                             </div>
                                         }
                                         else
                                         {
                                             <div class="d-flex flex-row" style="padding: 4px 16px; height: 32px;">
-                                                <MudIcon Icon="@Icons.Material.Outlined.Person" Color="Color.Default" Class="mr-2" />
-                                                <MudText Style="vertical-align: middle;">Только один</MudText>
+                                                <MudIcon Icon="@Icons.Material.Outlined.Group" Color="Color.Default" Class="mr-2" />
+                                                <MudText Style="vertical-align: middle;">Только все</MudText>
                                             </div>
                                         }
 

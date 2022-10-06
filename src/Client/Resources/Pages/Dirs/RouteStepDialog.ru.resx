@@ -127,7 +127,7 @@
     <value>Доп.согласованты</value>
   </data>
   <data name="All Requred" xml:space="preserve">
-    <value>Требуются все</value>
+    <value>Все организации</value>
   </data>
   <data name="Any Type" xml:space="preserve">
     <value>Любая орг-я</value>
@@ -204,6 +204,12 @@
   <data name="Ok" xml:space="preserve">
     <value>Применить</value>
   </data>
+  <data name="One participant from each organization is required to complete the process" xml:space="preserve">
+    <value>Для завершения процесса необходимо по одному участнику от каждой организации</value>
+  </data>
+  <data name="One participant is enough to complete the process" xml:space="preserve">
+    <value>Для завершения процесса достаточного одного участника</value>
+  </data>
   <data name="Only Chief" xml:space="preserve">
     <value>Требуется руководитель</value>
   </data>
@@ -238,7 +244,7 @@
     <value>СМО</value>
   </data>
   <data name="Some Participants" xml:space="preserve">
-    <value>Несколько участников</value>
+    <value>Достаточно одного</value>
   </data>
   <data name="Step" xml:space="preserve">
     <value>Процесс</value>

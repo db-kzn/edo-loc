@@ -162,24 +162,22 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
                 route.ForOrgTypes.Add(new RouteOrgType() { Route = route, OrgType = orgType })
             );
 
-            command.Stages.ForEach(stage =>
-                route.Stages.Add(new RouteStage()
-                {
-                    Route = route,
-                    Number = stage.Number,
+            command.Stages.ForEach(stage => route.Stages.Add(new RouteStage()
+            {
+                Route = route,
+                Number = stage.Number,
 
-                    Color = stage.Color,
-                    Name = stage.Name,
-                    Description = stage.Description,
+                Color = stage.Color,
+                Name = stage.Name,
+                Description = stage.Description,
 
-                    ActType = stage.ActType,
-                    InSeries = stage.InSeries,
-                    AllRequred = stage.AllRequred,
+                ActType = stage.ActType,
+                InSeries = stage.InSeries,
+                AllRequred = stage.AllRequred,
 
-                    DenyRevocation = stage.DenyRevocation,
-                    Validity = stage.Validity
-                })
-            );
+                DenyRevocation = stage.DenyRevocation,
+                Validity = stage.Validity
+            }));
 
             command.Steps.ForEach(s =>
             {
@@ -216,14 +214,13 @@ namespace EDO_FOMS.Application.Features.Directories.Commands
                 route.Steps.Add(step);
             });
 
-            command.Parses.ForEach(p =>
-                route.Parses.Add(new RouteFileParse() // route, p.PatternType, p.Pattern, p.ValueType
-                {
-                    Route = route,
-                    PatternType = p.PatternType,
-                    Pattern = p.Pattern,
-                    ValueType = p.ValueType
-                }));
+            command.Parses.ForEach(p => route.Parses.Add(new RouteFileParse()
+            { // route, p.PatternType, p.Pattern, p.ValueType
+                Route = route,
+                PatternType = p.PatternType,
+                Pattern = p.Pattern,
+                ValueType = p.ValueType
+            }));
 
             await _unitOfWork.Repository<Route>().AddAsync(route);
             await _unitOfWork.Commit(cancellationToken);

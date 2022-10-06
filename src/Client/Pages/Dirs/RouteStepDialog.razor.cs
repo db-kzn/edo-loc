@@ -38,8 +38,14 @@ namespace EDO_FOMS.Client.Pages.Dirs
         public static Act Agreementers { get; set; } = new();
         public static Act Reviewers { get; set; } = new();
 
+        private int delay;
+        private int duration;
+
         protected override void OnInitialized()
         {
+            delay = _stateService.TooltipDelay;
+            duration = _stateService.TooltipDuration;
+
             Members.Contact = null;
             Agreementers.Contact = null;
             Reviewers.Contact = null;
