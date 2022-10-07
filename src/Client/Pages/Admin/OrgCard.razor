@@ -1,0 +1,135 @@
+﻿@namespace EDO_FOMS.Client.Pages.Admin
+
+@page "/admin/orgs/org-card/{OrgId:int?}"
+
+@using EDO_FOMS.Domain.Enums
+
+@inject Microsoft.Extensions.Localization.IStringLocalizer<OrgCard> _localizer
+
+<MudPaper Square="true" Elevation="3" Style="z-index: 1;">
+    <MudToolBar>
+        <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Orgs"]" Color="Color.Tertiary" Placement="Placement.Right">
+            @*<MudButton Variant="Variant.Text" Href="/dirs/routes" >@_localizer["Routes"]</MudButton>*@
+            <MudIconButton Icon="@Icons.Material.Outlined.MapsHomeWork" Href="/admin/orgs" aria-label="Orgs"></MudIconButton>
+        </MudTooltip>
+
+        <MudIcon Icon="@Icons.Material.Outlined.NavigateNext" Title=">" Color="Color.Default" />
+
+        <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Organization Card"]" Color="Color.Tertiary" Placement="Placement.Right">
+            <MudText Class="ml-1" Typo="Typo.button">@_localizer[OrgId is null ? "New card": "Card"]</MudText>
+        </MudTooltip>
+    </MudToolBar>
+</MudPaper>
+
+<MudContainer MaxWidth="MaxWidth.False" Class="pa-6">
+    <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" @ref="_tabs">
+        <ChildContent>
+            <MudTabPanel Text="@_localizer["Title"]">
+                <MudCard>
+                    <MudCardContent>
+                        <MudGrid Style="max-height: 70vh; overflow-y: scroll;">
+                            <MudItem xs="6" Class="input-field">
+                                <MudTextField For="@(() => Org.Id)" @bind-Value="Org.Id" Label="@_localizer["Org ID"]" Variant="Variant.Filled" ReadOnly="true" /> @*Disabled="@(Org.Id == 0)"*@
+                            </MudItem>
+                            <MudItem xs="6" Class="input-field">
+                                <MudTextField For="@(() => Org.ShortName)" @bind-Value="Org.ShortName" Label="@_localizer["Short Name"]" ReadOnly="@(!_canSystemEdit)" />
+                            </MudItem>
+
+                            <MudItem xs="12" Class="input-field">
+                                <MudTextField For="@(() => Org.Name)" @bind-Value="Org.Name" Label="@_localizer["Name"]" ReadOnly="@(!_canSystemEdit)" />
+                            </MudItem>
+
+                            <MudItem xs="6" Class="input-field">
+                                <MudTextField For="@(() => Org.Inn)" @bind-Value="Org.Inn" Label="@_localizer["Org INN"]" ReadOnly="@(!_canSystemEdit)" />
+                            </MudItem>
+                            <MudItem xs="6" Class="input-field">
+                                <MudTextField For="@(() => Org.Code)" @bind-Value="Org.Code" Label="@_localizer["NSI Code"]" ReadOnly="@(!_canSystemEdit)" />
+                            </MudItem>
+
+                            @* <MudItem xs="6" Class="input-field">
+                            <MudTextField For="@(() => Org.UserId)" @bind-Value="Org.UserId" Label="@_localizer["Chief ID"]" />
+                            </MudItem>
+                            <MudItem xs="6" Class="input-field">
+                            <MudTextField For="@(() => Org.UserSnils)" @bind-Value="Org.UserSnils" Label="@_localizer["Chief SNILS"]" />
+                            </MudItem>*@
+
+                            <MudItem xs="6" Class="input-field">
+                                <MudTextField For="@(() => Org.Email)" @bind-Value="Org.Email" Label="@_localizer["EMail"]" InputType="InputType.Email" ReadOnly="@(!_canSystemEdit)" />
+                            </MudItem>
+
+                            <MudItem xs="6" Class="input-field">
+                                <MudTextField For="@(() => Org.Phone)" @bind-Value="Org.Phone" Label="@_localizer["Phone"]" ReadOnly="@(!_canSystemEdit)" />
+                            </MudItem>
+
+                            <MudItem xs="6" Class="input-field">
+                                <MudSelect T="OrgTypes" Label="@_localizer["Type"]" @bind-Value="Org.Type" ReadOnly="@(!_canSystemEdit)" AnchorOrigin="Origin.BottomCenter">
+                                    <MudSelectItem T="OrgTypes" Value="OrgTypes.MO">
+                                        <div class="d-flex flex-row" style="height: 24px;">
+                                            <MudIcon Icon="@Icons.Material.Outlined.MedicalServices" Color="Color.Primary" Size="Size.Small" Class="mr-2" />Медицинская организация
+                                        </div>
+                                    </MudSelectItem>
+                                    <MudSelectItem T="OrgTypes" Value="OrgTypes.SMO">
+                                        <div class="d-flex flex-row" style="height: 24px;">
+                                            <MudIcon Icon="@Icons.Material.Outlined.Museum" Color="Color.Success" Size="Size.Small" Class="mr-2" />Страховая медицинская организация
+                                        </div>
+                                    </MudSelectItem>
+                                    <MudSelectItem T="OrgTypes" Value="OrgTypes.Fund">
+                                        <div class="d-flex flex-row" style="height: 24px;">
+                                            <MudIcon Icon="@Icons.Material.Outlined.HealthAndSafety" Color="Color.Error" Size="Size.Small" Class="mr-2" />ФОНД ОМС
+                                        </div>
+                                    </MudSelectItem>
+                                </MudSelect>
+                            </MudItem>
+
+                            <MudItem xs="6" Class="input-field">
+                                <MudSelect T="OrgStates" Label="@_localizer["Status"]" @bind-Value="Org.State" ReadOnly="@(!_canSystemEdit)" AnchorOrigin="Origin.BottomCenter">
+                                    <MudSelectItem T="OrgStates" Value="OrgStates.OnSubmit">
+                                        <div class="d-flex flex-row" style="height: 24px;">
+                                            <MudIcon Icon="@Icons.Material.Outlined.SkipNext" Color="Color.Warning" Size="Size.Small" Class="mr-2" />На регистрации
+                                        </div>
+                                    </MudSelectItem>
+                                    <MudSelectItem T="OrgStates" Value="OrgStates.Active">
+                                        <div class="d-flex flex-row" style="height: 24px;">
+                                            <MudIcon Icon="@Icons.Material.Outlined.PlayArrow" Color="Color.Success" Size="Size.Small" Class="mr-2" />Активна
+                                        </div>
+                                    </MudSelectItem>
+                                    <MudSelectItem T="OrgStates" Value="OrgStates.Inactive">
+                                        <div class="d-flex flex-row" style="height: 24px;">
+                                            <MudIcon Icon="@Icons.Material.Outlined.Pause" Color="Color.Default" Size="Size.Small" Class="mr-2" />Приостановлена
+                                        </div>
+                                    </MudSelectItem>
+                                    <MudSelectItem T="OrgStates" Value="OrgStates.Blocked">
+                                        <div class="d-flex flex-row" style="height: 24px;">
+                                            <MudIcon Icon="@Icons.Material.Outlined.Stop" Color="Color.Error" Size="Size.Small" Class="mr-2" />Заблокирована
+                                        </div>
+                                    </MudSelectItem>
+                                    @*<MudSelectItem T="int" Value="5">Закрыта</MudSelectItem>*@
+                                </MudSelect>
+                            </MudItem>
+                        </MudGrid>
+                    </MudCardContent>
+
+                    <MudCardActions>
+                        <MudButton Size="Size.Large" Class="mx-2" FullWidth Variant="Variant.Outlined" StartIcon="@Icons.Material.Rounded.Close" Color="Color.Default"
+                                   OnClick="Close">
+                            @_localizer["Cancel"]
+                        </MudButton>
+
+                        <MudButton Size="Size.Large" Class="mx-2" FullWidth Variant="Variant.Outlined" Color="Color.Primary"
+                                   OnClick="SaveAsync">
+                            @_localizer["Save"]
+                        </MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudTabPanel>
+
+            <MudTabPanel Text="@_localizer["Emploeeys"]" Disabled>
+            </MudTabPanel>
+        </ChildContent>
+
+        <Header>
+            <MudDivider Vertical />
+            <MudIconButton Variant="Variant.Text" Icon="@Icons.Material.Outlined.Close" OnClick="Close" aria-label="Orgs"></MudIconButton>
+        </Header>
+    </MudTabs>
+</MudContainer>

@@ -1,9 +1,9 @@
 ﻿using EDO_FOMS.Application.Features.Documents.Commands;
 using EDO_FOMS.Application.Features.Documents.Queries;
-using EDO_FOMS.Application.Features.Orgs.Queries;
 using EDO_FOMS.Application.Models.Dir;
 using EDO_FOMS.Application.Requests.Documents;
 using EDO_FOMS.Application.Responses.Docums;
+using EDO_FOMS.Application.Responses.Orgs;
 using EDO_FOMS.Client.Extensions;
 using EDO_FOMS.Client.Infrastructure.Filters;
 using EDO_FOMS.Client.Infrastructure.Managers.Dir;

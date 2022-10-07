@@ -1,4 +1,4 @@
-﻿using EDO_FOMS.Application.Features.Orgs.Queries;
+﻿using EDO_FOMS.Application.Responses.Orgs;
 using EDO_FOMS.Domain.Entities.Dir;
 using EDO_FOMS.Domain.Enums;
 using System.Collections.Generic;

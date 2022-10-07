@@ -1,6 +1,7 @@
 ﻿using EDO_FOMS.Application.Extensions;
 using EDO_FOMS.Application.Interfaces.Repositories;
 using EDO_FOMS.Application.Requests.Orgs;
+using EDO_FOMS.Application.Responses.Orgs;
 using EDO_FOMS.Application.Specifications.Org;
 using EDO_FOMS.Domain.Entities.Org;
 using EDO_FOMS.Shared.Wrapper;

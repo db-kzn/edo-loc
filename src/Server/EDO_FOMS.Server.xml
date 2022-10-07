@@ -557,6 +557,13 @@
             <param name="userId"></param>
             <returns>Status 200 OK</returns>
         </member>
+        <member name="M:EDO_FOMS.Server.Controllers.System.AdminController.GetOrgCard(System.Int32)">
+            <summary>
+            Get Org Card
+            </summary>
+            <param name="orgId"></param>
+            <returns>Status 200 OK</returns>
+        </member>
         <member name="M:EDO_FOMS.Server.Controllers.System.AdminController.Post(EDO_FOMS.Application.Features.Orgs.Commands.AddEditOrgCommand)">
             <summary>
             Create/Update a Organization

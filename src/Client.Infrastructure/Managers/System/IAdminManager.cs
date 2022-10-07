@@ -2,11 +2,11 @@
 using EDO_FOMS.Application.Features.Certs.Commands;
 using EDO_FOMS.Application.Features.Certs.Queries;
 using EDO_FOMS.Application.Features.Orgs.Commands;
-using EDO_FOMS.Application.Features.Orgs.Queries;
 using EDO_FOMS.Application.Models;
 using EDO_FOMS.Application.Requests.Admin;
 using EDO_FOMS.Application.Requests.Orgs;
 using EDO_FOMS.Application.Responses.Identity;
+using EDO_FOMS.Application.Responses.Orgs;
 using EDO_FOMS.Shared.Wrapper;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -19,6 +19,9 @@ namespace EDO_FOMS.Client.Infrastructure.Managers.System
         Task<PaginatedResult<OrgsResponse>> GetPagedOrgsAsync(GetPagedOrgsRequest request);
         Task<PaginatedResult<OrgsResponse>> SearchOrgsAsync(SearchOrgsRequest request);
 
+        Task<IResult<OrgsResponse>> GetOrgCardAsync(int orgId);
+        Task<IResult<int>> AddEditOrgAsync(AddEditOrgCommand request);
+
         //Task<IResult<List<UserResponse>>> GetAllUsersAsync();
         Task<PaginatedResult<UserResponse>> GetPagedUsersAsync(GetPagedUsersRequest request);
         Task<PaginatedResult<UserResponse>> SearchUsersAsync(SearchUsersRequest request);
@@ -28,7 +31,6 @@ namespace EDO_FOMS.Client.Infrastructure.Managers.System
         Task<PaginatedResult<CertsResponse>> SearchCertsAsync(SearchCertsRequest request);
 
         //Task<IResult<int>> AddEditUserAsync(AddEditUserCommand request);
-        Task<IResult<int>> AddEditOrgAsync(AddEditOrgCommand request);
         
         Task<IResult> AddUserAsync(NewUserRequest request);
         Task<IResult> EditUserAsync(EditUserRequest request);

@@ -15,14 +15,28 @@ namespace EDO_FOMS.Application.Features.Orgs.Commands
     public class AddEditOrgCommand : IRequest<Result<int>>
     {
         public int Id { get; set; }
-        [Required]
-        [MaxLength(10)]
-        [MinLength(10)]
+        [Required, MaxLength(12), MinLength(10)]
         public string Inn { get; set; }
+        [MaxLength(13)]
+        public string Ogrn { get; set; } = string.Empty;
 
+        [MaxLength(6)]
+        public string OmsCode { get; set; }
         [Required]
+        [MaxLength(500)]
         public string Name { get; set; }
+        [MaxLength(32)]
         public string ShortName { get; set; }
+
+        public string HeadId { get; set; } = string.Empty; // Head - User ID
+        public string BuhgId { get; set; } = string.Empty; // Buhg - User ID
+
+        public bool IsPublic { get; set; } // CA no public - hide
+        public OrgTypes Type { get; set; } = OrgTypes.MO; // N/D, FOND, SMO, MO, CA
+        public OrgStates State { get; set; } = OrgStates.Active; // N/D, OnSubmit, Active, Inactive, Blocked, Closed, Deleted
+
+        public string Phone { get; set; }
+        public string Email { get; set; }
 
         //[Required]
         //public string UserId { get; set; } // Owner - User ID
@@ -30,14 +44,6 @@ namespace EDO_FOMS.Application.Features.Orgs.Commands
         //[MaxLength(11)]
         //[MinLength(11)]
         //public string UserSnils { get; set; } // User SNISL
-
-        public bool IsPublic { get; set; } // CA no public - hide
-        public OrgTypes Type { get; set; } = OrgTypes.MO; // N/D, FOND, SMO, MO, CA
-        public OrgStates State { get; set; } = OrgStates.Active; // N/D, OnSubmit, Active, Inactive, Blocked, Closed, Deleted
-
-        public string OmsCode { get; set; }
-        public string Phone { get; set; }
-        public string Email { get; set; }
     }
 
     internal class AddEditOrgCommandHandler : IRequestHandler<AddEditOrgCommand, Result<int>>

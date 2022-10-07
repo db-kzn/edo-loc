@@ -42,6 +42,7 @@ namespace EDO_FOMS.Domain.Entities.Org
         public string Ogrn { get; set; } = string.Empty;
         [MaxLength(6)]
         public string OmsCode { get; set; } = string.Empty;
+
         [Required]
         [MaxLength(500)]
         public string Name { get; set; } = string.Empty;

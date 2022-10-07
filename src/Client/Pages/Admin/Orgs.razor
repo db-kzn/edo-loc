@@ -3,6 +3,7 @@
 @page "/admin/orgs"
 
 @using EDO_FOMS.Application.Features.Orgs.Queries
+@using EDO_FOMS.Application.Responses.Orgs
 @using EDO_FOMS.Domain.Enums
 
 @attribute [Authorize(Policy = Permissions.System.View)]
@@ -48,7 +49,7 @@
 
 <MudContainer MaxWidth="MaxWidth.False" Class="pa-6">
     <MudTable Hover="true" Dense="@dense" Bordered="false" Striped="true" Breakpoint="Breakpoint.Xs" 
-        @ref="_mudTable" T="OrgsResponse" @bind-SelectedItem="_org" OnRowClick="EditOrgAsync"
+        @ref="_mudTable" T="OrgsResponse" @bind-SelectedItem="_org" OnRowClick="OnRowClick"
         ServerData="@(new Func<TableState, Task<TableData<OrgsResponse>>>(ServerReloadAsync))"
         Loading="@(!_loaded)" LoadingProgressColor="Color.Info"  RowsPerPage="@_rowsPerPage">
         
@@ -288,7 +289,7 @@
 {
     <MudItem Class="fab-btn-add">
         <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Add new org"]" Color="Color.Tertiary" Placement="Placement.Left">
-            <MudFab Color="Color.Secondary" Icon="@Icons.Material.Filled.Add" aria-label="add" OnClick="AddOrgAsync"/>
+            <MudFab Color="Color.Secondary" Icon="@Icons.Material.Filled.Add" aria-label="add" OnClick="AddOrg"/>
         </MudTooltip>
     </MudItem>
 }

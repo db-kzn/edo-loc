@@ -1,5 +1,6 @@
 ﻿using EDO_FOMS.Application.Features.Orgs.Commands;
 using EDO_FOMS.Application.Features.Orgs.Queries;
+using EDO_FOMS.Application.Responses.Orgs;
 using EDO_FOMS.Client.Infrastructure.Extensions;
 using EDO_FOMS.Domain.Entities.Org;
 using EDO_FOMS.Shared.Wrapper;

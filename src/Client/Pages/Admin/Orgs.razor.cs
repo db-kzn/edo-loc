@@ -1,6 +1,6 @@
 ﻿using EDO_FOMS.Application.Features.Orgs.Commands;
-using EDO_FOMS.Application.Features.Orgs.Queries;
 using EDO_FOMS.Application.Requests.Orgs;
+using EDO_FOMS.Application.Responses.Orgs;
 using EDO_FOMS.Client.Extensions;
 using EDO_FOMS.Client.Infrastructure.Filters;
 using EDO_FOMS.Client.Infrastructure.Managers.System;
@@ -226,39 +226,43 @@ namespace EDO_FOMS.Client.Pages.Admin
 
         // if (e is null) { throw new ArgumentNullException(nameof(e)); }
         // TableRowClickEventArgs<GetAllOrgsResponse> e
-        async Task EditOrgAsync() => await AddEdigOrgAsync(_org);
-        async Task AddOrgAsync() => await AddEdigOrgAsync(new());
-        async Task AddEdigOrgAsync(OrgsResponse org)
+        private void EditOrg() => AddEdigOrg(_org);
+        private void AddOrg() => AddEdigOrg(new());
+
+        private void OnRowClick() => AddEdigOrg(_org);
+        private void AddEdigOrg(OrgsResponse org)
         {
-            var param = new DialogParameters
-            {
-                {
-                    nameof(OrgEditDialog.AddEditOrgModel),
-                    new AddEditOrgCommand
-                    {
-                        Id = org.Id,
-                        Inn = org.Inn,
-                        OmsCode = org.Code,
+            _navigationManager.NavigateTo($"/admin/orgs/org-card/{org.Id}");
 
-                        Name = org.Name,
-                        ShortName = org.ShortName,
-                        //UserId = org.UserId,
-                        //UserSnils = org.UserSnils,
+            //var param = new DialogParameters
+            //{
+            //    {
+            //        nameof(OrgEditDialog.AddEditOrgModel),
+            //        new AddEditOrgCommand
+            //        {
+            //            Id = org.Id,
+            //            Inn = org.Inn,
+            //            OmsCode = org.Code,
 
-                        IsPublic = org.IsPublic,
-                        Type = org.Type,
-                        State = org.State,
+            //            Name = org.Name,
+            //            ShortName = org.ShortName,
+            //            //UserId = org.UserId,
+            //            //UserSnils = org.UserSnils,
 
-                        Phone = org.Phone,
-                        Email = org.Email
-                    }
-                }
-            };
+            //            IsPublic = org.IsPublic,
+            //            Type = org.Type,
+            //            State = org.State,
 
-            var dialog = _dialogService.Show<OrgEditDialog>("", param);
-            var result = await dialog.Result;
+            //            Phone = org.Phone,
+            //            Email = org.Email
+            //        }
+            //    }
+            //};
 
-            if (!result.Cancelled) { await _mudTable.ReloadServerData(); }
+            //var dialog = _dialogService.Show<OrgEditDialog>("", param);
+            //var result = await dialog.Result;
+
+            //if (!result.Cancelled) { await _mudTable.ReloadServerData(); }
         }
 
         private async Task Reset()

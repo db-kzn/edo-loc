@@ -168,6 +168,18 @@ namespace EDO_FOMS.Server.Controllers.System
         }
 
         /// <summary>
+        /// Get Org Card
+        /// </summary>
+        /// <param name="orgId"></param>
+        /// <returns>Status 200 OK</returns>
+        [Authorize(Policy = Permissions.System.View)]
+        [HttpGet("org-card")]
+        public async Task<IActionResult> GetOrgCard(int orgId)
+        {
+            return Ok(await _mediator.Send(new GetOrgCardQuery(orgId)));
+        }
+
+        /// <summary>
         /// Create/Update a Organization
         /// </summary>
         /// <param name="command"></param>

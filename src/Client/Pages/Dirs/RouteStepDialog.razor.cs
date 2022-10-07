@@ -1,8 +1,7 @@
-﻿using AutoMapper.Execution;
-using EDO_FOMS.Application.Features.Orgs.Queries;
-using EDO_FOMS.Application.Models.Dir;
+﻿using EDO_FOMS.Application.Models.Dir;
 using EDO_FOMS.Application.Requests.Documents;
 using EDO_FOMS.Application.Responses.Docums;
+using EDO_FOMS.Application.Responses.Orgs;
 using EDO_FOMS.Client.Infrastructure.Managers.Doc.Document;
 using EDO_FOMS.Domain.Enums;
 using Microsoft.AspNetCore.Components;

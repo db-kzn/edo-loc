@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using EDO_FOMS.Application.Features.Orgs.Commands;
-using EDO_FOMS.Application.Features.Orgs.Queries;
+using EDO_FOMS.Application.Responses.Orgs;
 using EDO_FOMS.Domain.Entities.Org;
 
 namespace EDO_FOMS.Application.Mappings

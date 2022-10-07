@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EDO_FOMS.Application.Interfaces.Repositories;
+using EDO_FOMS.Application.Responses.Orgs;
 using EDO_FOMS.Domain.Entities.Org;
 using EDO_FOMS.Shared.Wrapper;
 using MediatR;

@@ -2,11 +2,11 @@
 using EDO_FOMS.Application.Features.Certs.Commands;
 using EDO_FOMS.Application.Features.Certs.Queries;
 using EDO_FOMS.Application.Features.Orgs.Commands;
-using EDO_FOMS.Application.Features.Orgs.Queries;
 using EDO_FOMS.Application.Models;
 using EDO_FOMS.Application.Requests.Admin;
 using EDO_FOMS.Application.Requests.Orgs;
 using EDO_FOMS.Application.Responses.Identity;
+using EDO_FOMS.Application.Responses.Orgs;
 using EDO_FOMS.Client.Infrastructure.Extensions;
 using EDO_FOMS.Shared.Wrapper;
 using System.Collections.Generic;
@@ -41,6 +41,12 @@ namespace EDO_FOMS.Client.Infrastructure.Managers.System
         {
             var response = await _httpClient.PostAsJsonAsync(Routes.AdminEndpoints.SearchOrgs, request);
             return await response.ToPaginatedResult<OrgsResponse>();
+        }
+
+        public async Task<IResult<OrgsResponse>> GetOrgCardAsync(int orgId)
+        {
+            var response = await _httpClient.GetAsync(Routes.AdminEndpoints.GetOrgCard(orgId));
+            return await response.ToResult<OrgsResponse>();
         }
 
         //public async Task<IResult<List<UserResponse>>> GetAllUsersAsync()

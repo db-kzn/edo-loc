@@ -15,6 +15,7 @@ namespace EDO_FOMS.Client.Infrastructure.Routes
             var sort = (r.OrderBy?.Any() == true) ? string.Join(",", r.OrderBy) : ""; // Id Descending
             return $"{Ctrl}orgs?pageNumber={r.PageNumber}&pageSize={r.PageSize}&searchString={r.SearchString}&matchCase={r.MatchCase}&orderBy={sort}";
         }
+        public static string GetOrgCard(int orgId) => $"{Ctrl}org-card?orgId={orgId}";
 
         //public const string GetAllUsers = $"{Ctrl}users";
         public const string SearchUsers = $"{Ctrl}users/search";
