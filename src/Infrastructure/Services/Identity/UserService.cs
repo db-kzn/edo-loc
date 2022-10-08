@@ -161,26 +161,31 @@ namespace EDO_FOMS.Infrastructure.Services.Identity
         public async Task<Result<UserCardResponse>> GetUserCardAsync(string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
+            var org = await _db.Organizations.FirstOrDefaultAsync(o => o.Id == user.OrgId);
 
             UserCardResponse userCard = new()
             {
                 Id = user.Id,
                 InnLe = user.InnLe,
                 Snils = user.Snils,
-                Inn = user.Inn,
 
+                Inn = user.Inn,
                 Title = user.Title,
-                UserName = user.UserName,
+
                 Surname = user.Surname,
                 GivenName = user.GivenName,
 
-                OrgType = user.OrgType,
                 BaseRole = user.BaseRole,
-                IsActive = user.IsActive,
+                OrgType = user.OrgType,
+                OrgId = user.OrgId,
+                OrgName = org?.Name ?? string.Empty,
+                OrgShort = org?.ShortName ?? string.Empty,
 
                 Email = user.Email,
-                EmailConfirmed = user.EmailConfirmed,
                 PhoneNumber = user.PhoneNumber,
+
+                IsActive = user.IsActive,
+                EmailConfirmed = user.EmailConfirmed,
                 PhoneNumberConfirmed = user.PhoneNumberConfirmed,
 
                 ProfilePictureDataUrl = user.ProfilePictureDataUrl,

@@ -3,7 +3,9 @@ using EDO_FOMS.Application.Features.Orgs.Queries;
 using EDO_FOMS.Application.Responses.Orgs;
 using EDO_FOMS.Client.Infrastructure.Extensions;
 using EDO_FOMS.Domain.Entities.Org;
+using EDO_FOMS.Domain.Enums;
 using EDO_FOMS.Shared.Wrapper;
+using MudBlazor;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
@@ -47,6 +49,20 @@ namespace EDO_FOMS.Client.Infrastructure.Managers.Orgs
         {
             var response = await _httpClient.GetAsync(Routes.OrgsEndpoints.GetIdByCode(code));
             return await response.ToResult<int>();
+        }
+
+        public string OrgTypeIcon(OrgTypes orgType)
+        {
+            return orgType switch
+            {
+                OrgTypes.MO => Icons.Material.Outlined.MedicalServices,
+                OrgTypes.SMO => Icons.Material.Outlined.Museum,
+                OrgTypes.Fund => Icons.Material.Outlined.HealthAndSafety,
+                OrgTypes.MEO => Icons.Material.Outlined.LocalPolice,
+                OrgTypes.Treasury => Icons.Material.Outlined.AccountBalance,
+
+                _ => Icons.Material.Outlined.Domain
+            };
         }
     }
 }

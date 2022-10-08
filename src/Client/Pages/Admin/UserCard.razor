@@ -106,8 +106,21 @@
                             </MudItem>
 
                             <MudItem xs="6" Class="input-field">
+                                <div class="d-flex">
+                                    <MudTextField @bind-Value="@User.OrgName" Label="@_localizer["Organization"]" Variant="Variant.Text" Adornment="Adornment.Start" ReadOnly="true"
+                                                  AdornmentIcon="@OrgTypeIcon(User.OrgType)" />
+
+                                        <MudIconButton Icon="@Icons.Material.Outlined.Link" Style="height:48px;" Color="Color.Primary" OnClick="() => NavToOrg(User.OrgId)"></MudIconButton>
+                                </div>
+                            </MudItem>
+
+                            <MudItem xs="3" Class="input-field">
                                 <MudSwitch @bind-Checked="@User.IsActive" Label="@_localizer["Activate User"]" Color="Color.Tertiary"></MudSwitch>
+                            </MudItem>
+                            <MudItem xs="3" Class="input-field">
                                 <MudSwitch @bind-Checked="@User.EmailConfirmed" Label="@_localizer["Confirm Email"]" Color="Color.Tertiary"></MudSwitch>
+                            </MudItem>
+                            <MudItem xs="3" Class="input-field">
                                 <MudSwitch @bind-Checked="@User.PhoneNumberConfirmed" Label="@_localizer["Confirm Phone"]" Color="Color.Tertiary"></MudSwitch>
                             </MudItem>
 

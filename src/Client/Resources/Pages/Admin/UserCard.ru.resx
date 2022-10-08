@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Activate User" xml:space="preserve">
-    <value>Активировать</value>
+    <value>Активен</value>
   </data>
   <data name="Active" xml:space="preserve">
     <value>Активный</value>
@@ -182,6 +182,9 @@
   </data>
   <data name="Org INN mast be 10 or 12 symbols" xml:space="preserve">
     <value>ИНН организации должен быть 10 или 12 символов</value>
+  </data>
+  <data name="Organization" xml:space="preserve">
+    <value>Организация</value>
   </data>
   <data name="Phone" xml:space="preserve">
     <value>Телефон</value>

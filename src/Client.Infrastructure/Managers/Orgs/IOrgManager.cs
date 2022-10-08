@@ -2,6 +2,7 @@
 using EDO_FOMS.Application.Features.Orgs.Queries;
 using EDO_FOMS.Application.Responses.Orgs;
 using EDO_FOMS.Domain.Entities.Org;
+using EDO_FOMS.Domain.Enums;
 using EDO_FOMS.Shared.Wrapper;
 using System.Threading.Tasks;
 
@@ -16,6 +17,7 @@ namespace EDO_FOMS.Client.Infrastructure.Managers.Orgs
 
         Task<IResult<int>> GetIdByCodeAsync(string code);
 
+        string OrgTypeIcon(OrgTypes orgType);
 
         //Task<IResult<int>> DeleteAsync(int id);
         //Task<IResult<string>> ExportToExcelAsync(string searchString = "");

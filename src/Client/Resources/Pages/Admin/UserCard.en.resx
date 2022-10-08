@@ -183,6 +183,9 @@
   <data name="Org INN mast be 10 or 12 symbols" xml:space="preserve">
     <value>Org INN mast be 10 or 12 symbols</value>
   </data>
+  <data name="Organization" xml:space="preserve">
+    <value>Organization</value>
+  </data>
   <data name="Phone" xml:space="preserve">
     <value>Phone</value>
   </data>

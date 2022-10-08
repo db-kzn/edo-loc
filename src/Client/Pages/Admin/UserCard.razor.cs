@@ -1,7 +1,9 @@
 ﻿using EDO_FOMS.Application.Features.Certs.Queries;
 using EDO_FOMS.Application.Requests.Admin;
+using EDO_FOMS.Client.Infrastructure.Managers.Orgs;
 using EDO_FOMS.Client.Infrastructure.Managers.System;
 using EDO_FOMS.Client.Infrastructure.Model.Admin;
+using EDO_FOMS.Domain.Enums;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using MudBlazor;
@@ -14,6 +16,7 @@ namespace EDO_FOMS.Client.Pages.Admin
     public partial class UserCard
     {
         [Inject] private IAdminManager AdmManager { get; set; }
+        [Inject] private IOrgManager OrgManager { get; set; }
 
         [Parameter] public string UserId { get; set; }
 
@@ -54,24 +57,34 @@ namespace EDO_FOMS.Client.Pages.Admin
             }
 
             var uc = response.Data;
+            await _jsRuntime.InvokeVoidAsync("azino.Console", uc, "User Card:");
 
             User.Id = uc.Id;
             User.InnLe = uc.InnLe;
             User.Snils = uc.Snils;
-            User.Inn = uc.Inn;
 
+            User.Inn = uc.Inn;
             User.Title = uc.Title;
+
             User.Surname = uc.Surname;
             User.GivenName = uc.GivenName;
 
-            User.OrgType = uc.OrgType;
             User.BaseRole = uc.BaseRole;
+            User.OrgType = uc.OrgType;
+
+            User.OrgId = uc.OrgId;
+            User.OrgName = uc.OrgName;
+            User.OrgShort = uc.OrgShort;
+
+            User.Email = uc.Email;
+            User.PhoneNumber = uc.PhoneNumber;
 
             User.IsActive = uc.IsActive;
-            User.Email = uc.Email;
             User.EmailConfirmed = uc.EmailConfirmed;
-            User.PhoneNumber = uc.PhoneNumber;
             User.PhoneNumberConfirmed = uc.PhoneNumberConfirmed;
+
+            User.ProfilePictureDataUrl = uc.ProfilePictureDataUrl;
+            User.CreatedOn = uc.CreatedOn;
 
             await GetUserCertsAsync();
         }
@@ -157,6 +170,8 @@ namespace EDO_FOMS.Client.Pages.Admin
 
         private void Close() => NavigateToUsers();
         private void NavigateToUsers() => _navigationManager.NavigateTo($"/admin/users");
+        private void NavToOrg(int orgId) => _navigationManager.NavigateTo($"/admin/orgs/org-card/{orgId}");
+
         private UserCertModel NewUserCertModel(GetUserCertsResponse c)
         {
             return new()
@@ -203,5 +218,7 @@ namespace EDO_FOMS.Client.Pages.Admin
                 PhoneNumberConfirmed = User.PhoneNumberConfirmed
             };
         }
+
+        private string OrgTypeIcon(OrgTypes orgType) => OrgManager.OrgTypeIcon(orgType);
     }
 }
