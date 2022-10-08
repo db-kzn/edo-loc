@@ -20,6 +20,7 @@ namespace EDO_FOMS.Application.Interfaces.Services.Identity
         Task<Result<List<UserResponse>>> GetAllAsync();
         Task<PaginatedResult<UserResponse>> GetPagedUsersAsync(GetPagedUsersRequest request);
         Task<PaginatedResult<UserResponse>> SearchUsersAsync(SearchUsersRequest request);
+        Task<Result<UserCardResponse>> GetUserCardAsync(string userId);
 
         Task<IResult<UserResponse>> GetAsync(string userId);
         Task<Employee> GetEmployeeAsync(string userId);

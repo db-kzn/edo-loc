@@ -38,7 +38,7 @@ namespace EDO_FOMS.Client.Pages.Admin
 
         private bool _loaded;
         private string _searchString = "";
-        
+
         private ClaimsPrincipal _authUser;
         private string userId;
         private bool _canSystemEdit = false;
@@ -178,11 +178,11 @@ namespace EDO_FOMS.Client.Pages.Admin
 
                     TextInnLe = Filter.TextInnLe,
                     TextSnils = Filter.TextSnils,
-                    
+
                     TextTitle = Filter.TextTitle,
                     TextSurname = Filter.TextSurname,
                     TextGivenName = Filter.TextGivenName,
-                    
+
                     TextEmail = Filter.TextEmail,
                     TextPhone = Filter.TextPhone,
 
@@ -234,59 +234,60 @@ namespace EDO_FOMS.Client.Pages.Admin
             _loaded = true;
         }
 
-        private async Task AddNewUser()
-        {
-            var dialog = _dialogService.Show<NewUserDialog>(_localizer["New User"]);
-            var result = await dialog.Result;
+        private void OnRowClick() => AddEdigUser(_user.Id);
+        private void AddUser() => AddEdigUser(string.Empty);
+        private void AddEdigUser(string id) => _navigationManager.NavigateTo($"/admin/users/user-card/{id}");
 
-            if (!result.Cancelled)
-            {
-                //await GetUsersAsync();
-                await _mudTable.ReloadServerData();
-            }
-        }
-        async Task EditUser(TableRowClickEventArgs<UserResponse> e)
-        {
-            if (e is null)
-            {
-                throw new ArgumentNullException(nameof(e));
-            }
+        //private async Task AddNewUser()
+        //{
+        //    var dialog = _dialogService.Show<NewUserDialog>(_localizer["New User"]);
+        //    var result = await dialog.Result;
 
-            var ops = new DialogParameters
-            {
-                {
-                    nameof(UserEditDialog.EditUser),
-                    new EditUserRequest
-                    {
-                        Id = _user.Id,
-                        InnLe = _user.InnLe,
-                        Snils = _user.Snils,
-                        Inn = _user.Inn,
+        //    if (!result.Cancelled)
+        //    {
+        //        //await GetUsersAsync();
+        //        await _mudTable.ReloadServerData();
+        //    }
+        //}
+        //async Task EditUser(TableRowClickEventArgs<UserResponse> e)
+        //{
+        //    if (e is null) { throw new ArgumentNullException(nameof(e)); }
 
-                        Title = _user.Title,
-                        Surname = _user.Surname,
-                        GivenName = _user.GivenName,
+        //    var ops = new DialogParameters
+        //    {
+        //        {
+        //            nameof(UserEditDialog.EditUser),
+        //            new EditUserRequest
+        //            {
+        //                Id = _user.Id,
+        //                InnLe = _user.InnLe,
+        //                Snils = _user.Snils,
+        //                Inn = _user.Inn,
 
-                        OrgType = _user.OrgType,
-                        BaseRole = _user.BaseRole,
+        //                Title = _user.Title,
+        //                Surname = _user.Surname,
+        //                GivenName = _user.GivenName,
 
-                        IsActive = _user.IsActive,
-                        Email = _user.Email,
-                        EmailConfirmed = _user.EmailConfirmed,
-                        PhoneNumber = _user.PhoneNumber,
-                        PhoneNumberConfirmed = _user.PhoneNumberConfirmed
-                    }
-                }
-            };
+        //                OrgType = _user.OrgType,
+        //                BaseRole = _user.BaseRole,
 
-            var dialog = _dialogService.Show<UserEditDialog>("", ops);
-            var result = await dialog.Result;
+        //                IsActive = _user.IsActive,
+        //                Email = _user.Email,
+        //                EmailConfirmed = _user.EmailConfirmed,
+        //                PhoneNumber = _user.PhoneNumber,
+        //                PhoneNumberConfirmed = _user.PhoneNumberConfirmed
+        //            }
+        //        }
+        //    };
 
-            if (!result.Cancelled) {
-                //await GetUsersAsync();
-                await _mudTable.ReloadServerData();
-            }
-        }
+        //    var dialog = _dialogService.Show<UserEditDialog>("", ops);
+        //    var result = await dialog.Result;
+
+        //    if (!result.Cancelled) {
+        //        //await GetUsersAsync();
+        //        await _mudTable.ReloadServerData();
+        //    }
+        //}
 
         private void OnText()
         {

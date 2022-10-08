@@ -112,6 +112,19 @@ namespace EDO_FOMS.Server.Controllers.System
             return Ok(users);
         }
 
+        /// <summary>
+        /// Get User Card
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns>Status 200 OK</returns>
+        [Authorize(Policy = Permissions.System.View)]
+        [HttpGet("user-card")]
+        public async Task<IActionResult> GetUserCard(string userId)
+        {
+            var userCard = await _userService.GetUserCardAsync(userId);
+            return Ok(userCard);
+        }
+
         ///// <summary>
         ///// Get All Certificates
         ///// </summary>

@@ -224,46 +224,9 @@ namespace EDO_FOMS.Client.Pages.Admin
             _loaded = true;
         }
 
-        // if (e is null) { throw new ArgumentNullException(nameof(e)); }
-        // TableRowClickEventArgs<GetAllOrgsResponse> e
-        private void EditOrg() => AddEdigOrg(_org);
-        private void AddOrg() => AddEdigOrg(new());
-
-        private void OnRowClick() => AddEdigOrg(_org);
-        private void AddEdigOrg(OrgsResponse org)
-        {
-            _navigationManager.NavigateTo($"/admin/orgs/org-card/{org.Id}");
-
-            //var param = new DialogParameters
-            //{
-            //    {
-            //        nameof(OrgEditDialog.AddEditOrgModel),
-            //        new AddEditOrgCommand
-            //        {
-            //            Id = org.Id,
-            //            Inn = org.Inn,
-            //            OmsCode = org.Code,
-
-            //            Name = org.Name,
-            //            ShortName = org.ShortName,
-            //            //UserId = org.UserId,
-            //            //UserSnils = org.UserSnils,
-
-            //            IsPublic = org.IsPublic,
-            //            Type = org.Type,
-            //            State = org.State,
-
-            //            Phone = org.Phone,
-            //            Email = org.Email
-            //        }
-            //    }
-            //};
-
-            //var dialog = _dialogService.Show<OrgEditDialog>("", param);
-            //var result = await dialog.Result;
-
-            //if (!result.Cancelled) { await _mudTable.ReloadServerData(); }
-        }
+        private void AddOrg() => AddEdigOrg(0);
+        private void OnRowClick() => AddEdigOrg(_org.Id);
+        private void AddEdigOrg(int id) => _navigationManager.NavigateTo($"/admin/orgs/org-card/{id}");
 
         private async Task Reset()
         {

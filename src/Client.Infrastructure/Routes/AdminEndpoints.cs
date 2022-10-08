@@ -39,6 +39,7 @@ namespace EDO_FOMS.Client.Infrastructure.Routes
         //public const string AddEditUser = $"{Ctrl}user";
         public const string AddUser = $"{Ctrl}user/add";
         public const string EditUser = $"{Ctrl}user/edit";
+        public static string GetUserCard(string userId) => $"{Ctrl}user-card?userId={userId}";
 
         public const string AddEditCert = $"{Ctrl}cert";
         public const string DeleteCert = $"{Ctrl}cert";

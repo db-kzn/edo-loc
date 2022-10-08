@@ -25,6 +25,7 @@ namespace EDO_FOMS.Client.Infrastructure.Managers.System
         //Task<IResult<List<UserResponse>>> GetAllUsersAsync();
         Task<PaginatedResult<UserResponse>> GetPagedUsersAsync(GetPagedUsersRequest request);
         Task<PaginatedResult<UserResponse>> SearchUsersAsync(SearchUsersRequest request);
+        Task<IResult<UserCardResponse>> GetUserCardAsync(string userId);
 
         //Task<IResult<List<CertsResponse>>> GetAllCertsAsync();
         Task<PaginatedResult<CertsResponse>> GetPagedCertsAsync(GetPagedCertsRequest request);

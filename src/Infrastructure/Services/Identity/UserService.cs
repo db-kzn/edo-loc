@@ -158,6 +158,38 @@ namespace EDO_FOMS.Infrastructure.Services.Identity
                 .ToPaginatedListAsync(request.PageNumber, request.PageSize);
         }
 
+        public async Task<Result<UserCardResponse>> GetUserCardAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            UserCardResponse userCard = new()
+            {
+                Id = user.Id,
+                InnLe = user.InnLe,
+                Snils = user.Snils,
+                Inn = user.Inn,
+
+                Title = user.Title,
+                UserName = user.UserName,
+                Surname = user.Surname,
+                GivenName = user.GivenName,
+
+                OrgType = user.OrgType,
+                BaseRole = user.BaseRole,
+                IsActive = user.IsActive,
+
+                Email = user.Email,
+                EmailConfirmed = user.EmailConfirmed,
+                PhoneNumber = user.PhoneNumber,
+                PhoneNumberConfirmed = user.PhoneNumberConfirmed,
+
+                ProfilePictureDataUrl = user.ProfilePictureDataUrl,
+                CreatedOn = user.CreatedOn
+            };
+
+            return await Result<UserCardResponse>.SuccessAsync(userCard);
+        }
+
         public async Task<Result<List<UserResponse>>> GetAllByOrgIdAsync(int orgId)
         {
             var users = await _userManager.Users.Where(u => u.OrgId == orgId).ToListAsync();

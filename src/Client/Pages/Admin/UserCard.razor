@@ -1,0 +1,222 @@
+﻿@namespace EDO_FOMS.Client.Pages.Admin
+
+@page "/admin/users/user-card/{UserId}"
+
+@using EDO_FOMS.Client.Infrastructure.Model.Admin
+@using EDO_FOMS.Domain.Enums
+
+@inject Microsoft.Extensions.Localization.IStringLocalizer<UserCard> _localizer
+
+<MudPaper Square="true" Elevation="3" Style="z-index: 1;">
+    <MudToolBar>
+        <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Users"]" Color="Color.Tertiary" Placement="Placement.Right">
+            @*<MudButton Variant="Variant.Text" Href="/dirs/routes" >@_localizer["Routes"]</MudButton>*@
+            <MudIconButton Icon="@Icons.Material.Outlined.ManageAccounts" Href="/admin/users" aria-label="Goto Users"></MudIconButton>
+        </MudTooltip>
+
+        <MudIcon Icon="@Icons.Material.Outlined.NavigateNext" Title=">" Color="Color.Default" />
+
+        <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["User Card"]" Color="Color.Tertiary" Placement="Placement.Right">
+            <MudText Class="ml-1" Typo="Typo.button">@_localizer[string.IsNullOrWhiteSpace(UserId) ? "New card": "Card"]</MudText>
+        </MudTooltip>
+    </MudToolBar>
+</MudPaper>
+
+<MudContainer MaxWidth="MaxWidth.False" Class="pa-6">
+    <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" @ref="_tabs">
+        <ChildContent>
+            <MudTabPanel Text="@_localizer["Profile"]">
+                <MudCard>
+                    <MudCardContent>
+                        <MudGrid Style="max-height: 70vh; overflow-y: scroll;">
+                            @*<MudItem xs="12" Class="d-flex justify-center pb-4">
+                            <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Outlined.Memory" Size="Size.Large"
+                            Style="height: 56px;" FullWidth="true"  Color="Color.Default" OnClick="CertSelect">
+                            @_localizer["Fill out from certificate"]
+                            </MudButton>
+                            </MudItem>*@
+
+                            @*<MudItem xs="6" Class="input-field">
+                            <MudTextField For="@(() => User.Id)" @bind-Value="User.Id" Label="@_localizer["User ID"]" Variant="Variant.Filled" ReadOnly="true"/>
+                            </MudItem>*@
+
+                            <MudItem xs="6" Class="input-field">
+                                <MudTextField For="@(() => User.InnLe)" @bind-Value="User.InnLe" Label="@_localizer["Org INN"]" Variant="Variant.Filled" ReadOnly="true" />
+                            </MudItem>
+                            <MudItem xs="6" Class="input-field">
+                                <MudTextField For="@(() => User.Snils)" @bind-Value="User.Snils" Label="@_localizer["SNILS"]" Variant="Variant.Filled" ReadOnly="true" />
+                            </MudItem>
+
+                            <MudItem xs="6" Class="input-field">
+                                <MudTextField For="@(() => User.Inn)" @bind-Value="User.Inn" Label="@_localizer["User INN"]" />
+                            </MudItem>
+                            <MudItem xs="6" Class="input-field">
+                                <MudTextField For="@(() => User.Title)" @bind-Value="User.Title" Label="@_localizer["Title"]" />
+                            </MudItem>
+
+                            <MudItem xs="6" Class="input-field">
+                                <MudTextField For="@(() => User.Surname)" @bind-Value="User.Surname" Label="@_localizer["Surname"]" />
+                            </MudItem>
+                            <MudItem xs="6" Class="input-field">
+                                <MudTextField For="@(() => User.GivenName)" @bind-Value="User.GivenName" Label="@_localizer["Given Name"]" />
+                            </MudItem>
+
+                            <MudItem xs="6" Class="input-field">
+                                <MudTextField For="@(() => User.Email)" @bind-Value="User.Email" Label="@_localizer["E-Mail"]" InputType="InputType.Email" />
+                            </MudItem>
+                            <MudItem xs="6" Class="input-field">
+                                <MudTextField For="@(() => User.PhoneNumber)" @bind-Value="User.PhoneNumber" Label="@_localizer["Phone"]" InputType="InputType.Telephone" />
+                            </MudItem>
+
+                            <MudItem xs="6" Class="input-field">
+                                <MudSelect T="UserBaseRoles" Label="@_localizer["Base Role"]" @bind-Value="User.BaseRole" AnchorOrigin="Origin.BottomCenter">
+                                    @*AdornmentIcon="@(User.Role == _admin ? Icons.Material.Outlined.Stars : Icons.Material.Outlined.AccountCircle)" AdornmentColor="@(User.Role == _admin ? Color.Error : Color.Primary)"*@
+
+                                    <MudSelectItem T="UserBaseRoles" Value="UserBaseRoles.User">
+                                        <div class="d-flex flex-row" style="height: 24px;">
+                                            <MudIcon Icon="@Icons.Material.Outlined.Person" Color="Color.Default" Size="Size.Small" Class="mr-2" />Пользователь
+                                        </div>
+                                    </MudSelectItem>
+
+                                    <MudSelectItem T="UserBaseRoles" Value="UserBaseRoles.Employee">
+                                        <div class="d-flex flex-row" style="height: 24px;">
+                                            <MudIcon Icon="@Icons.Material.Outlined.HistoryEdu" Color="Color.Success" Size="Size.Small" Class="mr-2" />Сотрудник
+                                        </div>
+                                    </MudSelectItem>
+
+                                    <MudSelectItem T="UserBaseRoles" Value="UserBaseRoles.Manager">
+                                        <div class="d-flex flex-row" style="height: 24px;">
+                                            <MudIcon Icon="@Icons.Material.Outlined.Engineering" Color="Color.Primary" Size="Size.Small" Class="mr-2" />Администратор
+                                        </div>
+                                    </MudSelectItem>
+
+                                    <MudSelectItem T="UserBaseRoles" Value="UserBaseRoles.Chief">
+                                        <div class="d-flex flex-row" style="height: 24px;">
+                                            <MudIcon Icon="@Icons.Material.Outlined.WorkspacePremium" Color="Color.Warning" Size="Size.Small" Class="mr-2" />Руководитель
+                                        </div>
+                                    </MudSelectItem>
+
+                                    <MudSelectItem T="UserBaseRoles" Value="UserBaseRoles.Admin">
+                                        <div class="d-flex flex-row" style="height: 24px;">
+                                            <MudIcon Icon="@Icons.Material.Outlined.Stars" Color="Color.Error" Size="Size.Small" Class="mr-2" />Админ ЭДО
+                                        </div>
+                                    </MudSelectItem>
+
+                                </MudSelect>
+                            </MudItem>
+
+                            <MudItem xs="6" Class="input-field">
+                                <MudSwitch @bind-Checked="@User.IsActive" Label="@_localizer["Activate User"]" Color="Color.Tertiary"></MudSwitch>
+                                <MudSwitch @bind-Checked="@User.EmailConfirmed" Label="@_localizer["Confirm Email"]" Color="Color.Tertiary"></MudSwitch>
+                                <MudSwitch @bind-Checked="@User.PhoneNumberConfirmed" Label="@_localizer["Confirm Phone"]" Color="Color.Tertiary"></MudSwitch>
+                            </MudItem>
+
+                        </MudGrid>
+                    </MudCardContent>
+
+                    <MudCardActions>
+                        <MudButton Size="Size.Large" Class="mx-2" FullWidth Variant="Variant.Outlined" StartIcon="@Icons.Material.Rounded.Close" Color="Color.Default"
+                                   OnClick="Close">
+                            @_localizer["Cancel"]
+                        </MudButton>
+
+                        <MudButton Size="Size.Large" Class="mx-2" FullWidth Variant="Variant.Outlined" Color="Color.Primary"
+                                   OnClick="SaveAsync">
+                            @_localizer["Save"]
+                        </MudButton>
+
+
+                    </MudCardActions>
+                </MudCard>
+            </MudTabPanel>
+
+            <MudTabPanel Text="@_localizer["Certificates"]" Disabled="false">
+                <MudCard>
+                    <MudCardContent>
+                        <MudTable Hover="true" Dense="false" Bordered="false" Striped="true" Breakpoint="Breakpoint.Xs"
+                                  @ref="_mudTable" T="UserCertModel" Items="userCerts" Class="mb-0">
+
+                            <HeaderContent>
+                                <MudTh><MudTableSortLabel SortBy="new Func<UserCertModel, object>(x => x.Id)">@_localizer["ID"]</MudTableSortLabel></MudTh>
+                                <MudTh><MudTableSortLabel SortBy="new Func<UserCertModel, object>(x => x.Thumbprint)">@_localizer["Thumbprint"]</MudTableSortLabel></MudTh>
+                                <MudTh><MudTableSortLabel SortBy="new Func<UserCertModel, object>(x => x.Snils)">@_localizer["SNILS"]</MudTableSortLabel></MudTh>
+
+                                <MudTh><MudTableSortLabel SortBy="new Func<UserCertModel, object>(x => x.FromDate)">@_localizer["From Date"]</MudTableSortLabel></MudTh>
+                                <MudTh><MudTableSortLabel SortBy="new Func<UserCertModel, object>(x => x.TillDate)">@_localizer["Till Date"]</MudTableSortLabel></MudTh>
+                                <MudTh><MudTableSortLabel SortBy="new Func<UserCertModel, object>(x => x.CreatedOn)">@_localizer["Created"]</MudTableSortLabel></MudTh>
+
+                                <MudTh><MudTableSortLabel SortBy="new Func<UserCertModel, object>(x => x.IsActive)">@_localizer["Status"]</MudTableSortLabel></MudTh>
+                            </HeaderContent>
+
+                            <RowTemplate Context="userCert">
+                                <MudTd DataLabel="@_localizer["ID"]">
+                                    <MudText>@userCert.Id.ToString()</MudText>
+                                </MudTd>
+                                <MudTd DataLabel="@_localizer["Thumbprint"]">
+                                    <MudText>@userCert.Thumbprint</MudText>
+                                </MudTd>
+                                <MudTd DataLabel="@_localizer["SNILS"]">
+                                    <MudText>@userCert.Snils</MudText>
+                                </MudTd>
+
+                                <MudTd DataLabel="@_localizer["From Date"]">
+                                    <MudText>@userCert.FromDate.ToString("d")</MudText>
+                                </MudTd>
+                                <MudTd DataLabel="@_localizer["Till Date"]">
+                                    <MudText>@userCert.TillDate.ToString("d")</MudText>
+                                </MudTd>
+                                <MudTd DataLabel="@_localizer["Created"]">
+                                    <MudText>@userCert.CreatedOn.ToString()</MudText>
+                                </MudTd>
+
+                                <MudTd DataLabel="@_localizer["Status"]">
+                                    @if (userCert.IsActive)
+                                    {
+                                        <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Active"]" Placement="Placement.Left" Color="Color.Tertiary">
+                                            <MudIcon Icon="@Icons.Material.Outlined.GppGood" Color="Color.Success" Class="mx-2" />
+                                        </MudTooltip>
+                                    }
+                                    else
+                                    {
+                                        <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Inactive"]" Placement="Placement.Left" Color="Color.Tertiary">
+                                            <MudIcon Icon="@Icons.Material.Outlined.GppBad" Color="Color.Error" Class="mx-2" />
+                                        </MudTooltip>
+                                    }
+
+                                    @if (userCert.SignAllowed)
+                                    {
+                                        <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Allowed"]" Placement="Placement.Left" Color="Color.Tertiary">
+                                            <MudIcon Icon="@Icons.Material.Outlined.Draw" Color="Color.Success" Class="mx-2" />
+                                        </MudTooltip>
+                                    }
+                                    else
+                                    {
+                                        <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Not Allowed"]" Placement="Placement.Left" Color="Color.Tertiary">
+                                            <MudIcon Icon="@Icons.Material.Outlined.EditOff" Color="Color.Error" Class="mx-2" />
+                                        </MudTooltip>
+                                    }
+                                </MudTd>
+                            </RowTemplate>
+
+                        </MudTable>
+                    </MudCardContent>
+
+                    <MudCardActions>
+                        <MudButton Size="Size.Large" Class="mx-2" FullWidth Variant="Variant.Outlined" StartIcon="@Icons.Material.Rounded.Close" Color="Color.Default"
+                                   OnClick="Close">
+                            @_localizer["Cancel"]
+                        </MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudTabPanel>
+
+            <MudTabPanel Text="@_localizer["Roles"]" Disabled="true"></MudTabPanel>
+        </ChildContent>
+
+        <Header>
+            <MudDivider Vertical />
+            <MudIconButton Variant="Variant.Text" Icon="@Icons.Material.Outlined.Close" OnClick="Close" aria-label="Close User Card"></MudIconButton>
+        </Header>
+    </MudTabs>
+</MudContainer>
+

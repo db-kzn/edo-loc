@@ -52,7 +52,11 @@ namespace EDO_FOMS.Client.Pages.Admin
             var response = await AdmManager.GetOrgCardAsync((int)OrgId);
             await _jsRuntime.InvokeVoidAsync("azino.Console", response, "Org Card Response");
 
-            if (!response.Succeeded) { return; } // Вывести ошибку
+            if (!response.Succeeded)
+            {
+                response.Messages.ForEach((m) => _snackBar.Add(m, Severity.Error));
+                Close();
+            }
 
             var orgCard = response.Data;
 

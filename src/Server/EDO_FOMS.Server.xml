@@ -532,6 +532,13 @@
             <param name="request"></param>
             <returns>Status 200 OK</returns>
         </member>
+        <member name="M:EDO_FOMS.Server.Controllers.System.AdminController.GetUserCard(System.String)">
+            <summary>
+            Get User Card
+            </summary>
+            <param name="userId"></param>
+            <returns>Status 200 OK</returns>
+        </member>
         <member name="M:EDO_FOMS.Server.Controllers.System.AdminController.GetPagedCerts(System.Int32,System.Int32,System.String,System.Boolean,System.String)">
             <summary>
             Get Paged Certs

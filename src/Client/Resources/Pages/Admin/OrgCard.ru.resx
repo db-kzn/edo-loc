@@ -129,14 +129,29 @@
   <data name="Emploeeys" xml:space="preserve">
     <value>Сотрудники</value>
   </data>
+  <data name="INN mast be 10 or 12 symbols" xml:space="preserve">
+    <value>ИНН должен быть 10 или 12 символов</value>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>Наименование</value>
+  </data>
+  <data name="Name is requred" xml:space="preserve">
+    <value>Наименование обязательно</value>
+  </data>
+  <data name="Name max length 500 symbols" xml:space="preserve">
+    <value>Наименование не более 500 символов</value>
   </data>
   <data name="New card" xml:space="preserve">
     <value>Организация</value>
   </data>
   <data name="NSI Code" xml:space="preserve">
     <value>Код реестра НСИ</value>
+  </data>
+  <data name="NSI Code max length 6 symbols" xml:space="preserve">
+    <value>Код реестра НСИ не более 6 символов</value>
+  </data>
+  <data name="OGRN max length 13 symbols" xml:space="preserve">
+    <value>ОГРН не более 13 символов</value>
   </data>
   <data name="Org ID" xml:space="preserve">
     <value>ИД</value>
@@ -158,6 +173,9 @@
   </data>
   <data name="Short Name" xml:space="preserve">
     <value>Кратко</value>
+  </data>
+  <data name="Short Name max length 32 symbols" xml:space="preserve">
+    <value>Кратко не более 32 символов</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>Статус</value>

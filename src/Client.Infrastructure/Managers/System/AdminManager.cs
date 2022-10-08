@@ -66,6 +66,11 @@ namespace EDO_FOMS.Client.Infrastructure.Managers.System
             var response = await _httpClient.PostAsJsonAsync(Routes.AdminEndpoints.SearchUsers, request);
             return await response.ToPaginatedResult<UserResponse>();
         }
+        public async Task<IResult<UserCardResponse>> GetUserCardAsync(string userId)
+        {
+            var response = await _httpClient.GetAsync(Routes.AdminEndpoints.GetUserCard(userId));
+            return await response.ToResult<UserCardResponse>();
+        }
 
         //public async Task<IResult<List<CertsResponse>>> GetAllCertsAsync()
         //{

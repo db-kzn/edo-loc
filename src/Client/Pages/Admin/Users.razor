@@ -48,7 +48,7 @@
 
 <MudContainer MaxWidth="MaxWidth.False" Class="pa-6">
     <MudTable Hover="true" Dense="@dense" Bordered="false" Striped="true" Breakpoint="Breakpoint.Xs" 
-        @ref="_mudTable" T="UserResponse" @bind-SelectedItem="_user" OnRowClick="EditUser"
+        @ref="_mudTable" T="UserResponse" @bind-SelectedItem="_user" OnRowClick="OnRowClick"
         ServerData="@(new Func<TableState, Task<TableData<UserResponse>>>(ServerReloadAsync))"
         Loading="@(!_loaded)" LoadingProgressColor="Color.Info" RowsPerPage="@_rowsPerPage">
 
@@ -194,7 +194,7 @@
     {
         <MudItem Class="fab-btn-add">
             <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Add new user"]" Color="Color.Tertiary" Placement="Placement.Left">
-                <MudFab Color="Color.Secondary" Icon="@Icons.Material.Filled.Add" aria-label="add" OnClick="AddNewUser"/>
+                <MudFab Color="Color.Secondary" Icon="@Icons.Material.Filled.Add" aria-label="add" OnClick="AddUser"/>
             </MudTooltip>
         </MudItem>
     }

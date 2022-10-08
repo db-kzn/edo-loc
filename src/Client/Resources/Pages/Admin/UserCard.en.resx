@@ -118,138 +118,117 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Activate User" xml:space="preserve">
-    <value>Активировать</value>
+    <value>Activate User</value>
   </data>
   <data name="Active" xml:space="preserve">
-    <value>Активный</value>
-  </data>
-  <data name="Administrator" xml:space="preserve">
-    <value>Администратор ЭДО</value>
+    <value>Active</value>
   </data>
   <data name="Allowed" xml:space="preserve">
-    <value>Разрешено</value>
+    <value>Allowed</value>
   </data>
   <data name="Base Role" xml:space="preserve">
-    <value>Роль</value>
+    <value>Base Role</value>
   </data>
-  <data name="Basic" xml:space="preserve">
-    <value>Пользователь</value>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Card" xml:space="preserve">
+    <value>Card</value>
   </data>
   <data name="Certificates" xml:space="preserve">
-    <value>Сертификаты</value>
-  </data>
-  <data name="CommonName" xml:space="preserve">
-    <value>Имя [Отчество]</value>
+    <value>Certificates</value>
   </data>
   <data name="Confirm Email" xml:space="preserve">
-    <value>е-mail верен</value>
+    <value>Confirm Email</value>
   </data>
   <data name="Confirm Phone" xml:space="preserve">
-    <value>Телефон верен</value>
-  </data>
-  <data name="Country" xml:space="preserve">
-    <value>Страна</value>
+    <value>Confirm Phone</value>
   </data>
   <data name="Created" xml:space="preserve">
-    <value>Записан</value>
+    <value>Created</value>
   </data>
   <data name="E-Mail" xml:space="preserve">
-    <value>Электронная почта</value>
+    <value>E-Mail</value>
   </data>
-  <data name="Edit User" xml:space="preserve">
-    <value>Изменение пользователя</value>
-  </data>
-  <data name="email address is wrong" xml:space="preserve">
-    <value>Адрес электронной почты ошибочен</value>
-  </data>
-  <data name="Fill out from certificate" xml:space="preserve">
-    <value>Заполнить из сертификата</value>
+  <data name="e-mail address is wrong" xml:space="preserve">
+    <value>e-mail address is wrong</value>
   </data>
   <data name="From Date" xml:space="preserve">
-    <value>Выдан</value>
+    <value>From Date</value>
   </data>
   <data name="Given Name" xml:space="preserve">
-    <value>Имя [Отчество]</value>
+    <value>Given Name</value>
+  </data>
+  <data name="GivenName max length 200 symbols" xml:space="preserve">
+    <value>GivenName max length 200 symbols</value>
   </data>
   <data name="ID" xml:space="preserve">
-    <value>ИД</value>
+    <value>ID</value>
   </data>
-  <data name="INN" xml:space="preserve">
-    <value>ИНН</value>
+  <data name="Inactive" xml:space="preserve">
+    <value>Inactive</value>
   </data>
-  <data name="INN Org" xml:space="preserve">
-    <value>ИНН организации</value>
+  <data name="INN mast be 12 symbols" xml:space="preserve">
+    <value>INN mast be 12 symbols</value>
   </data>
-  <data name="Locality" xml:space="preserve">
-    <value>Населенный пункт</value>
+  <data name="New card" xml:space="preserve">
+    <value>New card</value>
   </data>
   <data name="Not Allowed" xml:space="preserve">
-    <value>Не разрешено</value>
-  </data>
-  <data name="OGRN" xml:space="preserve">
-    <value>ОГРН</value>
-  </data>
-  <data name="Org" xml:space="preserve">
-    <value>Организация</value>
+    <value>Not Allowed</value>
   </data>
   <data name="Org INN" xml:space="preserve">
-    <value>ИНН организации</value>
+    <value>Org INN</value>
   </data>
-  <data name="OrgUnit" xml:space="preserve">
-    <value>Подразделение</value>
+  <data name="Org INN mast be 10 or 12 symbols" xml:space="preserve">
+    <value>Org INN mast be 10 or 12 symbols</value>
   </data>
   <data name="Phone" xml:space="preserve">
-    <value>Телефон</value>
-  </data>
-  <data name="Phone Number" xml:space="preserve">
-    <value>Телефон</value>
+    <value>Phone</value>
   </data>
   <data name="Profile" xml:space="preserve">
-    <value>Профиль</value>
-  </data>
-  <data name="Register" xml:space="preserve">
-    <value>Зарегистрировать</value>
+    <value>Profile</value>
   </data>
   <data name="Roles" xml:space="preserve">
-    <value>Роли</value>
+    <value>Roles</value>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Сохранить</value>
+    <value>Save</value>
   </data>
   <data name="SNILS" xml:space="preserve">
-    <value>СНИЛС</value>
+    <value>SNILS</value>
   </data>
-  <data name="State" xml:space="preserve">
-    <value>Субъект РФ</value>
+  <data name="SNILS max length 11 symbols" xml:space="preserve">
+    <value>SNILS max length 11 symbols</value>
   </data>
   <data name="Status" xml:space="preserve">
-    <value>Состояние</value>
-  </data>
-  <data name="StreetAddress" xml:space="preserve">
-    <value>Адрес</value>
+    <value>Status</value>
   </data>
   <data name="Surname" xml:space="preserve">
-    <value>Фамилия</value>
+    <value>Surname</value>
   </data>
-  <data name="System role" xml:space="preserve">
-    <value>Системная роль</value>
+  <data name="Surname max length 200 symbols" xml:space="preserve">
+    <value>Surname max length 200 symbols</value>
   </data>
   <data name="Thumbprint" xml:space="preserve">
-    <value>Отпечаток</value>
+    <value>Thumbprint</value>
   </data>
   <data name="Till Date" xml:space="preserve">
-    <value>Истекает</value>
+    <value>Till Date</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Должность</value>
+    <value>Title</value>
   </data>
-  <data name="UnstructName" xml:space="preserve">
-    <value>Код должности</value>
+  <data name="Title max length 200 symbols" xml:space="preserve">
+    <value>Title max length 200 symbols</value>
   </data>
-  <data name="User ID" xml:space="preserve">
-    <value>ИД пользователя</value>
+  <data name="User Card" xml:space="preserve">
+    <value>User Card</value>
   </data>
   <data name="User INN" xml:space="preserve">
-    <value>ИНН пользователя</value>
+    <value>User INN</value>
+  </data>
+  <data name="Users" xml:space="preserve">
+    <value>Users</value>
   </data>
 </root>

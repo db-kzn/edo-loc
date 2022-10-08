@@ -25,7 +25,7 @@ namespace EDO_FOMS.Infrastructure.Models.Identity
 
         public int OrgId { get; set; }
 
-        [MaxLength(10)]
+        [MaxLength(12)]
         public string InnLe { get; set; }
         [MaxLength(11)]
         public string Snils { get; set; }
