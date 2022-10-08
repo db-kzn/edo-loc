@@ -55,10 +55,10 @@
                 <MudSelect T="MemberGroups" @bind-Value="@Step.MemberGroup" Label="@_localizer["Member Group"]" AnchorOrigin="Origin.BottomCenter">
                     <MudSelectItem T="MemberGroups" Value="@MemberGroups.Undefined">@_localizer["Group not defined"]</MudSelectItem>
                     <MudSelectItem T="MemberGroups" Value="@MemberGroups.OnlyHead">@_localizer["Only Heads"]</MudSelectItem>
-                    <MudSelectItem T="MemberGroups" Value="@MemberGroups.HeadAndAccountant">@_localizer["Head And Accountant"]</MudSelectItem>
-                    <MudSelectItem T="MemberGroups" Value="@MemberGroups.OrgAdmin">@_localizer["Org Admin"]</MudSelectItem>
-                    <MudSelectItem T="MemberGroups" Value="@MemberGroups.OnlyEmployees">@_localizer["Only Employees"]</MudSelectItem>
-                    <MudSelectItem T="MemberGroups" Value="@MemberGroups.ExtExpert">@_localizer["External Expert"]</MudSelectItem>
+                    <MudSelectItem T="MemberGroups" Value="@MemberGroups.HeadAndAccountant" Disabled>@_localizer["Head And Accountant"]</MudSelectItem>
+                    <MudSelectItem T="MemberGroups" Value="@MemberGroups.OrgAdmin" Disabled>@_localizer["Org Admin"]</MudSelectItem>
+                    <MudSelectItem T="MemberGroups" Value="@MemberGroups.OnlyEmployees" Disabled>@_localizer["Only Employees"]</MudSelectItem>
+                    <MudSelectItem T="MemberGroups" Value="@MemberGroups.ExtExpert" Disabled>@_localizer["External Expert"]</MudSelectItem>
                 </MudSelect>
             </MudItem>
 
@@ -149,7 +149,7 @@
             </MudItem>
             <MudItem xs="6">
                 <MudCheckBox @bind-Checked="@Step.HasReview" Label="@_localizer["Has Review"]" Color="Color.Primary"
-                             CheckedIcon="@Icons.Material.Outlined.MapsUgc" UnCheckedColor="Color.Default" />
+                             CheckedIcon="@Icons.Material.Outlined.MapsUgc" UnCheckedColor="Color.Default" Disabled />
             </MudItem>
 
             @*<MudItem xs="12"><MudDivider /></MudItem>*@
@@ -218,7 +218,7 @@
                     <MudAutocomplete T="ContactResponse" @bind-Value="Reviewers.Contact" SearchFunc="@((text) => SearchContactsAsync(UserBaseRoles.Undefined, text))"
                                      ResetValueOnEmptyText="@resetValueOnEmptyText" CoerceText="@coerceText" CoerceValue="@coerceValue" Clearable="false"
                                      Adornment="Adornment.Start" AdornmentColor="Color.Default" AdornmentIcon="@Icons.Material.Outlined.MapsUgc"
-                                     Label="@_localizer["Reviewers"]" ToStringFunc="@(e => (e == null) ? null : ContactName(e))">
+                                     Label="@_localizer["Reviewers"]" ToStringFunc="@(e => (e == null) ? null : ContactName(e))" Disabled>
 
                         <NoItemsTemplate>
                             <MudText Align="Align.Start" Class="px-4 py-1" Color="Color.Warning">

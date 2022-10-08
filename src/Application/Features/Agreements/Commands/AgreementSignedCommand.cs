@@ -46,15 +46,8 @@ namespace EDO_FOMS.Application.Features.Agreements.Commands
 
         public async Task<Result<int>> Handle(AgreementSignedCommand command, CancellationToken cancellationToken)
         {
-            // Согласование для которого принимается ответ
             var agreement = await _unitOfWork.Repository<Agreement>().GetByIdAsync(command.AgreementId);
-
-            //agreement.State = AgreementStates.Signed;
-            //agreement.Remark = command.Remark;
-            //agreement.Answered = DateTime.Now;
-
             var doc = await _unitOfWork.Repository<Document>().GetByIdAsync(agreement.DocumentId);
-            if (doc == null) { return await Result<int>.FailAsync(_localizer["Document not found"]); }
 
             var orgs = _unitOfWork.Repository<Organization>();
             var org = (agreement.OrgId != null) ? await orgs.GetByIdAsync((int)agreement.OrgId) : null;
@@ -65,9 +58,10 @@ namespace EDO_FOMS.Application.Features.Agreements.Commands
 
             var initials = new string(Array.ConvertAll(
                 employee.GivenName.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries),
-                n => n[0]));
+                n => n[0]
+                ));
 
-            var orgName = !string.IsNullOrWhiteSpace(org.ShortName) ? org.ShortName 
+            var orgName = !string.IsNullOrWhiteSpace(org.ShortName) ? org.ShortName
                 : org.Name[..((org.Name.Length > 32) ? 32 : org.Name.Length)];
 
             orgName = orgName.Replace("\"", "").Replace(" ", "_");

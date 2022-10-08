@@ -290,6 +290,7 @@ namespace EDO_FOMS.Client.Pages.Progress
         private async Task OnRowClickAsync()
         {
             if (!_loaded) return;
+            _selectedItems.RemoveWhere(i => i.AgreementId == _agreement.AgreementId);
             await ShowInProcessAsync(_agreement);
         }
         private async Task ShowInProcessAsync(AgreementModel a)
@@ -307,8 +308,10 @@ namespace EDO_FOMS.Client.Pages.Progress
             if (!result.Cancelled)
             {
                 var action = result.Data.ToString();
-
                 await _jsRuntime.InvokeVoidAsync("azino.Console", action, "ACTION: ");
+
+                _loaded = false;
+                StateHasChanged();
 
                 if (action == nameof(AgreementActions.ToReview)) { await VerifyAnAgreementAsync(a); }
                 else if (action == nameof(AgreementActions.ToRefuse)) { await RefuseAnAgreementAsync(a); }
@@ -320,6 +323,40 @@ namespace EDO_FOMS.Client.Pages.Progress
                 await _mudTable.ReloadServerData();
             }
             //await GetAgreementsAsync(AgreementStates.AllActive);
+        }
+
+        private async Task<string> CreateSignAsync(AgreementModel agreement)
+        {
+            var thumbprint = await _localStorage.GetItemAsync<string>(StorageConstants.Local.UserThumbprint);
+            var base64 = await DocManager.GetBase64Async(agreement.DocURL);
+            var sign = await _jsRuntime.InvokeAsync<string>("azino.SignCadesBES", thumbprint, base64, agreement.DocTitle);
+
+            if (string.IsNullOrWhiteSpace(sign))
+            {
+                _snackBar.Add(_localizer["Signing failed"], Severity.Error);
+                return string.Empty;
+            }
+
+            AgreementSignedCommand cmdSigned = new()
+            {
+                AgreementId = agreement.AgreementId,
+                EmplId = agreement.EmplId,
+                EmplOrgId = agreement.EmplOrgId,
+                DocId = agreement.DocId,
+                //Thumbprint = thumbprint,
+
+                Data = Convert.FromBase64String(sign)//Encoding.ASCII.GetBytes(base64)
+            };
+
+            var response = await DocManager.PostAgreementSignedAsync(cmdSigned);
+
+            if (!response.Succeeded)
+            {
+                response.Messages.ForEach((m) => _snackBar.Add(m, Severity.Error));
+                return string.Empty;
+            }
+
+            return thumbprint;
         }
 
         private async Task VerifyAnAgreementAsync(AgreementModel agreement)
@@ -339,12 +376,16 @@ namespace EDO_FOMS.Client.Pages.Progress
         }
         private async Task ApproveAnAgreementAsync(AgreementModel agreement)
         {
+            var thumbprint = await CreateSignAsync(agreement);
+            if (string.IsNullOrEmpty(thumbprint)) { return; } // Error !!!
+
             AgreementAnswerCommand command = new()
             {
                 Id = agreement.AgreementId,
                 State = AgreementStates.Approved,
                 Remark = "",
                 Members = new(),
+                Thumbprint = thumbprint,
 
                 URL = "",
                 UploadRequest = null
@@ -354,48 +395,8 @@ namespace EDO_FOMS.Client.Pages.Progress
         }
         private async Task SignAnAgreementAsync(AgreementModel agreement)
         {
-            _loaded = false;
-
-            //await _jsRuntime.InvokeVoidAsync("azino.Console", true, "Start To Sign: ");
-
-            var thumbprint = await _localStorage.GetItemAsync<string>(StorageConstants.Local.UserThumbprint);
-            //await _jsRuntime.InvokeVoidAsync("azino.Console", thumbprint, "User Thumbprint: ");
-
-            var base64 = await DocManager.GetBase64Async(agreement.DocURL);
-            //await _jsRuntime.InvokeVoidAsync("azino.Console", base64, "Doc Base64: ");
-
-            var sign = await _jsRuntime.InvokeAsync<string>("azino.SignCadesBES", thumbprint, base64, agreement.DocTitle);
-            //await _jsRuntime.InvokeVoidAsync("azino.Console", sign, "Sign: ");
-
-            //await _jsRuntime.InvokeVoidAsync("azino.Console", sign, "SIGN :");
-            //await _jsRuntime.InvokeVoidAsync("azino.Console", agreement, "Agreement :");
-
-            if (string.IsNullOrWhiteSpace(sign))
-            {
-                _snackBar.Add(_localizer["Signing failed"], Severity.Error);
-                _loaded = true;
-                return;
-            }
-
-            AgreementSignedCommand cmdSigned = new()
-            {
-                AgreementId = agreement.AgreementId,
-                EmplId = agreement.EmplId,
-                EmplOrgId = agreement.EmplOrgId,
-                DocId = agreement.DocId,
-                //Thumbprint = thumbprint,
-
-                Data = Convert.FromBase64String(sign)//Encoding.ASCII.GetBytes(base64)
-            };
-
-            var response = await DocManager.PostAgreementSignedAsync(cmdSigned);
-
-            if (!response.Succeeded)
-            {
-                response.Messages.ForEach((m) => _snackBar.Add(m, Severity.Error));
-                _loaded = true;
-                return;
-            }
+            var thumbprint = await CreateSignAsync(agreement);
+            if (string.IsNullOrEmpty(thumbprint)) { return; } // Error !!!
 
             AgreementAnswerCommand cmdAnswer = new()
             {
@@ -410,7 +411,7 @@ namespace EDO_FOMS.Client.Pages.Progress
             };
 
             await SendAgreementAnswerAsync(cmdAnswer);
-            await _mudTable.ReloadServerData();
+            //await _mudTable.ReloadServerData();
             //await GetAgreementsAsync(AgreementStates.AllActive);
         }
         private async Task RejectAnAgreementAsync(AgreementModel agreement)
@@ -459,8 +460,6 @@ namespace EDO_FOMS.Client.Pages.Progress
         }
         private async Task SendAgreementAnswerAsync(AgreementAnswerCommand command)
         {
-            _loaded = false;
-
             var response = await DocManager.PostAgreementAnswerAsync(command);
 
             if (!response.Succeeded)

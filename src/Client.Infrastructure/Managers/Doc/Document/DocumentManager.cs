@@ -17,7 +17,6 @@ using System;
 using EDO_FOMS.Application.Requests.Agreements;
 using EDO_FOMS.Application.Models.Dir;
 using EDO_FOMS.Application.Features.Documents.Commands;
-using EDO_FOMS.Application.Features.Directories.Queries;
 using EDO_FOMS.Application.Responses.Orgs;
 
 namespace EDO_FOMS.Client.Infrastructure.Managers.Doc.Document
