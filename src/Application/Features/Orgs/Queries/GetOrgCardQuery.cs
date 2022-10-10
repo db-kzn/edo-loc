@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EDO_FOMS.Application.Interfaces.Repositories;
+using EDO_FOMS.Application.Interfaces.Services.Identity;
 using EDO_FOMS.Application.Responses.Orgs;
 using EDO_FOMS.Domain.Entities.Org;
 using EDO_FOMS.Shared.Wrapper;
@@ -21,12 +22,15 @@ public class GetOrgCardQuery : IRequest<Result<OrgCardResponse>>
 
 internal class GetOrgCardQueryHandler : IRequestHandler<GetOrgCardQuery, Result<OrgCardResponse>>
 {
+    private readonly IUserService _userService;
     private readonly IUnitOfWork<int> _unitOfWork;
 
     public GetOrgCardQueryHandler(
+        IUserService userService,
         IUnitOfWork<int> unitOfWork
         )
     {
+        _userService = userService;
         _unitOfWork = unitOfWork;
     }
 
@@ -53,6 +57,9 @@ internal class GetOrgCardQueryHandler : IRequestHandler<GetOrgCardQuery, Result<
             Email = org.Email,
             CreatedOn = org.CreatedOn
         };
+
+        var result = await _userService.GetAllByOrgIdAsync(query.Id);
+        if (result.Succeeded) card.Employees = result.Data;
 
         return await Result<OrgCardResponse>.SuccessAsync(card);
     }

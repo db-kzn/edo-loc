@@ -43,10 +43,10 @@ namespace EDO_FOMS.Client.Infrastructure.Managers.System
             return await response.ToPaginatedResult<OrgsResponse>();
         }
 
-        public async Task<IResult<OrgsResponse>> GetOrgCardAsync(int orgId)
+        public async Task<IResult<OrgCardResponse>> GetOrgCardAsync(int orgId)
         {
             var response = await _httpClient.GetAsync(Routes.AdminEndpoints.GetOrgCard(orgId));
-            return await response.ToResult<OrgsResponse>();
+            return await response.ToResult<OrgCardResponse>();
         }
 
         //public async Task<IResult<List<UserResponse>>> GetAllUsersAsync()

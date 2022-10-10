@@ -3,6 +3,7 @@
 @page "/admin/orgs/org-card/{OrgId:int?}"
 
 @using EDO_FOMS.Domain.Enums
+@using EDO_FOMS.Client.Infrastructure.Model.Admin
 
 @inject Microsoft.Extensions.Localization.IStringLocalizer<OrgCard> _localizer
 
@@ -24,7 +25,7 @@
 <MudContainer MaxWidth="MaxWidth.False" Class="pa-6">
     <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" @ref="_tabs">
         <ChildContent>
-            <MudTabPanel Text="@_localizer["Title"]">
+            <MudTabPanel Text="@_localizer["Profile"]">
                 <MudCard>
                     <MudCardContent>
                         <MudGrid Style="max-height: 70vh; overflow-y: scroll;">
@@ -133,7 +134,122 @@
                 </MudCard>
             </MudTabPanel>
 
-            <MudTabPanel Text="@_localizer["Emploeeys"]" Disabled>
+            <MudTabPanel Text="@_localizer["Emploeeys"]">
+                <MudCard>
+                    <MudCardContent>
+                        <MudTable Hover="true" Dense="false" Bordered="false" Striped="true" Breakpoint="Breakpoint.Xs"
+                                  @ref="_mudTable" T="OrgCardUserModel" Items="Org.Users" Class="mb-0"
+                                  @bind-SelectedItem="@_selectedUser" OnRowClick="OnUserRowClick">
+
+                            <HeaderContent>
+                                <MudTh><MudTableSortLabel T="OrgCardUserModel" SortLabel="Snils">@_localizer["Snils"]</MudTableSortLabel></MudTh>
+
+                                <MudTh><MudTableSortLabel T="OrgCardUserModel" SortLabel="Title">@_localizer["Title"]</MudTableSortLabel></MudTh>
+                                <MudTh><MudTableSortLabel T="OrgCardUserModel" SortLabel="Surname">@_localizer["Surname"]</MudTableSortLabel></MudTh>
+                                <MudTh><MudTableSortLabel T="OrgCardUserModel" SortLabel="GivenName">@_localizer["Given Name"]</MudTableSortLabel></MudTh>
+
+                                <MudTh><MudTableSortLabel T="OrgCardUserModel" SortLabel="IsActive">@_localizer["State"]</MudTableSortLabel></MudTh>
+                                <MudTh><MudTableSortLabel T="OrgCardUserModel" SortLabel="CreatedOn">@_localizer["Created"]</MudTableSortLabel></MudTh>
+                            </HeaderContent>
+
+                            <RowTemplate>
+                                <MudTd DataLabel="@_localizer["Snils"]">@context.Snils</MudTd>
+
+                                <MudTd DataLabel="@_localizer["Title"]">@context.Title</MudTd>
+                                <MudTd DataLabel="@_localizer["Surname"]">@context.Surname</MudTd>
+                                <MudTd DataLabel="@_localizer["Given Name"]">@context.GivenName</MudTd>
+
+                                <MudTd DataLabel="@_localizer["State"]">
+                                    @{
+                                        if (context.EmailConfirmed)
+                                        {
+                                            <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["e-mail confirmed"]" Placement="Placement.Left" Color="Color.Tertiary">
+                                                <MudIcon Icon="@Icons.Material.Outlined.MarkEmailRead" Color="Color.Success" Class="mx-2" />
+                                            </MudTooltip>
+                                        }
+                                        else
+                                        {
+                                            <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["e-mail not confirmed"]" Placement="Placement.Left" Color="Color.Tertiary">
+                                                <MudIcon Icon="@Icons.Material.Outlined.MarkEmailUnread" Color="Color.Error" Class="mx-2" />
+                                            </MudTooltip>
+                                        }
+
+                                        if (context.IsActive)
+                                        {
+                                            <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Active"]" Placement="Placement.Left" Color="Color.Tertiary">
+                                                <MudIcon Icon="@Icons.Material.Outlined.Verified" Color="Color.Success" Class="mx-2" />
+                                            </MudTooltip>
+                                        }
+                                        else
+                                        {
+                                            <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Lock"]" Placement="Placement.Left" Color="Color.Tertiary">
+                                                <MudIcon Icon="@Icons.Material.Outlined.Lock" Color="Color.Warning" Class="mx-2" />
+                                            </MudTooltip>
+                                        }
+
+                                        if (context.OrgType == OrgTypes.MO)
+                                        {
+                                            <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["MO"]" Placement="Placement.Left" Color="Color.Tertiary">
+                                                <MudIcon Icon="@Icons.Material.Outlined.MedicalServices" Color="Color.Primary" Class="mx-2" />
+                                            </MudTooltip>
+                                        }
+                                        else if (context.OrgType == OrgTypes.SMO)
+                                        {
+                                            <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["SMO"]" Placement="Placement.Left" Color="Color.Tertiary">
+                                                <MudIcon Icon="@Icons.Material.Outlined.Museum" Color="Color.Success" Class="mx-2" />
+                                            </MudTooltip>
+                                        }
+                                        else if (context.OrgType == OrgTypes.Fund)
+                                        {
+                                            <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Fund OMS"]" Placement="Placement.Left" Color="Color.Tertiary">
+                                                <MudIcon Icon="@Icons.Material.Outlined.HealthAndSafety" Color="Color.Error" Class="mx-2" />
+                                            </MudTooltip>
+                                        }
+
+                                        if (context.BaseRole == UserBaseRoles.Manager)
+                                        {
+                                            <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Manager"]" Placement="Placement.Left" Color="Color.Tertiary">
+                                                <MudIcon Icon="@Icons.Material.Outlined.Engineering" Color="Color.Primary" Class="mx-2" />
+                                            </MudTooltip>
+                                        }
+                                        else if (context.BaseRole == UserBaseRoles.Chief)
+                                        {
+                                            <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Chief"]" Placement="Placement.Left" Color="Color.Tertiary">
+                                                <MudIcon Icon="@Icons.Material.Outlined.WorkspacePremium" Color="Color.Warning" Class="mx-2" />
+                                            </MudTooltip>
+                                        }
+                                        else if (context.BaseRole == UserBaseRoles.Employee)
+                                        {
+                                            <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Employee"]" Placement="Placement.Left" Color="Color.Tertiary">
+                                                <MudIcon Icon="@Icons.Material.Outlined.HistoryEdu" Color="Color.Success" Class="mx-2" />
+                                            </MudTooltip>
+                                        }
+                                        else if (context.BaseRole == UserBaseRoles.User)
+                                        {
+                                            <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["User"]" Placement="Placement.Left" Color="Color.Tertiary">
+                                                <MudIcon Icon="@Icons.Material.Outlined.Person" Color="Color.Default" Class="mx-2" />
+                                            </MudTooltip>
+                                        }
+                                        else if (context.BaseRole == UserBaseRoles.Admin)
+                                        {
+                                            <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Admin"]" Placement="Placement.Left" Color="Color.Tertiary">
+                                                <MudIcon Icon="@Icons.Material.Outlined.Stars" Color="Color.Error" Class="mx-2" />
+                                            </MudTooltip>
+                                        }
+                                    }
+                                </MudTd>
+                                <MudTd DataLabel="@_localizer["Created"]">@context.CreatedOn.ToString("g")</MudTd>
+                            </RowTemplate>
+                        </MudTable>
+                    </MudCardContent>
+
+                    <MudCardActions>
+                        <MudButton Size="Size.Large" Class="mx-2" FullWidth Variant="Variant.Outlined" StartIcon="@Icons.Material.Rounded.Close" Color="Color.Default"
+                                   OnClick="Close">
+                            @_localizer["Cancel"]
+                        </MudButton>
+                    </MudCardActions>
+                </MudCard>
             </MudTabPanel>
         </ChildContent>
 

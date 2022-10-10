@@ -1,5 +1,6 @@
 ﻿using Blazored.FluentValidation;
 using EDO_FOMS.Application.Features.Orgs.Commands;
+using EDO_FOMS.Application.Responses.Identity;
 using EDO_FOMS.Client.Infrastructure.Managers.System;
 using EDO_FOMS.Client.Infrastructure.Model.Admin;
 using EDO_FOMS.Domain.Enums;
@@ -18,13 +19,16 @@ namespace EDO_FOMS.Client.Pages.Admin
         [Parameter] public int? OrgId { get; set; }
         [Inject] private IAdminManager AdmManager { get; set; }
 
-        private OrgCardModel Org { get; set; } = new();
-
         private int tz;
         private int delay;
         private int duration;
 
         private MudTabs _tabs;
+        private int tabIndex = 0;
+
+        private OrgCardModel Org { get; set; } = new();
+        private MudTable<OrgCardUserModel> _mudTable;
+        private OrgCardUserModel _selectedUser = new();
 
         private ClaimsPrincipal _authUser;
         private bool _canSystemEdit = false;
@@ -76,6 +80,11 @@ namespace EDO_FOMS.Client.Pages.Admin
             Org.CreatedOn = orgCard.CreatedOn;
 
             _orgType = Org.Type;
+
+            orgCard.Employees.ForEach(e => Org.Users.Add(NewOrgCardUserModel(e)));
+
+            await _jsRuntime.InvokeVoidAsync("azino.Console", Org, "Org Card Model");
+
 
             StateHasChanged();
             // Событие - данные загружены
@@ -168,5 +177,40 @@ namespace EDO_FOMS.Client.Pages.Admin
 
         private void Close() => NavigateToOrgs();
         private void NavigateToOrgs() => _navigationManager.NavigateTo($"/admin/orgs");
+        private void OnUserRowClick()
+        {
+            if (_selectedUser is not null)
+            {
+                _navigationManager.NavigateTo($"/admin/users/user-card/{_selectedUser.Id}");
+            }
+        }
+
+        private OrgCardUserModel NewOrgCardUserModel(UserResponse u)
+        {
+            return new()
+            {
+                Id = u.Id,
+                InnLe = u.InnLe,
+                Snils = u.Snils,
+                Inn = u.Inn,
+
+                Title = u.Title,
+                UserName = u.UserName,
+                Surname = u.Surname,
+                GivenName = u.GivenName,
+
+                OrgType = u.OrgType,
+                BaseRole = u.BaseRole,
+                IsActive = u.IsActive,
+
+                Email = u.Email,
+                EmailConfirmed = u.EmailConfirmed,
+                PhoneNumber = u.PhoneNumber,
+                PhoneNumberConfirmed = u.PhoneNumberConfirmed,
+
+                ProfilePictureDataUrl = u.ProfilePictureDataUrl,
+                CreatedOn = u.CreatedOn,
+            };
+        }
     }
 }

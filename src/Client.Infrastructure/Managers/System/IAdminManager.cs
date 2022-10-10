@@ -19,7 +19,7 @@ namespace EDO_FOMS.Client.Infrastructure.Managers.System
         Task<PaginatedResult<OrgsResponse>> GetPagedOrgsAsync(GetPagedOrgsRequest request);
         Task<PaginatedResult<OrgsResponse>> SearchOrgsAsync(SearchOrgsRequest request);
 
-        Task<IResult<OrgsResponse>> GetOrgCardAsync(int orgId);
+        Task<IResult<OrgCardResponse>> GetOrgCardAsync(int orgId);
         Task<IResult<int>> AddEditOrgAsync(AddEditOrgCommand request);
 
         //Task<IResult<List<UserResponse>>> GetAllUsersAsync();

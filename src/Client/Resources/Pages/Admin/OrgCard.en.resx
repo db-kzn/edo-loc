@@ -123,11 +123,17 @@
   <data name="Card" xml:space="preserve">
     <value>Card</value>
   </data>
+  <data name="Created" xml:space="preserve">
+    <value>Created</value>
+  </data>
   <data name="EMail" xml:space="preserve">
     <value>EMail</value>
   </data>
   <data name="Emploeeys" xml:space="preserve">
     <value>Emploeeys</value>
+  </data>
+  <data name="Given Name" xml:space="preserve">
+    <value>Given Name</value>
   </data>
   <data name="INN mast be 10 or 12 symbols" xml:space="preserve">
     <value>INN mast be 10 or 12 symbols</value>
@@ -168,6 +174,9 @@
   <data name="Phone" xml:space="preserve">
     <value>Phone</value>
   </data>
+  <data name="Profile" xml:space="preserve">
+    <value>Profile</value>
+  </data>
   <data name="Save" xml:space="preserve">
     <value>Save</value>
   </data>
@@ -177,8 +186,17 @@
   <data name="Short Name max length 32 symbols" xml:space="preserve">
     <value>Short Name max length 32 symbols</value>
   </data>
+  <data name="Snils" xml:space="preserve">
+    <value>Snils</value>
+  </data>
+  <data name="State" xml:space="preserve">
+    <value>State</value>
+  </data>
   <data name="Status" xml:space="preserve">
     <value>Status</value>
+  </data>
+  <data name="Surname" xml:space="preserve">
+    <value>Surname</value>
   </data>
   <data name="Title" xml:space="preserve">
     <value>Title</value>

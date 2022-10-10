@@ -1,10 +1,14 @@
-﻿using EDO_FOMS.Domain.Enums;
+﻿using EDO_FOMS.Application.Responses.Identity;
+using EDO_FOMS.Domain.Enums;
 using System;
+using System.Collections.Generic;
 
 namespace EDO_FOMS.Application.Responses.Orgs
 {
     public class OrgCardResponse
     {
+        public List<UserResponse> Employees { get; set; } = new ();
+
         public int Id { get; set; }
 
         public string Inn { get; set; }

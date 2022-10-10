@@ -20,17 +20,16 @@ namespace EDO_FOMS.Client.Pages.Admin
 
         [Parameter] public string UserId { get; set; }
 
-        private UserCardModel User { get; set; } = new();
-
-        private int tabIndex = 0;
-        private MudTable<UserCertModel> _mudTable;
-        private readonly List<UserCertModel> userCerts = new();
-
         private int tz;
         private int delay;
         private int duration;
 
         private MudTabs _tabs;
+        private int tabIndex = 0;
+
+        private UserCardModel User { get; set; } = new();
+        private MudTable<UserCertModel> _mudTable;
+        private readonly List<UserCertModel> userCerts = new();
 
         protected override async Task OnInitializedAsync()
         {
