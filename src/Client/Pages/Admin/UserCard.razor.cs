@@ -4,11 +4,14 @@ using EDO_FOMS.Client.Infrastructure.Managers.Orgs;
 using EDO_FOMS.Client.Infrastructure.Managers.System;
 using EDO_FOMS.Client.Infrastructure.Model.Admin;
 using EDO_FOMS.Domain.Enums;
+using EDO_FOMS.Shared.Constants.Permission;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using MudBlazor;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace EDO_FOMS.Client.Pages.Admin
@@ -31,8 +34,14 @@ namespace EDO_FOMS.Client.Pages.Admin
         private MudTable<UserCertModel> _mudTable;
         private readonly List<UserCertModel> userCerts = new();
 
+        private ClaimsPrincipal _authUser;
+        private bool _canSystemEdit = false;
+
         protected override async Task OnInitializedAsync()
         {
+            _authUser = await _authStateProvider.GetAuthenticationStateProviderUserAsync();
+            _canSystemEdit = (await _authService.AuthorizeAsync(_authUser, Permissions.System.Edit)).Succeeded;
+
             await _jsRuntime.InvokeVoidAsync("azino.Console", UserId, "User: ");
 
             tz = _stateService.Timezone;
