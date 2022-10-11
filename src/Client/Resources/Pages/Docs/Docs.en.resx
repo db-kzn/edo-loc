@@ -273,4 +273,7 @@
   <data name="Recipient" xml:space="preserve">
     <value>Recipient</value>
   </data>
+  <data name="To Delete" xml:space="preserve">
+    <value>To Delete</value>
+  </data>
 </root>

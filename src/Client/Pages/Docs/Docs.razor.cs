@@ -39,7 +39,9 @@ namespace EDO_FOMS.Client.Pages.Docs
         private MudTable<DocModel> _mudTable;
         private IEnumerable<DocModel> _pagedData;
         private DocModel _doc;
+
         private readonly List<DocModel> _docs = new();
+        private HashSet<DocModel> _selectedItems = new();
 
         //private int _importsCount;
         private bool importPossible = false;
@@ -377,7 +379,7 @@ namespace EDO_FOMS.Client.Pages.Docs
             return await dialog.Result;
         }
 
-        private async void ImportFiles()
+        private async Task ImportFiles()
         {
             var parameters = new DialogParameters() { }; //{ nameof(InProgressDialog.Doc), doc }
             var options = new DialogOptions { CloseButton = true }; // MaxWidth = MaxWidth.Medium, FullWidth = true, DisableBackdropClick = true
@@ -386,6 +388,21 @@ namespace EDO_FOMS.Client.Pages.Docs
             var result = await dialog.Result;
 
             if (!result.Cancelled) { await RenewAsync(); }
+        }
+        private async Task DeleteSelectedItemsAsync()
+        {
+            var docs = _selectedItems.Where(i => i.Stage == DocStages.Draft || i.Stage == DocStages.InProgress || i.Stage == DocStages.Rejected).ToArray();
+            await _jsRuntime.InvokeVoidAsync("azino.Console", docs, "To Delete: ");
+
+            var parameters = new DialogParameters() { { nameof(ItemsToDeleteDialog.Docs), docs } };
+            var options = new DialogOptions { CloseButton = false };
+
+            var dialog = _dialogService.Show<ItemsToDeleteDialog>("", parameters, options);
+            var result = await dialog.Result;
+
+            _selectedItems.Clear();
+
+            await _mudTable.ReloadServerData();
         }
 
         private static string OrgName(OrgsResponse c)

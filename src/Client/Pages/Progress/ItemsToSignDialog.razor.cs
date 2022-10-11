@@ -86,8 +86,5 @@ public partial class ItemsToSignDialog
         Close();
     }
 
-    private void Close()
-    {
-        MudDialog.Close(DialogResult.Ok(true));
-    }
+    private void Close() => MudDialog.Close(DialogResult.Ok(true));
 }

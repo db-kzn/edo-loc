@@ -1,0 +1,44 @@
+﻿@namespace EDO_FOMS.Client.Pages.Progress
+
+@inject Microsoft.Extensions.Localization.IStringLocalizer<ItemsToSignDialog> _localizer
+
+<MudDialog Style="background-color: var(--mud-palette-background-grey); min-width: 540px;">
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Outlined.QrCode" Class="mr-3 mb-n1" />
+            @_localizer["Group agreement"]
+        </MudText>
+    </TitleContent>
+
+    @*Min="0" Max="@total" Value="@current"*@
+    <DialogContent>
+        <MudProgressLinear Color="Color.Success" Class="my-1" Size="Size.Large"
+                           Indeterminate="@processing" />
+        <MudProgressLinear Color="Color.Error" Class="my-1" Size="Size.Large"
+                           Min="0" Max="@total" Value="@current" />
+        <MudText Align="Align.Left" Typo="Typo.button">@($"{_localizer["Agreement"]} {current} {_localizer["of"]} {total}")</MudText>
+        </DialogContent>
+
+        <DialogActions>
+            <MudButton Variant="Variant.Outlined" Color="Color.Success" FullWidth="true" Size="Size.Large"
+                   Disabled="@(processing || cancel)" OnClick="OnStart" StartIcon="@Icons.Material.TwoTone.PlayArrow">
+                @_localizer["Start"]
+            </MudButton>
+
+        @if (processing)
+        {
+            <MudButton Variant="Variant.Outlined" Color="Color.Error" FullWidth="true" Size="Size.Large"
+                   Disabled="@cancel" OnClick="OnStop" StartIcon="@Icons.Material.TwoTone.Stop">
+                @_localizer["Stop"]
+            </MudButton>
+        }
+        else
+        {
+            <MudButton Variant="Variant.Outlined" Color="Color.Error" FullWidth="true" Size="Size.Large"
+                   OnClick="Close" StartIcon="@Icons.Material.TwoTone.Close">
+                @_localizer["Cancel"]
+            </MudButton>
+        }
+    </DialogActions>
+
+</MudDialog>

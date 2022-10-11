@@ -477,13 +477,30 @@ namespace EDO_FOMS.Client.Pages.Progress
         {
             //if (_selectedItems?.Where(i => i.Action == AgreementActions.ToSign && !i.ActionBlocked).Any() == false) return;
             var agrs = _selectedItems.Where(i => i.Action == ActTypes.Signing && !i.ActionBlocked).ToArray();
-            await _jsRuntime.InvokeVoidAsync("azino.Console", agrs, "AGRS: ");
+            await _jsRuntime.InvokeVoidAsync("azino.Console", agrs, "To Sign: ");
 
             var parameters = new DialogParameters() {{ nameof(ItemsToSignDialog.Agrs), agrs }};
             var options = new DialogOptions { CloseButton = false };
 
             var dialog = _dialogService.Show<ItemsToSignDialog>("", parameters, options);
             var result = await dialog.Result;
+
+            _selectedItems.Clear();
+
+            await _mudTable.ReloadServerData();
+        }
+        private async Task ApproveSelectedItemsAsync()
+        {
+            var agrs = _selectedItems.Where(i => i.Action == ActTypes.Agreement && !i.ActionBlocked).ToArray();
+            await _jsRuntime.InvokeVoidAsync("azino.Console", agrs, "To Approve: ");
+
+            var parameters = new DialogParameters() { { nameof(ItemsToAgreeDialog.Agrs), agrs } };
+            var options = new DialogOptions { CloseButton = false };
+
+            var dialog = _dialogService.Show<ItemsToAgreeDialog>("", parameters, options);
+            var result = await dialog.Result;
+
+            _selectedItems.Clear();
 
             await _mudTable.ReloadServerData();
         }

@@ -27,6 +27,13 @@
                 @_localizer["To Signed"]: @_selectedItems.Where(i => i.Action == ActTypes.Signing && !i.ActionBlocked).Count()
             </MudButton>
         }
+        @if (_selectedItems?.Where(i => i.Action == ActTypes.Agreement && !i.ActionBlocked).Any() == true)//ToArray().Length > 0
+        {
+            <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.TwoTone.Draw" Color="Color.Success"
+                OnClick="ApproveSelectedItemsAsync" Disabled="@(!_loaded)">
+                @_localizer["To Agreement"]: @_selectedItems.Where(i => i.Action == ActTypes.Agreement && !i.ActionBlocked).Count()
+            </MudButton>
+        }
 
         <MudSpacer />
 

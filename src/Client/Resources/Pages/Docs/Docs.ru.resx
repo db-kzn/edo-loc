@@ -261,6 +261,9 @@
   <data name="To Archive" xml:space="preserve">
     <value>В архив</value>
   </data>
+  <data name="To Delete" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
   <data name="To Import" xml:space="preserve">
     <value>Импортировать</value>
   </data>
