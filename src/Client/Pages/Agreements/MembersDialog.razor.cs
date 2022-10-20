@@ -1,5 +1,5 @@
 ﻿using EDO_FOMS.Application.Features.Agreements.Commands;
-using EDO_FOMS.Application.Features.Agreements.Queries;
+using EDO_FOMS.Application.Responses.Agreements;
 using EDO_FOMS.Application.Responses.Docums;
 using EDO_FOMS.Client.Infrastructure.Managers.Doc.Document;
 using Microsoft.AspNetCore.Components;

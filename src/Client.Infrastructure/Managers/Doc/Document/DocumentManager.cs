@@ -1,15 +1,11 @@
 ﻿using EDO_FOMS.Application.Features.Documents.Commands.AddEdit;
-using EDO_FOMS.Application.Features.Documents.Queries;
 using EDO_FOMS.Application.Requests.Documents;
 using EDO_FOMS.Client.Infrastructure.Extensions;
 using EDO_FOMS.Shared.Wrapper;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using EDO_FOMS.Application.Features.Documents.Queries.GetById;
-using EDO_FOMS.Application.Features.Documents.Queries.GetDocAgreements;
 using System.Collections.Generic;
-using EDO_FOMS.Application.Features.Agreements.Queries;
 using EDO_FOMS.Domain.Enums;
 using EDO_FOMS.Application.Features.Agreements.Commands;
 using EDO_FOMS.Application.Responses.Docums;
@@ -18,6 +14,8 @@ using EDO_FOMS.Application.Requests.Agreements;
 using EDO_FOMS.Application.Models.Dir;
 using EDO_FOMS.Application.Features.Documents.Commands;
 using EDO_FOMS.Application.Responses.Orgs;
+using EDO_FOMS.Application.Features.Documents.Queries;
+using EDO_FOMS.Application.Responses.Agreements;
 
 namespace EDO_FOMS.Client.Infrastructure.Managers.Doc.Document
 {
@@ -66,10 +64,16 @@ namespace EDO_FOMS.Client.Infrastructure.Managers.Doc.Document
             return await response.ToPaginatedResult<EmployeeAgreementsResponse>();
         }
 
-        public async Task<IResult<List<GetDocAgreementsResponse>>> GetDocAgreementsAsync(int docId)
+        public async Task<IResult<List<DocParticipantResponse>>> GetDocParticipantsAsync(int docId)
         {
             var response = await _httpClient.GetAsync(Routes.DocumentsEndpoints.GetDocAgreements(docId));
-            return await response.ToResult<List<GetDocAgreementsResponse>>();
+            return await response.ToResult<List<DocParticipantResponse>>();
+        }
+
+        public async Task<IResult<DocAgreementsCardResponse>> GetDocAgrsCardAsync(int docId, int? agrId)
+        {
+            var response = await _httpClient.GetAsync(Routes.DocumentsEndpoints.GetDocAgreementStage(docId, agrId));
+            return await response.ToResult<DocAgreementsCardResponse>();
         }
 
         public async Task<IResult<List<AgreementsProgressResponse>>> GetAgreementsProgressAsync(int docId, int? agrId)

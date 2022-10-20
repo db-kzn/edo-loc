@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EDO_FOMS.Application.Features.Documents.Queries.GetById
+namespace EDO_FOMS.Application.Responses.Docums
 {
     public class GetDocumentByIdResponse
     {

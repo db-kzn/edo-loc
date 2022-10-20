@@ -1,7 +1,7 @@
 ﻿using EDO_FOMS.Application.Features.Agreements.Commands;
-using EDO_FOMS.Application.Features.Agreements.Queries;
 using EDO_FOMS.Application.Requests.Agreements;
 using EDO_FOMS.Application.Requests.Documents;
+using EDO_FOMS.Application.Responses.Agreements;
 using EDO_FOMS.Application.Responses.Docums;
 using EDO_FOMS.Application.Responses.Orgs;
 using EDO_FOMS.Client.Extensions;
@@ -62,6 +62,7 @@ namespace EDO_FOMS.Client.Pages.Progress
         private ClaimsPrincipal _authUser;
         private string userId;
         private bool _canDocsEdit;
+        private bool _canSystemView;
 
         private int tz;
         private bool dense;
@@ -86,6 +87,7 @@ namespace EDO_FOMS.Client.Pages.Progress
             _authUser = await _authManager.CurrentUser();
             //_authUser = await _authStateProvider.GetAuthenticationStateProviderUserAsync();
             _canDocsEdit = (await _authService.AuthorizeAsync(_authUser, Permissions.Documents.Edit)).Succeeded;
+            _canSystemView = (await _authService.AuthorizeAsync(_authUser, Permissions.System.View)).Succeeded;
 
             userId = _authUser.GetUserId();
             tz = _stateService.Timezone;
@@ -291,7 +293,15 @@ namespace EDO_FOMS.Client.Pages.Progress
         {
             if (!_loaded) return;
             _selectedItems.RemoveWhere(i => i.AgreementId == _agreement.AgreementId);
-            await ShowInProcessAsync(_agreement);
+            
+            if (_canSystemView)
+            {
+                await ShowInProcessAsync(_agreement);
+            } 
+            else
+            {
+                await ShowAgreementListAsync(_agreement);
+            }
         }
         private async Task ShowInProcessAsync(AgreementModel a)
         {
@@ -323,6 +333,16 @@ namespace EDO_FOMS.Client.Pages.Progress
                 await _mudTable.ReloadServerData();
             }
             //await GetAgreementsAsync(AgreementStates.AllActive);
+        }
+        private async Task<DialogResult> ShowAgreementListAsync(AgreementModel a)
+        {
+            var doc = AgreementToDoc(a);
+            var parameters = new DialogParameters() { { nameof(DocAgreementsDialog.Doc), doc } };
+            var options = new DialogOptions { CloseButton = true };
+
+            var dialog = _dialogService.Show<DocAgreementsDialog>("", parameters, options);
+
+            return await dialog.Result;
         }
 
         private async Task<string> CreateSignAsync(AgreementModel agreement)

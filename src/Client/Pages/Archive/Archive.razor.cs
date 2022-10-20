@@ -1,6 +1,6 @@
-﻿using EDO_FOMS.Application.Features.Agreements.Queries;
-using EDO_FOMS.Application.Requests.Agreements;
+﻿using EDO_FOMS.Application.Requests.Agreements;
 using EDO_FOMS.Application.Requests.Documents;
+using EDO_FOMS.Application.Responses.Agreements;
 using EDO_FOMS.Application.Responses.Docums;
 using EDO_FOMS.Application.Responses.Orgs;
 using EDO_FOMS.Client.Extensions;

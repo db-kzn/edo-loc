@@ -28,7 +28,7 @@ namespace EDO_FOMS.Client.Pages.Admin
         private int duration;
 
         private MudTabs _tabs;
-        private int tabIndex = 0;
+        //private int tabIndex = 0;
 
         private UserCardModel User { get; set; } = new();
         private MudTable<UserCertModel> _mudTable;

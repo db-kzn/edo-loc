@@ -1,7 +1,7 @@
 ﻿using EDO_FOMS.Domain.Enums;
 using System;
 
-namespace EDO_FOMS.Application.Features.Agreements.Queries
+namespace EDO_FOMS.Application.Responses.Agreements
 {
     public class AgreementsProgressResponse
     {

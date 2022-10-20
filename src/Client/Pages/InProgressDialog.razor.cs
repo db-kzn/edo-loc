@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using System.Linq;
 using EDO_FOMS.Client.Infrastructure.Managers.Doc.Document;
 using EDO_FOMS.Client.Models;
-using EDO_FOMS.Application.Features.Agreements.Queries;
 using EDO_FOMS.Domain.Enums;
 using System;
+using EDO_FOMS.Application.Responses.Agreements;
 
 namespace EDO_FOMS.Client.Pages
 {

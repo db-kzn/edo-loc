@@ -1,5 +1,6 @@
 ﻿using EDO_FOMS.Application.Interfaces.Repositories;
 using EDO_FOMS.Application.Interfaces.Services.Identity;
+using EDO_FOMS.Application.Responses.Docums;
 using EDO_FOMS.Domain.Entities.Doc;
 using EDO_FOMS.Domain.Entities.Org;
 using EDO_FOMS.Shared.Wrapper;
@@ -10,31 +11,31 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace EDO_FOMS.Application.Features.Documents.Queries.GetDocAgreements
+namespace EDO_FOMS.Application.Features.Documents.Queries
 {
-    public class GetDocAgreementsQuery : IRequest<Result<List<GetDocAgreementsResponse>>>
+    public class GetDocParticipantsQuery : IRequest<Result<List<DocParticipantResponse>>>
     {
         public int Id { get; set; }
 
-        public GetDocAgreementsQuery(int docId)
+        public GetDocParticipantsQuery(int docId)
         {
             Id = docId;
         }
     }
 
-    internal class GetDocAgreementsQueryHandler : IRequestHandler<GetDocAgreementsQuery, Result<List<GetDocAgreementsResponse>>>
+    internal class GetDocParticipantsQueryHandler : IRequestHandler<GetDocParticipantsQuery, Result<List<DocParticipantResponse>>>
     {
         private readonly IUnitOfWork<int> _unitOfWork;
         private readonly IUserService _userService;
-        private readonly IStringLocalizer<GetDocAgreementsQueryHandler> _localizer;
+        private readonly IStringLocalizer<GetDocParticipantsQueryHandler> _localizer;
 
         //private readonly IMapper _mapper;
         //private readonly IAppCache _cache;
 
-        public GetDocAgreementsQueryHandler(
+        public GetDocParticipantsQueryHandler(
             IUnitOfWork<int> unitOfWork,
             IUserService userService,
-            IStringLocalizer<GetDocAgreementsQueryHandler> localizer
+            IStringLocalizer<GetDocParticipantsQueryHandler> localizer
 
             //IMapper mapper,
             //IAppCache cache
@@ -48,20 +49,21 @@ namespace EDO_FOMS.Application.Features.Documents.Queries.GetDocAgreements
             //_cache = cache;
         }
 
-        public async Task<Result<List<GetDocAgreementsResponse>>> Handle(GetDocAgreementsQuery request, CancellationToken cancellationToken)
+        public async Task<Result<List<DocParticipantResponse>>> Handle(GetDocParticipantsQuery request, CancellationToken cancellationToken)
         {
             var doc = await _unitOfWork.Repository<Document>().GetByIdAsync(request.Id);
-            if (doc == null) { return await Result<List<GetDocAgreementsResponse>>.FailAsync(_localizer["Document Not Found"]); }
+            if (doc == null) { return await Result<List<DocParticipantResponse>>.FailAsync(_localizer["Document Not Found"]); }
 
-            var agreements = _unitOfWork.Repository<Agreement>().Entities.Where(a => a.Document == doc).ToList();
+            var participants = _unitOfWork.Repository<Agreement>().Entities.Where(a => a.Document == doc).ToList();
 
-            List<GetDocAgreementsResponse> docAgreements = new();
+            List<DocParticipantResponse> docParticipants = new();
 
-            agreements.ForEach((a) => {
+            participants.ForEach((a) =>
+            {
                 var employee = _userService.GetEmployeeAsync(a.EmplId).Result;
                 var org = _unitOfWork.Repository<Organization>().Entities.FirstOrDefault(o => o.Id == employee.OrgId);
 
-                docAgreements.Add(new()
+                docParticipants.Add(new()
                 {
                     Step = a.StageNumber,
                     EmplId = a.EmplId,
@@ -77,7 +79,7 @@ namespace EDO_FOMS.Application.Features.Documents.Queries.GetDocAgreements
                 });
             });
 
-            return await Result<List<GetDocAgreementsResponse>>.SuccessAsync(docAgreements);
+            return await Result<List<DocParticipantResponse>>.SuccessAsync(docParticipants);
         }
     }
 }

@@ -1,5 +1,5 @@
-﻿using EDO_FOMS.Application.Features.Agreements.Queries;
-using EDO_FOMS.Application.Requests.Agreements;
+﻿using EDO_FOMS.Application.Requests.Agreements;
+using EDO_FOMS.Application.Responses.Agreements;
 using EDO_FOMS.Client.Infrastructure.Managers.Doc.Document;
 using EDO_FOMS.Domain.Enums;
 using EDO_FOMS.Shared.Constants.Permission;

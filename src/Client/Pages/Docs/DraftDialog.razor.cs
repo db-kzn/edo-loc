@@ -118,7 +118,7 @@ namespace EDO_FOMS.Client.Pages.Docs
 
         private async Task LoadDocAgreementsAsync(int id)
         {
-            var response = await DocManager.GetDocAgreementsAsync(id);
+            var response = await DocManager.GetDocParticipantsAsync(id);
 
             if (!response.Succeeded)
             {

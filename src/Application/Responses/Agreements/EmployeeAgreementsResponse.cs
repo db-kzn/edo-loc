@@ -3,7 +3,7 @@ using EDO_FOMS.Domain.Enums;
 using System;
 using System.Collections.Generic;
 
-namespace EDO_FOMS.Application.Features.Agreements.Queries
+namespace EDO_FOMS.Application.Responses.Agreements
 {
     public class EmployeeAgreementsResponse
     {

@@ -2,11 +2,12 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using EDO_FOMS.Application.Interfaces.Repositories;
+using EDO_FOMS.Application.Responses.Docums;
 using EDO_FOMS.Domain.Entities.Doc;
 using EDO_FOMS.Shared.Wrapper;
 using MediatR;
 
-namespace EDO_FOMS.Application.Features.Documents.Queries.GetById
+namespace EDO_FOMS.Application.Features.Documents.Queries
 {
     public class GetDocumentByIdQuery : IRequest<Result<GetDocumentByIdResponse>>
     {

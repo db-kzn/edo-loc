@@ -30,6 +30,8 @@ namespace EDO_FOMS.Client.Infrastructure.Routes
         public static string FindOrgsWithType(OrgTypes orgType, string search) => $"{Ctrl}/orgs-find?orgType={orgType}&search={search}";
 
         public static string GetAgreementsProgress(int docId, int? agrId) => $"{Ctrl}/progress?docId={docId}&agrId={agrId}";
+        public static string GetDocAgreementStage(int docId, int? agrId) => $"{Ctrl}/doc-agreements-card?docId={docId}&agrId={agrId}";
+
         public static string GetEmployeeAgreements(AgreementStates state) => $"{Ctrl}/user-agreements?state={state}";
         public static string GetAgreementMembers(int orgId, string search) => $"{Ctrl}/members?orgId={orgId}&search={search}";
 

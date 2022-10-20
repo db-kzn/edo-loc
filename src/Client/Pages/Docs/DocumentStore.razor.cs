@@ -1,5 +1,4 @@
-﻿using EDO_FOMS.Application.Features.Documents.Queries;
-using EDO_FOMS.Application.Requests.Documents;
+﻿using EDO_FOMS.Application.Requests.Documents;
 using EDO_FOMS.Client.Extensions;
 using MudBlazor;
 using System;
@@ -13,6 +12,7 @@ using EDO_FOMS.Domain.Entities.Doc;
 using EDO_FOMS.Shared.Constants.Permission;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
+using EDO_FOMS.Application.Responses.Docums;
 
 namespace EDO_FOMS.Client.Pages.Docs
 {

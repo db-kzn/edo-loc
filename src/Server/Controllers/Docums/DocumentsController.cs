@@ -1,11 +1,9 @@
 ﻿using EDO_FOMS.Application.Features.Documents.Commands.AddEdit;
 using EDO_FOMS.Application.Features.Documents.Commands.Delete;
 using EDO_FOMS.Application.Features.Documents.Queries;
-using EDO_FOMS.Application.Features.Documents.Queries.GetById;
 using EDO_FOMS.Shared.Constants.Permission;
 using EDO_FOMS.Application.Interfaces.Services.Identity;
 using EDO_FOMS.Domain.Enums;
-using EDO_FOMS.Application.Features.Documents.Queries.GetDocAgreements;
 using EDO_FOMS.Application.Features.Agreements.Queries;
 using EDO_FOMS.Application.Features.Agreements.Commands;
 using Microsoft.AspNetCore.Mvc;
@@ -199,7 +197,7 @@ namespace EDO_FOMS.Server.Controllers.Docums
         [HttpGet("agreements")]
         public async Task<IActionResult> GetDocAgreements(int docId)
         {
-            var agreements = await _mediator.Send(new GetDocAgreementsQuery(docId));
+            var agreements = await _mediator.Send(new GetDocParticipantsQuery(docId));
             return Ok(agreements);
         }
 
@@ -214,6 +212,20 @@ namespace EDO_FOMS.Server.Controllers.Docums
         public async Task<IActionResult> GetAgreementsProgress(int docId, int? agrId)
         {
             var agreements = await _mediator.Send(new AgreementsProgressQuery(docId, agrId));
+            return Ok(agreements);
+        }
+
+        /// <summary>
+        /// Get Document's Agreements Card
+        /// </summary>
+        /// <param name="docId"></param>
+        /// <param name="agrId"></param>
+        /// <returns>Status 200 OK</returns>
+        [Authorize(Policy = Permissions.Documents.View)]
+        [HttpGet("doc-agreements-card")]
+        public async Task<IActionResult> GetDocAgreementsCard(int docId, int? agrId)
+        {
+            var agreements = await _mediator.Send(new GetDocAgreementsCardQuery(docId, agrId));
             return Ok(agreements);
         }
 

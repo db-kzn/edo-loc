@@ -1,8 +1,8 @@
 ﻿using EDO_FOMS.Domain.Enums;
 
-namespace EDO_FOMS.Application.Features.Documents.Queries.GetDocAgreements
+namespace EDO_FOMS.Application.Responses.Docums
 {
-    public class GetDocAgreementsResponse
+    public class DocParticipantResponse
     {
         public int Step { get; set; }
         public string EmplId { get; set; }

@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 using System.Threading;
 using EDO_FOMS.Domain.Entities.Doc;
 using Microsoft.EntityFrameworkCore;
-using EDO_FOMS.Application.Features.Directories.Queries;
-using EDO_FOMS.Domain.Entities.Dir;
 using System.Linq;
+using EDO_FOMS.Application.Responses.Docums;
 
 namespace EDO_FOMS.Application.Features.Documents.Queries;
 
@@ -46,7 +45,7 @@ internal class GetDocCardQueryHandler : IRequestHandler<GetDocCardQuery, Result<
 
         var card = new DocCardResponse()
         {
-            Agreements = doc.Agreements.Select(a => new AgreementResponse(a)).ToList(),
+            Agreements = doc.Agreements.Select(a => new DocCardAgreementResponse(a)).ToList(),
 
             Id = doc.Id,
             PreviousId = doc.PreviousId,

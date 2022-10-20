@@ -233,6 +233,14 @@
             <param name="agrId"></param>
             <returns>Status 200 OK</returns>
         </member>
+        <member name="M:EDO_FOMS.Server.Controllers.Docums.DocumentsController.GetDocAgreementsCard(System.Int32,System.Nullable{System.Int32})">
+            <summary>
+            Get Document's Agreements Card
+            </summary>
+            <param name="docId"></param>
+            <param name="agrId"></param>
+            <returns>Status 200 OK</returns>
+        </member>
         <member name="M:EDO_FOMS.Server.Controllers.Docums.DocumentsController.GetEmployeeAgreements(EDO_FOMS.Domain.Enums.AgreementStates)">
             <summary>
             Get Found User Agreements

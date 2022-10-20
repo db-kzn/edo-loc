@@ -1,8 +1,7 @@
-﻿using EDO_FOMS.Domain.Entities.Org;
-using EDO_FOMS.Domain.Enums;
+﻿using EDO_FOMS.Domain.Enums;
 using System;
 
-namespace EDO_FOMS.Application.Features.Documents.Queries
+namespace EDO_FOMS.Application.Responses.Docums
 {
     public class GetDocumentsResponse
     {

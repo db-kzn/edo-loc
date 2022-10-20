@@ -1,5 +1,4 @@
 ﻿using EDO_FOMS.Application.Features.Documents.Commands;
-using EDO_FOMS.Application.Features.Documents.Queries;
 using EDO_FOMS.Application.Models.Dir;
 using EDO_FOMS.Application.Requests.Documents;
 using EDO_FOMS.Application.Responses.Docums;
@@ -65,6 +64,7 @@ namespace EDO_FOMS.Client.Pages.Docs
         private ClaimsPrincipal _authUser;
         private string userId;
         private bool _canDocsCreate;
+        private bool _canSystemView;
 
         private int tz;
         private bool dense;
@@ -89,6 +89,7 @@ namespace EDO_FOMS.Client.Pages.Docs
             _authUser = await _authManager.CurrentUser();
             //_authUser = await _authStateProvider.GetAuthenticationStateProviderUserAsync();
             _canDocsCreate = (await _authService.AuthorizeAsync(_authUser, Permissions.Documents.Create)).Succeeded;
+            _canSystemView = (await _authService.AuthorizeAsync(_authUser, Permissions.System.View)).Succeeded;
 
             userId = _authUser.GetUserId();
             tz = _stateService.Timezone;
@@ -317,9 +318,14 @@ namespace EDO_FOMS.Client.Pages.Docs
             {
                 AddEditDoc(doc);
             }
-            else
+            else if (_canSystemView)
             {
                 var result = await ShowInProcessAsync(doc);
+                if (!result.Cancelled) { await _mudTable.ReloadServerData(); }
+            }
+            else
+            {
+                var result = await ShowAgreementListAsync(doc);
                 if (!result.Cancelled) { await _mudTable.ReloadServerData(); }
             }
         }
@@ -375,6 +381,15 @@ namespace EDO_FOMS.Client.Pages.Docs
             var options = new DialogOptions { CloseButton = true };
 
             var dialog = _dialogService.Show<InProgressDialog>("", parameters, options);
+
+            return await dialog.Result;
+        }
+        private async Task<DialogResult> ShowAgreementListAsync(DocModel doc)
+        {
+            var parameters = new DialogParameters() { { nameof(DocAgreementsDialog.Doc), doc } };
+            var options = new DialogOptions { CloseButton = true };
+
+            var dialog = _dialogService.Show<DocAgreementsDialog>("", parameters, options);
 
             return await dialog.Result;
         }
