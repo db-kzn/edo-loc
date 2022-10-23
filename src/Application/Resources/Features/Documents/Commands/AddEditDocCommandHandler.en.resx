@@ -123,4 +123,7 @@
   <data name="Document Saved" xml:space="preserve">
     <value>Document Saved</value>
   </data>
+  <data name="Document Updated" xml:space="preserve">
+    <value>Document Updated</value>
+  </data>
 </root>

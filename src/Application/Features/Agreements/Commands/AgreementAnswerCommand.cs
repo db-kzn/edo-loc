@@ -107,7 +107,7 @@ namespace EDO_FOMS.Application.Features.Agreements.Commands
                                 if (a.OrgId == agreement.OrgId)
                                 {
                                     canceledCount++;
-                                    //a.IsCanceled = true;
+                                    a.IsCanceled = true;
                                     a.State = AgreementStates.Deleted;
                                     await _unitOfWork.Repository<Agreement>().UpdateAsync(a);
                                 }
@@ -118,16 +118,25 @@ namespace EDO_FOMS.Application.Features.Agreements.Commands
                                 NextStepOrComplete(doc);
                             }
                         }
-                        else
+                        else  // Любой в одном процессе
                         {
+                            var hasActive = false;
+
                             lastAgrs.ForEach(async a =>
                             {
-                                //a.IsCanceled = true;
-                                a.State = AgreementStates.Deleted;
-                                await _unitOfWork.Repository<Agreement>().UpdateAsync(a);
+                                if (a.RouteStepId == agreement.RouteStepId)
+                                {
+                                    a.IsCanceled = true;
+                                    a.State = AgreementStates.Deleted;
+                                    await _unitOfWork.Repository<Agreement>().UpdateAsync(a);
+                                }
+                                else
+                                {
+                                    hasActive = true;
+                                }
                             });
 
-                            NextStepOrComplete(doc);
+                            if (!hasActive) { NextStepOrComplete(doc); }
                         }
                     }
                 }

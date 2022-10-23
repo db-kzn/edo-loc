@@ -1,57 +1,68 @@
 ﻿(function () {
-    if (!!window.azino) { return; }
-    const cadesplugin = window.cadesplugin;
+    "use strict";
+
+    if (window.azino) { return; }
 
     let pluginAvailable = null;
-
+    const { cadesplugin } = window;
     cadesplugin
         .then(() => { pluginAvailable = true; })
         .catch(() => { pluginAvailable = false; });
 
-    var CADESCOM_CADES_BES = 1;
-    var CADESCOM_BASE64_TO_BINARY = 1;
+    // App Constants
+    const certTypes = CertTypes();
 
-    var CAPICOM_MY_STORE = "My";
-    var CAPICOM_CURRENT_USER_STORE = 2;
-    var CAPICOM_STORE_OPEN_MAXIMUM_ALLOWED = 2;
+    // CryptoPro Constants
+    const CADESCOM = CadesCom();
+    const CAPICOM = CapiCom();
 
-    var CAPICOM_AUTHENTICATED_ATTRIBUTE_SIGNING_TIME = 0;
-    var CADESCOM_AUTHENTICATED_ATTRIBUTE_DOCUMENT_NAME = 1;
+    window.azino =
+    {
+        about: null,
+        store: null,
+        license: null,
+        signer: null,
 
-    window.azino = {};
+        cx509privateKey: null,
+        certs: [],
+        userCert: null,
+        userThumbprint: null,
 
-    const azino = window.azino;
-    const certTypes = Object.freeze({
-        undefined: 0,
-        personal: 1,
-        organization: 2,
-        company: 3
-    });
+        // CRYPTOPRO METHODS
 
-    azino.about = null;
-    azino.store = null;
-    azino.license = null;
+        CadesPluginApiVersion: () => (cadesplugin && cadesplugin.JSModuleVersion) ? cadesplugin.JSModuleVersion : "",
+        BrowserPluginVersion: BrowserPluginVersion,
+        CspVersion: CspVersion,
+        CspName: CspName,
+        CspLicenses: CspLicenses,
 
-    azino.signer = null;
-    azino.cx509privateKey = null;
+        GetCertDetails: GetCertDetails,
+        GetCerts: GetCerts,
+        TokenCheck: TokenCheck,
+        SignCadesBES: SignCadesBES,
 
-    azino.certs = [];
-    azino.userCert = null;
-    azino.userThumbprint = null;
+        // NEW TESTING
 
-    azino.Console = (value, tag = "=> ") => console.log(tag, value);
-    azino.LinkOpen = (link) => window.open(link, "_blank", "comma,delimited,list,of,window,features");
+        GetCertList: GetCertLis,
 
-    azino.CadesPluginApiVersion = () => {
-        if (!cadesplugin) { return ""; }
+        // HELPERS
 
-        return (!cadesplugin.JSModuleVersion) ? "" : cadesplugin.JSModuleVersion;
+        Console: Console,
+        LinkOpen: (link) => window.open(link, "_blank", "comma,delimited,list,of,window,features"),
+
+        SaveFile: SaveFile,
+        Download: Download,
+        PlayAudio: PlayAudio,
+        ScrollToBottom: ScrollToBottom
     }
-    azino.BrowserPluginVersion = () => {
+
+    // CRYPTO FUNCTION
+
+    function BrowserPluginVersion() {
         if (!pluginAvailable) { return ""; }
 
         return GetAbout().then(function (about) {
-            if (typeof (about.PluginVersion) != "undefined") {
+            if (typeof (about.PluginVersion) !== "undefined") {
                 return about.PluginVersion.then(function (version) {
                     return Promise.all([
                         version.MajorVersion,
@@ -63,18 +74,18 @@
                 });
             }
 
-            if (typeof (about.Version) == "undefined") { return ""; }
+            if (typeof (about.Version) === "undefined") { return ""; }
 
             return about.Version.then(function (version) {
                 return version;
             });
         }).catch(function (e) { return ""; });
     }
-    azino.CspVersion = () => {
+    function CspVersion() {
         if (!pluginAvailable) { return ""; }
 
         return GetAbout().then(function (about) {
-            if (typeof (about.CSPVersion) == "undefined") { return ""; }
+            if (typeof (about.CSPVersion) === "undefined") { return ""; }
 
             return about.CSPVersion("", 80).then(function (version) {
                 return Promise.all([
@@ -87,20 +98,20 @@
             });
         }).catch(function (e) { return ""; });;
     }
-    azino.CspName = () => {
+    function CspName() {
         if (!pluginAvailable) { return ""; }
 
         //return "";
 
         return GetAbout().then(function (about) {
-            if (typeof (about.CSPName) == "undefined") { return ""; }
+            if (typeof (about.CSPName) === "undefined") { return ""; }
 
             return about.CSPName(80).then(function (name) {
                 return name;
             });
         }).catch(function (e) { return ""; });;
     }
-    azino.CspLicenses = () => {
+    function CspLicenses() {
         if (!pluginAvailable) { return ""; }
 
         return GetLicense().then(function (license) {
@@ -118,15 +129,14 @@
         }).catch(function (e) { return ""; });;
     }
 
-    azino.GetCertDetails = (thumbprint) => {
+    function GetCertDetails(thumbprint) {
         if (!pluginAvailable) { return null; }
 
         GetCertByThumbprint(thumbprint).then(cert => {
             console.log(cert);
         });
     }
-
-    azino.GetCerts = () => {
+    function GetCerts() {
         azino.certs.length = 0;
 
         let result = GetArrayOfCertPromises().then(a => {
@@ -192,7 +202,7 @@
                     cert.tillDate = new Date(Date.parse(ccc[5])).toLocaleDateString("ru-RU");
 
                     //cert.version = ccc[6];
-                    cert.version = (!!cert.subject.innLe) ? certTypes.company : (!!cert.subject.org) ? certTypes.organization : certTypes.personal;
+                    cert.version = (cert.subject.innLe) ? certTypes.company : (cert.subject.org) ? certTypes.organization : certTypes.personal;
                     //cert.isOrgCert = !!cert.subject.innLe; => cert.version => cert.type
 
                     cert.provider = ""; //ccc[7].provider;
@@ -210,12 +220,11 @@
         result.then(r => console.log("Result: ", r));
         return result;
     }
-
-    azino.TokenCheck = (thumbprint) => {
+    function TokenCheck(thumbprint) {
         return new Promise(function (resolve, reject) {
             cadesplugin.async_spawn(function* (args) {
                 var oStore = yield cadesplugin.CreateObjectAsync("CAdESCOM.Store");
-                yield oStore.Open(CAPICOM_CURRENT_USER_STORE, CAPICOM_MY_STORE, CAPICOM_STORE_OPEN_MAXIMUM_ALLOWED);
+                yield oStore.Open(CAPICOM.CURRENT_USER_STORE, CAPICOM.MY_STORE, CAPICOM.STORE_OPEN_MAXIMUM_ALLOWED);
 
                 var Certificates = yield oStore.Certificates;
                 var certCnt = yield Certificates.Count;
@@ -232,7 +241,7 @@
 
                     try {
                         var ctp = yield cert.Thumbprint;
-                        if (thumbprint == ctp) {
+                        if (thumbprint === ctp) {
                             oCertificate = cert;
                             break;
                         }
@@ -244,7 +253,7 @@
                 console.log("SignIn Cert: ", oCertificate);
                 var tokenСonnected = false;
 
-                if (oCertificate != null) {
+                if (oCertificate !== null) {
                     var pk = yield oCertificate.PrivateKey;
                     if (pk) {
                         try {
@@ -262,8 +271,7 @@
             }, resolve, reject); //cadesplugin.async_spawn
         });
     }
-
-    azino.SignCadesBES = (thumbprint, dataInBase64) => {
+    function SignCadesBES(thumbprint, dataInBase64) {
         //if (!pluginAvailable) { return ""; }
         //cadesplugin.set_log_level(4);
         //console.log("\n thumbprint: ", thumbprint, "\n dataInBase64: ", dataInBase64);
@@ -285,7 +293,7 @@
         //);
     };
 
-    azino.SaveFile = (filename, contentType, content) => {
+    function SaveFile(filename, contentType, content) {
         console.log("SIGN: ", filename, "\n", content);
 
         // Create the URL
@@ -304,12 +312,60 @@
         // On older versions of Safari, it seems you need to comment this line...
         URL.revokeObjectURL(exportUrl);
     }
+    function Download(options) {
+        var fileUrl = "data:" + options.mimeType + ";base64," + options.byteArray;
+
+        fetch(fileUrl)
+            .then(response => response.blob())
+            .then(blob => {
+                var link = window.document.createElement("a");
+                link.href = window.URL.createObjectURL(blob, { type: options.mimeType });
+                link.download = options.fileName;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+    }
+    function PlayAudio(elementName) {
+        document.getElementById(elementName).play();
+    }
+    function ScrollToBottom(elementName) {
+        element = document.getElementById(elementName);
+        element.scrollTop = element.scrollHeight - element.clientHeight;
+    }
+
+    // NEW TESTING
+
+
+
+    function GetCertLis(resetCache = false) {
+        if (!resetCache && azino.certs) { return azino.certs; }
+        if (azino.certs) { azino.certs.length = 0; } else { azino.certs = []; }
+
+        const cerst = azino.certs;
+
+
+
+
+        return cerst;
+    }
+
+    // HELPERS
+
+    function Console(value, tag = "|> ", type = "info") {
+        var log = (type === "info") ? console.info :
+            (type === "error") ? console.error :
+                (type === "debug") ? console.debug :
+                    (type === "warn") ? console.warn : console.log;
+
+        log(tag, value)
+    }
 
     function SignCreate(thumbprint, dataInBase64, docTitle = "") {
         return new Promise(function (resolve, reject) {
             cadesplugin.async_spawn(function* (args) {
                 var oStore = yield cadesplugin.CreateObjectAsync("CAdESCOM.Store");
-                yield oStore.Open(CAPICOM_CURRENT_USER_STORE, CAPICOM_MY_STORE, CAPICOM_STORE_OPEN_MAXIMUM_ALLOWED);
+                yield oStore.Open(CAPICOM.CURRENT_USER_STORE, CAPICOM.MY_STORE, CAPICOM.STORE_OPEN_MAXIMUM_ALLOWED);
 
                 var Certificates = yield oStore.Certificates;
                 var certCnt = yield Certificates.Count;
@@ -326,7 +382,7 @@
 
                     try {
                         var ctp = yield cert.Thumbprint;
-                        if (thumbprint == ctp) {
+                        if (thumbprint === ctp) {
                             oCertificate = cert;
                             break;
                         }
@@ -336,12 +392,12 @@
                 }
 
                 var oSigningTimeAttr = yield cadesplugin.CreateObjectAsync("CADESCOM.CPAttribute");
-                yield oSigningTimeAttr.propset_Name(CAPICOM_AUTHENTICATED_ATTRIBUTE_SIGNING_TIME);
+                yield oSigningTimeAttr.propset_Name(CAPICOM.AUTHENTICATED_ATTRIBUTE_SIGNING_TIME);
                 var oTimeNow = new Date();
                 yield oSigningTimeAttr.propset_Value(oTimeNow);
 
                 var oDocumentNameAttr = yield cadesplugin.CreateObjectAsync("CADESCOM.CPAttribute");
-                yield oDocumentNameAttr.propset_Name(CADESCOM_AUTHENTICATED_ATTRIBUTE_DOCUMENT_NAME);
+                yield oDocumentNameAttr.propset_Name(CADESCOM.AUTHENTICATED_ATTRIBUTE_DOCUMENT_NAME);
                 yield oDocumentNameAttr.propset_Value(docTitle);
 
                 var oSigner = yield cadesplugin.CreateObjectAsync("CAdESCOM.CPSigner");
@@ -353,12 +409,12 @@
                 yield oAuthAttrs.Add(oDocumentNameAttr);
 
                 var oSignedData = yield cadesplugin.CreateObjectAsync("CAdESCOM.CadesSignedData");
-                yield oSignedData.propset_ContentEncoding(CADESCOM_BASE64_TO_BINARY);
+                yield oSignedData.propset_ContentEncoding(CADESCOM.BASE64_TO_BINARY);
                 yield oSignedData.propset_Content(dataInBase64);
 
                 var sSignedMessage = "";
                 try {
-                    sSignedMessage = yield oSignedData.SignCades(oSigner, CADESCOM_CADES_BES, true);
+                    sSignedMessage = yield oSignedData.SignCades(oSigner, CADESCOM.CADES_BES, true);
                 } catch (err) {
                     e = cadesplugin.getLastError(err);
                     alert("Failed to create signature. Error: " + e);
@@ -370,7 +426,6 @@
             }, resolve, reject); //cadesplugin.async_spawn
         });
     }
-
     function Verify(sSignedMessage, dataInBase64) {
         return new Promise(function (resolve, reject) {
             cadesplugin.async_spawn(function* (args) {
@@ -378,9 +433,9 @@
                 try {
                     // Значение свойства ContentEncoding должно быть задано
                     // до заполнения свойства Content
-                    yield oSignedData.propset_ContentEncoding(CADESCOM_BASE64_TO_BINARY);
+                    yield oSignedData.propset_ContentEncoding(CADESCOM.BASE64_TO_BINARY);
                     yield oSignedData.propset_Content(dataInBase64);
-                    yield oSignedData.VerifyCades(sSignedMessage, CADESCOM_CADES_BES, true);
+                    yield oSignedData.VerifyCades(sSignedMessage, CADESCOM.CADES_BES, true);
                 }
                 catch (err) {
                     var e = cadesplugin.getLastError(err);
@@ -391,15 +446,14 @@
             }, resolve, reject);
         });
     }
-
     function OrgNameFormat(raw) {
-        if (typeof raw != "string") { return ""; }
+        if (typeof raw !== "string") { return ""; }
 
         let len = raw.length;
         if (len === 0) { return ""; }
 
         let rawName = (raw[0] === '"' && raw[len - 1] === '"') ? raw.slice(1, -1) : raw;
-        let orgName = rawName.replace(/\"\"/g, "\"");
+        let orgName = rawName.replace(/""/g, "\"");
 
         console.log("ORG NAME:\n ", raw, ";\n ", rawName, ";\n ", orgName);
 
@@ -408,7 +462,7 @@
         //    // const pairOfQuotes = '""';
         //    // const openingQuotes = '«'; // https://unicode-table.com/ru/sets/quotation-marks/
         //    // const closingQuotes = '»'; // 
-            
+
         //    //let first = orgName.indexOf('""');
         //    //let last = orgName.lastIndexOf('""');
 
@@ -419,7 +473,6 @@
 
         return orgName;
     }
-
     function GetCertByThumbprint(thumbprint) {
         if (!!azino.userCert && azino.userThumbprint === thumbprint) { return Promise.resolve(azino.userCert); }
 
@@ -428,12 +481,11 @@
                 return c.Thumbprint.then(t => t === thumbprint);
             });
 
-            if (!!azino.userCert) { azino.userThumbprint = thumbprint; }
+            if (azino.userCert) { azino.userThumbprint = thumbprint; }
 
             return azino.userCert;
         })
     }
-
     function GetArrayOfCertPromises() {
         return GetStore().then(store => {
             return store.Open().then(() => {
@@ -454,7 +506,6 @@
             })
         }).catch(function () { return []; });
     }
-
     function CreateCert(a) {
         return Promise.all([
             a.IsValid(),
@@ -480,7 +531,6 @@
             };
         })
     }
-
     function GetStore() {
         if (azino.store) { return Promise.resolve(azino.store); }
 
@@ -492,7 +542,6 @@
                 return store;
             });
     }
-
     function GetAbout() {
         if (azino.about) { return Promise.resolve(azino.about); }
 
@@ -502,9 +551,8 @@
             .then(about => {
                 azino.about = about;
                 return about;
-        });
+            });
     }
-
     function GetLicense() {
         if (azino.license) { return Promise.resolve(azino.license); }
 
@@ -516,13 +564,12 @@
                 return license;
             });
     }
-
     function Extract(from, what) {
         let result = "";
         let begin = from.indexOf(what);
         let start = begin + what.length;
 
-        if (what == "E=" && begin > 0) {
+        if (what === "E=" && begin > 0) {
             begin = from.indexOf(" E=");
             start = begin + 3;
         }
@@ -532,7 +579,7 @@
 
             while (end > 0) {
                 if (CheckQuotes(from.substr(start, end - start))) { break; }
-                
+
                 end = from.indexOf(', ', end + 1);
             }
 
@@ -541,7 +588,6 @@
 
         return result;
     }
-
     function CheckQuotes(str) {
         let result = 0;
 
@@ -552,36 +598,28 @@
         return !(result % 2);
     }
 
-    //function GetCX509PrivateKey() {
-    //    if (azino.cx509privateKey) { return Promise.resolve(azino.cx509privateKey); }
-
-    //    if (!pluginAvailable) { return Promise.reject(""); }
-
-    //    return cadesplugin.CreateObjectAsync("CAdESCOM.CX509PrivateKey")
-    //        .then(cx509privateKey => {
-    //            azino.cx509privateKey = cx509privateKey;
-    //            return cx509privateKey;
-    //        });
-    //}
-    //function ResolvePrivateKey(privateKey) {
-    //    return privateKey.then(pk => {
-    //        let providerName = pk.ProviderName
-    //            .then(pn => { return pn; })
-    //            .catch(e => { return e.message });
-
-    //        let uniqueContainerName = pk.UniqueContainerName
-    //            .then(ucn => { return ucn; })
-    //            .catch(e => { return e.message });
-
-    //        return Promise.all([
-    //            providerName,
-    //            uniqueContainerName
-    //        ]).then(r => {
-    //            return {
-    //                "provider": r[0],
-    //                "privateKeyLink": r[1]
-    //            };
-    //        });
-    //    })
-    //}
+    // CONSTANTS
+    function CertTypes() {
+        return Object.freeze({
+            undefined: 0,
+            personal: 1,
+            organization: 2,
+            company: 3
+        });
+    }
+    function CadesCom() {
+        return {
+            CADES_BES: 1,
+            BASE64_TO_BINARY: 1,
+            AUTHENTICATED_ATTRIBUTE_DOCUMENT_NAME: 1
+        }
+    }
+    function CapiCom() {
+        return {
+            MY_STORE: "My",
+            CURRENT_USER_STORE: 2,
+            STORE_OPEN_MAXIMUM_ALLOWED: 2,
+            AUTHENTICATED_ATTRIBUTE_SIGNING_TIME: 0
+        }
+    }
 }());

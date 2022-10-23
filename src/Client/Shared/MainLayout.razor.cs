@@ -68,7 +68,7 @@ namespace EDO_FOMS.Client.Shared
             {
                 if (CurrentUserId == receiverUserId)
                 {
-                    _jsRuntime.InvokeAsync<string>("PlayAudio", "notification");
+                    _jsRuntime.InvokeAsync<string>("azino.PlayAudio", "notification");
                     _snackBar.Add(message, Severity.Info, config =>
                     {
                         config.VisibleStateDuration = 10000;

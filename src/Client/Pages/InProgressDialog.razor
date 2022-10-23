@@ -264,7 +264,7 @@
     </DialogContent>
 
     <DialogActions>
-        @if (Doc.AgreementId == null || _isAnswered)
+        @if (Doc.AgreementId == null || _isAnswered || _isCanceled)
         {
             <MudButton Class="mx-2" Variant="Variant.Outlined" FullWidth="true" Color="Color.Default" Size="Size.Large"
                    StartIcon="@Icons.Material.Filled.Done" IconColor="Color.Info" OnClick="ClickOk">

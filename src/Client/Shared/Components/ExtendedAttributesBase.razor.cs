@@ -154,7 +154,7 @@ namespace EDO_FOMS.Client.Shared.Components
             var response = await ExtendedAttributeManager.ExportToExcelAsync(request);
             if (response.Succeeded)
             {
-                await _jsRuntime.InvokeVoidAsync("Download", new
+                await _jsRuntime.InvokeVoidAsync("azino.Download", new
                 {
                     ByteArray = response.Data,
                     FileName = $"{typeof(TExtendedAttribute).Name.ToLower()}_{DateTime.Now:ddMMyyyyHHmmss}.xlsx",

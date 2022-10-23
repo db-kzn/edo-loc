@@ -85,7 +85,7 @@ namespace EDO_FOMS.Client.Pages.Identity
         private async Task ExportToExcel()
         {
             var base64 = await _userManager.ExportToExcelAsync(_searchString);
-            await _jsRuntime.InvokeVoidAsync("Download", new
+            await _jsRuntime.InvokeVoidAsync("azino.Download", new
             {
                 ByteArray = base64,
                 FileName = $"{nameof(Users).ToLower()}_{DateTime.Now:ddMMyyyyHHmmss}.xlsx",

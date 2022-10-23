@@ -127,7 +127,7 @@ namespace EDO_FOMS.Client.Pages.Utilities
             var response = await AuditManager.DownloadFileAsync(_searchString, _searchInOldValues, _searchInNewValues);
             if (response.Succeeded)
             {
-                await _jsRuntime.InvokeVoidAsync("Download", new
+                await _jsRuntime.InvokeVoidAsync("azino.Download", new
                 {
                     ByteArray = response.Data,
                     FileName = $"{nameof(AuditTrails).ToLower()}_{DateTime.Now:ddMMyyyyHHmmss}.xlsx",

@@ -69,7 +69,7 @@ internal class AgreementsProgressQueryHandler : IRequestHandler<AgreementsProgre
         if (request.AgreementId != null)
         {
             var a = _unitOfWork.Repository<Agreement>().Entities.FirstOrDefault(a => a.Document == doc && a.Id == request.AgreementId);
-            if (a != null && a.Opened == null)
+            if (a != null && a.Opened == null && !a.IsCanceled)
             {
                 a.Opened = DateTime.Now;
                 await _unitOfWork.Repository<Agreement>().UpdateAsync(a);

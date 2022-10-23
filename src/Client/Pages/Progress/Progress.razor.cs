@@ -293,15 +293,17 @@ namespace EDO_FOMS.Client.Pages.Progress
         {
             if (!_loaded) return;
             _selectedItems.RemoveWhere(i => i.AgreementId == _agreement.AgreementId);
-            
-            if (_canSystemView)
-            {
-                await ShowInProcessAsync(_agreement);
-            } 
-            else
-            {
-                await ShowAgreementListAsync(_agreement);
-            }
+
+            await ShowInProcessAsync(_agreement);
+
+            //if (_canSystemView)
+            //{
+            //    await ShowInProcessAsync(_agreement);
+            //} 
+            //else
+            //{
+            //    await ShowAgreementListAsync(_agreement);
+            //}
         }
         private async Task ShowInProcessAsync(AgreementModel a)
         {

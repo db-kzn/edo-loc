@@ -12,7 +12,7 @@ public class AgreementSpecification : EdoFomsSpecification<Agreement>
 {
     public AgreementSpecification(string searchString, string userId, AgreementStates agrState = AgreementStates.Undefined, bool matchCase = false)
     {
-        Criteria = p => p.EmplId == userId;
+        Criteria = p => p.EmplId == userId && !p.IsCanceled;
 
         if (agrState == AgreementStates.AllActive)
         {
@@ -43,7 +43,7 @@ public class AgreementSpecification : EdoFomsSpecification<Agreement>
 
     public AgreementSpecification(SearchAgrsRequest request, string userId)
     {
-        Criteria = p => p.EmplId == userId && p.Document.Stage == request.DocStage;
+        Criteria = p => p.EmplId == userId && p.Document.Stage == request.DocStage && !p.IsCanceled;
 
         if (request.DocStage != DocStages.Archive)
         {

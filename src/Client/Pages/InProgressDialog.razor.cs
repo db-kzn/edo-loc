@@ -26,6 +26,7 @@ namespace EDO_FOMS.Client.Pages
 
         private bool _loaded = false;
         private bool _isAnswered = false;
+        private bool _isCanceled = false;
         private bool _isMain = false;
 
         private string _action = "";
@@ -51,6 +52,8 @@ namespace EDO_FOMS.Client.Pages
                 {
                     _isAnswered = !(a.State == AgreementStates.Incoming || a.State == AgreementStates.Received
                         || a.State == AgreementStates.Opened) || Doc.Stage == DocStages.Archive;
+
+                    _isCanceled = a.IsCanceled;
 
                     _isMain = (a.Action == ActTypes.Agreement || a.Action == ActTypes.Signing);
 

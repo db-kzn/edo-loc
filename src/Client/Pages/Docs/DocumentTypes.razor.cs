@@ -107,7 +107,7 @@ namespace EDO_FOMS.Client.Pages.Docs
             var response = await DocumentTypeManager.ExportToExcelAsync(_searchString);
             if (response.Succeeded)
             {
-                await _jsRuntime.InvokeVoidAsync("Download", new
+                await _jsRuntime.InvokeVoidAsync("azino.Download", new
                 {
                     ByteArray = response.Data,
                     FileName = $"{nameof(DocumentTypes).ToLower()}_{DateTime.Now:ddMMyyyyHHmmss}.xlsx",

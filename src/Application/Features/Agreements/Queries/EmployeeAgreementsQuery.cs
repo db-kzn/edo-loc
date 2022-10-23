@@ -101,7 +101,7 @@ namespace EDO_FOMS.Application.Features.Agreements.Queries
             var count = 0;
 
             agreements.ForEach(async (a) => {
-                if (a.Received == null)
+                if (a.Received == null && !a.IsCanceled)
                 {
                     count++;
                     a.Received = DateTime.Now;

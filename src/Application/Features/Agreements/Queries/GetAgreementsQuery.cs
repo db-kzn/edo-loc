@@ -45,7 +45,7 @@ internal class GetDocumentsQueryHandler : IRequestHandler<GetAgreementsQuery, Pa
         Expression<Func<Agreement, GetAgreementsResponse>> expression = e => new GetAgreementsResponse
         {
             AgreementId = e.Id,
-            ParentAgreementId  = e.ParentId,
+            ParentAgreementId = e.ParentId,
 
             EmplId = e.EmplId,
             EmplOrgId = e.OrgId,
@@ -90,7 +90,7 @@ internal class GetDocumentsQueryHandler : IRequestHandler<GetAgreementsQuery, Pa
 
             // Данные о согласовании
             Step = e.StageNumber,
-            State = (e.Received == null) ? AgreementStates.Received : e.State,
+            State = (e.Received == null && !e.IsCanceled) ? AgreementStates.Received : e.State,
             Action = e.Action,
             IsCanceled = e.IsCanceled,
 
@@ -120,10 +120,14 @@ internal class GetDocumentsQueryHandler : IRequestHandler<GetAgreementsQuery, Pa
         {
             var agrs = _unitOfWork.Repository<Agreement>().Entities.Where(a => ids.Contains(a.Id)).ToList();
 
-            agrs.ForEach(async a => {
-                a.Received = now;
-                a.State = AgreementStates.Received;
-                await _unitOfWork.Repository<Agreement>().UpdateAsync(a);
+            agrs.ForEach(async a =>
+            {
+                if (!a.IsCanceled)
+                {
+                    a.Received = now;
+                    a.State = AgreementStates.Received;
+                    await _unitOfWork.Repository<Agreement>().UpdateAsync(a);
+                }
             });
 
             await _unitOfWork.Commit(cancellationToken);

@@ -43,7 +43,7 @@ namespace EDO_FOMS.Application.Features.System.Queries
         {
             var progress = _unitOfWork.Repository<Agreement>().Entities
                 .Where(a =>
-                    a.EmplId == request.UserId && a.Document.Stage == DocStages.InProgress &&
+                    a.EmplId == request.UserId && a.Document.Stage == DocStages.InProgress && !a.IsCanceled &&
                     a.State != AgreementStates.Control && a.State != AgreementStates.Expecting &&
                     a.Opened == null)
                 .Count();

@@ -100,7 +100,7 @@ internal class SearchAgrsQueryHandler : IRequestHandler<SearchAgrsQuery, Paginat
 
             // Данные о согласовании
             Step = e.StageNumber,
-            State = (e.Received == null) ? AgreementStates.Received : e.State,
+            State = (e.Received == null && !e.IsCanceled) ? AgreementStates.Received : e.State,
             Action = e.Action,
             IsCanceled = e.IsCanceled,
 
@@ -125,10 +125,14 @@ internal class SearchAgrsQueryHandler : IRequestHandler<SearchAgrsQuery, Paginat
         {
             var list = _unitOfWork.Repository<Agreement>().Entities.Where(a => ids.Contains(a.Id)).ToList();
 
-            list.ForEach(async a => {
-                a.Received = now;
-                a.State = AgreementStates.Received;
-                await _unitOfWork.Repository<Agreement>().UpdateAsync(a);
+            list.ForEach(async a =>
+            {
+                if (!a.IsCanceled)
+                {
+                    a.Received = now;
+                    a.State = AgreementStates.Received;
+                    await _unitOfWork.Repository<Agreement>().UpdateAsync(a);
+                }
             });
 
             await _unitOfWork.Commit(cancellationToken);

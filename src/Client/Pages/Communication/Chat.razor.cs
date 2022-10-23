@@ -30,7 +30,7 @@ namespace EDO_FOMS.Client.Pages.Communication
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            await _jsRuntime.InvokeAsync<string>("ScrollToBottom", "chatContainer");
+            await _jsRuntime.InvokeAsync<string>("azino.ScrollToBottom", "chatContainer");
         }
 
         private async Task SubmitAsync()
@@ -116,7 +116,7 @@ namespace EDO_FOMS.Client.Pages.Communication
                      {
                          _messages.Add(new ChatHistoryResponse { Message = chatHistory.Message, FromUserFullName = userName, CreatedDate = chatHistory.CreatedDate, FromUserImageURL = CImageURL });
                      }
-                     await _jsRuntime.InvokeAsync<string>("ScrollToBottom", "chatContainer");
+                     await _jsRuntime.InvokeAsync<string>("azino.ScrollToBottom", "chatContainer");
                      StateHasChanged();
                  }
              });
