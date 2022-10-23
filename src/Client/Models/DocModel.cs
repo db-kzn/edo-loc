@@ -30,7 +30,7 @@ namespace EDO_FOMS.Client.Models
         public bool HasChanges { get; set; }
 
         public int? TypeId { get; set; }
-        //public string Type { get; set; }
+        public DocIcons Icon { get; set; }
         public string TypeName { get; set; }
         public string TypeShort { get; set; }
 

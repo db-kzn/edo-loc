@@ -17,8 +17,6 @@ namespace EDO_FOMS.Client.Infrastructure.Managers.Orgs
 
         Task<IResult<int>> GetIdByCodeAsync(string code);
 
-        string OrgTypeIcon(OrgTypes orgType);
-
         //Task<IResult<int>> DeleteAsync(int id);
         //Task<IResult<string>> ExportToExcelAsync(string searchString = "");
     }

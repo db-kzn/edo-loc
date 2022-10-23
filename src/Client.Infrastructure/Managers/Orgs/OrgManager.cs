@@ -50,19 +50,5 @@ namespace EDO_FOMS.Client.Infrastructure.Managers.Orgs
             var response = await _httpClient.GetAsync(Routes.OrgsEndpoints.GetIdByCode(code));
             return await response.ToResult<int>();
         }
-
-        public string OrgTypeIcon(OrgTypes orgType)
-        {
-            return orgType switch
-            {
-                OrgTypes.MO => Icons.Material.Outlined.MedicalServices,
-                OrgTypes.SMO => Icons.Material.Outlined.Museum,
-                OrgTypes.Fund => Icons.Material.Outlined.HealthAndSafety,
-                OrgTypes.MEO => Icons.Material.Outlined.LocalPolice,
-                OrgTypes.Treasury => Icons.Material.Outlined.AccountBalance,
-
-                _ => Icons.Material.Outlined.Domain
-            };
-        }
     }
 }

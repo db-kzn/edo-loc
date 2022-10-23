@@ -117,19 +117,79 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Add Members" xml:space="preserve">
+    <value>Add Members</value>
+  </data>
+  <data name="Agreement" xml:space="preserve">
+    <value>Agreement</value>
+  </data>
   <data name="Approval sheet" xml:space="preserve">
     <value>Approval sheet</value>
+  </data>
+  <data name="Approved" xml:space="preserve">
+    <value>Approved</value>
   </data>
   <data name="Certificate" xml:space="preserve">
     <value>Certificate</value>
   </data>
+  <data name="Control" xml:space="preserve">
+    <value>Control</value>
+  </data>
+  <data name="Deleted" xml:space="preserve">
+    <value>Deleted</value>
+  </data>
+  <data name="Expecting" xml:space="preserve">
+    <value>Expecting</value>
+  </data>
+  <data name="In work" xml:space="preserve">
+    <value>In work</value>
+  </data>
+  <data name="Incoming" xml:space="preserve">
+    <value>Incoming</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>Ok</value>
+  </data>
   <data name="Participant" xml:space="preserve">
     <value>Participant</value>
+  </data>
+  <data name="Refuse" xml:space="preserve">
+    <value>Refuse</value>
+  </data>
+  <data name="Refused" xml:space="preserve">
+    <value>Refused</value>
+  </data>
+  <data name="Reject" xml:space="preserve">
+    <value>Reject</value>
+  </data>
+  <data name="Rejected" xml:space="preserve">
+    <value>Rejected</value>
   </data>
   <data name="Signature" xml:space="preserve">
     <value>Signature</value>
   </data>
+  <data name="Signed" xml:space="preserve">
+    <value>Signed</value>
+  </data>
+  <data name="Signing" xml:space="preserve">
+    <value>Signing</value>
+  </data>
   <data name="Stage" xml:space="preserve">
     <value>Stage</value>
+  </data>
+  <data name="To Approve" xml:space="preserve">
+    <value>To Approve</value>
+  </data>
+  <data name="To Check" xml:space="preserve">
+    <value>To Check</value>
+  </data>
+  <data name="To Run" xml:space="preserve">
+    <value>To Run</value>
+  </data>
+  <data name="To Sign" xml:space="preserve">
+    <value>To Sign</value>
+  </data>
+  <data name="Verified" xml:space="preserve">
+    <value>Verified</value>
   </data>
 </root>

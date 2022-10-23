@@ -1,0 +1,171 @@
+﻿@namespace EDO_FOMS.Client.Pages
+
+@inject Microsoft.Extensions.Localization.IStringLocalizer<DocAgrsCardDialog> _localizer
+
+@using EDO_FOMS.Application.Responses.Agreements
+@using EDO_FOMS.Domain.Enums
+@using EDO_FOMS.Client.Infrastructure.Model.Docs
+
+<MudDialog Style="background-color: var(--mud-palette-background-grey); min-width: 600px; width: 100%">
+    <TitleContent>
+        <MudText Typo="Typo.h6" Class="d-flex align-center">
+            <MudIcon Class="mr-2" Icon="@DocTypeIcon(Doc.Icon)" />
+
+            @($"{_localizer["Approval sheet"]}:")
+
+            <MudLink Href="@Doc.URL" Color="Color.Dark" Typo="Typo.h6" Class="ml-2" Underline="Underline.None" Target="_blank">
+                @($" {Doc.TypeName} №{Doc.Number} от {Doc.DateStr}г.")
+            </MudLink>
+        </MudText>
+    </TitleContent>
+
+    <DialogContent>
+        <MudTable Hover="false" Dense="true" Bordered="false" Striped="false" Breakpoint="Breakpoint.Xs"
+                  Loading="@(!_loaded)" LoadingProgressColor="Color.Info" Style="margin-bottom: 0;"
+                  @ref="_mudTable" T="DocAgrsCardStageModel" @bind-SelectedItem="_stage" OnRowClick="OnStageClick"
+                  Items="@DocAgrsCard.Stages.Values" Context="stage">
+
+            <ColGroup>
+                <col style="width:40%;" />
+                <col style="width:40%;" />
+                <col style="width:20%;" />
+            </ColGroup>
+
+            <HeaderContent>
+                <MudTh>@_localizer["Participant"]</MudTh>
+                <MudTh>@_localizer["Certificate"]</MudTh>
+                <MudTh>@_localizer["Signature"]</MudTh>
+            </HeaderContent>
+
+            <RowTemplate>
+                <MudTd>
+                    <MudText Typo="Typo.button" Class="d-flex align-center">
+                        <MudIconButton Icon="@((stage.ShowAgreements) ? Icons.Material.Rounded.KeyboardArrowUp : Icons.Material.Rounded.KeyboardArrowDown)"
+                                       Class="mr-4" Color="Color.Primary" OnClick="@(() => ShowBtnPress(stage))" Size="Size.Small">
+                        </MudIconButton>
+                        @_localizer["Stage"]
+                        @stage.Number
+                    </MudText>
+                </MudTd>
+
+                <MudTd></MudTd>
+                <MudTd></MudTd>
+            </RowTemplate>
+
+            <ChildRowContent>
+                @if (stage.ShowAgreements)
+                {
+                    <MudTr>
+                        <td colspan="4">
+                            <MudCard Elevation="0">
+                                <MudCardContent Class="pa-0">
+                                    <MudTable Hover="true" Dense="true" Bordered="false" Striped="true" Breakpoint="Breakpoint.Xs"
+                                          Loading="@(!_loaded)" LoadingProgressColor="Color.Info" Style="margin-bottom: 0;"
+                                          Items="@stage.Agreements" Context="agreement">
+                                        <ColGroup>
+                                            <col style="width:40%;" />
+                                            <col style="width:40%;" />
+                                            <col style="width:20%;" />
+                                        </ColGroup>
+
+                                        <RowTemplate>
+                                            <MudTd DataLabel="@_localizer["Participant"]">
+                                                <MudText Typo="Typo.body2" Class="d-flex align-center">
+                                                    @{
+                                                        var orgTypeIcon = OrgTypeIcon(agreement.OrgType);
+                                                            <MudIcon Icon="@orgTypeIcon.Icon" Color="@Color.Default" Class="mr-4" />
+                                                    }
+                                                    <span>
+                                                        <MudText Typo="Typo.body2" Class="d-flex align-center">
+                                                            @(string.IsNullOrWhiteSpace(agreement.OrgShort) ? agreement.OrgInn : agreement.OrgShort)
+                                                        </MudText>
+                                                        @agreement.EmplTitle
+                                                        <br />
+                                                        @agreement.EmplSurname @agreement.EmplGivenName
+                                                    </span>
+                                                </MudText>
+                                            </MudTd>
+
+                                            <MudTd DataLabel="@_localizer["Certificate"]">
+                                                <MudText Typo="Typo.body2" Class="d-flex align-center">
+                                                    <MudIcon Icon="@Icons.Material.Rounded.Code" Color="@Color.Default" Class="mr-2" />
+                                                    @agreement.CertAlgorithm
+                                                </MudText>
+
+                                                <MudText Typo="Typo.body2" Class="d-flex align-center">
+                                                    <MudIcon Icon="@Icons.Material.Rounded.Fingerprint" Color="@Color.Default" Class="mr-2" />
+                                                    @agreement.CertThumbprint
+                                                </MudText>
+
+                                                <MudText Typo="Typo.body2" Class="d-flex align-center">
+                                                    <MudIcon Icon="@Icons.Material.Rounded.DateRange" Color="@Color.Default" Class="mr-2" />
+                                                    @(agreement.CertFromDate is not null ? $"{agreement.CertFromDate?.ToString("g")} - {agreement.CertTillDate?.ToString("g")}" : "")
+                                                </MudText>
+                                            </MudTd>
+
+                                            <MudTd DataLabel="@_localizer["Signature"]">
+                                                <MudText Typo="Typo.body2" Class="d-flex align-center">
+                                                    <MudIcon Icon="@Icons.Material.Rounded.Event" Color="@Color.Default" Class="mr-2" />
+                                                    @agreement.Answered
+                                                </MudText>
+                                                @{
+                                                    var iconAction = ActTypeIcon(agreement.Action);
+                                                    //<MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer[iconAction.Tooltip]" Placement="Placement.Left" Color="Color.Tertiary">
+                                                    //</MudTooltip>
+                                                        <MudText Typo="Typo.body2" Class="d-flex align-center">
+                                                            <MudIcon Icon="@iconAction.Icon" Color="@Color.Default" Class="mr-2" />
+                                                            @_localizer[iconAction.Label]
+                                                        </MudText>
+                                                }
+                                                @{
+                                                    var icon = AgrStateIcon(agreement.State);
+                                                        <MudText Typo="Typo.body2" Class="d-flex align-center">
+                                                            <MudIcon Icon="@icon.Icon" Color="@icon.Color" Class="mr-2" />
+                                                            @_localizer[icon.Label]
+                                                        </MudText>
+                                                }
+                                            </MudTd>
+                                        </RowTemplate>
+
+                                    </MudTable>
+                                </MudCardContent>
+                            </MudCard>
+                        </td>
+                    </MudTr>
+                }
+            </ChildRowContent>
+
+        </MudTable>
+    </DialogContent>
+
+    <DialogActions>
+        @if (Doc.AgreementId == null || _isAnswered || _isCanceled)
+        {
+            <MudButton Class="mx-2" Variant="Variant.Outlined" FullWidth="true" Color="Color.Default" Size="Size.Large"
+                   StartIcon="@Icons.Material.Filled.Done" IconColor="Color.Info" OnClick="ClickOk">
+                <MudText Typo="Typo.button" Class="ms-4">@_localizer["Ok"]</MudText>
+            </MudButton>
+        }
+        else
+        {
+            <MudButton Class="mx-2" Variant="Variant.Outlined" FullWidth="true" Color="Color.Success" Size="Size.Large"
+                   StartIcon="@Icons.Material.Filled.Done" IconColor="Color.Success" OnClick="ClickAgree">
+                <MudText Typo="Typo.button" Class="ms-4">@_localizer[_action]</MudText>
+            </MudButton>
+            if (_isMain)
+            {
+                <MudButton Class="mx-2" Variant="Variant.Outlined" FullWidth="true" Color="Color.Default" Size="Size.Large"
+                   StartIcon="@Icons.Material.Filled.AddTask" IconColor="Color.Inherit" OnClick="ClickAddMembers">
+                    <MudText Typo="Typo.button" Class="ms-4">@_localizer["Add Members"]</MudText>
+                </MudButton>
+            }
+            <MudButton Class="mx-2" Variant="Variant.Outlined" FullWidth="true" Color="Color.Error" Size="Size.Large"
+                   StartIcon="@Icons.Material.Filled.Close" IconColor="Color.Error" OnClick="ClickReject">
+                <MudText Typo="Typo.button" Class="ms-4">
+                    @((_action == nameof(AgreementActions.ToReview)) ? _localizer["Refuse"] : _localizer["Reject"])
+                </MudText>
+            </MudButton>
+        }
+
+    </DialogActions>
+</MudDialog>

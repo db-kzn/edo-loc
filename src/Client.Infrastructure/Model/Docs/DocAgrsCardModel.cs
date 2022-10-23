@@ -11,6 +11,7 @@ namespace EDO_FOMS.Client.Infrastructure.Model.Docs
 
         public int DocId { get; set; }
         public int RouteId { get; set; }
+        public DocIcons Icon { get; set; } = DocIcons.Newspaper;
 
         public string EmplId { get; set; }                                         //  Инициатор подписания
         public int EmplOrgId { get; set; }                                         // Организация инициатора

@@ -11,6 +11,7 @@ namespace EDO_FOMS.Application.Responses.Agreements
 
         public int DocId { get; set; }
         public int RouteId { get; set; }
+        public DocIcons Icon { get; set; }
 
         public string EmplId { get; set; }                                         //  Инициатор подписания
         public int EmplOrgId { get; set; }                                         // Организация инициатора
@@ -40,6 +41,7 @@ namespace EDO_FOMS.Application.Responses.Agreements
         public int? RouteStepId { get; set; } = null;              // Ссылка на шаблон процесса из маршрута документа
         public int StageNumber { get; set; } = 0;                  // Порядковый номер этапа подписания документа
         public bool IsAdditional { get; set; } = true;             // Дополнительный участник согласование
+        public bool IsCanceled { get; set; } = true;             // Отмененное участие
 
         public int? EmplOrgId { get; set; } = null;                // Организация подписанта / согласованта
         public OrgTypes OrgType { get; set; }

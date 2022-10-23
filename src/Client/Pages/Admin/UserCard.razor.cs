@@ -1,5 +1,6 @@
 ﻿using EDO_FOMS.Application.Features.Certs.Queries;
 using EDO_FOMS.Application.Requests.Admin;
+using EDO_FOMS.Client.Infrastructure.Managers;
 using EDO_FOMS.Client.Infrastructure.Managers.Orgs;
 using EDO_FOMS.Client.Infrastructure.Managers.System;
 using EDO_FOMS.Client.Infrastructure.Model.Admin;
@@ -20,6 +21,7 @@ namespace EDO_FOMS.Client.Pages.Admin
     {
         [Inject] private IAdminManager AdmManager { get; set; }
         [Inject] private IOrgManager OrgManager { get; set; }
+        [Inject] private IIconManager IconManager { get; set; }
 
         [Parameter] public string UserId { get; set; }
 
@@ -136,7 +138,7 @@ namespace EDO_FOMS.Client.Pages.Admin
         {
             var error = 0;
 
-            if (User.InnLe.Length != 10 || User.InnLe.Length != 12)
+            if (User.InnLe.Length != 10 && User.InnLe.Length != 12)
             {
                 error++;
                 _snackBar.Add(_localizer["Org INN mast be 10 or 12 symbols"], Severity.Warning);
@@ -227,6 +229,6 @@ namespace EDO_FOMS.Client.Pages.Admin
             };
         }
 
-        private string OrgTypeIcon(OrgTypes orgType) => OrgManager.OrgTypeIcon(orgType);
+        private string OrgTypeIcon(OrgTypes orgType) => IconManager.OrgTypeIcon(orgType).Icon;
     }
 }

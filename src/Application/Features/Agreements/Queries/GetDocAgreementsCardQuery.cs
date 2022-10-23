@@ -5,6 +5,7 @@ using EDO_FOMS.Domain.Entities.Doc;
 using EDO_FOMS.Domain.Entities.Org;
 using EDO_FOMS.Shared.Wrapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
@@ -45,7 +46,7 @@ internal class GetDocAgreementsCardQueryHandler : IRequestHandler<GetDocAgreemen
 
     public async Task<Result<DocAgreementsCardResponse>> Handle(GetDocAgreementsCardQuery request, CancellationToken cancellationToken)
     {
-        var doc = await _unitOfWork.Repository<Document>().GetByIdAsync(request.Id);
+        var doc = await _unitOfWork.Repository<Document>().Entities.Include(d => d.Type).FirstOrDefaultAsync(d => d.Id == request.Id, cancellationToken);
         if (doc is null) { return await Result<DocAgreementsCardResponse>.FailAsync(_localizer["Document Not Found"]); }
 
         bool commitRequired = false;
@@ -72,6 +73,7 @@ internal class GetDocAgreementsCardQueryHandler : IRequestHandler<GetDocAgreemen
 
             DocId = doc.Id,
             RouteId = doc.RouteId,
+            Icon = doc.Type.Icon,
 
             EmplId = doc.EmplId,
             EmplOrgId = doc.EmplOrgId,
@@ -98,6 +100,7 @@ internal class GetDocAgreementsCardQueryHandler : IRequestHandler<GetDocAgreemen
                 RouteStepId = a.RouteStepId,
                 StageNumber = a.StageNumber,
                 IsAdditional = a.IsAdditional,
+                IsCanceled = a.IsCanceled,
 
                 EmplOrgId = org.Id,
                 OrgType = org.Type,
@@ -122,7 +125,7 @@ internal class GetDocAgreementsCardQueryHandler : IRequestHandler<GetDocAgreemen
 
                 Remark = a.Remark,
                 SignURL = a.SignURL
-            });
+            }); ;
         });
 
         if (commitRequired) { await _unitOfWork.Commit(cancellationToken); }

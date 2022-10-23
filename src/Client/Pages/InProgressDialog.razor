@@ -97,22 +97,10 @@
                         </MudTd>
 
                         <MudTd DataLabel="@_localizer["Type"]">
-                            @if (context.UserOrgType == OrgTypes.Fund)
-                            {
-                                <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Fund OMS"]" Placement="Placement.Left" Color="Color.Tertiary">
-                                    <MudIcon Icon="@Icons.Material.Outlined.HealthAndSafety" Color="Color.Error" Class="mx-2" />
-                                </MudTooltip>
-                            }
-                            else if (context.UserOrgType == OrgTypes.MO)
-                            {
-                                <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["MO"]" Placement="Placement.Left" Color="Color.Tertiary">
-                                    <MudIcon Icon="@Icons.Material.Outlined.MedicalServices" Color="Color.Primary" Class="mx-2" />
-                                </MudTooltip>
-                            }
-                            else if (context.UserOrgType == OrgTypes.SMO)
-                            {
-                                <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["SMO"]" Placement="Placement.Left" Color="Color.Tertiary">
-                                    <MudIcon Icon="@Icons.Material.Outlined.Museum" Color="Color.Success" Class="mx-2" />
+                            @{
+                                var orgTypeIcon = OrgTypeIcon(context.UserOrgType);
+                                <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer[orgTypeIcon.Label]" Placement="Placement.Left" Color="Color.Tertiary">
+                                    <MudIcon Icon="@orgTypeIcon.Icon" Color="@orgTypeIcon.Color" Class="mx-2" />
                                 </MudTooltip>
                             }
                         </MudTd>
@@ -138,6 +126,10 @@
                             }
                             else if (context.Action == ActTypes.Review)
                             {
+                                // var Icon = DicManager.ActionIcon();
+                                // Icon.Icon
+                                // Icon.Color
+                                // Icon.Title
                                 <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["To Check"]" Placement="Placement.Left" Color="Color.Tertiary">
                                     <MudIcon Icon="@Icons.Material.Outlined.MapsUgc" Color="Color.Default" Class="mx-2" />
                                 </MudTooltip>
@@ -152,66 +144,11 @@
 
                         <MudTd DataLabel="@_localizer["State"]">
                             <div class="d-flex flex-row" style="height: 24px;">
-
-                                @if (context.State == AgreementStates.Expecting)    // -. Ожидание. Согласование назначено, очередь не дошла
-                                {
-                                    <MudIcon Icon="@Icons.Material.TwoTone.NotificationsPaused" Color="Color.Default" Class="mx-2" />
-                                    @_localizer["Expecting"]
-                                    @*<MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Expecting"]" Placement="Placement.Left" Color="Color.Tertiary"></MudTooltip>*@
-                                }
-                                else if (context.State == AgreementStates.Incoming)  // 1. Входящий - Новый поступивший
-                                {
-                                    <MudIcon Icon="@Icons.Material.TwoTone.MarkunreadMailbox" Color="Color.Default" Class="mx-2" />
-                                    @_localizer["Incoming"]
-                                    @*<MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Incoming"]" Placement="Placement.Left" Color="Color.Tertiary"></MudTooltip>*@
-                                }
-                                else if (context.State == AgreementStates.Received)  // 2. В работе - Открытый, прочитанный
-                                {
-                                    <MudIcon Icon="@Icons.Material.TwoTone.Drafts" Color="Color.Primary" Class="mx-2" />
-                                    @_localizer["In work"]
+                                @{
+                                    var icon = IconManager.AgrStateIcon(context.State);
+                                    <MudIcon Icon="@icon.Icon" Color="@icon.Color" Class="mx-2" />
+                                    @_localizer[icon.Label]
                                     @*<MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["In work"]" Placement="Placement.Left" Color="Color.Tertiary"></MudTooltip>*@
-                                }
-                                else if (context.State == AgreementStates.Verifed) // 3. Согласованный
-                                {
-                                    <MudIcon Icon="@Icons.Material.TwoTone.DoneOutline" Color="Color.Success" Class="mx-2" />
-                                    @_localizer["Verified"]
-                                    @*<MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Verified"]" Placement="Placement.Left" Color="Color.Tertiary"></MudTooltip>*@
-                                }
-                                else if (context.State == AgreementStates.Approved) // 3. Согласованный
-                                {
-                                    <MudIcon Icon="@Icons.Material.TwoTone.Verified" Color="Color.Success" Class="mx-2" />
-                                    @_localizer["Approved"]
-                                    @*<MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Approved"]" Placement="Placement.Left" Color="Color.Tertiary"></MudTooltip>*@
-                                }
-                                else if (context.State == AgreementStates.Signed)   // 3. Подписанный
-                                {
-                                    <MudIcon Icon="@Icons.Material.TwoTone.QrCode" Color="Color.Success" Class="mx-2" />
-                                    @_localizer["Signed"]
-                                    @*<MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Signed"]" Placement="Placement.Left" Color="Color.Tertiary"></MudTooltip>*@
-                                }
-                                else if (context.State == AgreementStates.Refused) // 4. Отклоненный
-                                {
-                                    <MudIcon Icon="@Icons.Material.TwoTone.Report" Color="Color.Warning" Class="mx-2" />
-                                    @_localizer["Refused"]
-                                    @*<MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Refused"]" Placement="Placement.Left" Color="Color.Tertiary"></MudTooltip>*@
-                                }
-                                else if (context.State == AgreementStates.Rejected) // 4. Отклоненный
-                                {
-                                    <MudIcon Icon="@Icons.Material.TwoTone.DisabledByDefault" Color="Color.Error" Class="mx-2" />
-                                    @_localizer["Rejected"]
-                                    @*<MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Rejected"]" Placement="Placement.Left" Color="Color.Tertiary"></MudTooltip>*@
-                                }
-                                else if (context.State == AgreementStates.Deleted) // 4+ Удален
-                                {
-                                    <MudIcon Icon="@Icons.Material.TwoTone.DeleteForever" Color="Color.Default" Class="mx-2" />
-                                    @_localizer["Deleted"]
-                                    @*<MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Deleted"]" Placement="Placement.Left" Color="Color.Tertiary"></MudTooltip>*@
-                                }
-                                else if (context.State == AgreementStates.Control) //
-                                {
-                                    <MudIcon Icon="@Icons.Material.TwoTone.Inventory" Color="Color.Info" Class="mx-2" />
-                                    @_localizer["Control"]
-                                    @*<MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Control"]" Placement="Placement.Left" Color="Color.Tertiary"></MudTooltip>*@
                                 }
                             </div>
                         </MudTd>

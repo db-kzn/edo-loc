@@ -6,6 +6,7 @@ using EDO_FOMS.Application.Responses.Docums;
 using EDO_FOMS.Application.Responses.Orgs;
 using EDO_FOMS.Client.Extensions;
 using EDO_FOMS.Client.Infrastructure.Filters;
+using EDO_FOMS.Client.Infrastructure.Managers;
 using EDO_FOMS.Client.Infrastructure.Managers.Dir;
 using EDO_FOMS.Client.Infrastructure.Managers.Doc.Document;
 using EDO_FOMS.Client.Infrastructure.Models.Dirs;
@@ -33,6 +34,7 @@ namespace EDO_FOMS.Client.Pages.Progress
 
         [Inject] private IDocumentManager DocManager { get; set; }
         [Inject] private IDirectoryManager DirManager { get; set; }
+        [Inject] private IIconManager IconManager { get; set; }
 
         [CascadingParameter]
         public NavCounts NavCounts { get; set; }
@@ -294,16 +296,16 @@ namespace EDO_FOMS.Client.Pages.Progress
             if (!_loaded) return;
             _selectedItems.RemoveWhere(i => i.AgreementId == _agreement.AgreementId);
 
-            await ShowInProcessAsync(_agreement);
+            //await ShowInProcessAsync(_agreement);
 
-            //if (_canSystemView)
-            //{
-            //    await ShowInProcessAsync(_agreement);
-            //} 
-            //else
-            //{
-            //    await ShowAgreementListAsync(_agreement);
-            //}
+            if (_canSystemView)
+            {
+                await ShowInProcessAsync(_agreement);
+            }
+            else
+            {
+                await ShowAgrsCardAsync(_agreement);
+            }
         }
         private async Task ShowInProcessAsync(AgreementModel a)
         {
@@ -336,15 +338,37 @@ namespace EDO_FOMS.Client.Pages.Progress
             }
             //await GetAgreementsAsync(AgreementStates.AllActive);
         }
-        private async Task<DialogResult> ShowAgreementListAsync(AgreementModel a)
+        private async Task<DialogResult> ShowAgrsCardAsync(AgreementModel a)
         {
             var doc = AgreementToDoc(a);
-            var parameters = new DialogParameters() { { nameof(DocAgreementsDialog.Doc), doc } };
+            var parameters = new DialogParameters() { { nameof(DocAgrsCardDialog.Doc), doc } };
             var options = new DialogOptions { CloseButton = true };
 
-            var dialog = _dialogService.Show<DocAgreementsDialog>("", parameters, options);
+            var dialog = _dialogService.Show<DocAgrsCardDialog>("", parameters, options);
+            var result = await dialog.Result;
 
-            return await dialog.Result;
+            if (a.Opened == null) { a.Opened = DateTime.Now; }
+
+            if (!result.Cancelled)
+            {
+                var action = result.Data.ToString();
+                await _jsRuntime.InvokeVoidAsync("azino.Console", action, "ACTION: ");
+
+                _loaded = false;
+                StateHasChanged();
+
+                if (action == nameof(AgreementActions.ToReview)) { await VerifyAnAgreementAsync(a); }
+                else if (action == nameof(AgreementActions.ToRefuse)) { await RefuseAnAgreementAsync(a); }
+                else if (action == nameof(AgreementActions.ToApprove)) { await ApproveAnAgreementAsync(a); }
+                else if (action == nameof(AgreementActions.ToSign)) { await SignAnAgreementAsync(a); }
+                else if (action == nameof(AgreementActions.ToReject)) { await RejectAnAgreementAsync(a); }
+                else if (action == nameof(AgreementActions.AddMembers)) { await AddMembersAsync(a); }
+
+                await _mudTable.ReloadServerData();
+            }
+            //await GetAgreementsAsync(AgreementStates.AllActive);
+
+            return result;
         }
 
         private async Task<string> CreateSignAsync(AgreementModel agreement)
@@ -553,6 +577,7 @@ namespace EDO_FOMS.Client.Pages.Progress
                 DocIsPublic = a.DocIsPublic,
 
                 DocTypeId = a.DocTypeId,
+                DocIcon = a.DocIcon,
                 DocTypeName = a.DocTypeName,//(a.DocTypeId == 1) ? "Договор" : "Доп.соглашение",  //a.DocTypeName,
                 DocTypeShort = a.DocTypeShort, //(a.DocTypeId == 1) ? "Дог" : "Д/С", //a.DocTypeShort,
 
@@ -612,6 +637,7 @@ namespace EDO_FOMS.Client.Pages.Progress
                 IsPublic = a.DocIsPublic,
 
                 TypeId = a.DocTypeId,
+                Icon = a.DocIcon,
                 TypeName = a.DocTypeName,
                 TypeShort = a.DocTypeShort,
 
@@ -817,6 +843,6 @@ namespace EDO_FOMS.Client.Pages.Progress
         //        a.DocCreatedOnStr?.Contains(_searchString, comparison) == true;
         //}
 
-        private string DocTypeIcon(DocIcons icon) => DirManager.DocTypeIcon(icon);
+        private string DocTypeIcon(DocIcons icon) => IconManager.DocTypeIcon(icon).Icon;
     }
 }

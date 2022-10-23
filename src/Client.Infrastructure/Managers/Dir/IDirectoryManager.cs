@@ -27,7 +27,5 @@ namespace EDO_FOMS.Client.Infrastructure.Managers.Dir
         Task<IResult<ImportResponse>> ImportFomsAsync();
         Task<IResult<ImportResponse>> ImportSmoAsync();
         Task<IResult<ImportResponse>> ImportMoAsync();
-
-        string DocTypeIcon(DocIcons icon);
     }
 }

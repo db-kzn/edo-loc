@@ -2,6 +2,7 @@
 using EDO_FOMS.Application.Requests.Directories;
 using EDO_FOMS.Application.Responses.Directories;
 using EDO_FOMS.Client.Extensions;
+using EDO_FOMS.Client.Infrastructure.Managers;
 using EDO_FOMS.Client.Infrastructure.Managers.Dir;
 using EDO_FOMS.Domain.Enums;
 using EDO_FOMS.Shared.Constants.Permission;
@@ -22,6 +23,7 @@ public partial class DocTypes
     public Origin AnchorOrigin { get; set; } = Origin.BottomRight;
 
     [Inject] private IDirectoryManager DirManager { get; set; }
+    [Inject] private IIconManager IconManager { get; set; }
 
     private MudTable<DocTypesResponse> _mudTable;
     private IEnumerable<DocTypesResponse> _pagedData = new List<DocTypesResponse>();
@@ -192,5 +194,5 @@ public partial class DocTypes
         if (!result.Cancelled) { await _mudTable.ReloadServerData(); }
     }
 
-    private string DocTypeIcon(DocIcons icon) => DirManager.DocTypeIcon(icon);  
+    private string DocTypeIcon(DocIcons icon) => IconManager.DocTypeIcon(icon).Icon;
 }

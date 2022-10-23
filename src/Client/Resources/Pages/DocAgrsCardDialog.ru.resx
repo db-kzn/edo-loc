@@ -117,19 +117,79 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Add Members" xml:space="preserve">
+    <value>Добавить согласующего</value>
+  </data>
+  <data name="Agreement" xml:space="preserve">
+    <value>Согласовать</value>
+  </data>
   <data name="Approval sheet" xml:space="preserve">
     <value>Лист Согласования</value>
+  </data>
+  <data name="Approved" xml:space="preserve">
+    <value>Одобрен</value>
   </data>
   <data name="Certificate" xml:space="preserve">
     <value>Сертификат</value>
   </data>
+  <data name="Control" xml:space="preserve">
+    <value>Контроль</value>
+  </data>
+  <data name="Deleted" xml:space="preserve">
+    <value>Удален</value>
+  </data>
+  <data name="Expecting" xml:space="preserve">
+    <value>Очередь</value>
+  </data>
+  <data name="In work" xml:space="preserve">
+    <value>В работе</value>
+  </data>
+  <data name="Incoming" xml:space="preserve">
+    <value>Новый</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>Ок</value>
+  </data>
   <data name="Participant" xml:space="preserve">
     <value>Участник</value>
+  </data>
+  <data name="Refuse" xml:space="preserve">
+    <value>Замечание</value>
+  </data>
+  <data name="Refused" xml:space="preserve">
+    <value>Замечание</value>
+  </data>
+  <data name="Reject" xml:space="preserve">
+    <value>Отклонить</value>
+  </data>
+  <data name="Rejected" xml:space="preserve">
+    <value>Отклонен</value>
   </data>
   <data name="Signature" xml:space="preserve">
     <value>Подпись</value>
   </data>
+  <data name="Signed" xml:space="preserve">
+    <value>Подписан</value>
+  </data>
+  <data name="Signing" xml:space="preserve">
+    <value>Подписать</value>
+  </data>
   <data name="Stage" xml:space="preserve">
     <value>Этап</value>
+  </data>
+  <data name="To Approve" xml:space="preserve">
+    <value>Согласование</value>
+  </data>
+  <data name="To Check" xml:space="preserve">
+    <value>Доп.согласование</value>
+  </data>
+  <data name="To Run" xml:space="preserve">
+    <value>Инициация</value>
+  </data>
+  <data name="To Sign" xml:space="preserve">
+    <value>Подписание</value>
+  </data>
+  <data name="Verified" xml:space="preserve">
+    <value>Принято</value>
   </data>
 </root>

@@ -38,6 +38,7 @@ public class GetAgreementsResponse
     public bool DocIsPublic { get; set; }
 
     public int DocTypeId { get; set; }
+    public DocIcons DocIcon { get; set; }
     public string DocTypeName { get; set; }
     public string DocTypeShort { get; set; }
 

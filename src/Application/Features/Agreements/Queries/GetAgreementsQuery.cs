@@ -68,6 +68,7 @@ internal class GetDocumentsQueryHandler : IRequestHandler<GetAgreementsQuery, Pa
             DocIsPublic = e.Document.IsPublic,
 
             DocTypeId = e.Document.TypeId,
+            DocIcon = e.Document.Type.Icon,
             DocTypeName = e.Document.Type.Name,
             DocTypeShort = e.Document.Type.Short,
 

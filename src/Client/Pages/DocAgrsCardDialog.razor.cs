@@ -1,21 +1,22 @@
-﻿using EDO_FOMS.Application.Responses.Agreements;
+﻿using EDO_FOMS.Client.Infrastructure.Managers;
+using EDO_FOMS.Client.Infrastructure.Managers.Dir;
 using EDO_FOMS.Client.Infrastructure.Managers.Doc.Document;
+using EDO_FOMS.Client.Infrastructure.Model;
 using EDO_FOMS.Client.Infrastructure.Model.Docs;
 using EDO_FOMS.Client.Models;
 using EDO_FOMS.Domain.Enums;
-using LinqKit;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using MudBlazor;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace EDO_FOMS.Client.Pages
 {
-    public partial class DocAgreementsDialog
+    public partial class DocAgrsCardDialog
     {
         [Inject] private IDocumentManager DocManager { get; set; }
+        [Inject] private IIconManager IconManager { get; set; }
 
         [CascadingParameter] private MudDialogInstance MudDialog { get; set; }
 
@@ -26,12 +27,12 @@ namespace EDO_FOMS.Client.Pages
         public DocAgrsCardStageModel _stage;
 
         //private Dictionary<int, DocAgrsCardStageModel> DocCardStages = new();
-
         //private MudTable<KeyValuePair<int, DocAgrsCardStageModel>> _mudTable;
         //private KeyValuePair<int, DocAgrsCardStageModel> _stage;
 
         private bool _loaded = false;
         private bool _isAnswered = false;
+        private bool _isCanceled = false;
         private bool _isMain = false;
 
         private string _action = "";
@@ -47,6 +48,8 @@ namespace EDO_FOMS.Client.Pages
             duration = _stateService.TooltipDuration;
 
             await GetDocAgrsCardAsync();
+
+            await _jsRuntime.InvokeVoidAsync("azino.Console", Doc, "DOC MODEL: ");
 
             _loaded = true;
         }
@@ -67,6 +70,7 @@ namespace EDO_FOMS.Client.Pages
 
             DocAgrsCard.DocId = card.DocId;
             DocAgrsCard.RouteId = card.RouteId;
+            DocAgrsCard.Icon = card.Icon;
 
             DocAgrsCard.EmplId = card.EmplId;
             DocAgrsCard.EmplOrgId = card.EmplOrgId;
@@ -89,10 +93,28 @@ namespace EDO_FOMS.Client.Pages
                 }
             });
 
+            if (Doc.AgreementId != null)
+            {
+                var a = card.Agreements.Find(a => a.AgreementId == Doc.AgreementId);
+
+                if (a != null)
+                {
+                    _isAnswered = !(a.State == AgreementStates.Incoming || a.State == AgreementStates.Received
+                        || a.State == AgreementStates.Opened) || Doc.Stage == DocStages.Archive;
+
+                    _isCanceled = a.IsCanceled;
+
+                    _isMain = (a.Action == ActTypes.Agreement || a.Action == ActTypes.Signing);
+
+                    _action = a.Action.ToString();
+                }
+            }
+
             //var stages = DocAgrsCard.Stages.Values;
         }
 
         private void OnStageClick() => ShowBtnPress(_stage);
+
         private void ShowBtnPress(DocAgrsCardStageModel stage)
         {
             if (stage != null)
@@ -124,5 +146,10 @@ namespace EDO_FOMS.Client.Pages
 
         private Func<DocAgrsCardStageModel, int, string> RowStyle => (a, _) => "";
         //    (a.UserOrgId == Doc.KeyOrgId) ? " font-style: italic;" : "";
+
+        private string DocTypeIcon(DocIcons type) => IconManager.DocTypeIcon(type).Icon;
+        private IconModel OrgTypeIcon(OrgTypes type) => IconManager.OrgTypeIcon(type);
+        private IconModel AgrStateIcon(AgreementStates state) => IconManager.AgrStateIcon(state);
+        private IconModel ActTypeIcon(ActTypes act) => IconManager.ActTypeIcon(act);
     }
 }

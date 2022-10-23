@@ -5,6 +5,7 @@ using EDO_FOMS.Application.Responses.Docums;
 using EDO_FOMS.Application.Responses.Orgs;
 using EDO_FOMS.Client.Extensions;
 using EDO_FOMS.Client.Infrastructure.Filters;
+using EDO_FOMS.Client.Infrastructure.Managers;
 using EDO_FOMS.Client.Infrastructure.Managers.Dir;
 using EDO_FOMS.Client.Infrastructure.Managers.Doc.Document;
 using EDO_FOMS.Client.Infrastructure.Models.Dirs;
@@ -31,6 +32,7 @@ namespace EDO_FOMS.Client.Pages.Archive
 
         [Inject] private IDocumentManager DocManager { get; set; }
         [Inject] private IDirectoryManager DirManager { get; set; }
+        [Inject] private IIconManager IconManager { get; set; }
 
         [CascadingParameter]
         public NavCounts NavCounts { get; set; }
@@ -301,10 +303,10 @@ namespace EDO_FOMS.Client.Pages.Archive
         {
             //var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true, DisableBackdropClick = true };
             var doc = AgreementToDoc(a);
-            var parameters = new DialogParameters() { { nameof(InProgressDialog.Doc), doc } };
+            var parameters = new DialogParameters() { { nameof(DocAgrsCardDialog.Doc), doc } };
             var options = new DialogOptions { CloseButton = true };
 
-            var dialog = _dialogService.Show<InProgressDialog>("", parameters, options);
+            var dialog = _dialogService.Show<DocAgrsCardDialog>("", parameters, options);
             var result = await dialog.Result;
 
             if (!result.Cancelled)
@@ -344,6 +346,7 @@ namespace EDO_FOMS.Client.Pages.Archive
                 DocIsPublic = a.DocIsPublic,
 
                 DocTypeId = a.DocTypeId,
+                DocIcon = a.DocIcon,
                 DocTypeName = a.DocTypeName, //(a.DocTypeId == 1) ? "Договор" : "Доп.соглашение",  //a.DocTypeName,
                 DocTypeShort = a.DocTypeShort, //(a.DocTypeId == 1) ? "Дог" : "Д/С", //a.DocTypeShort,
 
@@ -403,6 +406,7 @@ namespace EDO_FOMS.Client.Pages.Archive
                 IsPublic = a.DocIsPublic,
 
                 TypeId = a.DocTypeId,
+                Icon = a.DocIcon,
                 TypeName = a.DocTypeName,
                 TypeShort = a.DocTypeShort,
 
@@ -606,6 +610,6 @@ namespace EDO_FOMS.Client.Pages.Archive
         //        a.DocCreatedOnStr?.Contains(_searchString, comparison) == true;
         //}
 
-        private string DocTypeIcon(DocIcons icon) => DirManager.DocTypeIcon(icon);
+        private string DocTypeIcon(DocIcons icon) => IconManager.DocTypeIcon(icon).Icon;
     }
 }

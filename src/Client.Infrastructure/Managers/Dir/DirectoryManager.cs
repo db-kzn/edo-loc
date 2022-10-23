@@ -93,31 +93,5 @@ namespace EDO_FOMS.Client.Infrastructure.Managers.Dir
             var response = await _httpClient.GetAsync(Routes.DirectoriesEndpoints.ImportMo);
             return await response.ToResult<ImportResponse>();
         }
-
-        public string DocTypeIcon(DocIcons icon)
-        {
-            return icon switch
-            {
-                DocIcons.AssignmentLate => Icons.Material.Outlined.AssignmentLate,
-                DocIcons.AssignmentTurnedIn => Icons.Material.Outlined.AssignmentTurnedIn,
-                DocIcons.CalendarToday => Icons.Material.Outlined.CalendarToday,
-
-                DocIcons.ContactPage => Icons.Material.Outlined.ContactPage,
-                DocIcons.Description => Icons.Material.Outlined.Description,
-                DocIcons.Difference => Icons.Material.Outlined.Difference,
-
-                DocIcons.EventRepeat => Icons.Material.Outlined.EventRepeat,
-                DocIcons.FactCheck => Icons.Material.Outlined.FactCheck,
-                DocIcons.HelpCenter => Icons.Material.Outlined.HelpCenter,
-
-                DocIcons.Newspaper => Icons.Material.Outlined.Newspaper,
-                DocIcons.NoteAdd => Icons.Material.Outlined.NoteAdd,
-                DocIcons.Receipt => Icons.Material.Outlined.Receipt,
-
-                DocIcons.TableChart => Icons.Material.Outlined.TableChart,
-
-                _ => Icons.Material.Outlined.HelpOutline
-            };
-        }
     }
 }

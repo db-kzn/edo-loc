@@ -136,6 +136,7 @@ namespace EDO_FOMS.Application.Features.Agreements.Queries
                             DocRouteId = doc.RouteId,
 
                             DocTypeId = doc.TypeId,
+                            DocIcon = doc.Type.Icon,
                             DocTypeName = doc.Type.Name,  // Получить
                             DocTypeShort = doc.Type.Short, // Получить
 

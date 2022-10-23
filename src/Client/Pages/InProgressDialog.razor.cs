@@ -9,12 +9,15 @@ using EDO_FOMS.Client.Models;
 using EDO_FOMS.Domain.Enums;
 using System;
 using EDO_FOMS.Application.Responses.Agreements;
+using EDO_FOMS.Client.Infrastructure.Managers;
+using EDO_FOMS.Client.Infrastructure.Model;
 
 namespace EDO_FOMS.Client.Pages
 {
     public partial class InProgressDialog
     {
         [Inject] private IDocumentManager DocManager { get; set; }
+        [Inject] private IIconManager IconManager { get; set; }
 
         [CascadingParameter] private MudDialogInstance MudDialog { get; set; }
         //[Parameter] public AddEditDocumentCommand _doc { get; set; } = new();
@@ -48,6 +51,7 @@ namespace EDO_FOMS.Client.Pages
             if (Doc.AgreementId != null)
             {
                 var a = _agreements.Find(a => a.AgreementId == Doc.AgreementId);
+
                 if (a != null)
                 {
                     _isAnswered = !(a.State == AgreementStates.Incoming || a.State == AgreementStates.Received
@@ -113,5 +117,7 @@ namespace EDO_FOMS.Client.Pages
         {
             return (a.UserOrgId == Doc.KeyOrgId) ? " font-style: italic;" : "";
         };
+
+        private IconModel OrgTypeIcon(OrgTypes type) => IconManager.OrgTypeIcon(type);
     }
 }

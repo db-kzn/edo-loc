@@ -5,6 +5,7 @@ using EDO_FOMS.Application.Responses.Docums;
 using EDO_FOMS.Application.Responses.Orgs;
 using EDO_FOMS.Client.Extensions;
 using EDO_FOMS.Client.Infrastructure.Filters;
+using EDO_FOMS.Client.Infrastructure.Managers;
 using EDO_FOMS.Client.Infrastructure.Managers.Dir;
 using EDO_FOMS.Client.Infrastructure.Managers.Doc.Document;
 using EDO_FOMS.Client.Infrastructure.Models.Dirs;
@@ -31,6 +32,7 @@ namespace EDO_FOMS.Client.Pages.Docs
 
         [Inject] private IDocumentManager DocManager { get; set; }
         [Inject] private IDirectoryManager DirManager { get; set; }
+        [Inject] private IIconManager IconManager { get; set; }
 
         [CascadingParameter]
         public NavCounts NavCounts { get; set; }
@@ -386,10 +388,10 @@ namespace EDO_FOMS.Client.Pages.Docs
         }
         private async Task<DialogResult> ShowAgreementListAsync(DocModel doc)
         {
-            var parameters = new DialogParameters() { { nameof(DocAgreementsDialog.Doc), doc } };
+            var parameters = new DialogParameters() { { nameof(DocAgrsCardDialog.Doc), doc } };
             var options = new DialogOptions { CloseButton = true };
 
-            var dialog = _dialogService.Show<DocAgreementsDialog>("", parameters, options);
+            var dialog = _dialogService.Show<DocAgrsCardDialog>("", parameters, options);
 
             return await dialog.Result;
         }
@@ -664,6 +666,6 @@ namespace EDO_FOMS.Client.Pages.Docs
         //        doc.CreatedOnStr?.Contains(_searchString, comparison) == true;
         //}
 
-        private string DocTypeIcon(DocIcons icon) => DirManager.DocTypeIcon(icon);
+        private string DocTypeIcon(DocIcons icon) => IconManager.DocTypeIcon(icon).Icon;
     }
 }
