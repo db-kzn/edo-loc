@@ -1,5 +1,5 @@
 ﻿using EDO_FOMS.Client.Infrastructure.Managers.Doc.Document;
-using EDO_FOMS.Client.Models;
+using EDO_FOMS.Client.JsResponse;
 using EDO_FOMS.Shared.Constants.Storage;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
@@ -23,10 +23,10 @@ public partial class DocToSignDialog
     private string title;
 
     private bool onSigning = false;
-    
+
     private int delay;
     private int duration;
-    
+
     protected override async Task OnInitializedAsync()
     {
         thumbprint = await _localStorage.GetItemAsync<string>(StorageConstants.Local.UserThumbprint);
@@ -63,7 +63,8 @@ public partial class DocToSignDialog
 
         var base64 = Convert.ToBase64String(buffer);
         //var url = $"data:{format};base64,{base64}";
-        var sign = await _jsRuntime.InvokeAsync<string>("azino.SignCadesBES", thumbprint, base64, title);
+        var signed = await _jsRuntime.InvokeAsync<JsResult<string>>("azino.SignCadesBES", thumbprint, base64, title);
+        var sign = signed.Succeed ? signed.Data : "";
 
         if (string.IsNullOrWhiteSpace(sign))
         {

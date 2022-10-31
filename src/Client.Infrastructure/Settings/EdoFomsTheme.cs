@@ -113,10 +113,10 @@ namespace EDO_FOMS.Client.Infrastructure.Settings
         {
             Palette = new Palette()
             {
-                Primary = "#1E88E5",
-                Success = "#007E33",
+                Primary = "#00acc1", //"#1E88E5",
+                Success = "#43a047", //"#007E33",
 
-                AppbarBackground = "#1E88E5",
+                AppbarBackground = "#00acc1", //"#1E88E5",
                 Background = Colors.Grey.Lighten5,
 
                 Divider = "#EEE",
@@ -126,7 +126,7 @@ namespace EDO_FOMS.Client.Infrastructure.Settings
             },
             PaletteDark = new Palette()
             {
-                Primary = "#2196f3",
+                Primary = "#00acc1", //#2196f3",
                 Secondary = "#ad1457",
                 Success = "#007E33",
                 Black = "#27272f",

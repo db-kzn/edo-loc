@@ -1,9 +1,11 @@
 ﻿@page "/login"
 
 @using EDO_FOMS.Application.Models
+@using EDO_FOMS.Client.JsResponse
 
 @layout MainLayout
 @attribute [AllowAnonymous]
+
 @inject Microsoft.Extensions.Localization.IStringLocalizer<Login> _localizer
 
 <EditForm Model="@_certRegModel" OnValidSubmit="SubmitAsync">
@@ -146,12 +148,11 @@
                         </tr>
                         <tr>
                             <td><MudText Typo="Typo.body2" Align="Align.Right" Class="mx-2 my-1">@_localizer["Algorithm"]</MudText></td>
-                            <td><MudText Typo="Typo.body1" Align="Align.Left" Class="mx-2 my-1">@cert?.Algorithm</MudText></td>
+                            <td><MudText Typo="Typo.body1" Align="Align.Left" Class="mx-2 my-1">@cert?.PublicKey?.Algorithm</MudText></td>
                         </tr>
                         <tr>
                             <td><MudText Typo="Typo.body2" Align="Align.Right" Class="mx-2 my-1">@_localizer["Issuer"]</MudText></td>
-                            <td><MudText Typo="Typo.body1" Align="Align.Left" Class="mx-2 my-1">@cert?.Issuer?.Name</MudText></td>
-                        
+                            <td><MudText Typo="Typo.body1" Align="Align.Left" Class="mx-2 my-1">@cert?.Issuer?.Name</MudText></td>                        
                         </tr>
                         <tr>
                             <td><MudText Typo="Typo.body2" Align="Align.Right" Class="mx-2 my-1">@_localizer["Valid"]</MudText></td>

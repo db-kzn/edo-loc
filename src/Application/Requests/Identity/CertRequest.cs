@@ -5,6 +5,7 @@ namespace EDO_FOMS.Application.Requests.Identity
 {
     public class CertCheckRequest
     {
+        public int Ix { get; set; }
         public string OrgInn { get; set; }
         public string OrgName { get; set; }
 

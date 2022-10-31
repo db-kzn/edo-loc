@@ -5,13 +5,10 @@
 
     window.crypto_pro =
     {
-        GetCertificateList = GetCertificateList
+        GetCertificateList: GetCertificateList
     }
 
-    function GetCertificateList()
-    {
+    function GetCertificateList() {
 
     }
-
-
 }());

@@ -16,10 +16,11 @@
         <MudText>@ContentText</MudText>
     </DialogContent>
     <DialogActions>
-        <MudButton OnClick="Cancel">@localizer["Cancel"]</MudButton>
-        <MudButton Color="@Color" Variant="Variant.Filled" OnClick="Submit">@ButtonText</MudButton>
+        <MudButton Class="mx-2" Color="Color.Default" Variant="Variant.Outlined" FullWidth OnClick="Cancel">@localizer["Cancel"]</MudButton>
+        <MudButton Class="mx-2" Color="@Color" Variant="Variant.Outlined" FullWidth OnClick="Submit">@ButtonText</MudButton>
     </DialogActions>
 </MudDialog>
+
 @code {
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
 
@@ -35,7 +36,7 @@
 
     async Task Submit()
     {
-        await HubConnection.SendAsync(AppConstants.SignalR.OnDisconnect, CurrentUserId);
+        //await HubConnection.SendAsync(AppConstants.SignalR.OnDisconnect, CurrentUserId);
         await _authManager.Logout();
         _navigationManager.NavigateTo("/login");
         MudDialog.Close(DialogResult.Ok(true));

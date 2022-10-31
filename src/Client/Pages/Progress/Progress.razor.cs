@@ -10,6 +10,7 @@ using EDO_FOMS.Client.Infrastructure.Managers;
 using EDO_FOMS.Client.Infrastructure.Managers.Dir;
 using EDO_FOMS.Client.Infrastructure.Managers.Doc.Document;
 using EDO_FOMS.Client.Infrastructure.Models.Dirs;
+using EDO_FOMS.Client.JsResponse;
 using EDO_FOMS.Client.Models;
 using EDO_FOMS.Domain.Enums;
 using EDO_FOMS.Shared.Constants.Permission;
@@ -375,7 +376,8 @@ namespace EDO_FOMS.Client.Pages.Progress
         {
             var thumbprint = await _localStorage.GetItemAsync<string>(StorageConstants.Local.UserThumbprint);
             var base64 = await DocManager.GetBase64Async(agreement.DocURL);
-            var sign = await _jsRuntime.InvokeAsync<string>("azino.SignCadesBES", thumbprint, base64, agreement.DocTitle);
+            var signed = await _jsRuntime.InvokeAsync<JsResult<string>>("azino.SignCadesBES", thumbprint, base64, agreement.DocTitle);
+            var sign = signed.Succeed ? signed.Data : "";
 
             if (string.IsNullOrWhiteSpace(sign))
             {

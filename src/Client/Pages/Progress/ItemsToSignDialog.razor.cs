@@ -1,5 +1,6 @@
 ﻿using EDO_FOMS.Application.Features.Agreements.Commands;
 using EDO_FOMS.Client.Infrastructure.Managers.Doc.Document;
+using EDO_FOMS.Client.JsResponse;
 using EDO_FOMS.Client.Models;
 using EDO_FOMS.Domain.Enums;
 using EDO_FOMS.Shared.Constants.Storage;
@@ -52,7 +53,9 @@ public partial class ItemsToSignDialog
             StateHasChanged();
 
             base64 = await DocManager.GetBase64Async(agr.DocURL);
-            sign = await _jsRuntime.InvokeAsync<string>("azino.SignCadesBES", thumbprint, base64, agr.DocTitle);
+            var signed = await _jsRuntime.InvokeAsync<JsResult<string>>("azino.SignCadesBES", thumbprint, base64, agr.DocTitle);
+            sign = signed.Succeed ? signed.Data : "";
+
             if (string.IsNullOrWhiteSpace(sign)) { continue; }
 
             AgreementSignedCommand cmdSigned = new()

@@ -2,7 +2,6 @@
 {
     public class Cert
     {
-        public bool HasPrivateKey { get; set; }
         public bool IsValid { get; set; }
         public bool IsCorrect { get; set; }
         public bool IsOrgCert { get; set; }
@@ -20,6 +19,7 @@
 
         public string Provider { get; set; }
         public string PrivateKeyLink { get; set; }
+        public bool HasPrivateKey { get; set; }
 
         public CertSubject Subject { get; set; }
         //public CertOrg Org { get; set; }

@@ -1,7 +1,7 @@
-﻿using Blazored.FluentValidation;
-using EDO_FOMS.Application.Models;
+﻿using EDO_FOMS.Application.Models;
 using EDO_FOMS.Application.Requests.Identity;
 using EDO_FOMS.Application.Responses.Identity;
+using EDO_FOMS.Client.JsResponse;
 using EDO_FOMS.Client.Shared.Dialogs;
 using EDO_FOMS.Domain.Enums;
 using EDO_FOMS.Shared.Constants.Storage;
@@ -21,10 +21,10 @@ namespace EDO_FOMS.Client.Pages.Authentication
         //private FluentValidationValidator _fluentValidationValidator;
         //private bool Validated => _fluentValidationValidator.Validate(options => options.IncludeAllRuleSets());
         //private FakeCert _fakeCert;
-        
+
         private readonly CertCheckRequest _certCheckModel = new();
         private readonly RegisterByCertRequest _certRegModel = new();
-        private Cert cert = null;
+        private JsCert cert = null;
         private List<OrgCardModel> orgCards = new();
         private object orgCard;
         private readonly TokenRequest _tokenModel = new();
@@ -62,10 +62,18 @@ namespace EDO_FOMS.Client.Pages.Authentication
             onSubmiting = true;
 
             await _jsRuntime.InvokeAsync<string>("azino.Console", _certCheckModel.Thumbprint, "SignIn Thumbprint: ");
-            var tokenСonnected = await _jsRuntime.InvokeAsync<bool>("azino.TokenCheck", _certCheckModel.Thumbprint);
-            await _jsRuntime.InvokeVoidAsync("azino.Console", tokenСonnected, "Token Connected: ");
+            var checkRes = await _jsRuntime.InvokeAsync<JsResult<bool?>>("azino.TokenCheck", _certCheckModel.Thumbprint, _certCheckModel.Ix);
 
-            if (!tokenСonnected)
+            if (!checkRes.Succeed)
+            {
+                _snackBar.Add(checkRes.Message, Severity.Error);
+                onSubmiting = false;
+                return;
+            }
+
+            var tokenСonnected = checkRes.Data;
+
+            if (tokenСonnected != true)
             {
                 _snackBar.Add(string.Format(_localizer["The token is not connected"]), Severity.Warning);
                 onSubmiting = false;
@@ -92,14 +100,14 @@ namespace EDO_FOMS.Client.Pages.Authentication
 
         private async Task CertSelectAsync()
         {
-            var parameters = new DialogParameters {{ "ShowSuccessCheck", false }};
+            var parameters = new DialogParameters { { "ShowSuccessCheck", false } };
             var dialog = _dialogService.Show<CertificatesDialog>(_localizer["System Check"], parameters);
             var res = await dialog.Result;
 
             if (res.Cancelled) { return; }
             await _jsRuntime.InvokeVoidAsync("azino.Console", res.Data);
 
-            cert = res.Data as Cert;
+            cert = res.Data as JsCert;
             if (cert != null)
             {
                 WriteCertToRegModel(cert);
@@ -151,7 +159,7 @@ namespace EDO_FOMS.Client.Pages.Authentication
             else if (response.Result == CertCheckResults.RegOrgByInn)
             {
                 _snackBar.Add(_localizer["Organization registration required"], Severity.Warning);
-                await AreYouChiefAsync(response); // Are you chief?
+                AreYouChief(response); // Are you chief?
             }
             else if (response.Result == CertCheckResults.RegNewUser)
             {
@@ -268,11 +276,10 @@ namespace EDO_FOMS.Client.Pages.Authentication
             }
         }
 
-        private async Task AreYouChiefAsync(CertCheckResponse response)
+        private void AreYouChief(CertCheckResponse response)
         {
             // (RegOrgByInn) => LoginStates.AreYouChief ? => Need Chief || RegOrg & Chief
-
-            await _jsRuntime.InvokeAsync<string>("azino.GetCertDetails", _certCheckModel.Thumbprint);
+            // await _jsRuntime.InvokeAsync<string>("azino.GetCertDetails", _certCheckModel.Thumbprint);
             CurrentState = LoginStates.AreYouChief;
         }
 
@@ -299,15 +306,17 @@ namespace EDO_FOMS.Client.Pages.Authentication
 
         private void NoIamNotChief() { CurrentState = LoginStates.ChiefRequired; }
         private void YesIamChiefAsync()
-        { 
+        {
             _certRegModel.BaseRole = UserBaseRoles.Chief;
             CurrentState = LoginStates.OrgTitle;
             //await SignUpAsync();
         }
         private void Ok() { CurrentState = LoginStates.ChooseCert; }
 
-        private void WriteCertToRegModel(Cert cert)
+        private void WriteCertToRegModel(JsCert cert)
         {
+            _certCheckModel.Ix = 0;
+
             _certRegModel.InnLe = cert.Subject.InnLe;
             _certRegModel.Snils = cert.Subject.Snils;
             _certRegModel.Inn = cert.Subject.Inn;
@@ -328,8 +337,9 @@ namespace EDO_FOMS.Client.Pages.Authentication
             _certRegModel.FromDate = Convert.ToDateTime(cert.FromDate);
             _certRegModel.TillDate = Convert.ToDateTime(cert.TillDate);
         }
-        private void WriteCertToCheckModel(Cert cert)
+        private void WriteCertToCheckModel(JsCert cert)
         {
+            _certCheckModel.Ix = cert.Ix;
             _certCheckModel.OrgName = cert.Subject.Org;
             _certCheckModel.OrgInn = cert.Subject.InnLe;
 

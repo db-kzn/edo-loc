@@ -77,7 +77,7 @@
         else
         {
             <MudList Clickable="true" @bind-SelectedValue="SelectedValue">
-            @foreach (Cert cert in CorrectCertList)
+            @foreach (var cert in CorrectCertList)
             {
                 <MudPaper Class="ma-4" Elevation="1">
                     <MudListItem Icon="@Icons.Material.TwoTone.AccountBox" IconColor="Color.Warning" IconSize="Size.Large"

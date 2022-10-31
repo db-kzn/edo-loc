@@ -27,7 +27,7 @@
             </div>
         }
 
-        <MudText Align="Align.Right" Typo="Typo.h6" Color="Color.Info">Контакты по работе с документами:</MudText>
+        <MudText Align="Align.Right" Typo="Typo.h6" Color="Color.Primary">Контакты по работе с документами:</MudText>
         @if (!string.IsNullOrWhiteSpace(home.DocSupportPhone))
         {
             <MudText Align="Align.Right" Typo="Typo.body1">@home.DocSupportPhone</MudText>
@@ -38,7 +38,7 @@
             <MudText Align="Align.Right" Typo="Typo.body1">@home.DocSupportEmail</MudText>
         }
 
-        <MudText Align="Align.Right" Typo="Typo.h6" Color="Color.Info">Контакты технической поддержки:</MudText>
+        <MudText Align="Align.Right" Typo="Typo.h6" Color="Color.Primary">Контакты технической поддержки:</MudText>
         @if (!string.IsNullOrWhiteSpace(home.TechSupportPhone))
         {
             <MudText Align="Align.Right" Typo="Typo.body1">@home.TechSupportPhone</MudText>
