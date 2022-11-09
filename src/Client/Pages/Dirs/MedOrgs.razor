@@ -113,13 +113,13 @@
             </MudTd>
             <MudTd DataLabel="@_localizer["Address"]">
                 <MudHighlighter Text="@context.Address" HighlightedText="@_searchString" />
+                <p><MudHighlighter Text="@context.SiteUrl" HighlightedText="@_searchString" /></p>
             </MudTd>
 
             <MudTd DataLabel="@_localizer["Contacts"]">
                 <p><MudHighlighter Text="@context.Phone" HighlightedText="@_searchString" /></p>
                 <p><MudHighlighter Text="@context.HotLine" HighlightedText="@_searchString" /></p>
                 <p><MudHighlighter Text="@context.Email" HighlightedText="@_searchString" /></p>
-                <p><MudHighlighter Text="@context.SiteUrl" HighlightedText="@_searchString" /></p>
             </MudTd>
             <MudTd DataLabel="@_localizer["Head"]">
                 <p><MudHighlighter Text="@context.HeadLastName" HighlightedText="@_searchString" /></p>

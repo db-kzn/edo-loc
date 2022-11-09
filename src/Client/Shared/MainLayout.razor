@@ -70,8 +70,8 @@
                 @*<LanguageSelector />*@
                 <MudTooltip Delay="@delay" Duration="@duration" Text="@localizer["Toggle Dark Mode"]">
                     <MudIconButton OnClick="@((e) => DarkMode())"
-                                   Icon="@(_isDarkMode ? Icons.Material.TwoTone.LightMode : Icons.Material.TwoTone.DarkMode)"
-                                   Color="@(_isDarkMode ? Color.Warning : Color.Dark)" />
+                                   Icon="@(!_isDarkMode ? Icons.Material.TwoTone.LightMode : Icons.Material.TwoTone.DarkMode)"
+                                   Color="@(!_isDarkMode ? Color.Warning : Color.Default)" />
                 </MudTooltip>
 
                 <MudMenu Icon="@Icons.Material.Filled.AccountCircle" Color="Color.Inherit" Direction="Direction.Right" OffsetY>

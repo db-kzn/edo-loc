@@ -1,4 +1,24 @@
-﻿.fab-btn-add {
+﻿* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(41,148,99,.75) #fff;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(41,148,99,.75);
+    border-radius: 4px;
+    border: 1px solid #fff;
+}
+
+::-webkit-scrollbar-track {
+    background: #fff;
+}
+
+.fab-btn-add {
     position: fixed;
     right: 24px;
     bottom: 24px;

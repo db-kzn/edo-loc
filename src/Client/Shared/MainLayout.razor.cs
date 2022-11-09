@@ -161,7 +161,7 @@ namespace EDO_FOMS.Client.Shared
             {
                 {nameof(Dialogs.Logout.ContentText), $"{localizer["Logout Confirmation"]}"},
                 {nameof(Dialogs.Logout.ButtonText), $"{localizer["Logout"]}"},
-                {nameof(Dialogs.Logout.Color), Color.Error},
+                {nameof(Dialogs.Logout.Color), Color.Warning},
                 {nameof(Dialogs.Logout.CurrentUserId), CurrentUserId},
                 {nameof(Dialogs.Logout.HubConnection), hubConnection}
             };
