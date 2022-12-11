@@ -3,44 +3,54 @@
 
     if (window.azino) { return; }
 
-    const { cadesplugin } = window;
+    var { cadesplugin } = window;
+
+    cadesplugin.then(function () {
+        cadesplugin.set_log_level(cadesplugin.LOG_LEVEL_INFO);
+    });
 
     // App Constants
-    const certTypes = CertTypes();
+    var certTypes = CertTypes();
 
     // CryptoPro Constants
-    const CP =
+    var CP =
     {
         CADESCOM: CadesCom(),
         CAPICOM: CapiCom(),
         OBJ: Obj()
     };
 
-    const _certs = [];
-    const _user = {
-        _cert: null,
+    var _certs = [];
+    var _usedLast = {
+        _oCert: null,
         _thumbprint: ""
     }
 
     // CryptoAPI Objects
-    const _ = {
+    var _ = {
         oAbout: null,
         oCerts: [],
         oStore: null
     };
 
+    window.fileContent = null;
+
     window.azino =
     {
         _store: {
             _certs: _certs,
-            _user: _user
+            _usedLast: _usedLast
         },
+
+        // Methods with Result:
 
         GetCryptoAbout: GetCryptoAbout,
         GetCertList: GetCertList,
 
         TokenCheck: TokenCheck,
         SignCadesBES: SignCadesBES,
+        SignCadesBES_Async: SignCadesBES_Async,
+        // Helpers:
 
         Console: Console,
         LinkOpen: (link) => window.open(link, "_blank", "comma,delimited,list,of,window,features"),
@@ -49,7 +59,7 @@
         Download: Download,
         PlayAudio: PlayAudio,
         ScrollToBottom: ScrollToBottom
-    }
+    };
 
     // MAIN FUNCTION
 
@@ -64,8 +74,6 @@
             cspVersion: "",
             cspName: ""
         };
-
-        console.log()
 
         return (new Promise(function (resolve, reject) {
             cadesplugin.async_spawn(function* (args) {
@@ -154,7 +162,7 @@
 
                         cert.hasPrivateKey = yield oCert.HasPrivateKey();
                         cert.isValid = yield (yield oCert.IsValid()).Result;
-                        cert.isCorrect = (!!cert.hasPrivateKey && !!cert.isValid && !!cert.subject.snils && !!cert.thumbprint);
+                        cert.isCorrect = !!(cert.hasPrivateKey && cert.subject.snils && cert.thumbprint); //&& cert.isValid 
 
                         cert.hasError = false;
                     } catch (ex) {
@@ -166,6 +174,7 @@
                     _.oCerts.push(oCert);
                 }
 
+                console.log("ALL CERTS: ", _certs);
                 yield oStore.Close();
                 return args[0](_certs);
             }, resolve, reject);
@@ -175,7 +184,43 @@
     function TokenCheck(thumbprint, ix = 0) {
         return (new Promise(function (resolve, reject) {
             cadesplugin.async_spawn(function* (args) {
+                let oCertificate = yield GetCert(thumbprint, ix);
+                if (!oCertificate) { return args[1]("Ошибка доступа к сертификату"); }
+
+                let tokenСonnected = false;
+                let pk = yield oCertificate.PrivateKey;
+
+                if (pk) {
+                    console.log("Private Key: ", pk);
+                    try {
+                        let field = yield pk.UniqueContainerName;
+                        console.log("PK Field: ", field);
+                        tokenСonnected = !!field;
+                    } catch (ex) {
+                        return args[1]("Ошибка доступа к закрытому ключу: ", cadesplugin.getLastError(ex));
+                    }
+                }
+
+                return args[0](tokenСonnected);
+            }, resolve, reject);
+        })).then(r => { return Ok(r); }).catch(e => { return BadResponse(e); });
+    }
+    function SignCadesBES(thumbprint, dataInBase64) {
+        return SignCreate(thumbprint, dataInBase64)
+            .then(signedMessage => { return Ok(signedMessage); })
+            .catch(e => { return BadResponse(e); });
+    };
+
+    // CRYPTO PRO
+
+    function GetCert(thumbprint, ix = 0) {
+        return (new Promise(function (resolve, reject) {
+            cadesplugin.async_spawn(function* (args) {
                 let oCertificate = null;
+
+                if (_usedLast._thumbprint === thumbprint && _usedLast._oCert) {
+                    return args[0](_usedLast._oCert);
+                }
 
                 if (_.oCerts) {
                     if (!ix) {
@@ -186,24 +231,28 @@
                             }
                         }
                     }
-
                     if (ix) { oCertificate = _.oCerts[ix]; }
                 }
 
-                let oStore;
-
                 if (!oCertificate) {
+                    let oStore;
 
                     try {
                         if (!_.oStore) {
                             _.oStore = yield cadesplugin.CreateObjectAsync(CP.OBJ.Store);
-                            if (!_.oStore) { return args[1]("Хранилище сертификатов не найдено"); }
+                            if (!_.oStore) {
+                                console.warn("Хранилище сертификатов не найдено");
+                                return args[0](null);
+                            }
                         }
 
                         oStore = _.oStore;
 
                         yield oStore.Open(); //CP.CAPICOM.CURRENT_USER_STORE, CP.CAPICOM.MY_STORE, CP.CAPICOM.STORE_OPEN_MAXIMUM_ALLOWED
-                    } catch (ex) { return args[1]("Ошибка открытия хранилища сертификатов"); }
+                    } catch (ex) {
+                        console.warn("Ошибка открытия хранилища сертификатов");
+                        return args[0](null);
+                    }
 
                     let Certificates = yield oStore.Certificates;
                     let oStoreCertsCount = yield Certificates.Count;
@@ -213,7 +262,8 @@
 
                         try { cert = yield Certificates.Item(i); }
                         catch (ex) {
-                            return args[1](("Ошибка при получении сертификата: " + cadesplugin.getLastError(ex)));
+                            console.warn("Ошибка при получении сертификата: " + cadesplugin.getLastError(ex));
+                            return args[0](null);
                         }
 
                         try {
@@ -223,125 +273,158 @@
                                 break;
                             }
                         } catch (ex) {
-                            return args[1]("Ошибка при получении отпечатка: " + cadesplugin.getLastError(ex));
+                            console.warn("Ошибка при получении отпечатка: " + cadesplugin.getLastError(ex));
+                            return args[0](null);
                         }
                     }
+
+                    if (oStore) { yield oStore.Close(); }
                 }
 
-                console.log("SignIn Cert: ", oCertificate);
-                var tokenСonnected = false;
-
-                if (oCertificate !== null) {
-                    var pk = yield oCertificate.PrivateKey;
-                    if (pk) {
-                        try {
-                            console.log("Private Key: ", pk);
-                            var field = yield pk.UniqueContainerName;
-                            console.log("PK Field: ", field);
-                            tokenСonnected = !!field;
-                        } catch (ex) {
-                            alert("Ошибка доступа к закрытому ключу: ", cadesplugin.getLastError(ex));
-                        }
-                    }
+                if (oCertificate) {
+                    _usedLast._thumbprint = thumbprint;
+                    _usedLast._oCert = oCertificate;
+                } else {
+                    _usedLast._thumbprint = "";
+                    _usedLast._oCert = null;
                 }
 
-                if (oStore) { yield oStore.Close(); }
-                return args[0](tokenСonnected);
+                return args[0](oCertificate);
             }, resolve, reject); //cadesplugin.async_spawn
-        })).then(r => { return Ok(r); }).catch(e => { return BadResponse(e); });
+        }));
     }
-    function SignCadesBES(thumbprint, dataInBase64) {
-        return SignCreate(thumbprint, dataInBase64)
-            .then(signedMessage => { return Ok(signedMessage); })
-            .catch(e => { return BadResponse(e); });
-    };
 
     function SignCreate(thumbprint, dataInBase64, docTitle = "") {
         return new Promise(function (resolve, reject) {
             cadesplugin.async_spawn(function* (args) {
-                var StartTime = Date.now();
+                let oCertificate = yield GetCert(thumbprint);
+                if (!oCertificate) { return args[1]("Ошибка доступа к сертификату"); }
 
-                let oStore;
+                let oSigner;
 
                 try {
-                    if (!_.oStore) { _.oStore = yield cadesplugin.CreateObjectAsync(CP.OBJ.Store); }
-                    oStore = _.oStore;
-
-                    if (!oStore) { return args[1]("Хранилище сертификатов не найдено"); }
-
-                    yield oStore.Open(CP.CAPICOM.CURRENT_USER_STORE, CP.CAPICOM.MY_STORE, CP.CAPICOM.STORE_OPEN_MAXIMUM_ALLOWED);
-                } catch (ex) { return args[1]("Ошибка открытия хранилища сертификатов"); }
-
-                let Certificates = yield oStore.Certificates;
-                let certCnt = yield Certificates.Count;
-                let oCertificate;
-
-                for (var i = 1; i <= certCnt; i++) {
-                    let cert;
-
-                    try { cert = yield Certificates.Item(i); }
-                    catch (ex) {
-                        alert("Ошибка при получении сертификата: ", i, cadesplugin.getLastError(ex));
-                        continue;
-                    }
-
-                    try {
-                        var ctp = yield cert.Thumbprint;
-                        if (thumbprint === ctp) {
-                            oCertificate = cert;
-                            break;
-                        }
-                    } catch (ex) {
-                        alert("Ошибка при получении отпечатка: ", i, cadesplugin.getLastError(ex));
-                    }
+                    oSigner = yield cadesplugin.CreateObjectAsync(CP.OBJ.CPSigner);
+                    if (!oSigner) { return args[1]("Не удалось создать CAdESCOM.CPSigner"); }
+                } catch (e) {
+                    return args[1]("Ошибка обращения к CAdESCOM.CPSigner: " + e.number);
                 }
 
-                var RunTime = Date.now();
-                var oTimeNow = new Date();
+                try {
+                    yield oSigner.propset_Certificate(oCertificate);
+                    //yield oSigner.propset_CheckCertificate(true);
+                    yield oSigner.propset_Options(CP.CAPICOM.CERTIFICATE_INCLUDE_WHOLE_CHAIN);
+                } catch (e) {
+                    return args[1]("Ошибка настройки CAdESCOM.CPSigner");
+                }
 
-                var oSigningTimeAttr = yield cadesplugin.CreateObjectAsync(CP.OBJ.Attribute);
+                let oTimeNow = new Date();
+                let oSigningTimeAttr = yield cadesplugin.CreateObjectAsync(CP.OBJ.CPAttribute);
                 yield oSigningTimeAttr.propset_Name(CP.CAPICOM.AUTHENTICATED_ATTRIBUTE_SIGNING_TIME);
                 yield oSigningTimeAttr.propset_Value(oTimeNow);
 
-                var oDocumentNameAttr = yield cadesplugin.CreateObjectAsync(CP.OBJ.Attribute);
+                let oDocumentNameAttr = yield cadesplugin.CreateObjectAsync(CP.OBJ.CPAttribute);
                 yield oDocumentNameAttr.propset_Name(CP.CADESCOM.AUTHENTICATED_ATTRIBUTE_DOCUMENT_NAME);
                 yield oDocumentNameAttr.propset_Value(docTitle);
 
-                var oSigner = yield cadesplugin.CreateObjectAsync(CP.OBJ.Signer);
-                yield oSigner.propset_Certificate(oCertificate);
-                yield oSigner.propset_CheckCertificate(true);
-
-                var oAuthAttrs = yield oSigner.AuthenticatedAttributes2;
+                let oAuthAttrs = yield oSigner.AuthenticatedAttributes2;
                 yield oAuthAttrs.Add(oSigningTimeAttr);
                 yield oAuthAttrs.Add(oDocumentNameAttr);
 
-                var oSignedData = yield cadesplugin.CreateObjectAsync(CP.OBJ.SignedData);
+                let oSignedData = yield cadesplugin.CreateObjectAsync(CP.OBJ.CadesSignedData);
                 yield oSignedData.propset_ContentEncoding(CP.CADESCOM.BASE64_TO_BINARY);
                 yield oSignedData.propset_Content(dataInBase64);
 
-                var sSignedMessage = "";
+                let sSignedMessage = "";
+
                 try {
-                    sSignedMessage = yield oSignedData.SignCades(oSigner, CP.CADESCOM.CADES_BES, true);
+                    let StartTime = Date.now();
+                    sSignedMessage = yield oSignedData.SignCades(oSigner, CP.CADESCOM.CADES_BES); // ,true
+                    let EndTime = Date.now();
+                    console.warn("Время выполнения: " + (EndTime - StartTime) + " мс");
                 } catch (err) {
                     let mes = cadesplugin.getLastError(err);
-                    alert("Failed to create signature. Error: " + mes);
-                    return args[1](mes);
+                    return args[1]("Во время подписания произошла ошибка: " + mes);
                 }
-
-                yield oStore.Close();
-
-                var EndTime = Date.now();
-
-                console.warn("Время выполнения: " + (EndTime - StartTime) + " мс : " + (RunTime - StartTime));
 
                 return args[0](sSignedMessage);
             }, resolve, reject);
         });
     }
+
+    function SignCadesBES_Async(thumbprint) { return SignCadesBES_Async_File(thumbprint); }
+
+    function SignCadesBES_Async_File(thumbprint) {
+        cadesplugin.async_spawn(function* (arg) {
+            var certificate = yield GetCert(arg[0]);
+
+            console.log("Sign Cert: ", certificate);
+            var Signature;
+
+            try {
+                var errormes = "";
+                try {
+                    var oSigner = yield cadesplugin.CreateObjectAsync("CAdESCOM.CPSigner");
+                } catch (err) {
+                    errormes = "Failed to create CAdESCOM.CPSigner: " + err.number;
+                    throw errormes;
+                }
+
+                var oTimeNow = new Date();
+
+                var oSigningTimeAttr = yield cadesplugin.CreateObjectAsync("CADESCOM.CPAttribute");
+                yield oSigningTimeAttr.propset_Name(0);
+                yield oSigningTimeAttr.propset_Value(oTimeNow);
+
+                var oDocumentNameAttr = yield cadesplugin.CreateObjectAsync("CADESCOM.CPAttribute");
+                yield oDocumentNameAttr.propset_Name(1);
+                yield oDocumentNameAttr.propset_Value("Document Name");
+
+                var attr = yield oSigner.AuthenticatedAttributes2;
+                yield attr.Add(oSigningTimeAttr);
+                yield attr.Add(oDocumentNameAttr);
+
+                if (oSigner) {
+                    yield oSigner.propset_Certificate(certificate);
+                }
+                else {
+                    errormes = "Failed to create CAdESCOM.CPSigner";
+                    throw errormes;
+                }
+
+                var oSignedData = yield cadesplugin.CreateObjectAsync("CAdESCOM.CadesSignedData");
+
+                var dataToSign = window.fileContent;
+                if (dataToSign) {
+                    yield oSignedData.propset_ContentEncoding(1);
+                    yield oSignedData.propset_Content(dataToSign);
+                }
+
+                yield oSigner.propset_Options(1);
+
+                try {
+                    console.time("Signing");
+
+                    console.log("oSigner:", oSigner);
+                    console.log("oSignedData:", oSignedData);
+                    Signature = yield oSignedData.SignCades(oSigner, 1, true);
+
+                    console.timeEnd("Signing");
+                }
+                catch (err) {
+                    errormes = "Не удалось создать подпись из-за ошибки: " + cadesplugin.getLastError(err);
+                    throw errormes;
+                }
+            }
+            catch (err) {
+                //
+            }
+        }, thumbprint); //cadesplugin.async_spawn
+    }
+
     function Verify(sSignedMessage, dataInBase64) {
         return new Promise(function (resolve, reject) {
             cadesplugin.async_spawn(function* (args) {
-                var oSignedData = yield cadesplugin.CreateObjectAsync(CP.OBJ.SignedData);
+                var oSignedData = yield cadesplugin.CreateObjectAsync(CP.OBJ.CadesSignedData);
                 try {
                     // Значение свойства ContentEncoding должно быть задано
                     // до заполнения свойства Content
@@ -488,6 +571,7 @@
     function CapiCom() {
         return {
             AUTHENTICATED_ATTRIBUTE_SIGNING_TIME: 0,
+            CERTIFICATE_INCLUDE_WHOLE_CHAIN: 1,
             CURRENT_USER_STORE: 2,
             MY_STORE: "My",
             STORE_OPEN_MAXIMUM_ALLOWED: 2
@@ -496,9 +580,9 @@
     function Obj() {
         return {
             About: "CAdESCOM.About",
-            Attribute: "CADESCOM.CPAttribute",
-            SignedData: "CAdESCOM.CadesSignedData",
-            Signer: "CAdESCOM.CPSigner",
+            CPAttribute: "CADESCOM.CPAttribute",
+            CadesSignedData: "CAdESCOM.CadesSignedData",
+            CPSigner: "CAdESCOM.CPSigner",
             Store: "CAdESCOM.Store",
         };
     }

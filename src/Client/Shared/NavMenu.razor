@@ -83,6 +83,10 @@ else
         <MudDivider />
     }
 
+    <MudNavGroup Title=@_localizer["Workplace"] Icon="@Icons.Material.TwoTone.Badge" IconColor="Color.Primary" Expanded="true">
+        <MudNavLink Href="/workplace/docs" Icon="@Icons.Material.Outlined.Folder">@_localizer["Docums"]</MudNavLink>
+    </MudNavGroup>
+
     @*@if (_canSystemEdit)
     {
     <MudNavGroup Title=@_localizer["System"] Icon="@Icons.Material.TwoTone.HomeRepairService" IconColor="Color.Primary" Expanded="true">

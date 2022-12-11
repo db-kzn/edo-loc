@@ -377,6 +377,8 @@ namespace EDO_FOMS.Client.Pages.Progress
             var thumbprint = await _localStorage.GetItemAsync<string>(StorageConstants.Local.UserThumbprint);
             var base64 = await DocManager.GetBase64Async(agreement.DocURL);
             var signed = await _jsRuntime.InvokeAsync<JsResult<string>>("azino.SignCadesBES", thumbprint, base64, agreement.DocTitle);
+            await _jsRuntime.InvokeVoidAsync("azino.SignCadesBES_Async", thumbprint, base64, agreement.DocTitle);
+
             var sign = signed.Succeed ? signed.Data : "";
 
             if (string.IsNullOrWhiteSpace(sign))

@@ -1,7 +1,5 @@
 ﻿@using System.Net.Http
 @using System.Net.Http.Json
-@using EDO_FOMS.Client.Infrastructure.Managers.System
-@using EDO_FOMS.Client.Infrastructure.Services
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Components.Forms
@@ -32,6 +30,8 @@
 @using EDO_FOMS.Client.Infrastructure.Managers.Identity.Users
 @using EDO_FOMS.Client.Infrastructure.Managers.Interceptors
 @using EDO_FOMS.Client.Infrastructure.Managers.Preferences
+@using EDO_FOMS.Client.Infrastructure.Managers.System
+@using EDO_FOMS.Client.Infrastructure.Services
 @using EDO_FOMS.Client.Infrastructure.Settings
 
 @using EDO_FOMS.Client
@@ -42,10 +42,12 @@
 @using EDO_FOMS.Client.Shared.Dialogs
 
 @attribute [Authorize]
+
 @inject ClientPreferenceManager _clientPreferenceManager
 @inject AuthStateProvider       _authStateProvider
 @inject HttpClient              _httpClient
 @inject NavigationManager       _navigationManager
+
 @inject IAccountManager         _accountManager
 @inject IAuthenticationManager  _authManager
 @inject IAuthorizationService   _authService

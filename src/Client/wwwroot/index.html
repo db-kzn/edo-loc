@@ -35,7 +35,7 @@
         <a class="dismiss" style="color: brown;"><b>🗙</b></a>
     </div>
 
-    <script src="js/cadesplugin_api.js"></script>
+    <script src="js/cadesplugin_api_.js"></script>
     <!--<script src="js/crypto-pro.js"></script>-->
     <!--<script src="js/rutoken-plugin.js"></script>-->
     <script src="js/azino.js"></script>
@@ -43,6 +43,23 @@
 
     <script src="_framework/blazor.webassembly.js"></script>
     <script src="_content/MudBlazor/MudBlazor.min.js"></script>
+
+    <script>
+        var openFile = function (event) {
+            var input = event.target;
+
+            console.warn("OnFileLoad: ", input.files);
+
+            fileContent = undefined;
+            var reader = new FileReader();
+            reader.readAsDataURL(input.files[0]);
+            reader.onload = function () {
+                var header = ";base64,";
+                var fileData = reader.result;
+                fileContent = fileData.substr(fileData.indexOf(header) + header.length);
+            };
+        };
+    </script>
 </body>
 
 </html>

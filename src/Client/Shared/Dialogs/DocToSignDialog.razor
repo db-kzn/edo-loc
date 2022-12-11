@@ -5,43 +5,46 @@
 <MudDialog Style="min-width: 550px; background-color: var(--mud-palette-background-grey);">
     <TitleContent>
         <MudText Typo="Typo.h6">
-            <MudIcon Icon="@Icons.Material.TwoTone.QrCode" Class="mr-3 mb-n1" Color="Color.Default"/>
+            <MudIcon Icon="@Icons.Material.TwoTone.QrCode" Class="mr-3 mb-n1" Color="Color.Default" />
             @_localizer["Document signing"]
         </MudText>
     </TitleContent>
 
     <DialogContent>
         <MudItem xs="12">
-            <MudButtonGroup  Color="Color.Default" Variant="Variant.Outlined" Style="width: 100%; background-color: var(--mud-palette-surface);">
-                <InputFile id="fileInput" hidden OnChange="UploadFile" accept=".pdf"/>
+            <MudButtonGroup Color="Color.Default" Variant="Variant.Outlined" Style="width: 100%; background-color: var(--mud-palette-surface);">
+
+                @*<InputFile id="fileInput" hidden OnChange="UploadFile" accept="*" />*@
+
+                <input id="fileInput" hidden type='file' name="openFileButton" class="user_input" onchange="openFile(event)" style="width:100%">
+
                 <MudButton for="fileInput" HtmlTag="label" Disabled="@onSigning" Style="height: 56px;"
-                    Variant="Variant.Outlined" FullWidth="true" Color="Color.Default" Size="Size.Large" >
-                        @if(_file == null || string.IsNullOrEmpty(_file.Name))
-                        {
-                            <MudIcon Icon="@Icons.Material.TwoTone.Upload" Title="Upload" Size="Size.Large" Color="Color.Error" Class="mr-4"/>
-                            <MudText Typo="Typo.button" Color="Color.Error">@_localizer["Upload file"]</MudText>
-                        } 
-                        else
-                        {
-                            <MudIcon Icon="@Icons.Material.TwoTone.Description" Title="File" Size="Size.Large" Color="Color.Primary" Class="mr-4"/>
-                            <MudText Typo="Typo.button" Color="Color.Default">@_file.Name</MudText>
-                        }
+                           Variant="Variant.Outlined" FullWidth="true" Color="Color.Default" Size="Size.Large">
+                    @if (_file == null || string.IsNullOrEmpty(_file.Name))
+                    {
+                        <MudIcon Icon="@Icons.Material.TwoTone.Upload" Size="Size.Large" Color="Color.Error" Class="mr-4" />
+                        <MudText Typo="Typo.button" Color="Color.Error">@_localizer["Upload file"]</MudText>
+                    }
+                    else
+                    {
+                        <MudIcon Icon="@Icons.Material.TwoTone.Description" Size="Size.Large" Color="Color.Primary" Class="mr-4" />
+                        <MudText Typo="Typo.button" Color="Color.Default">@_file.Name</MudText>
+                    }
                 </MudButton>
 
-                
-                    <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Sign document"]" Color="Color.Tertiary" Placement="Placement.Left" Arrow="true">
-                        <MudButton Style="height: 56px; width: 72px;" Disabled="@(string.IsNullOrEmpty(title) || onSigning)" OnClick="ToSign">
+                @*Disabled="@(string.IsNullOrEmpty(title) ||onSigning)"*@
+                <MudTooltip Delay="@delay" Duration="@duration" Text="@_localizer["Sign document"]" Color="Color.Tertiary" Placement="Placement.Left" Arrow="true">
+                    <MudButton Style="height: 56px; width: 72px;" OnClick="ToSign">
                         @if (onSigning)
                         {
-                            <MudProgressCircular Size="Size.Medium" Color="Color.Error" Indeterminate="true"/>
+                            <MudProgressCircular Size="Size.Medium" Color="Color.Error" Indeterminate="true" />
                         }
                         else
                         {
-                            <MudIcon Icon="@Icons.Material.TwoTone.Draw" Title="Sign" Size="Size.Large"
-                                Color="@(string.IsNullOrEmpty(title) ? Color.Default : Color.Success)" />
+                            <MudIcon Icon="@Icons.Material.TwoTone.Draw" Size="Size.Large" Color="@(string.IsNullOrEmpty(title) ? Color.Default : Color.Success)" />
                         }
-                        </MudButton>
-                    </MudTooltip>
+                    </MudButton>
+                </MudTooltip>
             </MudButtonGroup>
         </MudItem>
     </DialogContent>

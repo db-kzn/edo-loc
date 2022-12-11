@@ -1,7 +1,4 @@
-﻿using EDO_FOMS.Application.Models;
-using EDO_FOMS.Client.Extensions;
-using EDO_FOMS.Client.Infrastructure.Managers.System;
-using EDO_FOMS.Client.Infrastructure.Services;
+﻿using EDO_FOMS.Client.Extensions;
 using EDO_FOMS.Client.Models;
 using EDO_FOMS.Shared.Constants.Permission;
 using Microsoft.AspNetCore.Authorization;

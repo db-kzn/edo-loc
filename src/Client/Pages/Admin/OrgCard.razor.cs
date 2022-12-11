@@ -1,5 +1,4 @@
-﻿using Blazored.FluentValidation;
-using EDO_FOMS.Application.Features.Orgs.Commands;
+﻿using EDO_FOMS.Application.Features.Orgs.Commands;
 using EDO_FOMS.Application.Responses.Identity;
 using EDO_FOMS.Client.Infrastructure.Managers.System;
 using EDO_FOMS.Client.Infrastructure.Model.Admin;
@@ -141,7 +140,7 @@ namespace EDO_FOMS.Client.Pages.Admin
         {
             var error = 0;
 
-            if (Org.Inn.Length != 10 || Org.Inn.Length != 12)
+            if (Org.Inn.Length != 10 && Org.Inn.Length != 12)
             {
                 error++;
                 _snackBar.Add(_localizer["INN mast be 10 or 12 symbols"], Severity.Warning);

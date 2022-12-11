@@ -19,7 +19,6 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <ApplicationIcon>favicon.ico</ApplicationIcon>
     <RootNamespace>EDO_FOMS.Server</RootNamespace>
     <AssemblyName>EDO_FOMS.Server</AssemblyName>
     <DocumentationFile>EDO_FOMS.Server.xml</DocumentationFile>
@@ -64,7 +63,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="favicon.ico" />
+    <Content Include="favicon.svg" />
     <Folder Include="Files\Images\ProfilePictures\" />
     <Folder Include="Logs\" />
   </ItemGroup>

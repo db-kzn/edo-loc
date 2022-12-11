@@ -56,33 +56,34 @@ public partial class DocToSignDialog
     {
         onSigning = true;
 
-        buffer = new byte[_file.Size];
-        await _file.OpenReadStream(_file.Size).ReadAsync(buffer);
+        //buffer = new byte[_file.Size];
+        //await _file.OpenReadStream(_file.Size).ReadAsync(buffer);
 
         //var title = Path.GetFileNameWithoutExtension(_file.Name);
 
-        var base64 = Convert.ToBase64String(buffer);
+        //var base64 = Convert.ToBase64String(buffer);
         //var url = $"data:{format};base64,{base64}";
-        var signed = await _jsRuntime.InvokeAsync<JsResult<string>>("azino.SignCadesBES", thumbprint, base64, title);
-        var sign = signed.Succeed ? signed.Data : "";
 
-        if (string.IsNullOrWhiteSpace(sign))
-        {
-            _snackBar.Add(_localizer["Signing failed"], Severity.Error);
-            onSigning = false;
-            return;
-        }
+        //var jsInProcess = (IJSInProcessRuntime)_jsRuntime;
+        var signed = await _jsRuntime.InvokeAsync<string>("azino.SignCadesBES_Async", thumbprint);
+        //var sign = signed.Succeed ? signed.Data : "";
 
-        var data = Convert.FromBase64String(sign);
+        //if (string.IsNullOrWhiteSpace(sign))
+        //{
+            //_snackBar.Add(_localizer["Signing failed"], Severity.Error);
+            //onSigning = false;
+            //return;
+        //}
+
+        //var data = Convert.FromBase64String(sign);
         //var fileStream = new MemoryStream(data);
-        var fileName = $"{title}.sig";
+        //var fileName = $"{title}.sig";
 
         //using var streamRef = new DotNetStreamReference(stream: fileStream);
 
-        await _jsRuntime.InvokeVoidAsync("azino.SaveFile", fileName, "application/octet-stream", data);
+        //await _jsRuntime.InvokeVoidAsync("azino.SaveFile", fileName, "application/octet-stream", data);
 
-        _file = null;
-
+        //_file = null;
 
         _snackBar.Add(_localizer["The document is signed"], Severity.Success);
         onSigning = false;

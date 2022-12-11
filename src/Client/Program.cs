@@ -1,12 +1,12 @@
 using EDO_FOMS.Client.Extensions;
 using EDO_FOMS.Client.Infrastructure.Managers.Preferences;
+using EDO_FOMS.Client.Infrastructure.Settings;
+using EDO_FOMS.Shared.Constants.Localization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using EDO_FOMS.Client.Infrastructure.Settings;
-using EDO_FOMS.Shared.Constants.Localization;
 
 namespace EDO_FOMS.Client
 {
